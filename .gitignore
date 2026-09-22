@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.xlsx
+App_Data/
+**/demo-state*.json
+**/demo-state*.lock
+TestResults/
+node_modules
+playwright-report/
+.DS_Store
