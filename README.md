@@ -1,72 +1,107 @@
 # Careline · AppointmentsWEB
 
-A complete, interactive first-phase doctor appointment application in **ASP.NET Core MVC / Razor / C#**, with a shared JSON demonstration store. No PostgreSQL, separate API server, external account, npm install, CDN, or API key is required to run the application.
+Doctor appointment scheduling with **ASP.NET Core MVC, a separate ASP.NET Core API, and PostgreSQL**. The existing patient, reception and doctor interfaces now share durable relational data through the API. All projects are in one Visual Studio solution.
 
 ## Run in Visual Studio on Windows
 
-1. Install **Visual Studio 2026, version 18.0 or later**, with the **ASP.NET and web development** workload and the **.NET 10 SDK**. Use the latest serviced Visual Studio 2026 release. .NET 10 is the LTS target; Visual Studio 2022 does not support targeting .NET 10.
-2. Clone this repository, or download its ZIP from GitHub and extract it to a normal writable folder.
-3. Open **`Appointments.sln`**.
-4. Right-click the solution and select **Restore NuGet Packages**. There are no third-party NuGet runtime dependencies.
-5. Right-click **Appointments.Web** → **Set as Startup Project**.
-6. Select the **Careline (local demo)** launch profile, then press **F5**.
-7. The browser opens **http://localhost:5180**. Choose Patient, Reception or Doctor, select an identity, and enter the workspace.
+1. Install a current **Visual Studio 2026** with **ASP.NET and web development** and the **.NET 10 SDK**. .NET 10 requires Visual Studio 2026 version 18.0 or later; use the latest serviced update compatible with your SDK. Visual Studio 2022 cannot target .NET 10.
+2. Install **PostgreSQL 17** locally, or start a Docker-compatible engine with Compose. Native PostgreSQL is fully supported and needs no container software or account. See the two setup choices below.
+3. Clone/download this repository and open a PowerShell terminal in its root.
+4. Complete **one** database setup choice below.
+5. Open **`Appointments.sln`**, restore NuGet packages, and select the **Careline - API and Web** solution launch profile. If the profile is not shown, right-click the solution → **Configure Startup Projects** → **Multiple startup projects** → set **Appointments.Api** and **Appointments.Web** to **Start**, with API first. Other projects should be None.
+6. Press **F5**. The API runs at **http://localhost:5181**, the web app at **http://localhost:5180**. Development startup applies the included migrations and seeds the workbook schedules on the first run. If the web page opens before the API is ready, retry after the API reports it is listening.
+7. Sign in with your initial administrator credentials, create a patient account, or use **Explore the development demo**. In the workspace, reception can manage **Accounts & access**.
 
-`global.json` requests SDK 10.0.100 with `latestFeature` roll-forward within .NET 10. The build was executed using **SDK 10.0.401** and **ASP.NET Core 10.0.12**. Install the current serviced .NET 10 SDK that matches your Visual Studio update; the application has no dependency on that exact patch. The SDK includes the ASP.NET Core runtime. The local HTTP launch profile avoids development-certificate setup.
+The solution targets **.NET 10 LTS**. `global.json` allows serviced 10.0 SDK feature bands. Verified build SDK: **10.0.401**, runtime **10.0.12**. EF Core is **10.0.12**, Npgsql EF provider **10.0.3**. No frontend build, external API key, paid scheduler or external account is required. Node/Python are needed only for optional tests.
 
-Command-line equivalent:
+### Choice A: automatic local database with Compose
+
+With your container engine running, execute:
+
+```powershell
+.\scripts\setup-local.ps1
+```
+
+The script creates a random database password in ignored `.env`, starts PostgreSQL on **127.0.0.1:55432**, configures API user-secrets, generates an initial administrator password in ignored `.local-admin.json`, and restores the solution. The default sign-in email is **admin@careline.local**. Open `.local-admin.json` locally to obtain its password; it is never a repository default. Re-running setup preserves existing credentials and the database volume. Do not delete `.env` while keeping the same database volume: that would generate credentials that differ from the initialized database.
+
+After your first sign-in, change the administrator password and remove the initial bootstrap secrets/file:
+
+```powershell
+dotnet user-secrets remove "Bootstrap:Email" --project src/Appointments.Api
+dotnet user-secrets remove "Bootstrap:Password" --project src/Appointments.Api
+Remove-Item .local-admin.json
+```
+
+Stop only the database with `docker compose stop`; resume with `docker compose up -d --wait`. Data remains in the named volume. Docker Desktop has its own licensing conditions; it is optional. Native PostgreSQL avoids that dependency entirely.
+
+### Choice B: native PostgreSQL, no Docker
+
+Using PostgreSQL's SQL Shell/psql as its administrator, create an isolated application role and database. Choose your own strong passwords; the values below are placeholders:
+
+```sql
+CREATE ROLE careline_app LOGIN PASSWORD 'YOUR_LOCAL_DATABASE_PASSWORD';
+CREATE DATABASE appointments_dev OWNER careline_app;
+\connect appointments_dev
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+```
+
+Set local API configuration (do not put passwords in tracked appsettings files):
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:Appointments" "Host=localhost;Port=5432;Database=appointments_dev;Username=careline_app;Password=YOUR_LOCAL_DATABASE_PASSWORD" --project src/Appointments.Api
+dotnet user-secrets set "Bootstrap:Email" "admin@careline.local" --project src/Appointments.Api
+dotnet user-secrets set "Bootstrap:Password" "YOUR_INITIAL_PASSWORD_AT_LEAST_12_CHARACTERS" --project src/Appointments.Api
+dotnet restore Appointments.sln
+```
+
+Then press F5 as above. Change/remove the bootstrap credentials after first sign-in. User-secrets are local development configuration, not an encrypted production secret vault.
+
+### Command-line run
+
+After database setup, use two terminals:
 
 ```sh
-dotnet restore Appointments.sln
-dotnet build Appointments.sln -c Release
+# Terminal 1
+dotnet run --project src/Appointments.Api
+# Terminal 2
 dotnet run --project src/Appointments.Web
 ```
 
-If port 5180 is occupied, change `applicationUrl` in `src/Appointments.Web/Properties/launchSettings.json`.
+Launch profiles select Development and the local ports. For another API address set web `Backend:ApiBaseUrl` (environment variable `Backend__ApiBaseUrl`). Outside Development it must be HTTPS. The web project has **no database connection string**; only the API connects to PostgreSQL.
 
 ## What is implemented
 
 | Workspace | Workflows |
 | --- | --- |
-| Patient | Doctor directory, name/specialty search, profiles and original schedule notes, date/slot picker, review/confirmation, upcoming/history views, details, cancellation, rescheduling |
-| Reception | All-doctor day/week/month calendar, doctor/status filters, appointment list/search, fictional patient search/creation, booking for patients, confirmation/status management, schedule and exception management, reset |
-| Doctor | Own calendar and appointments, bookings for patients, rescheduling/cancellation/statuses, own weekly hours and one-off availability |
+| Patient | Password registration/sign-in, directory and profiles, genuine available slots, review/confirmation, upcoming/history, details, rescheduling and cancellation |
+| Reception | All-doctor day/week/month calendar, filters/search, patient creation/search, phone booking, status changes, schedules and exceptions, account creation/provisioning/disable |
+| Doctor | Own calendar/appointments, phone booking, statuses, rescheduling/cancellation, own working hours and time away |
 
-FullCalendar Standard **6.1.20** is bundled locally. It includes day/week/month views, appointment cards, status colors, current-time indicator, navigation, free drag/drop rescheduling, server-derived available-time backgrounds, and unavailable-period backgrounds. The all-doctor view overlays appointments; select a doctor for availability shading. There is no paid resource timeline. The appointment list provides a keyboard-friendly alternative to dragging and calendar cells.
+FullCalendar Standard **6.1.20** remains bundled locally, with free day/week/month views, appointment cards, status colors, current-time indicator, availability backgrounds and validated/revertible drag rescheduling. No paid resource timeline is used. The list and slot-picker flows support keyboard operation without dragging. All existing visual design and role flows are retained; new account screens use the same style.
 
-The responsive interface includes mobile navigation, dialogs, loading/empty/error states, confirmations, focus styling, reduced-motion support and a simpler patient picker. UI labels are English; source doctor names, specialties and workbook notes retain their original Macedonian spelling. Location is explicitly unspecified; it is not invented.
+Password authentication uses ASP.NET Core's password hasher, database-backed opaque sessions, 2-hour expiry, sign-out revocation, account disabling and password-change revocation across instances. Five failed sign-ins lock an account for 15 minutes. Authentication endpoints have a 30 requests/minute/IP limit per API process. The browser has an encrypted HttpOnly SameSite cookie; API tokens are not placed in browser JavaScript or local storage. The API re-checks the live account and session on each request, and enforces role/ownership itself.
 
-## Demo identities and shared data
+Registration always creates a **new patient**. It cannot claim an existing patient record by matching an email. Reception must verify identity and provision a sign-in linked to that profile through **Accounts & access**. In Development, every demo profile already has a demo account: use **Set sign-in credentials** on that account to convert it to password access. For a new normal patient/doctor, create an account and select exactly the matching profile. One sign-in is allowed per linked doctor/patient; administrators have no profile link.
 
-- Use **Switch demo user** in the sidebar to change perspective.
-- Reception: **Alex • Reception**.
-- Patients: **Ana Petrova (Demo)**, **Marko Nikolov (Demo)** and four other fictional examples. Added demo patients also become selectable identities.
-- Doctor: any named doctor from the workbook. Unnamed service entries have no doctor login.
-- All users share the same server-side store. A new role/page load sees current data immediately. Already-open calendars/lists refresh on window focus and every 20 seconds while idle; no SignalR dependency is included.
-- Original hours are used wherever complete. Doctors without precise hours require an explicit staff-added session before times can be booked.
-- Generated sample appointments are relative to the date the store is first created/reset. Samples become historical over time; reset to populate fresh examples.
-- Sample patients, contact emails and appointments are fictional. **Do not enter real patient information or medical details.** No clinical-note fields exist.
-- Email/SMS/calendar integrations are absent. The UI explicitly says that no notification has been sent.
+Email verification, email password recovery, MFA, messages/reminders and external calendar synchronization are **not implemented**. No fake notifications are sent. Administrator credential provisioning is available locally until an identity verification/recovery policy is implemented.
 
-### Demo security boundary
+## Development demo and persistence
 
-This is **not production authentication**. Anyone who can reach the demo can choose any demo identity. Cookie-protected role selection, server-side ownership checks and antiforgery validation are included to exercise permissions, not to establish real identity. Patient responses contain only the current patient's records. Doctors can access only their own private appointment records and schedule changes; staff can search the fictional patient directory.
+In Development, `Demo:Enabled=true` is set by the development appsettings for both hosts. **Anyone with access to that mode can choose a demo identity, including an administrator.** Keep it local and use fictional data. Demo endpoints and issued demo sessions are rejected outside Development even if the flag is accidentally enabled.
 
-Run on your own computer. Before production, implement real authentication, authorization, patient-data protection, encrypted transport/storage, auditing, retention, backup, rate limiting and appropriate operational/legal review. The demo is not intended for internet deployment or real medical records.
+The first startup of an empty Development database imports **40 source profiles**, six fictional patients, valid relative-date sample appointments, and demo accounts. The same PostgreSQL tables serve demo and password sessions; changing roles does not switch databases. Added demo patients get a selectable demo identity. Sample appointments are generated once and become historical over time.
 
-## Persistence and reset
+In a fresh non-demo database only the workbook doctors/schedules and explicitly configured bootstrap administrator are seeded. Startup never overwrites operational data. Do not point a public deployment at a database that has been used with unrestricted demo administrator access.
 
-On Windows, runtime data lives at:
+Appointments, exceptions, hours, patients, account hashes, sessions, idempotency records and audit events all survive restarts. New page loads see current data immediately; open workspaces refresh on focus and every 20 seconds while idle. There is no SignalR push dependency. If the API/database is unavailable, the UI shows an error; it **never silently falls back to JSON**.
 
-```text
-%LOCALAPPDATA%\CarelineAppointments\demo-state.json
-```
+### Reset or preserve old phase-one data
 
-On Linux/macOS it uses the platform's .NET `LocalApplicationData` directory plus `CarelineAppointments/demo-state.json`. Data is outside source control. All writes are serialized, validated within a transaction copy, flushed to a temporary file, and atomically renamed. Failed writes do not update the live state. A lock file prevents two application instances sharing a demo store.
+There is **no browser reset for PostgreSQL**. For a disposable local Compose database only, stop both app hosts, back up anything you need, then run `docker compose down --volumes` followed by `docker compose up -d --wait`. This deletes all records in the local Careline database volume. Starting the Development API creates a fresh database schema and seed. Never use this operation for operational data.
 
-**Reset:** enter as Reception → Availability → **Reset demo**, then confirm. This resets all demo users/appointments/schedule adjustments. The original workbook seed stays unchanged. Alternatively, stop the application and remove the runtime `demo-state.json` file. Back it up first if you want to preserve demonstration changes. A corrupt or unsupported state fails visibly; it is not silently overwritten.
+The prior `%LOCALAPPDATA%\CarelineAppointments\demo-state.json` is untouched and is **not automatically imported**: its identities were unverified demonstration users. An audited, validated import is a separate migration if those examples need preserving.
 
-Override storage via `Demo:DataPath` in configuration or `Demo__DataPath` in the environment. Use an absolute path outside the repository. The store supports **one application process only**. Separate sessions within that process can book concurrently safely.
+The old standalone JSON demo is still available explicitly: set `Backend__Mode=Demo`, `Demo__Enabled=true`, run only `Appointments.Web` in Development. Its original reset button returns in that mode. It cannot be selected in Production and is not the default backend.
 
 ## Workbook interpretation and assumptions
 
@@ -74,7 +109,7 @@ The input was `Raspored_Doktori_Restrukturiran.xlsx`. All four sheets were inspe
 
 See [docs/WORKBOOK_ANALYSIS.md](docs/WORKBOOK_ANALYSIS.md) for detailed decisions and traceability. Important assumptions:
 
-- **30 minutes** is a configurable demonstration duration per doctor because no duration column exists. It is not a clinical recommendation. Staff may change it to 10–120 minutes in five-minute increments. Each doctor's supplied working hours remain independent.
+- **30 minutes** is a configurable initial duration per doctor because no duration column exists. It is not a clinical recommendation. Staff may change it to 10–120 minutes in five-minute increments. Each doctor's supplied working hours remain independent.
 - No lunch breaks, holiday dates, locations or explicit date-specific exceptions are supplied. None are invented. Staff can model breaks with split weekly periods and holidays/time away with unavailable exceptions.
 - Incomplete shift labels, on-call arrangements and once-monthly schedules do not create automatic slots. Add specific available periods through Availability after agreeing the demo time.
 - Working-day ranges are inclusive; weekdays follow the clean sheet exactly. There are no default weekend hours.
@@ -93,7 +128,7 @@ The service is authoritative. It checks working periods, exceptions, doctor and 
 | Confirmed | Cancelled before start; Completed or NoShow by staff after end |
 | Completed / Cancelled / NoShow | Terminal; create a new appointment instead |
 
-Rescheduling is allowed only before start for Scheduled/Confirmed appointments. Confirmation-dependent visits return to Scheduled after moving. Patients can cancel their own upcoming visits; secretary-only visits must be moved by staff. Staff cannot mark an unconfirmed past request completed; the demo intentionally has no administrative override.
+Rescheduling is allowed only before start for Scheduled/Confirmed appointments. Confirmation-dependent visits return to Scheduled after moving. Patients can cancel their own upcoming visits; secretary-only visits must be moved by staff. Staff cannot mark an unconfirmed past request completed; the application intentionally has no administrative override.
 
 ### Dates and time zones
 
@@ -101,63 +136,45 @@ Rescheduling is allowed only before start for Scheduled/Confirmed appointments. 
 
 FullCalendar runs in a **wall-clock display adapter** using its UTC mode: the app sends offset-free **Skopje wall times**, and translates dragging back to a local date/time command. These calendar `Date` objects are presentation coordinates, never persisted instants. This avoids browser-location drift without requiring a timezone plugin. All actual timezone resolution happens in C#.
 
-Nonexistent spring-forward times and ambiguous fall-back times are unavailable. Slots whose real duration differs from their wall-clock duration are excluded. The initial calendar is Monday-first and 24-hour. Change the timezone only with a fresh/reset demo store; a startup guard rejects a mismatch to prevent reinterpreting persisted schedules. Use a browser-supported IANA identifier.
+Nonexistent spring-forward times and ambiguous fall-back times are unavailable. Slots whose real duration differs from their wall-clock duration are excluded. The initial calendar is Monday-first and 24-hour. Change the timezone only with a fresh database or explicit data migration; a startup guard rejects a mismatch to prevent reinterpreting persisted schedules. Use a browser-supported IANA identifier.
 
-## Tests and actual verification
+## API, database and architecture
+
+- [Architecture and transaction design](docs/ARCHITECTURE.md)
+- [API routes, request examples and errors](docs/API.md)
+- [Database operations, migration and backup guidance](docs/DATABASE.md)
+- [Workbook analysis](docs/WORKBOOK_ANALYSIS.md)
+- [Manual QA checklist](docs/QA_CHECKLIST.md)
+- [Dependency licenses](THIRD_PARTY_NOTICES.md)
+
+Development API schema: **http://localhost:5181/openapi/v1.json**. Liveness: `/health`; authenticated database readiness: `/health/database`. There is no Swagger UI package or external documentation service.
+
+## Tests
 
 ```sh
 dotnet build Appointments.sln -c Release
-dotnet run --project tests/Appointments.Tests -c Release
-```
-
-The dependency-free executable test runner exits nonzero on failure. It intentionally needs no external testing NuGet package; **`dotnet test` does not run this suite**. Run the command above. It covers source counts, three-role consistency, ownership, doctor/patient overlaps, concurrency, idempotency, working-hour boundaries, split shifts, exceptions, protected schedule edits, status transitions, time zones/DST, JSON restart and resets.
-
-Optional HTTP smoke tests (Python 3 standard library, only needed to run this additional suite):
-
-```sh
+dotnet run --project tests/Appointments.Tests -c Release --no-build
 python tests/http_smoke.py
-```
-
-This script launches a disposable local instance and isolates its data; it does not reset your demo store.
-
-Optional DOM workflow checks (Node.js 24; dependencies are used for tests only):
-
-```sh
-npm ci --prefix tests/frontend
+npm ci --prefix tests/frontend --ignore-scripts --no-audit --no-fund
 npm test --prefix tests/frontend
 ```
 
-The GitHub Actions workflow runs build and all three test suites on Windows and Ubuntu. DOM tests execute the real Razor shell and browser JavaScript against a disposable live server using jsdom; they are not a substitute for browser visual/drag testing.
+The dependency-free executable runner contains **56** domain/JSON tests, including scheduling boundaries, overlaps, permissions, versions, status transitions, exceptions and DST. **`dotnet test` does not execute it**. HTTP tests contain **36** checks and DOM tests **21** checks against the explicitly isolated legacy demo mode.
 
-Verified in the delivery environment:
+For the real backend, create a **new empty disposable** PostgreSQL database whose name contains `test` or `integration`, set `CARELINE_TEST_CONNECTION` to its connection string, and run:
 
-- Release solution build: **0 warnings, 0 errors**.
-- Domain/persistence tests: **56/56 passed**.
-- DOM interaction checks: **21/21 passed** (jsdom; this does not verify layout or pointer dragging).
-- Live HTTP integration checks: **36/36 passed**.
-- JavaScript syntax checks: passed.
-- Browser-based visual/mobile/drag interaction testing: **not verified** because the provided cloud browser cannot access the loopback application. [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md) contains the remaining manual checks. Responsive styles and drag rejection/revert handling are implemented, but are not represented as visually tested.
-
-## Project map and next steps
-
-```text
-Appointments.sln
-src/
-  Appointments.Core/       Domain models, scheduling rules, service contracts, JSON store
-  Appointments.Web/        MVC controllers, view models, Razor views, JS/CSS, doctor seed
-tests/
-  Appointments.Tests/      Executable business-rule tests
-  frontend/               Optional jsdom workflow tests
-  http_smoke.py           Real MVC/cookie/antiforgery integration checks
-docs/
-  ARCHITECTURE.md          API/PostgreSQL integration plan
-  WORKBOOK_ANALYSIS.md     Source interpretation and ambiguities
-  QA_CHECKLIST.md          Manual role and responsive checks
-THIRD_PARTY_NOTICES.md
+```sh
+python tests/api_integration.py --dom
 ```
 
-Next, implement an ASP.NET Core API with authenticated identities and PostgreSQL transactions, then replace `IAppointmentService` with an HTTP-backed implementation. Preserve the authoritative server-side rules and add database overlap constraints and optimistic concurrency. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+This starts **two API processes and the MVC app**, applies the actual migration, exercises real password sessions and browser-to-API workflows, verifies persistence after API restart and races, and invokes **7 direct SQL constraint checks** that bypass application validation. It also repeats the 21 DOM checks against the PostgreSQL-backed application. It deliberately leaves fixture records in that disposable database; use a new database for every run.
 
-No known failing automated checks remain. Material phase-one limitations: single-process JSON storage, demo identity switching, English UI with Macedonian source text, no real notifications, no external calendar sync, no automatic holidays, no defined availability for incomplete source schedules, and no completed browser visual QA.
+GitHub Actions builds and runs the domain/legacy HTTP/DOM suites on **Windows and Ubuntu**, plus an **Ubuntu PostgreSQL 17 service** for the full backend suite. See the repository Actions tab for results on the delivered commit. Browser visual/mobile/pointer-drag QA and interactive Windows F5 setup remain manual; jsdom does not measure layout. The development environment cannot run a local PostgreSQL server, so database execution is verified in GitHub Actions rather than described as a local test.
 
-Technology references: [Microsoft .NET Windows/Visual Studio support](https://learn.microsoft.com/en-us/dotnet/core/install/windows), [.NET support lifecycle](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core), [FullCalendar licensing](https://fullcalendar.io/license). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for bundled licenses.
+## Scope and next development steps
+
+This phase provides an actual connected backend, relational migrations, transactional scheduling and password access. It is still a development system, **not a certified production medical platform**. Before using real patient data, configure HTTPS/reverse proxy trust, separate migration/runtime database privileges, durable encrypted data-protection keys, encrypted backups with restore drills, centralized audit/monitoring, retention and incident procedures, email verification/recovery and MFA or a reviewed OIDC provider. Apply your jurisdiction's patient-data requirements. No clinical notes are collected.
+
+Next priorities: complete browser/device QA; agree patient identity verification and onboarding; implement email verification/recovery or OIDC; add delivery-backed reminders via an outbox; replace full bootstrap appointment loading with windowed/paginated views for large clinics; add production deployment/backup automation and optionally real-time updates. Source entries without precise hours still require staff-defined availability; no holiday calendar, location or missing medical details are invented.
+
+Official references: [Microsoft Visual Studio/.NET compatibility](https://learn.microsoft.com/en-us/dotnet/core/install/windows), [.NET support](https://dotnet.microsoft.com/en-us/platform/support/policy), [Npgsql EF provider](https://www.npgsql.org/efcore/), [PostgreSQL constraints](https://www.postgresql.org/docs/17/ddl-constraints.html).

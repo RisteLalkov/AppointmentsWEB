@@ -38,3 +38,15 @@ The C# rule suite and real HTTP tests have executed successfully. The provided c
 - Open appointment details in two windows, change in one, save stale details in the other; expect refresh guidance.
 - Stop/restart the app; appointments persist. Source checkout stays clean.
 - Disable network access after startup; assets still load locally. No external font/CDN dependency exists.
+
+## Connected backend follow-up
+
+- Run the README Windows setup path, select both startup projects, press F5, and verify the initial administrator signs in.
+- Register a new patient; verify booking/reschedule/cancel across reception and doctor sessions.
+- In Accounts & access, create a linked normal patient account, convert a demo doctor to password sign-in, disable/re-enable an account, and change your password.
+- Check password, registration and account management pages at phone/tablet/desktop widths and with keyboard-only navigation.
+- Stop API and verify useful web errors with no JSON fallback; restart and verify data remains.
+- Repeat calendar drag/revert with another browser occupying the destination time.
+- Validate TLS/cookie behavior with your actual production reverse proxy before deployment.
+
+The automated PostgreSQL suite exercises these server-side behaviors and jsdom workflows. It does not certify visual layouts, interactive Visual Studio installation/setup, browser autofill or pointer dragging.

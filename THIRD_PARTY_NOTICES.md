@@ -14,10 +14,23 @@ Official references: https://fullcalendar.io/license, https://fullcalendar.io/do
 
 ## Microsoft .NET / ASP.NET Core
 
-The application targets the .NET 10 shared framework and does not add third-party NuGet runtime packages. .NET and ASP.NET Core are open-source projects under MIT licensing; the installed SDK includes its own third-party notices. Framework licensing: https://github.com/dotnet/runtime/blob/main/LICENSE.TXT and https://github.com/dotnet/aspnetcore/blob/main/LICENSE.txt.
+The application targets the .NET 10 shared framework and uses the packages listed below. .NET and ASP.NET Core are open-source projects under MIT licensing; the installed SDK includes its own third-party notices. Framework licensing: https://github.com/dotnet/runtime/blob/main/LICENSE.TXT and https://github.com/dotnet/aspnetcore/blob/main/LICENSE.txt.
 
 ## Other assets
 
 App CSS, favicon and interface illustrations are authored in source. Typography uses system fonts. Unicode interface symbols are text, not an external icon/font package. There are no paid components, remote images, external account requirements or API keys.
 
 Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettier (MIT); neither is required to run the site or bundled in its browser assets. No telemetry or external integrations have been added by the application.
+
+## PostgreSQL backend packages
+
+| Component | Version | License / source |
+| --- | --- | --- |
+| Microsoft.EntityFrameworkCore.Relational and Design | 10.0.12 | MIT — https://github.com/dotnet/efcore/blob/main/LICENSE.txt |
+| Microsoft.AspNetCore.OpenApi | 10.0.12 | MIT — ASP.NET Core repository license above |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | PostgreSQL License — https://github.com/npgsql/efcore.pg/blob/main/LICENSE |
+| Npgsql (transitive driver) | NuGet-resolved 10.x | PostgreSQL License — https://github.com/npgsql/npgsql/blob/main/LICENSE |
+| PostgreSQL server | 17 (serviced container tag / local install) | PostgreSQL License — https://www.postgresql.org/about/licence/ |
+| dotnet-ef (optional development tool) | 10.0.12 | MIT — EF Core repository license above |
+
+NuGet restores package licenses and notices with the packages. None of these application dependencies requires a paid license. Microsoft ASP.NET Core PasswordHasher is part of the shared framework; no proprietary identity service is required. The optional local Compose recipe uses the official PostgreSQL image. The container engine is separately installed software; Docker Desktop has separate terms and is not required because native PostgreSQL is supported.
