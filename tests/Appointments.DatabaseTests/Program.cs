@@ -19,8 +19,15 @@ string Copy(string doctor, string patient, string start = "a.\"Start\"", string 
     SELECT 'sql-' || md5(random()::text), {doctor}, {patient}, {start}, {end}, {status}, 1, 'sql-test', now(), md5(random()::text)
     FROM "Appointments" a WHERE a."Status" <> 'Cancelled' AND a."Start" > now() ORDER BY a."Start" LIMIT 1;
     """;
-await Reject("doctor exclusion constraint", Copy("a.\"DoctorId\"", "(SELECT p.\"Id\" FROM \"Patients\" p WHERE p.\"Id\" <> a.\"PatientId\" LIMIT 1)"), "23P01", "EX_Appointments_Doctor");
-await Reject("patient exclusion across different doctors", Copy("'d02'", "a.\"PatientId\""), "23P01", "EX_Appointments_Patient");
+await Reject("doctor exclusion constraint", """
+    INSERT INTO "Patients" ("Id","Name","Email","Phone","IsDemonstration")
+    VALUES ('sql-test-patient','SQL test','','',true);
+    """ + Copy("a.\"DoctorId\"", "'sql-test-patient'"), "23P01", "EX_Appointments_Doctor");
+await Reject("patient exclusion across different doctors", """
+    INSERT INTO "Doctors"
+    SELECT (jsonb_populate_record(NULL::"Doctors", to_jsonb(d) || '{"Id":"sql-test-doctor"}')).*
+    FROM "Doctors" d LIMIT 1;
+    """ + Copy("'sql-test-doctor'", "a.\"PatientId\""), "23P01", "EX_Appointments_Patient");
 await Reject("invalid appointment range", Copy("a.\"DoctorId\"", "a.\"PatientId\"", end: "a.\"Start\""), "23514");
 await Reject("invalid status", Copy("a.\"DoctorId\"", "a.\"PatientId\"", status: "'Invented'"), "23514");
 await Reject("nonexistent patient foreign key", Copy("a.\"DoctorId\"", "'missing-patient'", status: "'Cancelled'"), "23503");

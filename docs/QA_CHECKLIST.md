@@ -21,7 +21,7 @@ The C# rule suite and real HTTP tests have executed successfully. The provided c
 - Drag an upcoming visit to a valid slot; confirm. Drag into a conflict/closed hour; verify error and revert. Decline a move and verify original time.
 - Add a lunch break, a full-day exception, and an extra Saturday session. Check slot backgrounds and the patient picker.
 - Try changing hours so that an existing future booking would fall outside them; expect rejection.
-- Test reset in Reception with disposable data; confirm all demo overrides disappear.
+- In explicit standalone JSON Demo mode, test reset in Reception with disposable data. In API mode verify that this reset button is absent.
 
 ## Responsive and accessible behavior
 
