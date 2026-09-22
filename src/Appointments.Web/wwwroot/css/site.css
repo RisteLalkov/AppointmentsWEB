@@ -2175,3 +2175,6 @@ dialog::backdrop {
     scroll-behavior: auto !important;
   }
 }
+
+/* Account pages reuse the workspace palette and controls. */
+.account-page{max-width:640px;margin:50px auto;padding:24px}.account-card{padding:32px;margin-top:28px}.account-admin{max-width:1180px;margin:30px auto;padding:24px}.account-admin .page-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:32px 0}.account-section{padding:28px;margin:24px 0}.account-section>p{margin:12px 0 24px;font-size:13px;line-height:1.7}.account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px}.account-row{display:flex;justify-content:space-between;gap:24px;padding:22px 0;border-top:1px solid var(--border,#e3eae7)}.account-row p{font-size:12px;color:var(--muted);margin:8px 0}.account-actions{width:340px;max-width:100%}.account-actions details{margin-top:14px;font-size:13px}.account-actions summary{cursor:pointer;margin-bottom:12px}.logout-button{background:transparent;border:0;cursor:pointer;font:inherit}.account-card .field{margin-top:20px}@media(max-width:650px){.account-grid{grid-template-columns:1fr}.account-row,.account-admin .page-heading{flex-direction:column;align-items:stretch}.account-admin{padding:14px}.account-section{padding:20px}}

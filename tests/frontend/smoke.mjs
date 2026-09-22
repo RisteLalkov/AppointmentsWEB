@@ -31,6 +31,9 @@ const proc = spawn(
     env: {
       ...process.env,
       Demo__DataPath: resolve(temporary, "demo-state.json"),
+      Backend__Mode: process.env.TEST_API_BASE ? "Api" : "Demo",
+      Backend__ApiBaseUrl: process.env.TEST_API_BASE || "http://localhost:5181/",
+      Demo__Enabled: "true",
       ASPNETCORE_ENVIRONMENT: "Development",
     },
   },

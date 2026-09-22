@@ -31,3 +31,32 @@ jobs:
         run: npm ci --prefix tests/frontend --ignore-scripts --no-audit --no-fund
       - name: DOM workflow checks
         run: npm test --prefix tests/frontend
+  postgres-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: careline_integration
+          POSTGRES_USER: careline_test
+          POSTGRES_PASSWORD: isolated-ci-password
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U careline_test -d careline_integration"
+          --health-interval 3s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: dotnet build Appointments.sln -c Release
+      - run: npm ci --prefix tests/frontend --ignore-scripts --no-audit --no-fund
+      - name: Real PostgreSQL, two API instances, MVC and DOM workflows
+        env:
+          CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
+        run: python tests/api_integration.py --dom

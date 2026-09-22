@@ -69,7 +69,7 @@ with tempfile.TemporaryDirectory(prefix='careline-http-') as temp:
         sock.bind(('127.0.0.1', 0))
         port = sock.getsockname()[1]
     base = 'http://127.0.0.1:'+str(port)
-    env = dict(os.environ, Demo__DataPath=str(pathlib.Path(temp)/'demo-state.json'), ASPNETCORE_ENVIRONMENT='Development')
+    env = dict(os.environ, Backend__Mode="Demo", Demo__Enabled="true", Demo__DataPath=str(pathlib.Path(temp)/'demo-state.json'), ASPNETCORE_ENVIRONMENT='Development')
     with open(pathlib.Path(temp)/'server.log', 'w+') as log:
         web = root / 'src/Appointments.Web'
         proc = subprocess.Popen([args.dotnet,str(web/'bin/Release/net10.0/Appointments.Web.dll'),'--urls',base],cwd=web,env=env,stdout=log,stderr=log)

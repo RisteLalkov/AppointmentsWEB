@@ -1,20 +1,32 @@
-using System.Security.Claims;
+using Appointments.Contracts;
+using Appointments.Core;
 using Appointments.Web.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Appointments.Web.Controllers;
 
-public sealed class DemoController(DemoIdentity identity) : Controller
+public sealed class DemoController(DemoIdentity identity, ApiClient api, BackendSettings settings) : Controller
 {
-    [HttpGet] public IActionResult Index() => View(identity.Users);
-    [HttpPost] public async Task<IActionResult> Enter(string userId)
+    [HttpGet] public async Task<IActionResult> Index(CancellationToken ct)
     {
-        var actor = identity.Users.FirstOrDefault(a => a.Id == userId);
-        if (actor is null) return BadRequest("Select an existing demo user.");
-        var claims = new[] { new Claim(ClaimTypes.NameIdentifier, actor.Id), new Claim(ClaimTypes.Name, actor.Name), new Claim(ClaimTypes.Role, actor.Role.ToString()) };
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)));
-        return RedirectToAction("Index", "Home");
+        if (!settings.DemoEnabled) return NotFound();
+        try { return View(settings.UseApi ? await api.SendAsync<List<DemoActor>>("api/auth/demo-users", authenticated: false, ct: ct) : identity.Users); }
+        catch (RuleException e) { ViewData["ConnectionError"] = e.Message; return View(Array.Empty<DemoActor>()); }
+    }
+    [HttpPost] public async Task<IActionResult> Enter(string userId, CancellationToken ct)
+    {
+        if (!settings.DemoEnabled) return NotFound();
+        try
+        {
+            SessionResponse session;
+            if (settings.UseApi) session = await api.SendAsync<SessionResponse>("api/auth/demo-login", new { userId }, false, ct);
+            else
+            {
+                var actor = identity.Users.FirstOrDefault(a => a.Id == userId) ?? throw new RuleException("Select an existing demo user.");
+                session = new("", DateTimeOffset.UtcNow.AddHours(2), actor, true);
+            }
+            await WebSession.SignInAsync(HttpContext, session); return RedirectToAction("Index", "Home");
+        }
+        catch (RuleException e) { TempData["Error"] = e.Message; return RedirectToAction(nameof(Index)); }
     }
 }

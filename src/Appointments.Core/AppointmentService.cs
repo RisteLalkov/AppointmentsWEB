@@ -8,11 +8,11 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     private static Appointment FindAppointment(DemoState s, string id) => s.Appointments.FirstOrDefault(a => a.Id == id) ?? throw new RuleException("Appointment not found.", 404);
     private static bool CanSee(DemoActor actor, Appointment a) => actor.Role == DemoRole.Administrator ||
         (actor.Role == DemoRole.Doctor && actor.DoctorId == a.DoctorId) || (actor.Role == DemoRole.Patient && actor.PatientId == a.PatientId);
-    private static void CheckAccess(DemoActor actor, Appointment a) { if (!CanSee(actor, a)) throw new RuleException("This appointment is not accessible to your demo user.", 403); }
+    private static void CheckAccess(DemoActor actor, Appointment a) { if (!CanSee(actor, a)) throw new RuleException("This appointment is not accessible to your account.", 403); }
     private static void Staff(DemoActor actor, string? doctorId = null)
     {
         if (actor.Role == DemoRole.Patient || (actor.Role == DemoRole.Doctor && doctorId != null && actor.DoctorId != doctorId))
-            throw new RuleException("This action is not available for your demo role.", 403);
+            throw new RuleException("This action is not available for your role.", 403);
     }
     private static void Version(Appointment a, int version) { if (a.Version != version) throw new RuleException("This appointment changed in another window. Refresh and try again.", 409); }
     private void Editable(Appointment a)
@@ -45,7 +45,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         var doctor = FindDoctor(s, command.DoctorId);
         if (actor.Role == DemoRole.Doctor) Staff(actor, doctor.Id);
         if (actor.Role == DemoRole.Patient && (actor.PatientId != command.PatientId || doctor.StaffOnly)) throw new RuleException("This booking requires reception, or belongs to a different patient.", 403);
-        if (!s.Patients.Any(p => p.Id == command.PatientId)) throw new RuleException("Select a valid demonstration patient.");
+        if (!s.Patients.Any(p => p.Id == command.PatientId)) throw new RuleException("Select a valid patient.");
         if (!Guid.TryParse(command.RequestId, out _)) throw new RuleException("A valid booking request identifier is required.");
         var duplicate = s.Appointments.FirstOrDefault(a => a.RequestId == command.RequestId && a.CreatedBy == actor.Id);
         if (duplicate != null)
@@ -101,7 +101,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         if (phone.Length > 30 || phone.Any(c => !char.IsAsciiDigit(c) && !"+ -()".Contains(c))) throw new RuleException("Enter a valid phone number, or leave it empty.");
         return store.Write(s =>
         {
-            if (email.Length > 0 && s.Patients.Any(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase))) throw new RuleException("A demo patient with this email already exists.", 409);
+            if (email.Length > 0 && s.Patients.Any(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase))) throw new RuleException("A patient with this email already exists.", 409);
             var patient = new Patient(Guid.NewGuid().ToString("N"), name, email, phone); s.Patients.Add(patient); return patient;
         });
     }
@@ -114,7 +114,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         store.Write(s =>
         {
             var doctor = FindDoctor(s, doctorId); doctor.WorkingPeriods = periods; doctor.DurationMinutes = durationMinutes;
-            ProtectBookings(s, doctor); doctor.DemoScheduleEdited = true; return true;
+            ProtectBookings(s, doctor); doctor.DemoScheduleEdited = true; doctor.ScheduleVersion++; return true;
         });
     }
     private void ProtectBookings(DemoState s, Doctor doctor)

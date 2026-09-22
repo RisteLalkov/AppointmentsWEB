@@ -12,3 +12,10 @@ TestResults/
 node_modules
 playwright-report/
 .DS_Store
+.env
+.env.*
+!.env.example
+.local-admin.json
+**/appsettings.Local.json
+*.pfx
+*.pem

@@ -141,8 +141,8 @@
       body: data === undefined ? undefined : JSON.stringify(data),
     });
     if (response.status === 401) {
-      location.href = "/Demo";
-      throw new Error("Your demo session ended. Choose a demo user.");
+      location.href = "/Account/Login";
+      throw new Error("Your session ended. Please sign in again.");
     }
     let result;
     try {
@@ -199,7 +199,7 @@
       calendar: "Calendar",
       doctors: isPatient() ? "Find a doctor" : "Doctor directory",
       appointments: "Appointments",
-      patients: "Demo patients",
+      patients: "Patients",
       availability: "Availability",
     }[page];
     $("#zone-label").textContent = state.timeZone;
@@ -215,7 +215,7 @@
   function appointmentRow(a) {
     const d = doctor(a.doctorId),
       p = patient(a.patientId);
-    const name = isPatient() ? d.name : p?.name || "Demo patient";
+    const name = isPatient() ? d.name : p?.name || "Patient";
     return `<button class="appointment-row" data-detail="${a.id}">${avatar(name, Number(d.id.slice(1)))}<span class="row-info"><strong>${escape(name)}</strong><small>${escape(isPatient() ? d.specialty : d.name)}</small></span><span class="row-time">${timeOf(a.start)}<small>${formatDate(dayOf(a.start), { day: "numeric", month: "short" })}</small></span>${badge(a.status)}<span class="muted" aria-hidden="true">↗</span></button>`;
   }
   function renderOverview() {
@@ -367,7 +367,7 @@
             return `<li><span>${days[i]}</span><strong>${periods.length ? periods.map((p) => p.start.slice(0, 5) + " – " + p.end.slice(0, 5)).join(", ") : "—"}</strong></li>`;
           })
           .join("")}</ul>`
-      : `<div class="inline-note warning">Exact hours are not supplied. Reception or the doctor must agree a time and add a demonstration availability period.</div>`;
+      : `<div class="inline-note warning">Exact hours are not supplied. Reception or the doctor must agree a time and add an availability period.</div>`;
   }
   function openDialog(title, content, eyebrow = "CARELINE") {
     lastFocus = document.activeElement;
@@ -386,7 +386,7 @@
     const d = doctor(id);
     openDialog(
       "Meet your care provider",
-      `<div class="profile-header">${avatar(d.name, Number(id.slice(1)), "lg")}<div><h3>${escape(d.name)}</h3><p>${escape(d.specialty)}</p></div></div><div class="form-row"><div><label>Appointment length</label><p>${d.durationMinutes} minutes <small class="muted">· demo default</small></p></div><div><label>Booking method</label><p style="font-size:12px">${escape(d.bookingMethod)}</p></div></div><h3>Working schedule</h3>${scheduleList(d)}<div class="source-notes">${d.demoScheduleEdited ? "<p>Working hours have been adjusted in this demo.</p>" : ""}${d.sourceSchedules.map((s) => `<p>${escape(s.days)} ${s.start ? escape(s.start + "–" + s.end) : "· Hours not specified"}${s.note ? " · " + escape(s.note) : ""}</p>`).join("")}<p>Location: not supplied. ${d.isService ? "This is a service without a named doctor." : ""}</p></div><div class="dialog-actions"><button class="btn primary" data-book="${d.id}">Find an appointment ↗</button></div>`,
+      `<div class="profile-header">${avatar(d.name, Number(id.slice(1)), "lg")}<div><h3>${escape(d.name)}</h3><p>${escape(d.specialty)}</p></div></div><div class="form-row"><div><label>Appointment length</label><p>${d.durationMinutes} minutes <small class="muted">· configurable duration</small></p></div><div><label>Booking method</label><p style="font-size:12px">${escape(d.bookingMethod)}</p></div></div><h3>Working schedule</h3>${scheduleList(d)}<div class="source-notes">${d.demoScheduleEdited ? "<p>Working hours have been adjusted since the original import.</p>" : ""}${d.sourceSchedules.map((s) => `<p>${escape(s.days)} ${s.start ? escape(s.start + "–" + s.end) : "· Hours not specified"}${s.note ? " · " + escape(s.note) : ""}</p>`).join("")}<p>Location: not supplied. ${d.isService ? "This is a service without a named doctor." : ""}</p></div><div class="dialog-actions"><button class="btn primary" data-book="${d.id}">Find an appointment ↗</button></div>`,
       "DOCTOR PROFILE",
     );
   }
@@ -437,8 +437,8 @@
               .map((a) => {
                 const d = doctor(a.doctorId),
                   p = patient(a.patientId),
-                  name = isPatient() ? d.name : p?.name || "Demo patient";
-                return `<tr><td><div class="table-person">${avatar(name, Number(d.id.slice(1)))}<span><strong>${escape(name)}</strong><small>${escape(isPatient() ? d.specialty : "Fictional demonstration patient")}</small></span></div></td>${isPatient() ? "" : `<td>${escape(d.name)}</td>`}<td class="table-date"><strong>${formatDate(dayOf(a.start))}</strong><small>${timeOf(a.start)} – ${timeOf(a.end)}</small></td><td>${badge(a.status)}</td><td><button class="table-action" data-detail="${a.id}">Details ↗</button></td></tr>`;
+                  name = isPatient() ? d.name : p?.name || "Patient";
+                return `<tr><td><div class="table-person">${avatar(name, Number(d.id.slice(1)))}<span><strong>${escape(name)}</strong><small>${escape(isPatient() ? d.specialty : p?.isDemonstration ? "Fictional demonstration patient" : "Patient")}</small></span></div></td>${isPatient() ? "" : `<td>${escape(d.name)}</td>`}<td class="table-date"><strong>${formatDate(dayOf(a.start))}</strong><small>${timeOf(a.start)} – ${timeOf(a.end)}</small></td><td>${badge(a.status)}</td><td><button class="table-action" data-detail="${a.id}">Details ↗</button></td></tr>`;
               })
               .join("")}</tbody></table>`
           : empty(
@@ -460,7 +460,7 @@
       !isPatient() && a.status === "Confirmed" && new Date(a.end) <= new Date();
     openDialog(
       "Appointment details",
-      `<div class="booking-context">${avatar(d.name, Number(d.id.slice(1)))}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div>${badge(a.status)}<dl class="detail-list"><div><dt>Patient</dt><dd>${escape(p?.name || "Demo patient")}</dd></div><div><dt>Date</dt><dd>${formatDate(dayOf(a.start), { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</dd></div><div><dt>Time</dt><dd>${timeOf(a.start)} – ${timeOf(a.end)}</dd></div><div><dt>Time zone</dt><dd>${escape(state.timeZone)}</dd></div><div><dt>Booking reference</dt><dd>CL-${a.id.slice(0, 8).toUpperCase()}</dd></div><div><dt>Duration</dt><dd>${Math.round((new Date(a.end) - new Date(a.start)) / 60000)} minutes</dd></div></dl>${a.status === "Scheduled" ? `<div class="inline-note warning">This time is reserved and awaiting staff confirmation. No notification has been sent.</div>` : ""}<div id="detail-error"></div><div class="dialog-actions">${future ? `<button class="btn danger" data-status="Cancelled" data-id="${id}">Cancel visit</button>${!isPatient() || !d.staffOnly ? `<button class="btn secondary" data-move="${id}">Reschedule</button>` : ""}` : ""}${!isPatient() && future && a.status === "Scheduled" ? `<button class="btn primary" data-status="Confirmed" data-id="${id}">Confirm visit</button>` : ""}${complete ? `<button class="btn secondary" data-status="NoShow" data-id="${id}">Mark no-show</button><button class="btn primary" data-status="Completed" data-id="${id}">Complete visit</button>` : ""}${!future && !complete ? '<button class="btn secondary" data-action="close">Close</button>' : ""}</div>`,
+      `<div class="booking-context">${avatar(d.name, Number(d.id.slice(1)))}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div>${badge(a.status)}<dl class="detail-list"><div><dt>Patient</dt><dd>${escape(p?.name || "Patient")}</dd></div><div><dt>Date</dt><dd>${formatDate(dayOf(a.start), { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</dd></div><div><dt>Time</dt><dd>${timeOf(a.start)} – ${timeOf(a.end)}</dd></div><div><dt>Time zone</dt><dd>${escape(state.timeZone)}</dd></div><div><dt>Booking reference</dt><dd>CL-${a.id.slice(0, 8).toUpperCase()}</dd></div><div><dt>Duration</dt><dd>${Math.round((new Date(a.end) - new Date(a.start)) / 60000)} minutes</dd></div></dl>${a.status === "Scheduled" ? `<div class="inline-note warning">This time is reserved and awaiting staff confirmation. No notification has been sent.</div>` : ""}<div id="detail-error"></div><div class="dialog-actions">${future ? `<button class="btn danger" data-status="Cancelled" data-id="${id}">Cancel visit</button>${!isPatient() || !d.staffOnly ? `<button class="btn secondary" data-move="${id}">Reschedule</button>` : ""}` : ""}${!isPatient() && future && a.status === "Scheduled" ? `<button class="btn primary" data-status="Confirmed" data-id="${id}">Confirm visit</button>` : ""}${complete ? `<button class="btn secondary" data-status="NoShow" data-id="${id}">Mark no-show</button><button class="btn primary" data-status="Completed" data-id="${id}">Complete visit</button>` : ""}${!future && !complete ? '<button class="btn secondary" data-action="close">Close</button>' : ""}</div>`,
       "APPOINTMENT · CL-" + a.id.slice(0, 8).toUpperCase(),
     );
   }
@@ -527,7 +527,7 @@
       profile(selected);
       $("#dialog-content").insertAdjacentHTML(
         "afterbegin",
-        '<div class="inline-note warning">The source requires booking through reception. Switch to the receptionist demo to arrange this visit. No message has been sent.</div>',
+        '<div class="inline-note warning">The source requires booking through reception. Contact reception to arrange this visit. No message has been sent.</div>',
       );
       return;
     }
@@ -549,7 +549,7 @@
       d = doctor(b.doctorId);
     openDialog(
       b.moveId ? "Find a new time" : "Make time for your health",
-      `<div class="steps"><span class="step active">01 · Doctor & time</span><span class="step">02 · Review</span><span class="step">03 · Booked</span></div><div class="field"><label for="booking-doctor">Your care provider</label><select id="booking-doctor" ${b.moveId || isDoctor() ? "disabled" : ""}>${doctorOptions(b.doctorId)}</select></div>${d.requiresConfirmation ? `<div class="inline-note warning">${escape(d.bookingMethod)} · Staff confirmation is required.</div>` : ""}${d.tuesdayFirst ? '<div class="inline-note">Tuesday is filled first. Wednesday opens when that week’s future Tuesday slots are full.</div>' : ""}<div class="form-row" style="margin-top:17px"><div class="field"><label for="booking-date">Choose a date</label><input type="date" id="booking-date" value="${b.date}" min="${state.today}" max="${addDays(state.today, 180)}" required></div><div class="field"><label>Appointment length</label><div class="inline-note">${d.durationMinutes} minutes · ${escape(state.timeZone)}</div></div></div>${!isPatient() ? `<div class="field"><label for="booking-patient-search">Find a demonstration patient</label><input id="booking-patient-search" placeholder="Search patient name…" ${b.moveId ? "disabled" : ""}></div><div class="field"><label for="booking-patient">Patient</label><select id="booking-patient" ${b.moveId ? "disabled" : ""}><option value="">Select a patient</option>${state.patients.map((p) => `<option value="${p.id}" ${p.id === b.patientId ? "selected" : ""}>${escape(p.name)}</option>`).join("")}</select>${b.moveId ? "" : '<button class="link-button" style="font-size:11px;margin-top:8px" id="new-patient-from-booking">＋ Add a demonstration patient</button>'}</div>` : ""}<div class="slots-label"><strong>Available times</strong><span id="slot-count"></span></div><div id="booking-slots" aria-live="polite"></div><div id="booking-error"></div><div class="dialog-actions"><button class="btn secondary" data-action="close">Go back</button><button class="btn primary" id="review-booking">Review appointment ↗</button></div>`,
+      `<div class="steps"><span class="step active">01 · Doctor & time</span><span class="step">02 · Review</span><span class="step">03 · Booked</span></div><div class="field"><label for="booking-doctor">Your care provider</label><select id="booking-doctor" ${b.moveId || isDoctor() ? "disabled" : ""}>${doctorOptions(b.doctorId)}</select></div>${d.requiresConfirmation ? `<div class="inline-note warning">${escape(d.bookingMethod)} · Staff confirmation is required.</div>` : ""}${d.tuesdayFirst ? '<div class="inline-note">Tuesday is filled first. Wednesday opens when that week’s future Tuesday slots are full.</div>' : ""}<div class="form-row" style="margin-top:17px"><div class="field"><label for="booking-date">Choose a date</label><input type="date" id="booking-date" value="${b.date}" min="${state.today}" max="${addDays(state.today, 180)}" required></div><div class="field"><label>Appointment length</label><div class="inline-note">${d.durationMinutes} minutes · ${escape(state.timeZone)}</div></div></div>${!isPatient() ? `<div class="field"><label for="booking-patient-search">Find a patient</label><input id="booking-patient-search" placeholder="Search patient name…" ${b.moveId ? "disabled" : ""}></div><div class="field"><label for="booking-patient">Patient</label><select id="booking-patient" ${b.moveId ? "disabled" : ""}><option value="">Select a patient</option>${state.patients.map((p) => `<option value="${p.id}" ${p.id === b.patientId ? "selected" : ""}>${escape(p.name)}</option>`).join("")}</select>${b.moveId ? "" : '<button class="link-button" style="font-size:11px;margin-top:8px" id="new-patient-from-booking">＋ Add a patient</button>'}</div>` : ""}<div class="slots-label"><strong>Available times</strong><span id="slot-count"></span></div><div id="booking-slots" aria-live="polite"></div><div id="booking-error"></div><div class="dialog-actions"><button class="btn secondary" data-action="close">Go back</button><button class="btn primary" id="review-booking">Review appointment ↗</button></div>`,
       "BOOK AN APPOINTMENT",
     );
     $("#booking-doctor").addEventListener("change", async (e) => {
@@ -636,7 +636,7 @@
     }
     openDialog(
       "One last look.",
-      `<div class="steps"><span class="step">01 · Doctor & time</span><span class="step active">02 · Review</span><span class="step">03 · Booked</span></div><div class="booking-context">${avatar(d.name)}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div><dl class="detail-list"><div><dt>Patient</dt><dd>${escape(patient(b.patientId)?.name)}</dd></div><div><dt>Date</dt><dd>${formatDate(b.date, { weekday: "short", day: "numeric", month: "long" })}</dd></div><div><dt>Time</dt><dd>${b.time} · ${d.durationMinutes} minutes</dd></div><div><dt>Time zone</dt><dd>${escape(state.timeZone)}</dd></div></dl><div class="inline-note ${d.requiresConfirmation ? "warning" : ""}">${d.requiresConfirmation ? "Your selected time will be reserved pending staff confirmation." : "Your appointment will be confirmed immediately."} This is a demonstration; no email or SMS is sent.</div><div id="booking-error"></div><div class="dialog-actions"><button class="btn secondary" id="booking-back">Back</button><button class="btn primary" id="submit-booking">${b.moveId ? "Confirm new time" : "Confirm appointment"} ✓</button></div>`,
+      `<div class="steps"><span class="step">01 · Doctor & time</span><span class="step active">02 · Review</span><span class="step">03 · Booked</span></div><div class="booking-context">${avatar(d.name)}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div><dl class="detail-list"><div><dt>Patient</dt><dd>${escape(patient(b.patientId)?.name)}</dd></div><div><dt>Date</dt><dd>${formatDate(b.date, { weekday: "short", day: "numeric", month: "long" })}</dd></div><div><dt>Time</dt><dd>${b.time} · ${d.durationMinutes} minutes</dd></div><div><dt>Time zone</dt><dd>${escape(state.timeZone)}</dd></div></dl><div class="inline-note ${d.requiresConfirmation ? "warning" : ""}">${d.requiresConfirmation ? "Your selected time will be reserved pending staff confirmation." : "Your appointment will be confirmed immediately."} No email or SMS is sent.</div><div id="booking-error"></div><div class="dialog-actions"><button class="btn secondary" id="booking-back">Back</button><button class="btn primary" id="submit-booking">${b.moveId ? "Confirm new time" : "Confirm appointment"} ✓</button></div>`,
       "REVIEW YOUR VISIT",
     );
     $("#booking-back").addEventListener("click", async () => {
@@ -815,7 +815,7 @@
             )
             .map((a) => ({
               id: a.id,
-              title: `${patient(a.patientId)?.name || "Demo patient"}${!doctorFilter ? " · " + doctor(a.doctorId).name : ""}`,
+              title: `${patient(a.patientId)?.name || "Patient"}${!doctorFilter ? " · " + doctor(a.doctorId).name : ""}`,
               start: wall(a.start),
               end: wall(a.end),
               classNames: [a.status],
@@ -902,11 +902,11 @@
     app.innerHTML =
       heading(
         "People at the heart of care.",
-        "Find or add fictional patients for your demonstration appointments.",
-        '<button class="btn primary" data-action="add-patient">＋ Add demo patient</button>',
+        "Find patients and coordinate their appointments.",
+        '<button class="btn primary" data-action="add-patient">＋ Add patient</button>',
         "DEMONSTRATION DIRECTORY",
       ) +
-      `<div class="toolbar"><div class="search-field"><label class="visually-hidden" for="patient-search">Search patients</label><input id="patient-search" placeholder="Search name, demo email or phone…" value="${escape(search)}"></div></div><div class="inline-note" style="margin-bottom:20px">These are demonstration identities. Please enter fictional contact details only. No medical records are stored.</div><div id="patient-results"></div>`;
+      `<div class="toolbar"><div class="search-field"><label class="visually-hidden" for="patient-search">Search patients</label><input id="patient-search" placeholder="Search name, email or phone…" value="${escape(search)}"></div></div><div class="inline-note" style="margin-bottom:20px">${state.demoMode ? "Demo mode: use fictional contact details only." : "Contact information supports scheduling. Keep clinical details out of this workspace."}</div><div id="patient-results"></div>`;
     $("#patient-search").oninput = (e) => {
       search = e.target.value;
       patientResults();
@@ -920,12 +920,12 @@
         .includes(search.toLowerCase()),
     );
     $("#patient-results").innerHTML =
-      `<p class="results-count">${list.length} demonstration patients</p><div class="patient-card-list">${list.map((p, i) => `<article class="card patient-card">${avatar(p.name, i)}<h3>${escape(p.name)}</h3><p>${escape(p.email || "No demo email supplied")}</p><p>${escape(p.phone || "No demo phone supplied")}</p><span class="badge">Fictional patient</span><br><button class="btn secondary small" data-patient-book="${p.id}">Book appointment ↗</button></article>`).join("")}</div>${list.length ? "" : empty("No matching patients", "Try another search or add a fictional patient.")}`;
+      `<p class="results-count">${list.length} patients</p><div class="patient-card-list">${list.map((p, i) => `<article class="card patient-card">${avatar(p.name, i)}<h3>${escape(p.name)}</h3><p>${escape(p.email || "No email supplied")}</p><p>${escape(p.phone || "No phone supplied")}</p><span class="badge">${p.isDemonstration ? "Fictional patient" : "Patient"}</span><br><button class="btn secondary small" data-patient-book="${p.id}">Book appointment ↗</button></article>`).join("")}</div>${list.length ? "" : empty("No matching patients", "Try another search or add a patient.")}`;
   }
   function addPatientForm(returnBooking) {
     openDialog(
-      "Add a demonstration patient",
-      `<p class="muted" style="font-size:12px">Use fictional details only. This person becomes available across the demonstration workspaces.</p><form id="patient-form"><div class="field"><label for="patient-name">Full name</label><input id="patient-name" name="name" required minlength="2" maxlength="80" placeholder="e.g. Jane Example (Demo)"></div><div class="field"><label for="patient-email">Demo email <span class="muted">· optional</span></label><input id="patient-email" name="email" type="email" maxlength="120" placeholder="jane@example.test"></div><div class="field"><label for="patient-phone">Demo phone <span class="muted">· optional</span></label><input id="patient-phone" name="phone" maxlength="30" placeholder="Leave empty if not needed"></div><div id="patient-error"></div><div class="dialog-actions"><button class="btn secondary" type="button" id="patient-back">Back</button><button class="btn primary" type="submit">Add demo patient</button></div></form>`,
+      "Add a patient",
+      `<p class="muted" style="font-size:12px">${state.demoMode ? "Use fictional details only." : "This person becomes available to the care team for scheduling."}</p><form id="patient-form"><div class="field"><label for="patient-name">Full name</label><input id="patient-name" name="name" required minlength="2" maxlength="80" placeholder="e.g. Jane Example (Demo)"></div><div class="field"><label for="patient-email">Email <span class="muted">· optional</span></label><input id="patient-email" name="email" type="email" maxlength="120" placeholder="jane@example.test"></div><div class="field"><label for="patient-phone">Phone <span class="muted">· optional</span></label><input id="patient-phone" name="phone" maxlength="30" placeholder="Leave empty if not needed"></div><div id="patient-error"></div><div class="dialog-actions"><button class="btn secondary" type="button" id="patient-back">Back</button><button class="btn primary" type="submit">Add patient</button></div></form>`,
       "FICTIONAL DETAILS ONLY",
     );
     $("#patient-back").onclick = () => {
@@ -953,7 +953,7 @@
           closeDialog();
           renderPage();
         }
-        toast("Demonstration patient added.");
+        toast("Patient added.");
       } catch (err) {
         $("#patient-error").innerHTML =
           `<div class="inline-error" role="alert">${escape(err.message)}</div>`;
@@ -971,7 +971,7 @@
         "",
         "AVAILABILITY",
       ) +
-      `<div class="toolbar"><label for="availability-doctor">Care provider</label><select id="availability-doctor" ${isDoctor() ? "disabled" : ""}>${doctorOptions(doctorFilter)}</select></div><div class="inline-note" style="margin-bottom:20px">Changes apply to this demonstration. Existing bookings are protected: conflicting availability changes will be rejected.</div><div class="schedule-editor"><section class="card"><h3>Weekly working hours</h3><p class="muted" style="font-size:12px">Use separate periods for split shifts or recurring breaks.</p><form id="schedule-form"><div class="field"><label for="duration">Appointment duration (minutes)</label><input id="duration" type="number" min="10" max="120" step="5" value="${d.durationMinutes}" required></div><div id="periods">${d.workingPeriods.map(periodRow).join("")}</div><button type="button" class="btn secondary small" id="add-period">＋ Add working period</button><div id="schedule-error" style="margin-top:15px"></div><div class="dialog-actions"><button class="btn primary" type="submit">Save working hours</button></div></form><div class="divider"></div><label>Original workbook information</label><div class="source-notes">${d.sourceSchedules.map((s) => `<p>${escape(s.days)} · ${s.start ? escape(s.start + "–" + s.end) : "Exact hours not supplied"}${s.note ? " · " + escape(s.note) : ""}</p>`).join("")}</div></section><section class="card"><h3>Exceptions & time away</h3><p class="muted" style="font-size:12px">Block a break or holiday, or add a one-off available session.</p><form id="exception-form"><div class="form-row"><div class="field"><label for="exception-date">Date</label><input id="exception-date" name="date" type="date" min="${state.today}" max="${addDays(state.today, 180)}" value="${state.today}" required></div><div class="field"><label for="exception-type">Type</label><select id="exception-type" name="type"><option value="blocked">Unavailable / break</option><option value="available">Additional availability</option></select></div></div><div class="form-row"><div class="field"><label for="exception-start">From</label><input id="exception-start" type="time" name="start" value="12:00" required></div><div class="field"><label for="exception-end">Until</label><input id="exception-end" type="time" name="end" value="13:00" required></div></div><div class="field"><label for="exception-reason">Reason</label><input id="exception-reason" name="reason" maxlength="120" minlength="2" placeholder="e.g. Demo lunch break" required><div class="field-help">For a full day, use 00:00–23:59. No clinical details.</div></div><div id="exception-error"></div><button class="btn primary wide" type="submit">Add exception</button></form><div class="divider"></div><label>Saved exceptions</label><div id="exception-list" aria-live="polite">Loading…</div></section></div>${isAdmin() ? `<section class="reset-panel"><div><strong>Start fresh</strong><p>Reset all demo appointments, patients and schedule changes to the original seed.</p></div><button class="btn secondary" id="reset-demo">Reset demo</button></section>` : ""}`;
+      `<div class="toolbar"><label for="availability-doctor">Care provider</label><select id="availability-doctor" ${isDoctor() ? "disabled" : ""}>${doctorOptions(doctorFilter)}</select></div><div class="inline-note" style="margin-bottom:20px">Changes are shared across all workspaces. Existing bookings are protected: conflicting availability changes will be rejected.</div><div class="schedule-editor"><section class="card"><h3>Weekly working hours</h3><p class="muted" style="font-size:12px">Use separate periods for split shifts or recurring breaks.</p><form id="schedule-form"><div class="field"><label for="duration">Appointment duration (minutes)</label><input id="duration" type="number" min="10" max="120" step="5" value="${d.durationMinutes}" required></div><div id="periods">${d.workingPeriods.map(periodRow).join("")}</div><button type="button" class="btn secondary small" id="add-period">＋ Add working period</button><div id="schedule-error" style="margin-top:15px"></div><div class="dialog-actions"><button class="btn primary" type="submit">Save working hours</button></div></form><div class="divider"></div><label>Original workbook information</label><div class="source-notes">${d.sourceSchedules.map((s) => `<p>${escape(s.days)} · ${s.start ? escape(s.start + "–" + s.end) : "Exact hours not supplied"}${s.note ? " · " + escape(s.note) : ""}</p>`).join("")}</div></section><section class="card"><h3>Exceptions & time away</h3><p class="muted" style="font-size:12px">Block a break or holiday, or add a one-off available session.</p><form id="exception-form"><div class="form-row"><div class="field"><label for="exception-date">Date</label><input id="exception-date" name="date" type="date" min="${state.today}" max="${addDays(state.today, 180)}" value="${state.today}" required></div><div class="field"><label for="exception-type">Type</label><select id="exception-type" name="type"><option value="blocked">Unavailable / break</option><option value="available">Additional availability</option></select></div></div><div class="form-row"><div class="field"><label for="exception-start">From</label><input id="exception-start" type="time" name="start" value="12:00" required></div><div class="field"><label for="exception-end">Until</label><input id="exception-end" type="time" name="end" value="13:00" required></div></div><div class="field"><label for="exception-reason">Reason</label><input id="exception-reason" name="reason" maxlength="120" minlength="2" placeholder="e.g. Lunch break" required><div class="field-help">For a full day, use 00:00–23:59. No clinical details.</div></div><div id="exception-error"></div><button class="btn primary wide" type="submit">Add exception</button></form><div class="divider"></div><label>Saved exceptions</label><div id="exception-list" aria-live="polite">Loading…</div></section></div>${isAdmin() && state.canReset ? `<section class="reset-panel"><div><strong>Start fresh</strong><p>Reset all demo appointments, patients and schedule changes to the original seed.</p></div><button class="btn secondary" id="reset-demo">Reset demo</button></section>` : ""}`;
     $("#availability-doctor").onchange = (e) => {
       doctorFilter = e.target.value;
       renderAvailability();
@@ -998,6 +998,7 @@
         await api("schedule/" + doctorFilter, {
           periods,
           durationMinutes: Number($("#duration").value),
+          version: doctor(doctorFilter).scheduleVersion,
         });
         await load(false);
         $("#schedule-error").innerHTML = "";
@@ -1176,7 +1177,7 @@
         "We couldn’t load your workspace.",
         "Your saved appointments have not been changed.",
       ) +
-      `<div class="inline-error" role="alert">${escape(e.message)}</div><button class="btn primary" id="retry-load">Try again</button><a class="btn secondary" href="/Demo">Switch demo user</a>`;
+      `<div class="inline-error" role="alert">${escape(e.message)}</div><button class="btn primary" id="retry-load">Try again</button><a class="btn secondary" href="/Account/Login">Sign in</a>`;
     $("#retry-load").onclick = () => location.reload();
   });
 })();

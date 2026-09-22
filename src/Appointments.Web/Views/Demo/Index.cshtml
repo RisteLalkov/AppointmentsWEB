@@ -8,6 +8,9 @@
         <footer>Care, beautifully coordinated. <span>Europe / Skopje</span></footer>
     </div>
     <section class="welcome-form">
+        @if (ViewData["ConnectionError"] is string error) { <div class="inline-error" role="alert">@error</div> }
+        @if (TempData["Error"] is string message) { <div class="inline-error" role="alert">@message</div> }
+        <a href="/Account/Login" class="section-link">Password sign-in →</a>
         <div class="demo-label"><span class="dot"></span> INTERACTIVE DEMO</div>
         <h2>Your space.<br />Your perspective.</h2><p class="muted">Choose a workspace to explore the complete appointment journey.</p>
         <div class="role-tabs" role="group" aria-label="Choose demo role"><button type="button" class="active" data-role="Patient">Patient</button><button type="button" data-role="Administrator">Reception</button><button type="button" data-role="Doctor">Doctor</button></div>

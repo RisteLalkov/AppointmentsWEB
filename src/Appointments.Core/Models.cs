@@ -20,6 +20,7 @@ public record Doctor
     public List<WorkingPeriod> WorkingPeriods { get; set; } = [];
     public List<SourceSchedule> SourceSchedules { get; init; } = [];
     public bool DemoScheduleEdited { get; set; }
+    public int ScheduleVersion { get; set; } = 1;
 }
 public record Patient(string Id, string Name, string Email, string Phone, bool IsDemonstration = true);
 public record AvailabilityException(string Id, string DoctorId, DateOnly Date, TimeOnly Start, TimeOnly End, bool IsAvailable, string Reason);

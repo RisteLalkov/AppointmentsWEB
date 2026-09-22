@@ -1,0 +1,9 @@
+[
+  {
+    "Name": "Careline - API and Web",
+    "Projects": [
+      { "Path": "src\\Appointments.Api\\Appointments.Api.csproj", "Action": "Start" },
+      { "Path": "src\\Appointments.Web\\Appointments.Web.csproj", "Action": "Start" }
+    ]
+  }
+]
