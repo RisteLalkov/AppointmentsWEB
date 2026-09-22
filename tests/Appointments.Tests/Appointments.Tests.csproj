@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Appointments.Core/Appointments.Core.csproj" />
+    <Content Include="../../src/Appointments.Web/Seed/doctors.json" Link="doctors.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

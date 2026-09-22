@@ -1,0 +1,7 @@
+{
+  "name": "careline-dom-checks",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node smoke.mjs" },
+  "devDependencies": { "jsdom": "26.1.0" }
+}

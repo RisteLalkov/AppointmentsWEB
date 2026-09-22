@@ -1,0 +1,26 @@
+@model IReadOnlyList<DemoActor>
+@{ ViewData["Title"] = "Choose your workspace"; }
+<main class="welcome">
+    <div class="welcome-story">
+        <a class="brand" href="/Demo"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
+        <div class="welcome-copy"><span class="eyebrow light">A LITTLE LESS WAITING. A LOT MORE CARE.</span><h1>Better days<br />start with<br /><em>better care.</em></h1><p>One thoughtfully connected place for patients, doctors and the people who bring them together.</p></div>
+        <div class="welcome-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-card"><span class="art-check">✓</span><div><strong>Time for your health</strong><small>A simpler way to plan your visit</small></div></div></div>
+        <footer>Care, beautifully coordinated. <span>Europe / Skopje</span></footer>
+    </div>
+    <section class="welcome-form">
+        <div class="demo-label"><span class="dot"></span> INTERACTIVE DEMO</div>
+        <h2>Your space.<br />Your perspective.</h2><p class="muted">Choose a workspace to explore the complete appointment journey.</p>
+        <div class="role-tabs" role="group" aria-label="Choose demo role"><button type="button" class="active" data-role="Patient">Patient</button><button type="button" data-role="Administrator">Reception</button><button type="button" data-role="Doctor">Doctor</button></div>
+        <form asp-controller="Demo" asp-action="Enter" method="post" id="demo-form">
+            <label for="demo-user">Enter as</label>
+            <select id="demo-user" name="userId" required>
+                @foreach (var actor in Model) { <option value="@actor.Id" data-role="@actor.Role">@actor.Name</option> }
+            </select>
+            <p class="role-description" id="role-description">Find your doctor, choose a time, and keep every appointment in one place.</p>
+            <button class="btn primary wide" type="submit">Open my workspace <span aria-hidden="true">↗</span></button>
+        </form>
+        <aside class="demo-notice"><strong>A safe space to explore</strong><p>Demo users and appointments are fictional. Role switching is for testing, with no password required. Please use fictional patient details only.</p></aside>
+        <small class="muted">Doctor schedules are based on the supplied workbook. No messages or reminders are sent.</small>
+    </section>
+</main>
+@section Scripts { <script src="~/js/demo.js" asp-append-version="true"></script> }

@@ -1,0 +1,1430 @@
+[
+  {
+    "id": "d01",
+    "name": "Др. Ивица Клељонски",
+    "specialty": "Спортска медицина",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 2,
+        "days": "Понеделник–Петок",
+        "start": "08:00",
+        "end": "15:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d02",
+    "name": "Дијагностика – РТГ/МНР · услуга",
+    "specialty": "Дијагностика – РТГ/МНР",
+    "bookingMethod": "Закажување со потврда",
+    "funding": "Не е наведено",
+    "isService": true,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "20:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 3,
+        "days": "Понеделник–Петок",
+        "start": "08:00",
+        "end": "20:00",
+        "type": "Фиксен распоред",
+        "note": "Техничар на повик"
+      }
+    ]
+  },
+  {
+    "id": "d03",
+    "name": "Др. Мирко Крстевски",
+    "specialty": "Гастроентерологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Tuesday",
+        "start": "10:00:00",
+        "end": "13:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "10:00:00",
+        "end": "13:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 4,
+        "days": "Вторник; Среда",
+        "start": "10:00",
+        "end": "13:00",
+        "type": "Фиксен распоред",
+        "note": "Колоноскопии и гастроскопии"
+      }
+    ]
+  },
+  {
+    "id": "d04",
+    "name": "Проф. Анте Поповски",
+    "specialty": "Невропсихијатрија / Неврологија",
+    "bookingMethod": "Само со потврда од доктор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 5,
+        "days": "По договор",
+        "start": "",
+        "end": "",
+        "type": "По барање",
+        "note": "Можно и во сабота"
+      }
+    ]
+  },
+  {
+    "id": "d05",
+    "name": "Миодраг Врчаковски",
+    "specialty": "Радиологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "09:00:00",
+        "end": "17:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "09:00:00",
+        "end": "17:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "09:00:00",
+        "end": "17:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "09:00:00",
+        "end": "17:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "09:00:00",
+        "end": "17:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 6,
+        "days": "Понеделник–Петок",
+        "start": "09:00",
+        "end": "17:00",
+        "type": "Фиксен распоред",
+        "note": "МНР/РТГ"
+      }
+    ]
+  },
+  {
+    "id": "d06",
+    "name": "Толе Битовски",
+    "specialty": "Физикална медицина",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 7,
+        "days": "Понеделник–Петок",
+        "start": "08:00",
+        "end": "16:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d07",
+    "name": "Др. Филип Дума",
+    "specialty": "Неврологија / Педијатрија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": true,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Tuesday",
+        "start": "14:30:00",
+        "end": "19:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "16:00:00",
+        "end": "19:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 8,
+        "days": "Вторник",
+        "start": "14:30",
+        "end": "19:00",
+        "type": "Фиксен распоред",
+        "note": "Прво се полни вторник"
+      },
+      {
+        "row": 9,
+        "days": "Среда",
+        "start": "16:00",
+        "end": "19:00",
+        "type": "Фиксен распоред",
+        "note": "Втор избор по вторник"
+      }
+    ]
+  },
+  {
+    "id": "d08",
+    "name": "Др. Игор Кузмановски",
+    "specialty": "Неврологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Thursday",
+        "start": "15:00:00",
+        "end": "17:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 10,
+        "days": "Четврток",
+        "start": "15:00",
+        "end": "17:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d09",
+    "name": "Др. Невенка Славеска",
+    "specialty": "Педијатрија",
+    "bookingMethod": "Со потврда од доктор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Thursday",
+        "start": "15:00:00",
+        "end": "19:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "15:00:00",
+        "end": "19:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 11,
+        "days": "Четврток; Петок",
+        "start": "15:00",
+        "end": "19:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d10",
+    "name": "Др. Виктор Тевчев",
+    "specialty": "Радиологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 12,
+        "days": "Вторник–Четврток",
+        "start": "",
+        "end": "",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d11",
+    "name": "Проф. Др. Гоце Спасовски",
+    "specialty": "Нефрологија / Интерна медицина",
+    "bookingMethod": "Со потврда",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Wednesday",
+        "start": "15:00:00",
+        "end": "17:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 13,
+        "days": "Среда",
+        "start": "15:00",
+        "end": "17:00",
+        "type": "Фиксен распоред",
+        "note": "Задолжително известување при барање"
+      }
+    ]
+  },
+  {
+    "id": "d12",
+    "name": "Проф. Сашо Стојчев",
+    "specialty": "Невропсихијатрија",
+    "bookingMethod": "Со потврда",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "18:00:00",
+        "end": "20:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 14,
+        "days": "Понеделник",
+        "start": "18:00",
+        "end": "20:00",
+        "type": "Фиксен распоред",
+        "note": "Задолжително известување"
+      }
+    ]
+  },
+  {
+    "id": "d13",
+    "name": "Проф. Пушевски",
+    "specialty": "Ревматологија / Интерна медицина",
+    "bookingMethod": "Со дневна потврда",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Tuesday",
+        "start": "14:30:00",
+        "end": "18:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "14:30:00",
+        "end": "18:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 15,
+        "days": "Вторник; Четврток",
+        "start": "14:30",
+        "end": "18:00",
+        "type": "Фиксен распоред",
+        "note": "Во 08:00 се известува број на пациенти"
+      }
+    ]
+  },
+  {
+    "id": "d14",
+    "name": "Проф. Бисерка Јовковска Ќаева",
+    "specialty": "Пулмологија / Алергологија",
+    "bookingMethod": "Со дневна потврда",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Tuesday",
+        "start": "14:30:00",
+        "end": "18:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "14:30:00",
+        "end": "18:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "14:30:00",
+        "end": "18:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 16,
+        "days": "Вторник–Четврток",
+        "start": "14:30",
+        "end": "18:00",
+        "type": "Фиксен распоред",
+        "note": "Во 08:30 се известува број на пациенти"
+      }
+    ]
+  },
+  {
+    "id": "d15",
+    "name": "Јован Нешковски",
+    "specialty": "Нефрологија",
+    "bookingMethod": "По телефон/потврда",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 17,
+        "days": "По повик после 14:00",
+        "start": "",
+        "end": "",
+        "type": "По повик",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d16",
+    "name": "Проф. Владо Поповски",
+    "specialty": "Максилофацијална хирургија",
+    "bookingMethod": "По договор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 18,
+        "days": "По барање",
+        "start": "",
+        "end": "",
+        "type": "По барање",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d17",
+    "name": "Др. Кирил Петковски",
+    "specialty": "Ортопедија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "14:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "14:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "14:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 19,
+        "days": "Понеделник; Среда",
+        "start": "14:00",
+        "end": "20:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      },
+      {
+        "row": 20,
+        "days": "Вторник; Четврток; Петок",
+        "start": "08:00",
+        "end": "14:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d18",
+    "name": "Проф. Зафировски",
+    "specialty": "Ортопедија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "12:00:00",
+        "end": "16:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 21,
+        "days": "Понеделник; Среда",
+        "start": "08:00",
+        "end": "12:00",
+        "type": "Фиксен распоред",
+        "note": "Нов распоред"
+      },
+      {
+        "row": 22,
+        "days": "Четврток",
+        "start": "12:00",
+        "end": "16:00",
+        "type": "Фиксен распоред",
+        "note": "Нов распоред"
+      }
+    ]
+  },
+  {
+    "id": "d19",
+    "name": "Др. Љупчо Ѓоргиевски",
+    "specialty": "Неврологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Фонд",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "15:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 23,
+        "days": "Понеделник–Петок",
+        "start": "08:00",
+        "end": "15:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d20",
+    "name": "Др. Драган Тантуровски",
+    "specialty": "Гинекологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 24,
+        "days": "Понеделник–Петок",
+        "start": "",
+        "end": "",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d21",
+    "name": "Др. Алан Андоновски",
+    "specialty": "Ортопедија",
+    "bookingMethod": "Прво контакт со доктор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 25,
+        "days": "По договор",
+        "start": "",
+        "end": "",
+        "type": "По договор",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d22",
+    "name": "Др. Наташа Доргут",
+    "specialty": "Стоматологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "12:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "12:00:00",
+        "end": "20:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 26,
+        "days": "Понеделник; Среда; Петок",
+        "start": "08:00",
+        "end": "16:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      },
+      {
+        "row": 27,
+        "days": "Вторник; Четврток",
+        "start": "12:00",
+        "end": "20:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d23",
+    "name": "Проф. Љупчо Лековски",
+    "specialty": "Урологија",
+    "bookingMethod": "Преку секретарка",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": true,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "11:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "11:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "11:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 28,
+        "days": "Вторник–Четврток",
+        "start": "08:00",
+        "end": "11:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d24",
+    "name": "Др. Снежана Бонгард",
+    "specialty": "Кардиологија",
+    "bookingMethod": "По телефон/потврда",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 29,
+        "days": "По повик",
+        "start": "",
+        "end": "",
+        "type": "По повик",
+        "note": "Можно и домашна посета"
+      }
+    ]
+  },
+  {
+    "id": "d25",
+    "name": "Др. Владимир Михајловски",
+    "specialty": "Абдоминална хирургија",
+    "bookingMethod": "По телефон",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 30,
+        "days": "По повик",
+        "start": "",
+        "end": "",
+        "type": "По повик",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d26",
+    "name": "Горан Кондов",
+    "specialty": "Торакална хирургија",
+    "bookingMethod": "По телефон",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 31,
+        "days": "По повик",
+        "start": "",
+        "end": "",
+        "type": "По повик",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d27",
+    "name": "Проф. Мирче Симеонов",
+    "specialty": "Ортопедија / Трауматологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "14:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "14:00:00",
+        "end": "20:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "14:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 32,
+        "days": "Понеделник; Среда",
+        "start": "14:00",
+        "end": "20:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      },
+      {
+        "row": 33,
+        "days": "Вторник; Четврток; Петок",
+        "start": "08:00",
+        "end": "14:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d28",
+    "name": "Др. Катерина Адамова",
+    "specialty": "Ендокринологија",
+    "bookingMethod": "По договор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 34,
+        "days": "",
+        "start": "",
+        "end": "",
+        "type": "По договор",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d29",
+    "name": "Проф. Илбер Бесими",
+    "specialty": "Ортопедија / Трауматологија",
+    "bookingMethod": "На повик",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 35,
+        "days": "По барање",
+        "start": "",
+        "end": "",
+        "type": "По барање",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d30",
+    "name": "Др. Аница Димеска",
+    "specialty": "Лекарски уверенија / експертизи",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 36,
+        "days": "Понеделник–Петок",
+        "start": "09:00",
+        "end": "12:00",
+        "type": "Фиксен распоред",
+        "note": "Пасоши, возачи, чамци, воздухопловна и трудова медицина"
+      }
+    ]
+  },
+  {
+    "id": "d31",
+    "name": "Др. Зоран Шандуловски",
+    "specialty": "Дерматологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 37,
+        "days": "Понеделник; Петок",
+        "start": "",
+        "end": "",
+        "type": "Фиксен распоред",
+        "note": "1 смена"
+      },
+      {
+        "row": 38,
+        "days": "Вторник; Среда; Четврток",
+        "start": "",
+        "end": "",
+        "type": "Фиксен распоред",
+        "note": "2 смена"
+      }
+    ]
+  },
+  {
+    "id": "d32",
+    "name": "Проф. Ленче Милошева",
+    "specialty": "Психотерапија / Клиничка психологија",
+    "bookingMethod": "По договор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 39,
+        "days": "По повик",
+        "start": "",
+        "end": "",
+        "type": "По повик",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d33",
+    "name": "Марија Грубор",
+    "specialty": "Психологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 40,
+        "days": "Понеделник–Петок",
+        "start": "08:00",
+        "end": "16:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d34",
+    "name": "Др. Роберт Николовски",
+    "specialty": "Кардиологија / Интерна / Ендокринологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "08:00:00",
+        "end": "16:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 41,
+        "days": "Понеделник–Петок",
+        "start": "08:00",
+        "end": "16:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d35",
+    "name": "Офталмологија · услуга",
+    "specialty": "Офталмологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": true,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "10:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "10:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "10:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "10:00:00",
+        "end": "15:00:00"
+      },
+      {
+        "day": "Friday",
+        "start": "10:00:00",
+        "end": "15:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 42,
+        "days": "Понеделник–Петок",
+        "start": "10:00",
+        "end": "15:00",
+        "type": "Фиксен распоред",
+        "note": "Во изворот нема наведено име на лекар"
+      }
+    ]
+  },
+  {
+    "id": "d36",
+    "name": "Гордана Иванова",
+    "specialty": "Офталмологија",
+    "bookingMethod": "Директно закажување",
+    "funding": "Само приватно",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Wednesday",
+        "start": "15:00:00",
+        "end": "17:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 43,
+        "days": "Среда",
+        "start": "15:00",
+        "end": "17:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d37",
+    "name": "Др. Лидија Дубровска Милетиќ",
+    "specialty": "ОРЛ",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Monday",
+        "start": "10:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Tuesday",
+        "start": "10:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Wednesday",
+        "start": "10:00:00",
+        "end": "14:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "10:00:00",
+        "end": "14:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 44,
+        "days": "Понеделник–Четврток",
+        "start": "10:00",
+        "end": "14:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d38",
+    "name": "Др. Светлана Станковиќ",
+    "specialty": "Хематологија / Интерна медицина",
+    "bookingMethod": "Директно закажување",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": false,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [
+      {
+        "day": "Tuesday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      },
+      {
+        "day": "Thursday",
+        "start": "09:00:00",
+        "end": "12:00:00"
+      }
+    ],
+    "sourceSchedules": [
+      {
+        "row": 45,
+        "days": "Вторник; Четврток",
+        "start": "09:00",
+        "end": "12:00",
+        "type": "Фиксен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d39",
+    "name": "Саде Чагри",
+    "specialty": "Пластична хирургија",
+    "bookingMethod": "По договор",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": false,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 46,
+        "days": "Еднаш месечно",
+        "start": "",
+        "end": "",
+        "type": "Месечен распоред",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "d40",
+    "name": "Др. Емил Угриновски",
+    "specialty": "Не е наведена",
+    "bookingMethod": "Задолжително преку секретарка",
+    "funding": "Не е наведено",
+    "isService": false,
+    "requiresConfirmation": true,
+    "staffOnly": true,
+    "tuesdayFirst": false,
+    "durationMinutes": 30,
+    "workingPeriods": [],
+    "sourceSchedules": [
+      {
+        "row": 47,
+        "days": "По договор",
+        "start": "",
+        "end": "",
+        "type": "По договор",
+        "note": "Задолжително закажување со секретарка"
+      }
+    ]
+  }
+]

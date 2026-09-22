@@ -1,0 +1,37 @@
+@model DemoActor
+@{ ViewData["Title"] = "Workspace"; }
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="/"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
+        <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? "RECEPTION WORKSPACE" : Model.Role == DemoRole.Doctor ? "DOCTOR WORKSPACE" : "PATIENT WORKSPACE")</div>
+        <nav aria-label="Main navigation" id="navigation">
+            <button class="nav-item active" data-page="overview"><span aria-hidden="true">▦</span> Overview</button>
+            @if (Model.Role == DemoRole.Patient) {
+                <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Find a doctor</button>
+            } else {
+                <button class="nav-item" data-page="calendar"><span aria-hidden="true">▤</span> Calendar</button>
+            }
+            <button class="nav-item" data-page="appointments"><span aria-hidden="true">◷</span> Appointments</button>
+            @if (Model.Role != DemoRole.Patient) {
+                <button class="nav-item" data-page="patients"><span aria-hidden="true">♧</span> Demo patients</button>
+                <button class="nav-item" data-page="availability"><span aria-hidden="true">☷</span> Availability</button>
+                @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Doctor directory</button> }
+            }
+        </nav>
+        <div class="sidebar-bottom"><div class="help-card"><span class="mini-cross">✚</span><strong>Room for better care.</strong><p>Every appointment, thoughtfully connected.</p></div><a class="switch-user" href="/Demo">⇄ <span>Switch demo user</span></a><div class="demo-label"><span class="dot"></span> DEMO MODE</div></div>
+    </aside>
+    <div class="main-shell">
+        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><span class="breadcrumb">Workspace <span>/</span> <strong id="page-label">Overview</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? "Receptionist" : Model.Role.RoleLabel()) · Demo</small></div></div></header>
+        <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> Preparing your workspace…</div></div></main>
+        <footer class="app-footer"><span>Careline <span class="muted">/</span> A little more peace of mind.</span><span>Fictional patients · Shared demonstration data</span></footer>
+    </div>
+</div>
+<dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">CARELINE</span><h2 id="dialog-title">Appointment</h2></div><button class="icon-button" id="close-dialog" aria-label="Close dialog">×</button></div><div id="dialog-content"></div></dialog>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-header"><h2 id="confirm-title">Please confirm</h2></div><p id="confirm-message"></p><div class="dialog-actions"><button class="btn secondary" id="confirm-no">Keep current</button><button class="btn primary" id="confirm-yes">Confirm</button></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div hidden id="csrf">@Html.AntiForgeryToken()</div>
+@section Scripts {
+    <script src="~/vendor/fullcalendar.min.js" asp-append-version="true"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+}
