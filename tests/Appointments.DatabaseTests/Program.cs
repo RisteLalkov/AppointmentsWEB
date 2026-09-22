@@ -7,11 +7,11 @@ await using var connection = new NpgsqlConnection(connectionString);
 await connection.OpenAsync();
 var passed = 0;
 // Each intentional constraint failure rolls back its own transaction, preserving the HTTP suite data.
-async Task Reject(string label, string sql, string state)
+async Task Reject(string label, string sql, string state, string? constraint = null)
 {
     await using var tx = await connection.BeginTransactionAsync();
     try { await using var cmd = new NpgsqlCommand(sql, connection, tx); await cmd.ExecuteNonQueryAsync(); throw new Exception("Constraint did not reject: " + label); }
-    catch (PostgresException e) when (e.SqlState == state) { passed++; Console.WriteLine("PASS SQL " + label); }
+    catch (PostgresException e) when (e.SqlState == state && (constraint == null || e.ConstraintName == constraint)) { passed++; Console.WriteLine("PASS SQL " + label); }
     finally { await tx.RollbackAsync(); }
 }
 string Copy(string doctor, string patient, string start = "a.\"Start\"", string end = "a.\"End\"", string status = "'Confirmed'") => $"""
@@ -19,8 +19,8 @@ string Copy(string doctor, string patient, string start = "a.\"Start\"", string 
     SELECT 'sql-' || md5(random()::text), {doctor}, {patient}, {start}, {end}, {status}, 1, 'sql-test', now(), md5(random()::text)
     FROM "Appointments" a WHERE a."Status" <> 'Cancelled' AND a."Start" > now() ORDER BY a."Start" LIMIT 1;
     """;
-await Reject("doctor exclusion constraint", Copy("a.\"DoctorId\"", "(SELECT p.\"Id\" FROM \"Patients\" p WHERE p.\"Id\" <> a.\"PatientId\" LIMIT 1)"), "23P01");
-await Reject("patient exclusion across different doctors", Copy("(SELECT d.\"Id\" FROM \"Doctors\" d WHERE d.\"Id\" <> a.\"DoctorId\" LIMIT 1)", "a.\"PatientId\""), "23P01");
+await Reject("doctor exclusion constraint", Copy("a.\"DoctorId\"", "(SELECT p.\"Id\" FROM \"Patients\" p WHERE p.\"Id\" <> a.\"PatientId\" LIMIT 1)"), "23P01", "EX_Appointments_Doctor");
+await Reject("patient exclusion across different doctors", Copy("'d02'", "a.\"PatientId\""), "23P01", "EX_Appointments_Patient");
 await Reject("invalid appointment range", Copy("a.\"DoctorId\"", "a.\"PatientId\"", end: "a.\"Start\""), "23514");
 await Reject("invalid status", Copy("a.\"DoctorId\"", "a.\"PatientId\"", status: "'Invented'"), "23514");
 await Reject("nonexistent patient foreign key", Copy("a.\"DoctorId\"", "'missing-patient'", status: "'Cancelled'"), "23503");

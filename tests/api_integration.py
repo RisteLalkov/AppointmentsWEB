@@ -7,6 +7,7 @@ import argparse
 import concurrent.futures
 import datetime as dt
 import http.cookiejar
+from html import unescape
 import json
 import os
 import pathlib
@@ -144,6 +145,14 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         with concurrent.futures.ThreadPoolExecutor(2) as pool:
             responses = list(pool.map(lambda pair: pair[0].request('/api/appointments', pair[1]), [(admin, race[0]), (admin2, race[1])]))
         check(sorted(code for code, _ in responses) == [200, 409], 'Two API processes cannot double-book one doctor')
+        # Two different doctor locks must still protect the patient's single time interval.
+        admin.ok('/api/exceptions/d03', {'date': day, 'start': slots[4]['time'], 'end': slots[5]['time'], 'isAvailable': True, 'reason': 'Integration shared time'})
+        with concurrent.futures.ThreadPoolExecutor(2) as pool:
+            responses = list(pool.map(lambda pair: pair[0].request('/api/appointments', pair[1]),
+                [(admin, command(slots[4], 'p05')), (admin2, command(slots[4], 'p05', 'd03'))]))
+        check(sorted(code for code, _ in responses) == [200, 409], 'One patient cannot book overlapping visits across two doctors and API processes')
+        doctor_booking = doctor.ok('/api/appointments', command(slots[5], 'p06'))
+        check(any(a['id'] == doctor_booking['id'] for a in admin.ok('/api/bootstrap')['appointments']), 'Doctor phone booking appears in reception workspace')
         move = {'date': day, 'time': slots[2]['time'], 'version': appt['version']}
         moved = patient.ok(f"/api/appointments/{appt['id']}/move", move)
         check(moved['version'] == 2 and moved['start'] != appt['start'], 'Patient rescheduling persists and increments version')
@@ -178,6 +187,7 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         start('Appointments.Web', web_url, web_env, temporary)
         web = Client(web_url)
         html = web.web_login('patient@integration.test')
+        check('CONNECTED' in html and 'DEMO MODE' not in html, 'Password workspace clearly identifies connected mode')
         check('accessToken' not in html and patient.token not in html, 'API session token is not rendered into HTML')
         check(any(a['id'] == appt['id'] and a['status'] == 'Cancelled' for a in web.ok('/data/bootstrap')['appointments']), 'MVC reads shared database state through API')
         check(web.request('/data/appointments', command(slots[3]), csrf=False)[0] == 400, 'MVC rejects mutations without anti-forgery token')
@@ -185,10 +195,12 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         check(any(a['id'] == web_booking['id'] for a in doctor.ok('/api/bootstrap')['appointments']), 'Browser booking reaches doctor through database')
         admin_web = Client(web_url)
         admin_web.web_login('admin@integration.test')
-        check('People &amp; access' in admin_web.ok('/Accounts'), 'Administrator account management Razor page renders')
+        accounts_page = unescape(admin_web.ok('/Accounts'))
+        check('People & access' in accounts_page and 'phone-login@integration.test' in accounts_page, 'Administrator account management Razor page renders live accounts')
         check(not pathlib.Path(web_env['Demo__DataPath']).exists(), 'API-backed MVC never creates a local JSON store')
         # Restart an API; sessions, schedules and appointments survive.
         server1.terminate(); server1.wait(timeout=15)
+        check(web.request('/data/bootstrap')[0] == 503, 'MVC reports API outage without silently falling back to demonstration data')
         server1 = start('Appointments.Api', api1, env, temporary)
         check(any(a['id'] == web_booking['id'] for a in patient.ok('/api/bootstrap')['appointments']), 'Appointments and sessions survive API restart')
         check(next(d for d in admin.ok('/api/bootstrap')['doctors'] if d['id']=='d01')['scheduleVersion'] == 2, 'Schedule revision survives API restart')

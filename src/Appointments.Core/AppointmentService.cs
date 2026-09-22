@@ -109,7 +109,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     {
         Staff(actor, doctorId);
         if (durationMinutes is < 10 or > 120 || durationMinutes % 5 != 0) throw new RuleException("Use a duration of 10–120 minutes in 5-minute increments.");
-        if (periods.Count > 21 || periods.Any(p => !Enum.IsDefined(p.Day) || p.Start >= p.End || p.Start.Second != 0 || p.End.Second != 0 || (p.End - p.Start).TotalMinutes < durationMinutes)) throw new RuleException("Each working period must fit a full appointment and end on the same day.");
+        if (periods.Count > 21 || periods.Any(p => p == null || !Enum.IsDefined(p.Day) || p.Start >= p.End || p.Start.Second != 0 || p.End.Second != 0 || (p.End - p.Start).TotalMinutes < durationMinutes)) throw new RuleException("Each working period must fit a full appointment and end on the same day.");
         if (periods.Any(p => periods.Any(q => !ReferenceEquals(p, q) && p.Day == q.Day && p.Start < q.End && q.Start < p.End))) throw new RuleException("Working periods must not overlap.");
         store.Write(s =>
         {
