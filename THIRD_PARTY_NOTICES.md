@@ -29,7 +29,7 @@ Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettie
 | Microsoft.EntityFrameworkCore.Relational and Design | 10.0.12 | MIT — https://github.com/dotnet/efcore/blob/main/LICENSE.txt |
 | Microsoft.AspNetCore.OpenApi | 10.0.12 | MIT — ASP.NET Core repository license above |
 | Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | PostgreSQL License — https://github.com/npgsql/efcore.pg/blob/main/LICENSE |
-| Npgsql (transitive driver) | NuGet-resolved 10.x | PostgreSQL License — https://github.com/npgsql/npgsql/blob/main/LICENSE |
+| Npgsql (transitive driver) | 10.0.3 | PostgreSQL License — https://github.com/npgsql/npgsql/blob/main/LICENSE |
 | PostgreSQL server | 17 (serviced container tag / local install) | PostgreSQL License — https://www.postgresql.org/about/licence/ |
 | dotnet-ef (optional development tool) | 10.0.12 | MIT — EF Core repository license above |
 
