@@ -1,2 +1,3 @@
-@{ ViewData["Title"] = "Something went wrong"; }
-<main class="error-page"><span class="brand-mark">✚</span><h1>We couldn’t complete that request.</h1><p>Your saved appointments are retained. Return to the workspace and try again.</p><a class="btn primary" href="/">Return to workspace</a><a class="btn secondary" href="/Demo">Choose a demo user</a></main>
+@inject BackendSettings Backend
+@{ ViewData["Title"] = "Настана грешка"; }
+<main class="error-page"><span class="brand-mark">✚</span><h1>Не можевме да го извршиме барањето.</h1><p>Вашите зачувани термини се задржани. Вратете се во работниот простор и обидете се повторно.</p><a class="btn primary" href="/">Врати се во работниот простор</a>@if (Backend.DemoEnabled) { <a class="btn secondary" href="/Demo">Избери демо-корисник</a> } else { <a class="btn secondary" href="/Account/Login">Најави се</a> }</main>

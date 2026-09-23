@@ -14,7 +14,7 @@ public sealed class DataController(IServiceProvider services, DemoIdentity ident
     private IAppointmentService Demo => services.GetRequiredService<IAppointmentService>();
     private async Task<IActionResult> Execute(string path, object? body, Func<object> demo)
     {
-        if (!ModelState.IsValid) return BadRequest(new { error = "Some fields are invalid. Check dates, times and required values." });
+        if (!ModelState.IsValid) return BadRequest(new { error = "Некои полиња се невалидни. Проверете ги датумите, времињата и задолжителните вредности." });
         try { return Ok(settings.UseApi ? await api.SendAsync<JsonElement>("api/" + path, body, ct: HttpContext.RequestAborted) : demo()); }
         catch (RuleException e) { return StatusCode(e.StatusCode, new { error = e.Message }); }
     }

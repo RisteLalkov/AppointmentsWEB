@@ -6,6 +6,7 @@ import argparse
 import concurrent.futures
 import datetime as dt
 import http.cookiejar
+import html as html_module
 import json
 import os
 import pathlib
@@ -55,7 +56,7 @@ class Client:
         text = response.read().decode()
         try: body = json.loads(text)
         except ValueError: body = text
-        return response.status, body
+        return response.status, html_module.unescape(body) if isinstance(body, str) else body
     def login(self, user):
         code, html = self.request('/Demo')
         token = re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"', html).group(1)
@@ -81,20 +82,24 @@ with tempfile.TemporaryDirectory(prefix='careline-http-') as temp:
                 except (OSError, urllib.error.URLError): pass
                 time.sleep(.1)
             else: raise RuntimeError('Server did not start.')
+            check('lang="mk"' in anon.request('/Demo')[1], 'Macedonian is the default document language')
+            code, error = anon.request('/Home/Error')
+            check('Не можевме да го извршиме барањето.' in error, 'Error page is Macedonian')
             check(anon.request('/data/bootstrap')[0]==401,'Anonymous data access denied')
             check(anon.request('/Demo/Enter',{'userId':'admin'},form=True)[0]==400,'Role switch requires antiforgery token')
             reception, pat, other, doctor = Client(), Client(), Client(), Client()
             html=reception.login('admin')
-            check('Calendar' in html and 'Availability' in html,'Reception navigation includes schedule management')
+            check('Календар' in html and 'Достапност' in html,'Reception navigation includes schedule management')
             html=pat.login('p01')
-            check('Find a doctor' in html and 'data-page="patients"' not in html,'Patient navigation is role-specific')
+            check('Пронајди лекар' in html and 'data-page="patients"' not in html,'Patient navigation is role-specific')
             other.login('p02');doctor.login('user-d01')
             code,data=pat.request('/data/bootstrap')
             check(code==200 and len(data['doctors'])==40,'Bootstrap provides complete workbook directory')
             check(len(data['patients'])==1 and all(a['patientId']=='p01' for a in data['appointments']),'Patient HTTP payload excludes other patients')
             check(pat.request('/data/patients',{'name':'Example Demo','email':'','phone':''})[0]==403,'Patient cannot create patient through direct HTTP')
             check(doctor.request('/data/schedule/d03',{'periods':[],'durationMinutes':30})[0]==403,'Doctor cannot edit another schedule through HTTP')
-            check(reception.request('/data/patients',{'name':'','email':'','phone':''})[0]==400,'Empty required fields rejected')
+            code, invalid = reception.request('/data/patients',{'name':'','email':'','phone':''})
+            check(code==400 and 'Некои полиња се невалидни' in invalid['error'], 'Invalid fields rejected with Macedonian feedback')
             check(reception.request('/data/patients',{'name':'HTTP Demo','email':'http@example.test','phone':''},csrf=False)[0]==400,'Write endpoints reject missing antiforgery token')
             code,p=reception.request('/data/patients',{'name':'HTTP Example (Demo)','email':'http@example.test','phone':''})
             check(code==200 and p['isDemonstration'],'Reception creates a fictional patient')
@@ -108,7 +113,8 @@ with tempfile.TemporaryDirectory(prefix='careline-http-') as temp:
             check(code==200 and a['status']=='Confirmed','Patient booking succeeds through MVC endpoint')
             check(pat.request('/data/appointments',command)[1]['id']==a['id'],'HTTP duplicate submission is idempotent')
             conflict=dict(command,patientId='p02',requestId=str(uuid.uuid4()))
-            check(other.request('/data/appointments',conflict)[0]==409,'HTTP conflict returns 409')
+            code, conflict_result = other.request('/data/appointments',conflict)
+            check(code==409 and 'повеќе не е достапен' in conflict_result['error'], 'Conflict returns 409 with Macedonian feedback')
             check(any(x['id']==a['id'] for x in doctor.request('/data/bootstrap')[1]['appointments']),'Patient booking immediately visible to doctor')
             check(any(x['id']==a['id'] for x in reception.request('/data/bootstrap')[1]['appointments']),'Patient booking immediately visible to reception')
             check(other.request('/data/appointments/'+a['id']+'/status',{'status':'Cancelled','version':1})[0]==403,'Other patient cannot mutate appointment by ID')

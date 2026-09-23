@@ -6,11 +6,11 @@ const users = [...document.querySelectorAll("#demo-user option")].map((o) => ({
 }));
 const descriptions = {
   Patient:
-    "Find your doctor, choose a time, and keep every appointment in one place.",
+    "Пронајдете лекар, изберете термин и следете ги сите закажувања на едно место.",
   Administrator:
-    "Coordinate the whole day. Find patients, book visits, and manage every doctor’s schedule.",
+    "Организирајте го целиот ден. Пронајдете пациенти, закажете прегледи и управувајте со распоредите на лекарите.",
   Doctor:
-    "A clear view of your day, with your appointments and availability together.",
+    "Јасен преглед на вашиот ден, со сите термини и достапни периоди на едно место.",
 };
 document
   .querySelectorAll("[data-role].role-tabs button, .role-tabs button")

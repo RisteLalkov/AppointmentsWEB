@@ -14,13 +14,13 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
     public static string HashToken(string token) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
     public static string Email(string email) => email.Trim().ToLowerInvariant();
     public static void ValidatePassword(string password)
-    { if (password.Length is < 12 or > 128) throw new RuleException("Use a password between 12 and 128 characters."); }
+    { if (password.Length is < 12 or > 128) throw new RuleException("Користете лозинка со должина од 12 до 128 знаци."); }
 
     public async Task<SessionResponse> LoginAsync(LoginInput input, CancellationToken ct)
     {
         var normalized = Email(input.Email);
         var id = await db.Accounts.AsNoTracking().Where(a => a.NormalizedEmail == normalized).Select(a => a.Id).SingleOrDefaultAsync(ct);
-        if (id == null) throw new RuleException("Email or password is incorrect, or the account is unavailable.", 401);
+        if (id == null) throw new RuleException("Е-поштата или лозинката е неточна, или сметката е недостапна.", 401);
         // Commit failures as well: lockout counters must survive rejected sign-ins.
         var result = await operations.TransactionAsync<SessionResponse?>(async () =>
         {
@@ -38,13 +38,13 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
             account.FailedAttempts = 0; account.LockedUntil = null;
             return await IssueAsync(account, false, ct);
         }, ct);
-        return result ?? throw new RuleException("Email or password is incorrect, or the account is unavailable.", 401);
+        return result ?? throw new RuleException("Е-поштата или лозинката е неточна, или сметката е недостапна.", 401);
     }
     public Task<SessionResponse> DemoAsync(string id, CancellationToken ct) => operations.TransactionAsync(async () =>
     {
         await operations.LockAsync("account:" + id, ct);
         var account = await db.Accounts.SingleOrDefaultAsync(a => a.Id == id && a.IsDemo && a.Enabled, ct)
-            ?? throw new RuleException("Demo user not found.", 404);
+            ?? throw new RuleException("Демо-корисникот не е пронајден.", 404);
         return await IssueAsync(account, true, ct);
     }, ct);
     private async Task<SessionResponse> IssueAsync(Account account, bool demo, CancellationToken ct)
@@ -60,11 +60,11 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
     public async Task<AccountSummary> RegisterAsync(RegisterInput input, CancellationToken ct)
     {
         ValidatePassword(input.Password);
-        if (input.Name.Trim().Length < 2) throw new RuleException("Enter a name with at least two characters.");
+        if (input.Name.Trim().Length < 2) throw new RuleException("Внесете име со најмалку два знака.");
         return await operations.TransactionAsync(async () =>
         {
             var email = Email(input.Email);
-            if (await db.Patients.AnyAsync(p => p.Email == email, ct)) throw new RuleException("An account cannot be created with these details. Ask reception if you already have a patient record.", 409);
+            if (await db.Patients.AnyAsync(p => p.Email == email, ct)) throw new RuleException("Не може да се создаде сметка со овие податоци. Проверете со рецепцијата дали веќе имате пациентски профил.", 409);
             var patient = new Patient(Guid.NewGuid().ToString("N"), input.Name.Trim(), email, "", false);
             var account = new Account { Email = email, NormalizedEmail = email, Name = patient.Name, Role = DemoRole.Patient, PatientId = patient.Id };
             account.PasswordHash = hasher.HashPassword(account, input.Password); db.Patients.Add(patient); db.Accounts.Add(account);
@@ -74,10 +74,10 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
     public async Task<AccountSummary> CreateAsync(DemoActor actor, AccountInput input, CancellationToken ct)
     {
         Admin(actor); ValidatePassword(input.Password);
-        if (!Enum.IsDefined(input.Role) || input.Name.Trim().Length is < 2 or > 80 || input.Email.Length > 120) throw new RuleException("Enter a valid name, email and role.");
-        if (input.Role == DemoRole.Doctor && (input.DoctorId == null || input.PatientId != null || !await db.Doctors.AnyAsync(d => d.Id == input.DoctorId && !d.IsService, ct))) throw new RuleException("Select one named doctor for a doctor account.");
-        if (input.Role == DemoRole.Patient && (input.PatientId == null || input.DoctorId != null || !await db.Patients.AnyAsync(p => p.Id == input.PatientId, ct))) throw new RuleException("Select one patient for a patient account.");
-        if (input.Role == DemoRole.Administrator && (input.PatientId != null || input.DoctorId != null)) throw new RuleException("Reception accounts cannot be linked to a doctor or patient.");
+        if (!Enum.IsDefined(input.Role) || input.Name.Trim().Length is < 2 or > 80 || input.Email.Length > 120) throw new RuleException("Внесете важечко име, е-пошта и улога.");
+        if (input.Role == DemoRole.Doctor && (input.DoctorId == null || input.PatientId != null || !await db.Doctors.AnyAsync(d => d.Id == input.DoctorId && !d.IsService, ct))) throw new RuleException("Изберете конкретен лекар за лекарската сметка.");
+        if (input.Role == DemoRole.Patient && (input.PatientId == null || input.DoctorId != null || !await db.Patients.AnyAsync(p => p.Id == input.PatientId, ct))) throw new RuleException("Изберете еден пациент за пациентската сметка.");
+        if (input.Role == DemoRole.Administrator && (input.PatientId != null || input.DoctorId != null)) throw new RuleException("Сметките на рецепцијата не може да се поврзат со лекарски или пациентски профил.");
         return await operations.TransactionAsync(async () =>
         {
             var email = Email(input.Email);
@@ -93,7 +93,7 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
         {
             await operations.LockAsync("account:" + actor.Id, ct);
             var account = await db.Accounts.SingleAsync(a => a.Id == actor.Id, ct);
-            if (account.PasswordHash.Length == 0 || hasher.VerifyHashedPassword(account, account.PasswordHash, input.CurrentPassword) == PasswordVerificationResult.Failed) throw new RuleException("Current password is incorrect.");
+            if (account.PasswordHash.Length == 0 || hasher.VerifyHashedPassword(account, account.PasswordHash, input.CurrentPassword) == PasswordVerificationResult.Failed) throw new RuleException("Тековната лозинка е неточна.");
             account.PasswordHash = hasher.HashPassword(account, input.NewPassword); account.FailedAttempts = 0; account.LockedUntil = null;
             await db.Sessions.Where(s => s.AccountId == actor.Id).ExecuteDeleteAsync(ct);
             operations.Audit(actor, "account.password.changed", actor.Id); await db.SaveChangesAsync(ct); return true;
@@ -101,23 +101,23 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
     }
     public async Task AccessAsync(DemoActor actor, string id, bool enabled, CancellationToken ct)
     {
-        Admin(actor); if (id == actor.Id) throw new RuleException("You cannot disable your own account.");
+        Admin(actor); if (id == actor.Id) throw new RuleException("Не може да ја оневозможите сопствената сметка.");
         await operations.TransactionAsync(async () =>
         {
             await operations.LockAsync("account:" + id, ct);
-            var account = await db.Accounts.SingleOrDefaultAsync(a => a.Id == id, ct) ?? throw new RuleException("Account not found.", 404);
+            var account = await db.Accounts.SingleOrDefaultAsync(a => a.Id == id, ct) ?? throw new RuleException("Сметката не е пронајдена.", 404);
             account.Enabled = enabled; await db.Sessions.Where(s => s.AccountId == id).ExecuteDeleteAsync(ct);
             operations.Audit(actor, enabled ? "account.enabled" : "account.disabled", id); await db.SaveChangesAsync(ct); return true;
         }, ct);
     }
-    public static void Admin(DemoActor actor) { if (actor.Role != DemoRole.Administrator) throw new RuleException("Administrator access is required.", 403); }
+    public static void Admin(DemoActor actor) { if (actor.Role != DemoRole.Administrator) throw new RuleException("Потребен е администраторски пристап.", 403); }
     public Task<bool> CredentialsAsync(DemoActor actor, string id, LoginInput input, CancellationToken ct)
     {
         Admin(actor); ValidatePassword(input.Password);
         return operations.TransactionAsync(async () =>
         {
             await operations.LockAsync("account:" + id, ct);
-            var account = await db.Accounts.SingleOrDefaultAsync(a => a.Id == id, ct) ?? throw new RuleException("Account not found.", 404);
+            var account = await db.Accounts.SingleOrDefaultAsync(a => a.Id == id, ct) ?? throw new RuleException("Сметката не е пронајдена.", 404);
             account.Email = Email(input.Email); account.NormalizedEmail = account.Email;
             account.PasswordHash = hasher.HashPassword(account, input.Password); account.IsDemo = false;
             account.FailedAttempts = 0; account.LockedUntil = null;

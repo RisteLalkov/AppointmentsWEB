@@ -10,9 +10,9 @@ public static class DemoSeed
         {
             TimeZoneId = clock.Zone.Id,
             Doctors = JsonSerializer.Deserialize<List<Doctor>>(doctorJson, JsonDemoStore.JsonOptions)!,
-            Patients = [new("p01", "Ana Petrova (Demo)", "ana@example.test", ""), new("p02", "Marko Nikolov (Demo)", "marko@example.test", ""),
-                new("p03", "Elena Stojanova (Demo)", "elena@example.test", ""), new("p04", "David Ivanov (Demo)", "david@example.test", ""),
-                new("p05", "Sara Dimitrova (Demo)", "sara@example.test", ""), new("p06", "Nikola Petrov (Demo)", "nikola@example.test", "")]
+            Patients = [new("p01", "Ана Петрова (демо)", "ana@example.test", ""), new("p02", "Марко Николов (демо)", "marko@example.test", ""),
+                new("p03", "Елена Стојанова (демо)", "elena@example.test", ""), new("p04", "Давид Иванов (демо)", "david@example.test", ""),
+                new("p05", "Сара Димитрова (демо)", "sara@example.test", ""), new("p06", "Никола Петров (демо)", "nikola@example.test", "")]
         };
         // Relative dates keep a fresh demo useful. No clinical records or notes are seeded.
         for (var offset = -7; offset <= 10; offset++)
@@ -33,7 +33,7 @@ public static class DemoSeed
         return state;
     }
     public static List<DemoActor> Actors(IEnumerable<Doctor> doctors, IEnumerable<Patient> patients) =>
-        [new("admin", "Alex • Reception", DemoRole.Administrator),
+        [new("admin", "Алекс • Рецепција", DemoRole.Administrator),
          ..patients.Select(p => new DemoActor(p.Id, p.Name, DemoRole.Patient, PatientId: p.Id)),
          ..doctors.Where(d => !d.IsService).Select(d => new DemoActor("user-" + d.Id, d.Name, DemoRole.Doctor, d.Id))];
 }

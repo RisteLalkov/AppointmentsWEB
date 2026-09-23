@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using Appointments.Api.Services;
@@ -9,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
+// Macedonian is the application default on every host, regardless of OS language.
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("mk-MK");
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("mk-MK");
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 64 * 1024);
 var connection = builder.Configuration.GetConnectionString("Appointments");
@@ -22,7 +26,7 @@ builder.Services.Configure<PasswordHasherOptions>(o => o.IterationCount = 210000
 builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOptions, SessionAuthentication>("Session", _ => { });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(new { error = "Invalid input. Check required fields, email, dates, times and text lengths." }));
+builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(new { error = "Невалидни податоци. Проверете ги задолжителните полиња, е-поштата, датумите, времињата и должината на текстот." }));
 builder.Services.AddOpenApi();
 builder.Services.AddRateLimiter(o =>
 {
@@ -30,6 +34,10 @@ builder.Services.AddRateLimiter(o =>
     o.AddPolicy("auth", context => RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
 });
 var app = builder.Build();
+app.UseRequestLocalization(new RequestLocalizationOptions()
+    .SetDefaultCulture("mk-MK")
+    .AddSupportedCultures("mk-MK")
+    .AddSupportedUICultures("mk-MK"));
 app.Use(async (context, next) =>
 {
     context.Response.Headers.CacheControl = "no-store";
@@ -39,12 +47,12 @@ app.Use(async (context, next) =>
     catch (Exception e) when (e is NpgsqlException or DbUpdateException)
     {
         app.Logger.LogError(e, "Database request failed."); context.Response.StatusCode = 503;
-        await context.Response.WriteAsJsonAsync(new { error = "The database is temporarily unavailable. Please try again." });
+        await context.Response.WriteAsJsonAsync(new { error = "Базата на податоци е привремено недостапна. Обидете се повторно." });
     }
     catch (Exception e)
     {
         app.Logger.LogError(e, "Request failed."); context.Response.StatusCode = 500;
-        await context.Response.WriteAsJsonAsync(new { error = "The request could not be completed. Please try again." });
+        await context.Response.WriteAsJsonAsync(new { error = "Барањето не можеше да се изврши. Обидете се повторно." });
     }
 });
 if (!app.Environment.IsDevelopment()

@@ -11,8 +11,8 @@ public sealed class DemoIdentity(IHttpContextAccessor accessor, IServiceProvider
         get
         {
             var user = accessor.HttpContext!.User; var id = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!settings.UseApi) return Users.FirstOrDefault(a => a.Id == id) ?? throw new RuleException("Select a demo user again.", 401);
-            if (id == null || !Enum.TryParse<DemoRole>(user.FindFirstValue(ClaimTypes.Role), out var role)) throw new RuleException("Please sign in again.", 401);
+            if (!settings.UseApi) return Users.FirstOrDefault(a => a.Id == id) ?? throw new RuleException("Повторно изберете демо-корисник.", 401);
+            if (id == null || !Enum.TryParse<DemoRole>(user.FindFirstValue(ClaimTypes.Role), out var role)) throw new RuleException("Најавете се повторно.", 401);
             return new(id, user.Identity!.Name!, role, user.FindFirstValue("doctorId"), user.FindFirstValue("patientId"));
         }
     }

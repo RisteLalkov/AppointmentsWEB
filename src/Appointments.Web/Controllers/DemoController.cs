@@ -22,7 +22,7 @@ public sealed class DemoController(DemoIdentity identity, ApiClient api, Backend
             if (settings.UseApi) session = await api.SendAsync<SessionResponse>("api/auth/demo-login", new { userId }, false, ct);
             else
             {
-                var actor = identity.Users.FirstOrDefault(a => a.Id == userId) ?? throw new RuleException("Select an existing demo user.");
+                var actor = identity.Users.FirstOrDefault(a => a.Id == userId) ?? throw new RuleException("Изберете постоечки демо-корисник.");
                 session = new("", DateTimeOffset.UtcNow.AddHours(2), actor, true);
             }
             await WebSession.SignInAsync(HttpContext, session); return RedirectToAction("Index", "Home");

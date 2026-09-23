@@ -1,24 +1,24 @@
 @model List<Appointments.Contracts.AccountSummary>
-@{ ViewData["Title"] = "Account management"; var workspace = ViewData["Workspace"] as Appointments.Contracts.BootstrapResponse; }
+@{ ViewData["Title"] = "Управување со сметки"; var workspace = ViewData["Workspace"] as Appointments.Contracts.BootstrapResponse; }
 <main class="account-admin">
     <a class="brand" href="/">✚ careline.</a>
-    <div class="page-heading"><div><span class="eyebrow">RECEPTION WORKSPACE</span><h1>People & access</h1><p class="muted">Manage sign-in access for your patients and care team.</p></div><a class="btn secondary" href="/">Back to workspace</a></div>
+    <div class="page-heading"><div><span class="eyebrow">РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА</span><h1>Корисници и пристап</h1><p class="muted">Управувајте со пристапот на пациентите и медицинскиот тим.</p></div><a class="btn secondary" href="/">Назад во работниот простор</a></div>
     @if (ViewData["Error"] is string error || TempData["Error"] is string) { <div class="inline-error" role="alert">@(ViewData["Error"] ?? TempData["Error"])</div> }
     @if (TempData["Notice"] is string notice) { <div class="inline-note" role="status">@notice</div> }
-    <section class="card account-section"><h2>Create an account</h2><p class="muted">Link a patient or doctor account to an existing profile. Each profile has one account. New patient profiles can be added in the workspace.</p>
+    <section class="card account-section"><h2>Создај сметка</h2><p class="muted">Поврзете пациентска или лекарска сметка со постоечки профил. Секој профил има една сметка. Нови пациентски профили се додаваат во работниот простор.</p>
     <form asp-action="Create" method="post" class="account-grid">
-        <div class="field"><label for="name">Display name</label><input id="name" name="Name" required maxlength="80" minlength="2" autocomplete="off"></div>
-        <div class="field"><label for="email">Sign-in email</label><input id="email" name="Email" type="email" required maxlength="120" autocomplete="off"></div>
-        <div class="field"><label for="role">Role</label><select id="role" name="Role"><option>Patient</option><option>Doctor</option><option>Administrator</option></select></div>
-        <div class="field"><label for="patient">Patient profile (patient role only)</label><select id="patient" name="PatientId"><option value="">None</option>@foreach(var p in workspace?.Patients ?? []) { <option value="@p.Id">@p.Name</option> }</select></div>
-        <div class="field"><label for="doctor">Doctor profile (doctor role only)</label><select id="doctor" name="DoctorId"><option value="">None</option>@foreach(var d in workspace?.Doctors ?? []) { <option value="@d.Id">@d.Name</option> }</select></div>
-        <div class="field"><label for="password">Initial password (12–128 characters)</label><input id="password" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div>
-        <div><button class="btn primary" type="submit">Create account</button></div>
+        <div class="field"><label for="name">Прикажано име</label><input id="name" name="Name" required maxlength="80" minlength="2" autocomplete="off"></div>
+        <div class="field"><label for="email">Е-пошта за најава</label><input id="email" name="Email" type="email" required maxlength="120" autocomplete="off"></div>
+        <div class="field"><label for="role">Улога</label><select id="role" name="Role"><option value="Patient">Пациент</option><option value="Doctor">Лекар</option><option value="Administrator">Администратор</option></select></div>
+        <div class="field"><label for="patient">Пациентски профил (само за пациенти)</label><select id="patient" name="PatientId"><option value="">Нема</option>@foreach(var p in workspace?.Patients ?? []) { <option value="@p.Id">@p.Name</option> }</select></div>
+        <div class="field"><label for="doctor">Лекарски профил (само за лекари)</label><select id="doctor" name="DoctorId"><option value="">Нема</option>@foreach(var d in workspace?.Doctors ?? []) { <option value="@d.Id">@d.Name</option> }</select></div>
+        <div class="field"><label for="password">Почетна лозинка (12–128 знаци)</label><input id="password" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div>
+        <div><button class="btn primary" type="submit">Создај сметка</button></div>
     </form></section>
-    <section class="card account-section"><h2>Existing accounts</h2><p class="muted">Set credentials to enable password sign-in for a demonstration identity. This removes it from the demo switcher. Share credentials privately; no email is sent.</p>
+    <section class="card account-section"><h2>Постоечки сметки</h2><p class="muted">Поставете податоци за најава за да овозможите пристап со лозинка за демо-корисник. Тој повеќе нема да се прикажува во изборот на демо-корисници. Споделете ги податоците приватно; не се испраќа е-пошта.</p>
     <div class="account-list">@foreach(var a in Model) {
-        <article class="account-row"><div><strong>@a.Name</strong><p>@a.Email</p><span class="badge">@a.Role · @(a.Enabled ? "Enabled" : "Disabled")</span></div>
-        <div class="account-actions"><form asp-action="Access" method="post"><input name="id" type="hidden" value="@a.Id"><input name="enabled" type="hidden" value="@(!a.Enabled)"><button class="btn secondary small" type="submit">@(a.Enabled ? "Disable access" : "Enable access")</button></form>
-        <details><summary>Set sign-in credentials</summary><form asp-action="Credentials" method="post"><input name="id" type="hidden" value="@a.Id"><div class="field"><label for="email-@a.Id">Email</label><input id="email-@a.Id" name="Email" value="@a.Email" type="email" required maxlength="120" autocomplete="off"></div><div class="field"><label for="password-@a.Id">New password</label><input id="password-@a.Id" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div><button class="btn primary small" type="submit">Save credentials & revoke sessions</button></form></details></div></article>
+        <article class="account-row"><div><strong>@a.Name</strong><p>@a.Email</p><span class="badge">@a.Role.RoleLabel() · @(a.Enabled ? "Овозможена" : "Оневозможена")</span></div>
+        <div class="account-actions"><form asp-action="Access" method="post"><input name="id" type="hidden" value="@a.Id"><input name="enabled" type="hidden" value="@(!a.Enabled)"><button class="btn secondary small" type="submit">@(a.Enabled ? "Оневозможи пристап" : "Овозможи пристап")</button></form>
+        <details><summary>Постави податоци за најава</summary><form asp-action="Credentials" method="post"><input name="id" type="hidden" value="@a.Id"><div class="field"><label for="email-@a.Id">Е-пошта</label><input id="email-@a.Id" name="Email" value="@a.Email" type="email" required maxlength="120" autocomplete="off"></div><div class="field"><label for="password-@a.Id">Нова лозинка</label><input id="password-@a.Id" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div><button class="btn primary small" type="submit">Зачувај и одјави ги сите сесии</button></form></details></div></article>
     }</div></section>
 </main>

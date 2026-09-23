@@ -1,13 +1,13 @@
 @inject BackendSettings Backend
-@{ ViewData["Title"] = "Welcome back"; }
+@{ ViewData["Title"] = "Добредојдовте повторно"; }
 <main class="welcome">
-    <div class="welcome-story"><a class="brand" href="/"><span class="brand-mark">✚</span> careline.</a><div class="welcome-copy"><span class="eyebrow light">CARE, BEAUTIFULLY CONNECTED</span><h1>A familiar place.<br /><em>A fresh start.</em></h1><p>Your appointments and your care team, together in one place.</p></div></div>
-    <section class="welcome-form"><span class="eyebrow">WELCOME BACK</span><h2>Good to see you.</h2><p class="muted">Sign in to your personal workspace.</p>
+    <div class="welcome-story"><a class="brand" href="/"><span class="brand-mark">✚</span> careline.</a><div class="welcome-copy"><span class="eyebrow light">ГРИЖА ШТО НÈ ПОВРЗУВА</span><h1>Познато место.<br /><em>Нов почеток.</em></h1><p>Вашите термини и медицинскиот тим, на едно место.</p></div></div>
+    <section class="welcome-form"><span class="eyebrow">ДОБРЕДОЈДОВТЕ ПОВТОРНО</span><h2>Драго ни е што сте тука.</h2><p class="muted">Најавете се во вашиот работен простор.</p>
         @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error</div> }
         @if (TempData["Notice"] is string notice) { <div class="inline-note">@notice</div> }
-        <form asp-action="Login" method="post"><div class="field"><label for="email">Email address</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">Password</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">Sign in ↗</button></form>
-        <div class="divider"></div><p>New here? <a href="/Account/Register">Create a patient account</a></p>
-        @if (Backend.DemoEnabled) { <a class="btn secondary wide" href="/Demo">Explore the development demo</a> }
-        <p class="field-help" style="margin-top:20px">Need help accessing an existing record? Contact reception. Password recovery by email is not enabled.</p>
+        <form asp-action="Login" method="post"><div class="field"><label for="email">Е-пошта</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">Лозинка</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">Најави се ↗</button></form>
+        <div class="divider"></div><p>Првпат сте тука? <a href="/Account/Register">Создајте пациентска сметка</a></p>
+        @if (Backend.DemoEnabled) { <a class="btn secondary wide" href="/Demo">Разгледајте ја демо-верзијата</a> }
+        <p class="field-help" style="margin-top:20px">Ви треба помош за пристап до постоечки профил? Контактирајте ја рецепцијата. Обновувањето лозинка преку е-пошта не е овозможено.</p>
     </section>
 </main>

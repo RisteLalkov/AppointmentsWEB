@@ -22,6 +22,6 @@ public sealed class AuthController(AccountService service, AppointmentsDbContext
         DemoAllowed(); var accounts = await db.Accounts.AsNoTracking().Where(a => a.IsDemo && a.Enabled).OrderBy(a => a.Id).ToListAsync(ct); return accounts.Select(a => a.Actor()).ToList();
     }
     [HttpPost("demo-login"), EnableRateLimiting("auth")] public Task<SessionResponse> DemoLogin(DemoLoginInput input, CancellationToken ct) { DemoAllowed(); return service.DemoAsync(input.UserId, ct); }
-    private void DemoAllowed() { if (!environment.IsDevelopment() || !configuration.GetValue<bool>("Demo:Enabled")) throw new RuleException("Demo mode is disabled.", 404); }
+    private void DemoAllowed() { if (!environment.IsDevelopment() || !configuration.GetValue<bool>("Demo:Enabled")) throw new RuleException("Демо-режимот е оневозможен.", 404); }
 }
 public record DemoLoginInput(string UserId);

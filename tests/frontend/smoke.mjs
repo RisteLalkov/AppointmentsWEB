@@ -115,6 +115,7 @@ async function workspace(user) {
       "utf8",
     ),
   );
+  w.eval(await readFile(resolve(root, "src/Appointments.Web/wwwroot/js/validation-mk.js"), "utf8"));
   const $ = (selector) => w.document.querySelector(selector);
   await until(() => $(".page-heading"));
   return {
@@ -149,9 +150,11 @@ try {
   }
   const pat = await workspace("p01");
   assert(
-    pat.$(".hero-banner")?.textContent.includes("A little time"),
+    pat.$(".hero-banner")?.textContent.includes("Одвојте време"),
     "Patient overview renders",
   );
+  assert(pat.w.document.documentElement.lang === "mk", "HTML defaults to Macedonian");
+  assert(pat.$("#navigation").textContent.includes("Термини") && !pat.$("#navigation").textContent.includes("Appointments"), "Navigation is Macedonian");
   await pat.page("doctors");
   assert(
     pat.w.document.querySelectorAll(".doctor-card").length === 40,
@@ -170,6 +173,7 @@ try {
     pat.$("#main-dialog").open && pat.$(".schedule-summary"),
     "Doctor profile shows schedule",
   );
+  assert(pat.$(".schedule-summary").textContent.includes("Понеделник"), "Doctor profile uses Macedonian weekdays");
   pat.click("#close-dialog");
   pat.click("[data-book]");
   await until(() => pat.$("#booking-date"));
@@ -187,10 +191,11 @@ try {
   pat.click("#submit-booking");
   await until(() => pat.$(".success-view"));
   assert(
-    pat.$(".success-view").textContent.includes("Appointment confirmed"),
+    pat.$(".success-view").textContent.includes("Терминот е потврден"),
     "Patient booking completes in DOM flow",
   );
   pat.click("[data-detail]");
+  assert(pat.$("#dialog-content .badge.Confirmed").textContent === "Потврден", "Status label translated while CSS/protocol status stays stable");
   assert(pat.$("[data-move]"), "Saved appointment offers rescheduling");
   pat.click("[data-move]");
   await until(() => pat.$("#booking-date"));
@@ -202,7 +207,7 @@ try {
   pat.click("#submit-booking");
   await until(() => pat.$(".success-view"));
   assert(
-    pat.$(".success-view").textContent.includes("Appointment confirmed"),
+    pat.$(".success-view").textContent.includes("Терминот е потврден"),
     "Rescheduling completes in DOM flow",
   );
   pat.click("[data-detail]");
@@ -224,12 +229,14 @@ try {
     admin.$(".fc-timeGridWeek-view"),
     "Reception weekly calendar initializes",
   );
+  assert(/[А-Ша-ш]/.test(admin.$("#calendar-title").textContent) && !/September|October|November|December|January|February|March|April|May|June|July|August/.test(admin.$("#calendar-title").textContent), "Calendar title uses Macedonian months");
+  assert(admin.$(".fc-col-header-cell-cushion").textContent.includes("пон"), "Calendar starts on Monday with Macedonian weekday");
   admin.change("#calendar-doctor", "d01");
   await until(() =>
-    admin.$("#calendar-loading")?.textContent.includes("Live availability"),
+    admin.$("#calendar-loading")?.textContent.includes("Ажурирана достапност"),
   );
   assert(
-    admin.$("#calendar-loading").textContent.includes("Live availability"),
+    admin.$("#calendar-loading").textContent.includes("Ажурирана достапност"),
     "Calendar loads authoritative availability successfully",
   );
   admin.click('[data-calendar-view="dayGridMonth"]');
@@ -238,7 +245,11 @@ try {
   assert(admin.$(".fc-timeGridDay-view"), "Day view initializes");
   await admin.page("patients");
   admin.click('[data-action="add-patient"]');
+  admin.$("#patient-name").reportValidity();
+  assert(admin.$("#patient-name").validationMessage === "Пополнете го ова задолжително поле.", "Native required validation is Macedonian");
   admin.$("#patient-name").value = "DOM Example (Demo)";
+  admin.$("#patient-name").dispatchEvent(new admin.w.Event("input", { bubbles: true }));
+  assert(admin.$("#patient-name").checkValidity(), "Editing clears localized validation error");
   admin.$("#patient-email").value = "dom@example.test";
   admin
     .$("#patient-form")
@@ -256,6 +267,11 @@ try {
     admin.w.document.querySelectorAll(".period-row").length === 5,
     "Weekly schedule editor loads actual periods",
   );
+  assert(admin.$(".period-day").value === "Monday" && admin.$(".period-day option:checked").textContent === "Понеделник", "Schedule editor preserves enum values behind Macedonian labels");
+  admin.$("#schedule-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => admin.$("#toast").textContent === "Неделното работно време е зачувано.");
+  const saved = await (await admin.request("/data/bootstrap")).json();
+  assert(saved.doctors.find(d => d.id === "d01").workingPeriods[0].day === "Monday", "Localized schedule saves and round-trips through server");
   admin.$("#exception-date").value = iso;
   admin.$("#exception-start").value = "12:00";
   admin.$("#exception-end").value = "13:00";
@@ -280,7 +296,7 @@ try {
     "Doctor calendar cannot switch to other doctors",
   );
   await doc.page("availability");
-  await until(() => doc.$("#exception-list")?.textContent !== "Loading…");
+  await until(() => doc.$("#exception-list")?.textContent !== "Се вчитува…");
   assert(
     doc.$("#availability-doctor").disabled,
     "Doctor availability selection stays on own profile",

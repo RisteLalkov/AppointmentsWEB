@@ -1,8 +1,12 @@
+using System.Globalization;
 using Appointments.Core;
 using Appointments.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
+// Macedonian is the application default on every host, regardless of OS language.
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("mk-MK");
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("mk-MK");
 var builder = WebApplication.CreateBuilder(args);
 var allowHttp = builder.Environment.IsDevelopment()
     || builder.Configuration.GetValue<bool>("Hosting:AllowHttpForTesting");
@@ -49,6 +53,10 @@ builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<DemoIdentity>();
 var app = builder.Build();
+app.UseRequestLocalization(new RequestLocalizationOptions()
+    .SetDefaultCulture("mk-MK")
+    .AddSupportedCultures("mk-MK")
+    .AddSupportedUICultures("mk-MK"));
 app.UseExceptionHandler("/Home/Error");
 if (!allowHttp)
 {

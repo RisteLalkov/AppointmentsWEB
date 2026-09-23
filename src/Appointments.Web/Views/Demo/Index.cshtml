@@ -1,29 +1,29 @@
 @model IReadOnlyList<DemoActor>
-@{ ViewData["Title"] = "Choose your workspace"; }
+@{ ViewData["Title"] = "Изберете работен простор"; }
 <main class="welcome">
     <div class="welcome-story">
         <a class="brand" href="/Demo"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
-        <div class="welcome-copy"><span class="eyebrow light">A LITTLE LESS WAITING. A LOT MORE CARE.</span><h1>Better days<br />start with<br /><em>better care.</em></h1><p>One thoughtfully connected place for patients, doctors and the people who bring them together.</p></div>
-        <div class="welcome-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-card"><span class="art-check">✓</span><div><strong>Time for your health</strong><small>A simpler way to plan your visit</small></div></div></div>
-        <footer>Care, beautifully coordinated. <span>Europe / Skopje</span></footer>
+        <div class="welcome-copy"><span class="eyebrow light">ПОМАЛКУ ЧЕКАЊЕ. ПОВЕЌЕ ГРИЖА.</span><h1>Подобрите денови<br />започнуваат со<br /><em>подобра грижа.</em></h1><p>Заедничко место за пациентите, лекарите и тимот што ги поврзува.</p></div>
+        <div class="welcome-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-card"><span class="art-check">✓</span><div><strong>Време за вашето здравје</strong><small>Полесен начин да го закажете прегледот</small></div></div></div>
+        <footer>Грижа со добра организација. <span>Европа / Скопје</span></footer>
     </div>
     <section class="welcome-form">
         @if (ViewData["ConnectionError"] is string error) { <div class="inline-error" role="alert">@error</div> }
         @if (TempData["Error"] is string message) { <div class="inline-error" role="alert">@message</div> }
-        <a href="/Account/Login" class="section-link">Password sign-in →</a>
-        <div class="demo-label"><span class="dot"></span> INTERACTIVE DEMO</div>
-        <h2>Your space.<br />Your perspective.</h2><p class="muted">Choose a workspace to explore the complete appointment journey.</p>
-        <div class="role-tabs" role="group" aria-label="Choose demo role"><button type="button" class="active" data-role="Patient">Patient</button><button type="button" data-role="Administrator">Reception</button><button type="button" data-role="Doctor">Doctor</button></div>
+        <a href="/Account/Login" class="section-link">Најава со лозинка →</a>
+        <div class="demo-label"><span class="dot"></span> ИНТЕРАКТИВНА ДЕМО-ВЕРЗИЈА</div>
+        <h2>Ваш простор.<br />Ваша перспектива.</h2><p class="muted">Изберете работен простор за да го разгледате целиот процес на закажување.</p>
+        <div class="role-tabs" role="group" aria-label="Изберете демо-улога"><button type="button" class="active" data-role="Patient">Пациент</button><button type="button" data-role="Administrator">Рецепција</button><button type="button" data-role="Doctor">Лекар</button></div>
         <form asp-controller="Demo" asp-action="Enter" method="post" id="demo-form">
-            <label for="demo-user">Enter as</label>
+            <label for="demo-user">Продолжете како</label>
             <select id="demo-user" name="userId" required>
                 @foreach (var actor in Model) { <option value="@actor.Id" data-role="@actor.Role">@actor.Name</option> }
             </select>
-            <p class="role-description" id="role-description">Find your doctor, choose a time, and keep every appointment in one place.</p>
-            <button class="btn primary wide" type="submit">Open my workspace <span aria-hidden="true">↗</span></button>
+            <p class="role-description" id="role-description">Пронајдете лекар, изберете термин и следете ги сите закажувања на едно место.</p>
+            <button class="btn primary wide" type="submit">Отвори го мојот работен простор <span aria-hidden="true">↗</span></button>
         </form>
-        <aside class="demo-notice"><strong>A safe space to explore</strong><p>Demo users and appointments are fictional. Role switching is for testing, with no password required. Please use fictional patient details only.</p></aside>
-        <small class="muted">Doctor schedules are based on the supplied workbook. No messages or reminders are sent.</small>
+        <aside class="demo-notice"><strong>Простор за испробување</strong><p>Демо-корисниците и термините се измислени. Менувањето улоги е за тестирање и не бара лозинка. Користете само измислени податоци за пациенти.</p></aside>
+        <small class="muted">Распоредите на лекарите се преземени од доставениот документ. Не се испраќаат пораки или потсетници.</small>
     </section>
 </main>
 @section Scripts { <script src="~/js/demo.js" asp-append-version="true"></script> }

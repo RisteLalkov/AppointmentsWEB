@@ -1,5 +1,8 @@
 # Careline · AppointmentsWEB
 
+The user interface now opens in **Macedonian (`mk-MK`)** by default, including the calendar, booking flow, all three roles, account management and validation messages. Existing database records and API identifiers remain compatible; **no database migration or reset is needed**. Republish **both Web and API** to update all messages. See [localization and update instructions](docs/LOCALIZATION.md).
+
+
 Doctor appointment scheduling with **ASP.NET Core MVC, a separate ASP.NET Core API, and PostgreSQL**. The existing patient, reception and doctor interfaces now share durable relational data through the API. All projects are in one Visual Studio solution.
 
 ## Run in Visual Studio on Windows

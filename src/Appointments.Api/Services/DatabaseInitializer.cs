@@ -33,7 +33,7 @@ public sealed class DatabaseInitializer(AppointmentsDbContext db, SchedulingCloc
             AccountService.ValidatePassword(password); email = AccountService.Email(email);
             if (!await db.Accounts.AnyAsync(a => a.NormalizedEmail == email, ct))
             {
-                var admin = new Account { Email = email, NormalizedEmail = email, Name = "Careline Administrator", Role = DemoRole.Administrator };
+                var admin = new Account { Email = email, NormalizedEmail = email, Name = "Администратор на Careline", Role = DemoRole.Administrator };
                 admin.PasswordHash = hasher.HashPassword(admin, password); db.Accounts.Add(admin);
             }
         }

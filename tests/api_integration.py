@@ -74,6 +74,7 @@ class Client:
         return self
     def web_login(self, email, secret=password):
         _, html = self.request('/Account/Login')
+        check('lang="mk"' in html and 'Најави се' in unescape(html), 'Password login page defaults to Macedonian')
         token = re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"', html)[1]
         code, html = self.request('/Account/Login', {'Email': email, 'Password': secret, '__RequestVerificationToken': token}, form=True)
         check(code == 200 and 'main-content' in html, 'Password login renders MVC workspace')
@@ -187,7 +188,7 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         start('Appointments.Web', web_url, web_env, temporary)
         web = Client(web_url)
         html = web.web_login('patient@integration.test')
-        check('CONNECTED' in html and 'DEMO MODE' not in html, 'Password workspace clearly identifies connected mode')
+        check('ПОВРЗАНО' in unescape(html) and 'ДЕМО-РЕЖИМ' not in unescape(html), 'Password workspace clearly identifies connected mode')
         check('accessToken' not in html and patient.token not in html, 'API session token is not rendered into HTML')
         check(any(a['id'] == appt['id'] and a['status'] == 'Cancelled' for a in web.ok('/data/bootstrap')['appointments']), 'MVC reads shared database state through API')
         check(web.request('/data/appointments', command(slots[3]), csrf=False)[0] == 400, 'MVC rejects mutations without anti-forgery token')
@@ -196,7 +197,8 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         admin_web = Client(web_url)
         admin_web.web_login('admin@integration.test')
         accounts_page = unescape(admin_web.ok('/Accounts'))
-        check('People & access' in accounts_page and 'phone-login@integration.test' in accounts_page, 'Administrator account management Razor page renders live accounts')
+        check('Корисници и пристап' in accounts_page and 'phone-login@integration.test' in accounts_page, 'Administrator account management Razor page renders live accounts')
+        check('<option value="Patient">Пациент</option>' in accounts_page and '<option value="Doctor">Лекар</option>' in accounts_page, 'Account role options preserve API values behind Macedonian labels')
         check(not pathlib.Path(web_env['Demo__DataPath']).exists(), 'API-backed MVC never creates a local JSON store')
         # Restart an API; sessions, schedules and appointments survive.
         server1.terminate(); server1.wait(timeout=15)

@@ -15,7 +15,7 @@ public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor)
         if (authenticated)
         {
             var token = await accessor.HttpContext!.GetTokenAsync("api_token");
-            if (string.IsNullOrEmpty(token)) throw new RuleException("Please sign in again.", 401);
+            if (string.IsNullOrEmpty(token)) throw new RuleException("Најавете се повторно.", 401);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
         try
@@ -23,13 +23,13 @@ public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor)
             using var response = await client.SendAsync(request, ct);
             if (!response.IsSuccessStatusCode)
             {
-                var message = response.StatusCode == HttpStatusCode.Unauthorized ? "Your session has expired. Please sign in again." : "The API could not complete this request.";
+                var message = response.StatusCode == HttpStatusCode.Unauthorized ? "Вашата сесија истече. Најавете се повторно." : "Серверот не можеше да го изврши барањето.";
                 try { var error = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: ct); if (error.TryGetProperty("error", out var value)) message = value.GetString() ?? message; } catch (JsonException) { }
                 throw new RuleException(message, (int)response.StatusCode);
             }
             return (await response.Content.ReadFromJsonAsync<T>(JsonDemoStore.JsonOptions, ct))!;
         }
-        catch (HttpRequestException) { throw new RuleException("The appointment API is unavailable. Start Appointments.Api and check its database connection.", 503); }
-        catch (TaskCanceledException) when (!ct.IsCancellationRequested) { throw new RuleException("The API request timed out. Refresh before retrying; your last change may have been saved.", 504); }
+        catch (HttpRequestException) { throw new RuleException("Сервисот за термини е недостапен. Обидете се повторно подоцна или контактирајте ја рецепцијата.", 503); }
+        catch (TaskCanceledException) when (!ct.IsCancellationRequested) { throw new RuleException("Истече времето за одговор од серверот. Освежете пред да се обидете повторно; последната промена можеби е зачувана.", 504); }
     }
 }

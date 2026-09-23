@@ -11,7 +11,7 @@ public record Doctor
     public required string Name { get; init; }
     public required string Specialty { get; init; }
     public string BookingMethod { get; init; } = "";
-    public string Funding { get; init; } = "Not specified";
+    public string Funding { get; init; } = "Не е наведено";
     public bool IsService { get; init; }
     public bool RequiresConfirmation { get; init; }
     public bool StaffOnly { get; init; }

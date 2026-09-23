@@ -37,7 +37,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     }
     public async Task<Appointment> BookAsync(DemoActor actor, BookingCommand command, CancellationToken ct)
     {
-        if (!Guid.TryParse(command.RequestId, out var key)) throw new RuleException("A valid booking request identifier is required.");
+        if (!Guid.TryParse(command.RequestId, out var key)) throw new RuleException("Потребен е важечки идентификатор на барањето. Повторно отворете го формуларот за закажување.");
         command = command with { RequestId = key.ToString("N") };
         var fingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(command, JsonDemoStore.JsonOptions))));
         return await TransactionAsync(async () =>
@@ -46,7 +46,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             var replay = await db.IdempotencyRequests.FindAsync([actor.Id, command.RequestId], ct);
             if (replay != null)
             {
-                if (replay.Fingerprint != fingerprint) throw new RuleException("This request identifier was already used for a different booking.", 409);
+                if (replay.Fingerprint != fingerprint) throw new RuleException("Ова барање веќе е употребено за друг термин. Повторно отворете го формуларот.", 409);
                 return JsonSerializer.Deserialize<Appointment>(replay.ResponseJson, JsonDemoStore.JsonOptions)!;
             }
             await LockAsync("doctor:" + command.DoctorId, ct);
@@ -63,7 +63,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     private async Task<Appointment> ChangeAppointmentAsync(DemoActor actor, string id, string action, Func<AppointmentService, Appointment> change, CancellationToken ct)
     {
         var reference = await Visible(actor).AsNoTracking().Where(a => a.Id == id).Select(a => new { a.DoctorId, a.PatientId }).SingleOrDefaultAsync(ct)
-            ?? throw new RuleException("Appointment not found or not accessible.", 404);
+            ?? throw new RuleException("Терминот не е пронајден или немате пристап до него.", 404);
         return await TransactionAsync(async () =>
         {
             await LockAsync("doctor:" + reference.DoctorId, ct);
@@ -91,7 +91,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         await TransactionAsync(async () =>
         {
             await LockAsync("doctor:" + doctorId, ct); var state = await LoadAsync(doctorId, null, ct);
-            if (input.Version is null || input.Version != state.Doctors.Single().ScheduleVersion) throw new RuleException("The schedule changed. Refresh this page before saving.", 409);
+            if (input.Version is null || input.Version != state.Doctors.Single().ScheduleVersion) throw new RuleException("Распоредот е променет. Освежете ја страницата пред зачувување.", 409);
             Rules(state).ReplaceSchedule(actor, doctorId, input.Periods, input.DurationMinutes);
             Audit(actor, "schedule.updated", doctorId); await db.SaveChangesAsync(ct); return true;
         }, ct);
@@ -108,19 +108,19 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     }
     public async Task RemoveExceptionAsync(DemoActor actor, string id, CancellationToken ct)
     {
-        var doctorId = await db.Exceptions.AsNoTracking().Where(e => e.Id == id).Select(e => e.DoctorId).SingleOrDefaultAsync(ct) ?? throw new RuleException("Exception not found.", 404);
+        var doctorId = await db.Exceptions.AsNoTracking().Where(e => e.Id == id).Select(e => e.DoctorId).SingleOrDefaultAsync(ct) ?? throw new RuleException("Исклучокот не е пронајден.", 404);
         Staff(actor, doctorId);
         await TransactionAsync(async () =>
         {
             await LockAsync("doctor:" + doctorId, ct); var state = await LoadAsync(doctorId, null, ct);
-            var e = await db.Exceptions.SingleOrDefaultAsync(e => e.Id == id, ct) ?? throw new RuleException("Exception already removed.", 409);
+            var e = await db.Exceptions.SingleOrDefaultAsync(e => e.Id == id, ct) ?? throw new RuleException("Исклучокот веќе е отстранет.", 409);
             if (state.Exceptions.All(x => x.Id != id)) state.Exceptions.Add(e);
             Rules(state).RemoveException(actor, id); db.Exceptions.Remove(e); Audit(actor, "availability.removed", id); await db.SaveChangesAsync(ct); return true;
         }, ct);
     }
     private async Task<DemoState> LoadAsync(string doctorId, string? patientId, CancellationToken ct)
     {
-        var doctor = await db.Doctors.AsSplitQuery().SingleOrDefaultAsync(d => d.Id == doctorId, ct) ?? throw new RuleException("Doctor not found.", 404);
+        var doctor = await db.Doctors.AsSplitQuery().SingleOrDefaultAsync(d => d.Id == doctorId, ct) ?? throw new RuleException("Лекарот не е пронајден.", 404);
         var now = clock.UtcNow; var today = clock.Today;
         return new DemoState
         {
@@ -136,14 +136,14 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     public void Audit(DemoActor actor, string action, string target) => db.AuditEvents.Add(new() { ActorId = actor.Id, Action = action, TargetId = target, OccurredAt = clock.UtcNow });
     public static void Staff(DemoActor actor, string? doctorId = null)
     {
-        if (actor.Role == DemoRole.Patient || (actor.Role == DemoRole.Doctor && doctorId != null && actor.DoctorId != doctorId)) throw new RuleException("Your account cannot perform this operation.", 403);
+        if (actor.Role == DemoRole.Patient || (actor.Role == DemoRole.Doctor && doctorId != null && actor.DoctorId != doctorId)) throw new RuleException("Вашата сметка нема дозвола за оваа постапка.", 403);
     }
     public async Task<T> TransactionAsync<T>(Func<Task<T>> operation, CancellationToken ct)
     {
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
         try { var result = await operation(); await tx.CommitAsync(ct); return result; }
-        catch (DbUpdateConcurrencyException) { throw new RuleException("This record changed in another session. Refresh and try again.", 409); }
-        catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: "23P01" }) { throw new RuleException("The doctor or patient already has an overlapping appointment. Select another time.", 409); }
-        catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: "23505" }) { throw new RuleException("A record with those details already exists.", 409); }
+        catch (DbUpdateConcurrencyException) { throw new RuleException("Овој запис е променет во друга сесија. Освежете и обидете се повторно.", 409); }
+        catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: "23P01" }) { throw new RuleException("Лекарот или пациентот веќе има термин што се преклопува. Изберете друго време.", 409); }
+        catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: "23505" }) { throw new RuleException("Веќе постои запис со тие податоци.", 409); }
     }
 }
