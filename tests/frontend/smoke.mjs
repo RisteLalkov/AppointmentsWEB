@@ -267,11 +267,17 @@ try {
     admin.w.document.querySelectorAll(".period-row").length === 5,
     "Weekly schedule editor loads actual periods",
   );
-  assert(admin.$(".period-day").value === "Monday" && admin.$(".period-day option:checked").textContent === "Понеделник", "Schedule editor preserves enum values behind Macedonian labels");
+  await until(() => admin.$("#exception-list")?.textContent !== "Се вчитува…");
+  // PostgreSQL owned collections have no implicit order: validate every selected
+  // label/value pair rather than assuming the first saved period is Monday.
+  const weekdayLabels = { Sunday: "Недела", Monday: "Понеделник", Tuesday: "Вторник", Wednesday: "Среда", Thursday: "Четврток", Friday: "Петок", Saturday: "Сабота" };
+  const periodSelects = [...admin.w.document.querySelectorAll(".period-day")];
+  const expectedDays = periodSelects.map(select => select.value).sort();
+  assert(periodSelects.every(select => weekdayLabels[select.value] === select.selectedOptions[0].textContent), "Schedule editor preserves enum values behind Macedonian labels");
   admin.$("#schedule-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
   await until(() => admin.$("#toast").textContent === "Неделното работно време е зачувано.");
   const saved = await (await admin.request("/data/bootstrap")).json();
-  assert(saved.doctors.find(d => d.id === "d01").workingPeriods[0].day === "Monday", "Localized schedule saves and round-trips through server");
+  assert(JSON.stringify(saved.doctors.find(d => d.id === "d01").workingPeriods.map(p => p.day).sort()) === JSON.stringify(expectedDays), "Localized schedule saves and round-trips through server");
   admin.$("#exception-date").value = iso;
   admin.$("#exception-start").value = "12:00";
   admin.$("#exception-end").value = "13:00";
