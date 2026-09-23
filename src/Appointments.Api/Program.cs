@@ -47,7 +47,11 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsJsonAsync(new { error = "The request could not be completed. Please try again." });
     }
 });
-if (!app.Environment.IsDevelopment()) app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment()
+    && !builder.Configuration.GetValue<bool>("Hosting:AllowHttpForTesting"))
+{
+    app.UseHttpsRedirection();
+}
 app.UseRateLimiter(); app.UseAuthentication(); app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ready" })).AllowAnonymous();
