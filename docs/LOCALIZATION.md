@@ -12,7 +12,7 @@ Macedonian (`mk-MK`) is the default and only interface language in this version.
 - Scheduling, conflict, permission and account validation messages returned by Core/API/MVC.
 - Browser form constraint-validation messages (including dynamically inserted forms).
 
-Razor text is in `Views`, dynamic workspace text in `wwwroot/js/app.js`, and native form validation in `wwwroot/js/validation-mk.js`. Role presentation is in `Services/DisplayExtensions.cs`. Both hosts establish `mk-MK` request culture. FullCalendar is configured with a local Macedonian locale object; dates use `Intl.DateTimeFormat("mk-MK")`, Monday-first weeks and 24-hour times.
+Razor text is in `Views`, dynamic workspace text in `wwwroot/js/app.js`, and native form validation in `wwwroot/js/validation-mk.js`. Role presentation is in `Services/DisplayExtensions.cs`. Both hosts establish `mk-MK` request culture. FullCalendar is configured with a local Macedonian locale object; dates use explicit Macedonian month/day labels (including browsers without Macedonian Intl data), Monday-first weeks and 24-hour times.
 
 ## Compatibility
 

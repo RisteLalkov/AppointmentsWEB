@@ -83,13 +83,23 @@
     const p = Object.fromEntries(parts.map((p) => [p.type, p.value]));
     return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
   };
-  const formatDate = (
-    date,
-    options = { day: "numeric", month: "short", year: "numeric" },
-  ) =>
-    new Intl.DateTimeFormat("mk-MK", { ...options, timeZone: "UTC" }).format(
-      new Date(date.slice(0, 10) + "T12:00:00Z"),
-    );
+  // Some browsers omit Macedonian from their bundled Intl/ICU data and silently
+  // fall back to English. Explicit labels keep presentation Macedonian everywhere.
+  const monthNames = ["јануари", "февруари", "март", "април", "мај", "јуни", "јули", "август", "септември", "октомври", "ноември", "декември"];
+  const shortMonths = ["јан.", "фев.", "мар.", "апр.", "мај", "јун.", "јул.", "авг.", "септ.", "окт.", "ноем.", "дек."];
+  const shortDays = ["нед.", "пон.", "вто.", "сре.", "чет.", "пет.", "саб."];
+  const formatDate = (date, options = { day: "numeric", month: "short", year: "numeric" }) => {
+    const value = new Date(date.slice(0, 10) + "T12:00:00Z");
+    const day = value.getUTCDate(), month = value.getUTCMonth(), year = value.getUTCFullYear();
+    const parts = [];
+    if (options.day) parts.push(options.day === "2-digit" ? String(day).padStart(2, "0") : String(day));
+    if (options.month) parts.push(options.month === "long" ? monthNames[month] : options.month === "short" ? shortMonths[month] : String(month + 1).padStart(options.month === "2-digit" ? 2 : 1, "0"));
+    if (options.year) parts.push(String(year));
+    const numeric = ["numeric", "2-digit"].includes(options.month);
+    const text = parts.join(numeric ? "." : " ") + (numeric && !options.year ? "." : "");
+    const weekday = options.weekday === "long" ? dayLabels[value.getUTCDay()].toLowerCase() : shortDays[value.getUTCDay()];
+    return options.weekday ? weekday + (text ? ", " + text : "") : text;
+  };
   const addDays = (date, n) => {
     const d = new Date(date + "T12:00:00Z");
     d.setUTCDate(d.getUTCDate() + n);
@@ -750,6 +760,19 @@
         navLinkHint: "Отвори го датумот",
         viewHint: "Приказ на календарот"
       },
+      titleFormat: info => {
+        const start = info.start.marker.toISOString();
+        const end = info.end?.marker.toISOString();
+        return end && end.slice(0, 10) !== start.slice(0, 10)
+          ? `${formatDate(start, { day: "numeric", month: "short", year: start.slice(0, 4) !== end.slice(0, 4) ? "numeric" : undefined })} – ${formatDate(end)}`
+          : formatDate(start, { day: "numeric", month: "long", year: "numeric" });
+      },
+      views: {
+        dayGridMonth: { titleFormat: info => formatDate(info.date.marker.toISOString(), { month: "long", year: "numeric" }) }
+      },
+      dayHeaderContent: info => formatDate(info.date.toISOString(), info.view.type === "dayGridMonth"
+        ? { weekday: "short" } : { weekday: "short", day: "numeric", month: "2-digit" }),
+      dayPopoverFormat: info => formatDate(info.date.marker.toISOString(), { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
       initialView: calendarView,
       initialDate: calendarDate || state.today,
       headerToolbar: false,

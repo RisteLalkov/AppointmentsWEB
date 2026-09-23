@@ -92,6 +92,16 @@ async function workspace(user) {
   windows.push(dom.window);
   const w = dom.window;
   w.fetch = request;
+  // Model Chromium builds that silently fall back to English for mk-MK.
+  // Explicit Macedonian calendar/date labels must remain correct in this case.
+  const NativeDateTimeFormat = w.Intl.DateTimeFormat;
+  w.Intl = Object.create(w.Intl);
+  w.Intl.DateTimeFormat = class extends NativeDateTimeFormat {
+    constructor(locales, options) {
+      const fallback = value => /^mk(?:-|$)/i.test(value) ? "en-US" : value;
+      super(Array.isArray(locales) ? locales.map(fallback) : locales ? fallback(locales) : locales, options);
+    }
+  };
   w.matchMedia = () => ({
     matches: false,
     addListener() {},
@@ -222,6 +232,7 @@ try {
   pat.click("#close-dialog");
   await pat.page("appointments");
   assert(pat.$("#appointment-results"), "Patient appointment list renders");
+  assert(/[а-ш]/i.test(pat.$(".table-date strong").textContent) && !/[a-z]/i.test(pat.$(".table-date strong").textContent), "Appointment dates stay Macedonian without browser locale data");
   const admin = await workspace("admin");
   await admin.page("calendar");
   await until(() => admin.$(".fc-view"));

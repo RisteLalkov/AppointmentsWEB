@@ -1105,6 +1105,9 @@ input[type="time"] {
 }
 .doctor-card-actions .btn {
   flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
   font-size: 11px;
   padding: 9px;
 }
@@ -1175,6 +1178,7 @@ input[type="time"] {
   box-shadow: 0 2px 5px #304f2609;
 }
 .table-wrap {
+  position: relative;
   overflow: auto;
 }
 table {
@@ -2011,7 +2015,7 @@ dialog::backdrop {
   }
   .doctor-grid,
   .patient-card-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .doctor-card {
     padding: 21px;
