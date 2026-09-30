@@ -18,6 +18,23 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         var appointments = await Visible(actor).AsNoTracking().OrderBy(a => a.Start).ToListAsync(ct);
         return new(actor, doctors, patients, appointments, clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, demo, false);
     }
+    public async Task<ReportResult> ReportAsync(DemoActor actor, ReportQuery query, CancellationToken ct)
+    {
+        if (actor.Role != DemoRole.Administrator) throw new RuleException("Извештаите се достапни само за администратори.", 403);
+        ReportBuilder.Validate(query);
+        var start = clock.ToInstant(query.From, TimeOnly.MinValue) ?? throw new RuleException("Невалиден почетен датум во временската зона.");
+        var end = clock.ToInstant(query.To.AddDays(1), TimeOnly.MinValue) ?? throw new RuleException("Невалиден краен датум во временската зона.");
+        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+        var state = new DemoState
+        {
+            Doctors = await db.Doctors.AsNoTracking().AsSplitQuery().ToListAsync(ct),
+            Patients = await db.Patients.AsNoTracking().ToListAsync(ct),
+            Appointments = await db.Appointments.AsNoTracking().Where(a => a.Start >= start && a.Start < end).ToListAsync(ct),
+            Exceptions = await db.Exceptions.AsNoTracking().Where(e => e.Date >= query.From && e.Date <= query.To).ToListAsync(ct)
+        };
+        var result = ReportBuilder.Build(actor, query, state, clock);
+        await tx.CommitAsync(ct); return result;
+    }
     public IQueryable<Appointment> Visible(DemoActor actor) => db.Appointments.Where(a => actor.Role == DemoRole.Administrator ||
         (actor.Role == DemoRole.Patient && a.PatientId == actor.PatientId) || (actor.Role == DemoRole.Doctor && a.DoctorId == actor.DoctorId));
     public async Task<IReadOnlyList<Slot>> SlotsAsync(DemoActor actor, string doctorId, DateOnly date, string? excludeId, CancellationToken ct)

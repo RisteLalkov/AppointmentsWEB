@@ -18,6 +18,10 @@ public sealed class DataController(IServiceProvider services, DemoIdentity ident
         try { return Ok(settings.UseApi ? await api.SendAsync<JsonElement>("api/" + path, body, ct: HttpContext.RequestAborted) : demo()); }
         catch (RuleException e) { return StatusCode(e.StatusCode, new { error = e.Message }); }
     }
+    [Authorize(Roles = "Administrator"), HttpGet("reports")]
+    public Task<IActionResult> Reports([FromQuery] ReportQuery query) => Execute(
+        $"reports?from={query.From:yyyy-MM-dd}&to={query.To:yyyy-MM-dd}&groupBy={Escape(query.GroupBy)}&doctorId={Escape(query.DoctorId)}&specialty={Escape(query.Specialty)}&serviceId={Escape(query.ServiceId)}", null,
+        () => ReportBuilder.Build(identity.Actor, query, services.GetRequiredService<IDemoStore>().Read(s => s), clock));
     [HttpGet("bootstrap")] public Task<IActionResult> Bootstrap() => Execute("bootstrap", null, () => new BootstrapResponse(identity.Actor, Demo.Doctors(), Demo.Patients(identity.Actor), Demo.Appointments(identity.Actor), clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, true, true, "Demo"));
     [HttpGet("slots")] public Task<IActionResult> Slots(string doctorId, DateOnly date, string? excludeId) => Execute($"slots?doctorId={Escape(doctorId)}&date={date:yyyy-MM-dd}&excludeId={Uri.EscapeDataString(excludeId ?? "")}", null, () => Demo.Availability(identity.Actor, doctorId, date, excludeId));
     [HttpGet("exceptions")] public Task<IActionResult> Exceptions(string doctorId) => Execute("exceptions?doctorId=" + Escape(doctorId), null, () => Demo.Exceptions(identity.Actor, doctorId));

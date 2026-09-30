@@ -10,6 +10,7 @@ namespace Appointments.Api.Controllers;
 [ApiController, Authorize, Route("api"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public sealed class AppointmentsController(PostgresAppointments service) : ApiControllerBase
 {
+    [Authorize(Roles = "Administrator"), HttpGet("reports")] public Task<ReportResult> Reports([FromQuery] ReportQuery query, CancellationToken ct) => service.ReportAsync(Actor, query, ct);
     [HttpGet("bootstrap")] public Task<BootstrapResponse> Bootstrap(CancellationToken ct) => service.BootstrapAsync(Actor, IsDemo, ct);
     [HttpGet("appointments")] public async Task<IActionResult> List([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, int skip = 0, int take = 100, CancellationToken ct = default)
     {

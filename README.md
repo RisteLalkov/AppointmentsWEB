@@ -72,6 +72,10 @@ dotnet run --project src/Appointments.Web
 
 Launch profiles select Development and the local ports. For another API address set web `Backend:ApiBaseUrl` (environment variable `Backend__ApiBaseUrl`). Outside Development it must be HTTPS. The web project has **no database connection string**; only the API connects to PostgreSQL.
 
+## Calendar and reports update
+
+The wider calendar includes specialty/service-profile filters and custom date periods. Administrators now have **Извештаи** with date/provider filters, status counts, daily/weekly/monthly breakdowns, provider/specialty/service summaries, estimated utilisation and CSV export. See [definitions, limitations and deployment](docs/REPORTS_AND_CALENDAR.md). No database migration is required.
+
 ## What is implemented
 
 | Workspace | Workflows |

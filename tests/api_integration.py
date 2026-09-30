@@ -110,6 +110,15 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         admin2 = Client(api2, admin.token)
         check(admin2.ok('/health/database')['status'] == 'ready', 'Session and PostgreSQL work across two API instances')
         state = admin.ok('/api/bootstrap')
+        report_path = '/api/reports?' + urllib.parse.urlencode({'from': state['today'], 'to': state['today'], 'groupBy': 'day'})
+        check(anon.request(report_path)[0] == 401, 'Anonymous reports rejected')
+        check(Client(api1).demo('p01').request(report_path)[0] == 403, 'Patient reports rejected by API')
+        check(Client(api1).demo('user-d01').request(report_path)[0] == 403, 'Doctor reports rejected by API')
+        report = admin.ok(report_path)
+        metrics = report['summary']
+        check(metrics['total'] == sum(metrics[k] for k in ('confirmed','completed','cancelled','pending','noShow')) and len(report['periods']) == 1, 'PostgreSQL reports return consistent daily status totals')
+        check(admin.request(report_path.replace('groupBy=day', 'groupBy=invalid'))[0] == 400, 'API rejects invalid report grouping')
+
         check(len(state['doctors']) == 40 and sum(len(d['workingPeriods']) for d in state['doctors']) == 87, 'Database imports source doctors and 87 schedule periods')
         check(state['backend'] == 'Api' and not state['canReset'] and not state['demoMode'], 'API mode advertises real persistence and disables browser reset')
         check(anon.request('/openapi/v1.json')[0] == 200, 'Development OpenAPI document generated')

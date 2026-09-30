@@ -47,6 +47,18 @@
     slotRequest = 0,
     refreshInFlight = false;
   let toastTimer, lastFocus;
+  let calendarSpecialty = "", calendarService = "", calendarRange, reportRequest = 0, reportFilters;
+  const serviceOptions = selected => `<option value="">Сите услуги / прегледи</option><option value="unassigned" ${selected === "unassigned" ? "selected" : ""}>Без заведена услуга</option>${state.doctors.filter(d => d.isService).map(d => `<option value="${d.id}" ${selected === d.id ? "selected" : ""}>${escape(d.name)}</option>`).join("")}`;
+  const specialtyOptions = selected => `<option value="">Сите специјалности</option>${[...new Set(state.doctors.map(d => d.specialty))].sort().map(v => `<option value="${escape(v)}" ${selected === v ? "selected" : ""}>${escape(v)}</option>`).join("")}`;
+  const calendarDoctors = () => ownDoctors().filter(d => (!calendarSpecialty || d.specialty === calendarSpecialty) && (!calendarService || (calendarService === "unassigned" ? !d.isService : d.isService && d.id === calendarService)));
+  // randomUUID is absent on HTTP intranet origins; getRandomValues remains available.
+  function requestId() {
+    if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    bytes[6] = (bytes[6] & 15) | 64; bytes[8] = (bytes[8] & 63) | 128;
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+    return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
+  }
   const app = $("#app"),
     dialog = $("#main-dialog");
   const isPatient = () => state.actor.role === "Patient";
@@ -180,6 +192,7 @@
     if (page === next) renderPage();
   }
   function renderPage() {
+    reportRequest++;
     if (calendar) {
       calendar.destroy();
       calendar = null;
@@ -196,6 +209,7 @@
             "patients",
             "availability",
             "doctors",
+            "reports",
           ];
     if (!allowed.includes(page)) page = "overview";
     $$(".nav-item").forEach((n) => {
@@ -206,6 +220,7 @@
       );
     });
     $("#page-label").textContent = {
+      reports: "Извештаи",
       overview: "Преглед",
       calendar: "Календар",
       doctors: isPatient() ? "Пронајди лекар" : "Список на лекари",
@@ -215,6 +230,7 @@
     }[page];
     $("#zone-label").textContent = state.timeZone;
     ({
+      reports: renderReports,
       overview: renderOverview,
       doctors: renderDoctors,
       appointments: renderAppointments,
@@ -549,7 +565,7 @@
       moveId,
       patientId:
         a?.patientId || patientId || (isPatient() ? state.actor.patientId : ""),
-      requestId: crypto.randomUUID(),
+      requestId: requestId(),
       version: a?.version,
     };
     bookingForm();
@@ -696,6 +712,11 @@
     }
   }
   function renderCalendar() {
+    if (isDoctor()) { calendarSpecialty = ""; calendarService = ""; doctorFilter = state.actor.doctorId; }
+    const matchingDoctors = calendarDoctors();
+    if (doctorFilter && !matchingDoctors.some(d => d.id === doctorFilter)) doctorFilter = "";
+    calendarRange ||= { from: state.today, to: addDays(state.today, 6) };
+    const calendarDoctorOptions = `<option value="">Сите соодветни лекари / услуги</option>${matchingDoctors.map(d => `<option value="${d.id}" ${d.id === doctorFilter ? "selected" : ""}>${escape(d.name)}</option>`).join("")}`;
     // Replacing the selected provider also replaces the calendar's listeners.
     if (calendar) {
       calendar.destroy();
@@ -710,10 +731,11 @@
         bookButton(),
         "ВАШИОТ РАСПОРЕД",
       ) +
-      `<div class="toolbar">${isAdmin() ? `<label for="calendar-doctor">Лекар</label><select id="calendar-doctor">${doctorOptions(doctorFilter, true)}</select>` : `<span class="results-count" style="margin:0">${escape(doctor(doctorFilter).name)}</span>`}<label class="visually-hidden" for="calendar-status">Филтрирај по статус</label><select id="calendar-status"><option value="">Сите статуси</option>${statuses.map((s) => `<option value="${s}" ${s === statusFilter ? "selected" : ""}>${statusLabel(s)}</option>`).join("")}</select><button class="btn secondary small" id="refresh-calendar">↻ Освежи</button></div><div class="calendar-layout"><section class="card calendar-panel"><div class="calendar-top"><div class="calendar-nav"><button class="icon-button" id="calendar-prev" aria-label="Претходен период">‹</button><button class="icon-button" id="calendar-next" aria-label="Следен период">›</button><h2 id="calendar-title"></h2><button class="btn secondary small" id="calendar-today">Денес</button></div><div class="calendar-views" role="group" aria-label="Приказ на календарот">${[
+      `<div class="toolbar">${isAdmin() ? `<label for="calendar-doctor">Лекар</label><select id="calendar-doctor">${calendarDoctorOptions}</select><label class="visually-hidden" for="calendar-specialty">Специјалност</label><select id="calendar-specialty">${specialtyOptions(calendarSpecialty)}</select><label class="visually-hidden" for="calendar-service">Услуга</label><select id="calendar-service">${serviceOptions(calendarService)}</select>` : `<span class="results-count" style="margin:0">${escape(doctor(doctorFilter).name)}</span>`}<label class="visually-hidden" for="calendar-status">Филтрирај по статус</label><select id="calendar-status"><option value="">Сите статуси</option>${statuses.map((s) => `<option value="${s}" ${s === statusFilter ? "selected" : ""}>${statusLabel(s)}</option>`).join("")}</select><button class="btn secondary small" id="refresh-calendar">↻ Освежи</button></div><form id="calendar-range-form" class="calendar-range"><label>Од <input type="date" id="calendar-from" value="${calendarRange.from}" required></label><label>До <input type="date" id="calendar-to" value="${calendarRange.to}" required></label><button class="btn secondary small" type="submit">Прикажи период</button><span class="muted">До 31 ден · ${matchingDoctors.length} профили</span><span id="calendar-range-error" role="alert"></span></form><div class="calendar-layout"><section class="card calendar-panel ${calendarView === "timeGridRange" ? "custom-range" : ""}" style="--range-width:${Math.max(1, (new Date(calendarRange.to) - new Date(calendarRange.from)) / 86400000 + 1) * 110}px"><div class="calendar-top"><div class="calendar-nav"><button class="icon-button" id="calendar-prev" aria-label="Претходен период">‹</button><button class="icon-button" id="calendar-next" aria-label="Следен период">›</button><h2 id="calendar-title"></h2><button class="btn secondary small" id="calendar-today">Денес</button></div><div class="calendar-views" role="group" aria-label="Приказ на календарот">${[
         ["timeGridDay", "Ден"],
         ["timeGridWeek", "Недела"],
         ["dayGridMonth", "Месец"],
+        ["timeGridRange", "Период"],
       ]
         .map(
           ([v, l]) =>
@@ -721,12 +743,30 @@
         )
         .join(
           "",
-        )}</div></div><div id="calendar-loading" class="calendar-load" aria-live="polite"></div><div id="calendar"></div><div class="calendar-legend"><span><i style="background:#dcebd0"></i>Достапно</span><span><i style="background:#6d9776"></i>Потврден</span><span><i style="background:#cba05b"></i>Чека потврда</span><span><i style="background:#cdb5a9"></i>Недостапно</span></div><p class="mobile-calendar-note">Користете дневен приказ за повеќе простор. Секој термин е достапен и преку тастатура во списокот со термини.</p></section><aside class="calendar-aside" id="calendar-aside"></aside></div>`;
+        )}</div></div><div id="calendar-loading" class="calendar-load" aria-live="polite"></div><div class="calendar-scroll"><div id="calendar"></div></div><div class="calendar-legend"><span><i style="background:#dcebd0"></i>Достапно</span><span><i style="background:#6d9776"></i>Потврден</span><span><i style="background:#cba05b"></i>Чека потврда</span><span><i style="background:#cdb5a9"></i>Недостапно</span></div><p class="mobile-calendar-note">Користете дневен приказ за повеќе простор. Секој термин е достапен и преку тастатура во списокот со термини.</p></section><details class="calendar-context"><summary>Работно време и информации за избраниот лекар</summary><aside class="calendar-aside" id="calendar-aside"></aside></details></div>`;
     $("#calendar-doctor")?.addEventListener("change", (e) => {
       doctorFilter = e.target.value;
       calendarDate = calendar.getDate().toISOString().slice(0, 10);
       renderCalendar();
     });
+    for (const id of ["calendar-specialty", "calendar-service"]) {
+      $("#" + id)?.addEventListener("change", e => {
+        if (id === "calendar-specialty") calendarSpecialty = e.target.value;
+        else calendarService = e.target.value;
+        doctorFilter = "";
+        calendarDate = calendar.getDate().toISOString().slice(0, 10);
+        renderCalendar();
+      });
+    }
+    $("#calendar-range-form").onsubmit = e => {
+      e.preventDefault();
+      const from = $("#calendar-from").value, to = $("#calendar-to").value;
+      const length = (new Date(to) - new Date(from)) / 86400000;
+      if (!from || !to || !Number.isFinite(length) || length < 0 || length > 30) {
+        $("#calendar-range-error").textContent = "Изберете период од 1 до 31 ден."; return;
+      }
+      calendarRange = { from, to }; calendarView = "timeGridRange"; calendarDate = from; renderCalendar();
+    };
     $("#calendar-status").addEventListener("change", (e) => {
       statusFilter = e.target.value;
       calendar.refetchEvents();
@@ -768,18 +808,19 @@
           : formatDate(start, { day: "numeric", month: "long", year: "numeric" });
       },
       views: {
+        timeGridRange: { type: "timeGrid", duration: { days: 7 } },
         dayGridMonth: { titleFormat: info => formatDate(info.date.marker.toISOString(), { month: "long", year: "numeric" }) }
       },
       dayHeaderContent: info => formatDate(info.date.toISOString(), info.view.type === "dayGridMonth"
         ? { weekday: "short" } : { weekday: "short", day: "numeric", month: "2-digit" }),
       dayPopoverFormat: info => formatDate(info.date.marker.toISOString(), { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
-      initialView: calendarView,
+      initialView: calendarView === "timeGridRange" ? "timeGridWeek" : calendarView,
       initialDate: calendarDate || state.today,
       headerToolbar: false,
       firstDay: 1,
       timeZone: "UTC",
       allDaySlot: false,
-      height: Math.max(520, Math.min(780, innerHeight - 260)),
+      height: Math.max(innerWidth < 650 ? 540 : 660, Math.min(900, innerHeight - 220)),
       slotMinTime: "00:00:00",
       slotMaxTime: "24:00:00",
       scrollTime: "08:00:00",
@@ -807,9 +848,10 @@
         calendarDate = info.view.currentStart.toISOString().slice(0, 10);
       },
       dateClick(info) {
+        if (!matchingDoctors.length) { toast("Нема профили за избраните филтри.", true); return; }
         const date = info.dateStr.slice(0, 10);
         openBooking(
-          doctorFilter,
+          doctorFilter || matchingDoctors[0]?.id,
           date,
           info.allDay ? "" : info.dateStr.slice(11, 16),
         );
@@ -845,12 +887,14 @@
         }
       },
       events: async (info, success, failure) => {
+        if (page !== "calendar") { success([]); return; }
         $("#calendar-loading").textContent =
           "Се освежуваат закажаните и слободните термини…";
         try {
           let events = state.appointments
             .filter(
               (a) =>
+                matchingDoctors.some(d => d.id === a.doctorId) &&
                 (!doctorFilter || a.doctorId === doctorFilter) &&
                 (!statusFilter || a.status === statusFilter),
             )
@@ -909,19 +953,31 @@
           if ($("#calendar-loading"))
             $("#calendar-loading").textContent =
               "Освежувањето не успеа. Кликнете Освежи за повторен обид.";
-          toast(e.message, true);
+          if (page === "calendar") toast(e.message, true);
         }
       },
     });
     calendar.render();
-    $("#calendar-prev").onclick = () => calendar.prev();
-    $("#calendar-next").onclick = () => calendar.next();
-    $("#calendar-today").onclick = () => calendar.gotoDate(state.today);
+    if (calendarView === "timeGridRange") calendar.changeView("timeGridRange", { start: calendarRange.from, end: addDays(calendarRange.to, 1) });
+    const shiftRange = n => {
+      const days = (new Date(calendarRange.to) - new Date(calendarRange.from)) / 86400000 + 1;
+      calendarRange = { from: addDays(calendarRange.from, n * days), to: addDays(calendarRange.to, n * days) };
+      renderCalendar();
+    };
+    $("#calendar-prev").onclick = () => calendarView === "timeGridRange" ? shiftRange(-1) : calendar.prev();
+    $("#calendar-next").onclick = () => calendarView === "timeGridRange" ? shiftRange(1) : calendar.next();
+    $("#calendar-today").onclick = () => {
+      if (calendarView === "timeGridRange") { calendarRange = { from: state.today, to: addDays(state.today, 6) }; renderCalendar(); }
+      else calendar.gotoDate(state.today);
+    };
     $$("[data-calendar-view]").forEach(
       (b) =>
         (b.onclick = () => {
           calendarView = b.dataset.calendarView;
-          calendar.changeView(calendarView);
+          $(".calendar-panel").classList.toggle("custom-range", calendarView === "timeGridRange");
+          if (calendarView === "timeGridRange") calendar.changeView(calendarView, { start: calendarRange.from, end: addDays(calendarRange.to, 1) });
+          else calendar.changeView(calendarView);
+          calendar.updateSize();
           $$("[data-calendar-view]").forEach((x) =>
             x.classList.toggle("active", x === b),
           );
@@ -938,6 +994,65 @@
         e.target.disabled = false;
       }
     };
+  }
+  function renderReports() {
+    if (!isAdmin()) return;
+    reportFilters ||= { from: state.today.slice(0, 8) + "01", to: state.today, groupBy: "day", doctorId: "", specialty: "", serviceId: "" };
+    const f = reportFilters;
+    app.innerHTML = heading("Извештаи и статистика.", "Јасен преглед на термините, исходите и искористеноста.", "", "ПОДАТОЦИ ЗА ПОДОБРО ПЛАНИРАЊЕ") +
+      `<section class="card report-controls"><form id="report-form"><div class="report-filter-grid"><label>Од<input type="date" name="from" value="${f.from}" required></label><label>До<input type="date" name="to" value="${f.to}" required></label><label>Групирање<select name="groupBy">${[["day","По ден"],["week","По недела"],["month","По месец"]].map(([v,l]) => `<option value="${v}" ${v === f.groupBy ? "selected" : ""}>${l}</option>`).join("")}</select></label><label>Лекар / профил<select name="doctorId">${doctorOptions(f.doctorId, true)}</select></label><label>Специјалност<select name="specialty">${specialtyOptions(f.specialty)}</select></label><label>Услуга<select name="serviceId">${serviceOptions(f.serviceId)}</select></label></div><div class="report-presets"><button type="button" class="btn secondary small" data-report-preset="today">Денес</button><button type="button" class="btn secondary small" data-report-preset="week">Оваа недела</button><button type="button" class="btn secondary small" data-report-preset="month">Овој месец</button><button type="button" class="btn secondary small" id="report-reset">Исчисти филтри</button><button class="btn primary small" type="submit">Прикажи извештај ↗</button></div></form></section><div id="report-results" aria-live="polite"></div>`;
+    const form = $("#report-form");
+    form.onsubmit = e => { e.preventDefault(); reportFilters = Object.fromEntries(new FormData(form)); loadReport(); };
+    $$("[data-report-preset]").forEach(b => b.onclick = () => {
+      const type = b.dataset.reportPreset;
+      form.elements.from.value = type === "today" ? state.today : type === "week" ? monday(state.today) : state.today.slice(0,8) + "01";
+      form.elements.to.value = type === "week" ? addDays(monday(state.today), 6) : type === "month"
+        ? new Date(Date.UTC(Number(state.today.slice(0,4)), Number(state.today.slice(5,7)), 0, 12)).toISOString().slice(0,10) : state.today;
+      form.requestSubmit();
+    });
+    $("#report-reset").onclick = () => { for (const key of ["doctorId", "specialty", "serviceId"]) form.elements[key].value = ""; form.requestSubmit(); };
+    loadReport();
+  }
+  async function loadReport() {
+    const request = ++reportRequest, target = $("#report-results");
+    target.innerHTML = '<div class="loading-state" role="status"><span class="spinner"></span> Се подготвува извештајот…</div>';
+    try {
+      const data = await api("reports?" + new URLSearchParams(reportFilters));
+      if (request !== reportRequest || page !== "reports") return;
+      const m = data.summary;
+      const percent = value => value == null ? "—" : `${value.toFixed(1)}%`;
+      const hours = value => (value / 60).toFixed(1);
+      const tiles = [
+        ["Вкупно термини",m.total,"Вклучува и откажани"], ["Реализирани",m.completed,"Завршени прегледи"],
+        ["Потврдени",m.confirmed,"Тековен статус"], ["Чекаат потврда",m.pending,"Резервирани термини"],
+        ["Откажани",m.cancelled,`${percent(m.cancellationPercent)} од сите термини`], ["Не се појавиле",m.noShow,`${percent(m.noShowPercent)} од реализирани + недоаѓања`],
+        ["Пациенти во периодот",m.patients,`${data.registeredPatients} регистрирани вкупно`], ["Искористеност ≈",percent(m.utilizationPercent),`${hours(m.occupiedMinutes)} / ${hours(m.capacityMinutes)} часа`]
+      ];
+      const periodLabel = row => data.query.groupBy === "month" ? formatDate(row.key, { month: "long", year: "numeric" }) : (data.query.groupBy === "week" ? "Недела од " : "") + formatDate(row.key);
+      const max = Math.max(1, ...data.periods.map(r => r.metrics.total));
+      target.innerHTML = `<p class="results-count">${formatDate(data.query.from)} – ${formatDate(data.query.to)} · ${escape(data.timeZone)} · Пресметано во ${timeOf(data.generatedAt)}</p><div class="stats-grid report-stats">${tiles.map(([label,value,note]) => `<article class="card stat-card"><span class="stat-label">${label}</span><strong class="stat-value">${value}</strong><div class="stat-note">${note}</div></article>`).join("")}</div>
+        <details class="report-definitions"><summary>Како се пресметуваат показателите</summary><p>Периодот ги опфаќа двата датума според почетокот на прегледот во ${escape(data.timeZone)}. Броевите ги користат тековните статуси. „Вкупно“ ги вклучува сите статуси; процентот на откажување е откажани / вкупно. Процентот на недоаѓање е недоаѓања / (реализирани + недоаѓања). Пациентите во периодот се единствени пациенти, вклучувајќи ги и откажаните термини.</p><p>Искористеноста е приближна: зафатени минути / минути достапни за целосни прегледи, според сегашното работно време и зачуваните исклучоци. Се сметаат сите неоткажани термини, вклучувајќи недоаѓања. Не се чуваат историски верзии на распоредот; правилото „прво вторник“ не го намалува физичкиот капацитет. При нула капацитет се прикажува „—“.</p><p>Услугите се постоечките профили означени како услуга. Останатите прегледи се „Без заведена услуга“; не се претпоставува услуга според специјалноста. Неделите почнуваат во понеделник. Првиот и последниот збирен период може да бидат делумни.</p></details>
+        <p class="inline-note report-caveat">Искористеноста е проценка според сегашниот распоред. ${m.outsideCapacityMinutes ? `${hours(m.outsideCapacityMinutes)} часа неоткажани термини се надвор од пресметаниот капацитет.` : ""} Услугите се ограничени на постоечките услужни профили.</p>
+        ${m.total ? "" : '<div class="inline-note">Нема термини за избраните филтри. Капацитетот, ако постои, е прикажан подолу.</div>'}
+        <section class="card report-chart-card"><div class="card-head"><h3>Термини низ периодот</h3><span class="muted">Сите статуси</span></div><div class="report-chart" tabindex="0" role="img" aria-label="Број на термини по период; точните вредности се во табелата подолу.">${data.periods.map(r => `<div class="report-bar" title="${escape(periodLabel(r))}: ${r.metrics.total}"><span>${r.metrics.total}</span><i style="height:${Math.max(2, r.metrics.total / max * 120)}px"></i><small>${escape(data.query.groupBy === "day" ? formatDate(r.key, { day: "numeric", month: "short" }) : periodLabel(r))}</small></div>`).join("")}</div></section>
+        <section class="card report-table-card"><div class="card-head"><div class="chip-tabs" role="group" aria-label="Разгледај извештај">${[["periods","По период"],["doctors","По лекар / профил"],["specialties","По специјалност"],["services","По услуга"]].map(([key,label]) => `<button data-report-tab="${key}" aria-pressed="${key === "periods"}" class="${key === "periods" ? "active" : ""}">${label}</button>`).join("")}</div><button class="btn secondary small" id="report-export">Преземи CSV</button></div><div class="table-wrap" tabindex="0" id="report-table"></div></section>`;
+      let active = "periods";
+      const labels = ["Група","Вкупно","Потврдени","Реализирани","Откажани","Чекаат потврда","Недоаѓања","Пациенти","Капацитет (часа)","Зафатено (часа)","Искористеност ≈","Откажани %","Недоаѓања %"];
+      const rowValues = r => { const v = r.metrics; return [active === "periods" ? periodLabel(r) : r.label,v.total,v.confirmed,v.completed,v.cancelled,v.pending,v.noShow,v.patients,hours(v.capacityMinutes),hours(v.occupiedMinutes),percent(v.utilizationPercent),percent(v.cancellationPercent),percent(v.noShowPercent)]; };
+      const table = () => {
+        $("#report-table").innerHTML = `<table><caption class="visually-hidden">Извештај за избраниот период</caption><thead><tr>${labels.map(l => `<th scope="col">${l}</th>`).join("")}</tr></thead><tbody>${data[active].map(r => `<tr>${rowValues(r).map((v,i) => i === 0 ? `<th scope="row">${escape(v)}</th>` : `<td>${escape(v)}</td>`).join("")}</tr>`).join("") || `<tr><td colspan="13">Нема соодветни профили.</td></tr>`}</tbody></table>`;
+      };
+      table();
+      $$("[data-report-tab]").forEach(b => b.onclick = () => { active = b.dataset.reportTab; $$("[data-report-tab]").forEach(x => { x.classList.toggle("active", x === b); x.setAttribute("aria-pressed", String(x === b)); }); table(); });
+      $("#report-export").onclick = () => {
+        const safe = value => { let text = String(value); if (/^[=+@\-\t\r]/.test(text)) text = "'" + text; return '"' + text.replaceAll('"', '""') + '"'; };
+        const rows = [["Од",data.query.from,"До",data.query.to,"Временска зона",data.timeZone], ["Лекар", data.query.doctorId || "Сите", "Специјалност", data.query.specialty || "Сите", "Услуга", data.query.serviceId || "Сите"], ["Капацитетот е проценка според сегашниот распоред. Услугите се постоечките услужни профили."], labels, ...data[active].map(rowValues)];
+        const url = URL.createObjectURL(new Blob(["\ufeff" + rows.map(r => r.map(safe).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" }));
+        const link = document.createElement("a"); link.href = url; link.download = `careline-${active}-${data.query.from}-${data.query.to}.csv`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+    } catch (error) {
+      if (request === reportRequest && page === "reports") target.innerHTML = `<div class="inline-error" role="alert">${escape(error.message)}</div><p>Проверете ги филтрите и кликнете „Прикажи извештај“ за повторен обид.</p>`;
+    }
   }
   function renderPatients() {
     app.innerHTML =
@@ -1161,7 +1276,10 @@
       openBooking(null, null, null, null, target.dataset.patientBook);
     if (target.dataset.action === "book") {
       if (isPatient()) navigate("doctors");
-      else openBooking();
+      else if (page === "calendar") {
+        const selected = doctorFilter || calendarDoctors()[0]?.id;
+        if (selected) openBooking(selected); else toast("Нема профили за избраните филтри.", true);
+      } else openBooking();
     }
     if (target.dataset.action === "close") closeDialog();
     if (target.dataset.action === "add-patient") addPatientForm();

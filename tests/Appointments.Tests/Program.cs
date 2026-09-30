@@ -84,6 +84,58 @@ Test("Unknown or on-call doctor gets no invented hours", () => {using var f=New(
 Test("Booking horizon enforced", () => {using var f=New();Reject(()=>f.Service.Book(pat,Cmd(date:monday.AddDays(189))),409);});
 Test("Returned data cannot mutate persisted state", () => {using var f=New();var d=f.Service.Doctors()[0];d.WorkingPeriods.Clear();Equal(5,f.Service.Doctors()[0].WorkingPeriods.Count);});
 
+Test("Reports aggregate every status, distinct patients and cancellation/no-show denominators", () => {
+    using var f=New(); var state=f.Seed();
+    state.Doctors[0].WorkingPeriods=[new(DayOfWeek.Monday,new(8,0),new(12,0))];
+    state.Doctors.RemoveAt(1);
+    foreach(var status in Enum.GetValues<AppointmentStatus>()) {
+        var start=f.Clock.ToInstant(monday,new TimeOnly(8,0))!.Value.AddMinutes(30*(int)status);
+        state.Appointments.Add(new(){DoctorId="d1",PatientId=(int)status%2==0?"p1":"p2",Start=start,End=start.AddMinutes(30),Status=status});
+    }
+    var r=ReportBuilder.Build(admin,new(monday,monday),state,f.Clock);
+    Equal(5,r.Summary.Total); Equal(1,r.Summary.Completed);Equal(1,r.Summary.Pending);Equal(1,r.Summary.Confirmed);Equal(1,r.Summary.Cancelled);Equal(1,r.Summary.NoShow);
+    Equal(2,r.Summary.Patients);Equal(20d,r.Summary.CancellationPercent);Equal<double?>(50d,r.Summary.NoShowPercent);
+    Equal(240d,r.Summary.CapacityMinutes);Equal(120d,r.Summary.OccupiedMinutes);Equal<double?>(50d,r.Summary.UtilizationPercent);
+});
+Test("Reports are administrator-only and validate range/group/filter", () => {
+    using var f=New();var state=f.Seed();
+    Reject(()=>ReportBuilder.Build(pat,new(monday,monday),state,f.Clock),403);Reject(()=>ReportBuilder.Build(doc,new(monday,monday),state,f.Clock),403);
+    Reject(()=>ReportBuilder.Build(admin,new(monday,monday.AddDays(-1)),state,f.Clock));
+    Reject(()=>ReportBuilder.Build(admin,new(monday,monday.AddDays(366)),state,f.Clock));
+    Reject(()=>ReportBuilder.Build(admin,new(monday,monday,"invalid"),state,f.Clock));
+    Reject(()=>ReportBuilder.Build(admin,new(monday,monday,ServiceId:"d1"),state,f.Clock));
+});
+Test("Reports distinguish actual service profiles, specialties and unknown services", () => {
+    using var f=New();var state=f.Seed();state.Doctors[1]=state.Doctors[1] with { IsService=true,Specialty="Service specialty" };
+    var r=ReportBuilder.Build(admin,new(monday,monday,ServiceId:"d2"),state,f.Clock);
+    Equal(1,r.Doctors.Count);Equal("d2",r.Services.Single().Key);
+    r=ReportBuilder.Build(admin,new(monday,monday,ServiceId:"unassigned"),state,f.Clock);Equal("d1",r.Doctors.Single().Key);
+    r=ReportBuilder.Build(admin,new(monday,monday,DoctorId:"d1",Specialty:"Service specialty"),state,f.Clock);Equal(0,r.Doctors.Count);Equal<double?>(null,r.Summary.UtilizationPercent);
+});
+Test("Reports merge overlapping availability and honour blocks without double-counting capacity", () => {
+    using var f=New();var state=f.Seed();state.Doctors.RemoveAt(1);state.Doctors[0].WorkingPeriods=[new(DayOfWeek.Monday,new(8,0),new(10,0))];
+    state.Exceptions=[new("x","d1",monday,new(9,0),new(11,0),true,"Extra"),new("y","d1",monday,new(9,30),new(10,0),false,"Break")];
+    var r=ReportBuilder.Build(admin,new(monday,monday),state,f.Clock);Equal(150d,r.Summary.CapacityMinutes);Equal<double?>(0d,r.Summary.UtilizationPercent);
+});
+Test("Reports use clinic dates, Monday weeks, month groups and include zero days", () => {
+    using var f=New();var state=f.Seed();var date=new DateOnly(2026,10,1);
+    state.Appointments.Add(new(){DoctorId="d1",PatientId="p1",Start=new(2026,9,30,22,30,0,TimeSpan.Zero),End=new(2026,9,30,23,0,0,TimeSpan.Zero),Status=AppointmentStatus.Confirmed});
+    var r=ReportBuilder.Build(admin,new(date,date.AddDays(2)),state,f.Clock);Equal(1,r.Summary.Total);Equal(3,r.Periods.Count);Equal(1,r.Periods[0].Metrics.Total);
+    r=ReportBuilder.Build(admin,new(date,date,"week"),state,f.Clock);Equal("2026-09-28",r.Periods.Single().Key);
+    r=ReportBuilder.Build(admin,new(date.AddDays(-1),date,"month"),state,f.Clock);Equal(2,r.Periods.Count);Equal(1,r.Periods[1].Metrics.Total);
+});
+Test("Reports flag bookings outside current schedule and never divide by zero", () => {
+    using var f=New();var state=f.Seed();state.Doctors.ForEach(d=>d.WorkingPeriods=[]);var start=f.Clock.ToInstant(monday,new(9,0))!.Value;
+    state.Appointments.Add(new(){DoctorId="d1",PatientId="p1",Start=start,End=start.AddMinutes(30),Status=AppointmentStatus.Confirmed});
+    var r=ReportBuilder.Build(admin,new(monday,monday),state,f.Clock);Equal(30d,r.Summary.OutsideCapacityMinutes);Equal<double?>(null,r.Summary.UtilizationPercent);Equal<double?>(null,r.Summary.NoShowPercent);
+});
+Test("Report capacity excludes DST invalid and ambiguous slots", () => {
+    using var f=New();var state=f.Seed();state.Doctors.RemoveAt(1);state.Doctors[0].WorkingPeriods=[new(DayOfWeek.Sunday,new(1,0),new(4,0))];
+    foreach(var date in new[]{new DateOnly(2027,3,28),new DateOnly(2026,10,25)}) {
+        var r=ReportBuilder.Build(admin,new(date,date),state,f.Clock);Equal(90d,r.Summary.CapacityMinutes);
+    }
+});
+
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

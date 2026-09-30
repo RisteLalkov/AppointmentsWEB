@@ -20,6 +20,7 @@
                 <button class="nav-item" data-page="availability"><span aria-hidden="true">☷</span> Достапност</button>
                 @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Список на лекари</button> }
             }
+        @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
         </nav>
         @if (Backend.UseApi && Model.Role == DemoRole.Administrator) { <a class="nav-item" href="/Accounts">♧ Сметки и пристап</a> }
         <div class="sidebar-bottom"><div class="help-card"><span class="mini-cross">✚</span><strong>Простор за подобра грижа.</strong><p>Сите термини, добро организирани.</p></div>@if (Backend.DemoEnabled) { <a class="switch-user" href="/Demo">⇄ <span>Промени демо-корисник</span></a> }

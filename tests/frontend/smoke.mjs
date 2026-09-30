@@ -92,6 +92,7 @@ async function workspace(user) {
   windows.push(dom.window);
   const w = dom.window;
   w.fetch = request;
+  Object.defineProperty(w.crypto, "randomUUID", { value: undefined }); // HTTP intranet fallback
   // Model Chromium builds that silently fall back to English for mk-MK.
   // Explicit Macedonian calendar/date labels must remain correct in this case.
   const NativeDateTimeFormat = w.Intl.DateTimeFormat;
@@ -254,6 +255,37 @@ try {
   assert(admin.$(".fc-dayGridMonth-view"), "Month view initializes");
   admin.click('[data-calendar-view="timeGridDay"]');
   assert(admin.$(".fc-timeGridDay-view"), "Day view initializes");
+  admin.change("#calendar-specialty", now.doctors.find(d => d.id === "d01").specialty);
+  assert([...admin.$("#calendar-doctor").options].slice(1).every(o => now.doctors.find(d => d.id === o.value).specialty === now.doctors.find(d => d.id === "d01").specialty), "Calendar specialty filters provider choices");
+  admin.change("#calendar-specialty", "");
+  const service = now.doctors.find(d => d.isService);
+  admin.change("#calendar-service", service.id);
+  assert(admin.$("#calendar-doctor").options.length === 2 && admin.$("#calendar-doctor").options[1].value === service.id, "Calendar service filter uses actual service profiles");
+  admin.change("#calendar-service", "");
+  admin.$("#calendar-from").value = now.today; admin.$("#calendar-to").value = iso;
+  admin.$("#calendar-range-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  assert(admin.$(".fc-timeGridRange-view"), "Custom calendar period initializes");
+  admin.click("#calendar-next");
+  assert(admin.$("#calendar-from").value > now.today, "Custom period navigation advances the selected range");
+  admin.$("#calendar-to").value = now.today;
+  admin.$("#calendar-range-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  assert(admin.$("#calendar-range-error").textContent.includes("31"), "Invalid calendar period rejected");
+  await admin.page("reports");
+  await until(() => admin.$("#report-table table"));
+  assert(admin.$(".report-stats").textContent.includes("Искористеност"), "Administrator reports render all summary metrics");
+  admin.click('[data-report-tab="services"]');
+  assert(admin.$("#report-table").textContent.includes("Без заведена услуга"), "Reports disclose missing service attribution");
+  const reportQuery = new URLSearchParams({ from: now.today, to: iso, groupBy: "week" });
+  assert((await pat.request("/data/reports?" + reportQuery)).status === 403, "Patient cannot access reports endpoint");
+  admin.$("#report-form").elements.from.value = iso; admin.$("#report-form").elements.to.value = now.today;
+  admin.$("#report-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => admin.$("#report-results .inline-error"));
+  assert(admin.$("#report-results").textContent.includes("366"), "Reports reject reversed date ranges with useful error");
+  admin.$("#report-form").elements.from.value = now.today; admin.$("#report-form").elements.to.value = iso;
+  admin.$("#report-form").elements.groupBy.value = "month";
+  admin.$("#report-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => admin.$("#report-table table"));
+  assert(admin.$("#report-table").textContent.includes("Вкупно"), "Report recovers after error and changes grouping");
   await admin.page("patients");
   admin.click('[data-action="add-patient"]');
   admin.$("#patient-name").reportValidity();
