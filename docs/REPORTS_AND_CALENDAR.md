@@ -26,3 +26,17 @@ Administrators open **Извештаи**. Choose inclusive start/end dates (maxi
 Pull main, rebuild and publish BOTH Appointments.Api and Appointments.Web. Preserve server connection strings, API URL and hosting flags. Ensure the Web publish includes `wwwroot/js/app.js` and `wwwroot/css/site.css`; refresh the browser with Ctrl+F5. Existing patient/appointment data is preserved. No database reset, re-import or migration is needed.
 
 The booking request-ID generator now supports intranet HTTP browsers that lack `crypto.randomUUID`, using `crypto.getRandomValues`. HTTPS remains the production deployment target.
+
+## Calendar and reports styling
+
+Calendar and report filters share the workspace's padded cards, labeled fields,
+colors, and responsive grid. Calendar date controls sit in a separate row within
+that card. The expandable doctor schedule has a keyboard-accessible summary,
+clear focus indication, and a rotating chevron. Reports retain their definitions,
+capacity caveats, and horizontally scrollable data table.
+
+When publishing this UI update, publish **Appointments.Web**, including both
+`wwwroot/css/site.css` and `wwwroot/js/app.js`. Updating only JavaScript can leave
+new controls without their matching styles. Preserve the server's configuration.
+Refresh with Ctrl+F5 after deployment. This styling update requires no API or
+database changes.

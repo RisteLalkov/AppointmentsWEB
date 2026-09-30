@@ -2185,20 +2185,24 @@ dialog::backdrop {
 
 /* Spacious calendar and reporting workspace. */
 .calendar-layout { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-.calendar-panel { padding: 24px; border-top: 3px solid #50794a; box-shadow: 0 8px 30px #223c2910; }
+.calendar-panel { padding: 24px; min-width: 0; }
 .calendar-panel .fc-timegrid-slot { height: 46px; }
 .calendar-panel .fc-col-header-cell { padding: 9px 0; background: #f5f8f2; }
 .calendar-panel .fc-day-today { background: #f3f8ec !important; }
 .calendar-panel .fc-event { border-radius: 6px; padding: 3px 5px; }
-.calendar-range { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; margin: 0 0 18px; }
+.calendar-range { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; margin: 20px 0 0; padding-top: 20px; border-top: 1px solid var(--line); }
 .calendar-range label, .report-filter-grid label { display: grid; gap: 7px; font-size: 12px; color: var(--muted); }
 .calendar-range input { width: 165px; }
 #calendar-range-error { color: #a02d2d; font-size: 12px; }
-.calendar-context { border: 1px solid var(--line); border-radius: 12px; padding: 15px 20px; background: #fff; }
+.calendar-context { overflow: hidden; }
 .calendar-context summary, .report-definitions summary { cursor: pointer; font-size: 13px; font-weight: 600; }
-.calendar-context .calendar-aside { display: block; margin-top: 14px; }
-.calendar-context .calendar-aside .card { max-width: 600px; }
-.report-controls { padding: 22px; margin-bottom: 22px; }
+.calendar-context .calendar-aside { display: block; padding: 0 24px 24px; }
+.calendar-context .calendar-aside .card { margin: 0; box-shadow: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; }
+.calendar-context .calendar-aside .card-head { padding: 20px 0 12px; }
+.calendar-context .calendar-aside .card-body { padding: 0; max-width: 680px; }
+.calendar-context .calendar-aside p { color: var(--muted); font-size: 13px; }
+.calendar-context .calendar-aside .schedule-summary li { font-size: 13px; }
+.workspace-filters { margin-bottom: 24px; }
 .report-filter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .report-filter-grid input, .report-filter-grid select { width: 100%; min-width: 0; }
 .report-presets { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
@@ -2206,7 +2210,7 @@ dialog::backdrop {
 .report-stats { margin: 16px 0; }
 .report-stats .stat-card { min-width: 0; }
 .report-stats .stat-label { white-space: normal; }
-.report-definitions { margin: 20px 0 12px; }
+.report-definitions { margin: 20px 0 12px; padding: 18px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
 .report-definitions p { font-size: 12px; line-height: 1.8; margin-top: 10px; max-width: 1000px; }
 .report-caveat { margin-bottom: 20px; }
 .report-chart-card, .report-table-card { margin-top: 20px; min-width: 0; }
@@ -2223,7 +2227,7 @@ dialog::backdrop {
   .calendar-range { gap: 10px; }
   .calendar-range input { width: 145px; }
   .report-filter-grid { grid-template-columns: minmax(0, 1fr); }
-  .report-controls { padding: 16px; }
+
   .report-presets .primary { margin-left: 0; }
 }
 
@@ -2232,3 +2236,36 @@ dialog::backdrop {
 
 .report-table-card .table-wrap { max-height: 620px; }
 .report-table-card thead th { position: sticky; top: 0; background: #f5f8f2; z-index: 1; }
+
+/* Shared filter cards use the workspace's typography, spacing and palette. */
+.filter-description { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+.calendar-filter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.calendar-filter-grid label, .filter-provider { display: grid; gap: 7px; font-size: 12px; color: var(--muted); }
+.calendar-filter-grid select, .calendar-range input { min-width: 0; width: 100%; }
+.calendar-range label { flex: 0 1 180px; }
+.filter-provider strong { color: var(--ink); font-size: 14px; align-self: center; }
+.filter-hint { margin-left: auto; align-self: center; color: var(--muted); font-size: 12px; }
+#calendar-range-error:not(:empty) { flex-basis: 100%; }
+.report-presets { padding-top: 20px; border-top: 1px solid var(--line); }
+.calendar-context > summary { display: flex; align-items: center; gap: 14px; padding: 22px 24px; list-style: none; color: var(--ink); }
+.calendar-context > summary::-webkit-details-marker { display: none; }
+.calendar-context > summary small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; margin-top: 4px; }
+.schedule-icon { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; background: var(--mint); color: var(--green); border-radius: 12px; font-size: 25px; }
+.disclosure-chevron { margin-left: auto; font-size: 22px; transition: transform .2s; }
+.calendar-context[open] .disclosure-chevron { transform: rotate(180deg); }
+.calendar-context > summary:hover { background: var(--paper); }
+.calendar-context > summary:focus-visible, .report-definitions > summary:focus-visible { outline: 2px solid var(--green); outline-offset: -3px; border-radius: 12px; }
+@media (max-width: 1100px) {
+  .calendar-filter-grid, .report-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .workspace-filters .card-head { align-items: flex-start; padding: 20px 16px 16px; }
+  .workspace-filters .card-body { padding: 0 16px 20px; }
+  .workspace-filters .card-head > .btn { flex-shrink: 0; }
+  .calendar-filter-grid, .report-filter-grid { grid-template-columns: minmax(0, 1fr); }
+  .calendar-range label { flex: 1 1 120px; }
+  .filter-hint { margin-left: 0; flex-basis: 100%; }
+  .calendar-context > summary { padding: 18px 16px; gap: 10px; }
+  .calendar-context .calendar-aside { padding: 0 16px 20px; }
+  .report-presets .primary { width: 100%; }
+}
