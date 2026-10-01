@@ -185,3 +185,9 @@ This phase provides an actual connected backend, relational migrations, transact
 Next priorities: complete browser/device QA; agree patient identity verification and onboarding; implement email verification/recovery or OIDC; add delivery-backed reminders via an outbox; replace full bootstrap appointment loading with windowed/paginated views for large clinics; add production deployment/backup automation and optionally real-time updates. Source entries without precise hours still require staff-defined availability; no holiday calendar, location or missing medical details are invented.
 
 Official references: [Microsoft Visual Studio/.NET compatibility](https://learn.microsoft.com/en-us/dotnet/core/install/windows), [.NET support](https://dotnet.microsoft.com/en-us/platform/support/policy), [Npgsql EF provider](https://www.npgsql.org/efcore/), [PostgreSQL constraints](https://www.postgresql.org/docs/17/ddl-constraints.html).
+
+## Doctor and service catalogue
+
+Administrators can manage doctors, specialties and services through **Каталог**.
+This update requires the service catalogue migration before publishing API and Web.
+See [catalogue workflows and DBeaver deployment](docs/SERVICE_CATALOGUE.md).

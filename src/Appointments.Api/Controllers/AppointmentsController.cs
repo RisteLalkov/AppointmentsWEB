@@ -11,6 +11,9 @@ namespace Appointments.Api.Controllers;
 public sealed class AppointmentsController(PostgresAppointments service) : ApiControllerBase
 {
     [Authorize(Roles = "Administrator"), HttpGet("reports")] public Task<ReportResult> Reports([FromQuery] ReportQuery query, CancellationToken ct) => service.ReportAsync(Actor, query, ct);
+    [Authorize(Roles = "Administrator"), HttpPost("catalogue/doctors")] public Task<object> Doctor(DoctorInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "doctors", input, ct);
+    [Authorize(Roles = "Administrator"), HttpPost("catalogue/specialties")] public Task<object> Specialty(SpecialtyInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "specialties", input, ct);
+    [Authorize(Roles = "Administrator"), HttpPost("catalogue/services")] public Task<object> MedicalService(ServiceInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "services", input, ct);
     [HttpGet("bootstrap")] public Task<BootstrapResponse> Bootstrap(CancellationToken ct) => service.BootstrapAsync(Actor, IsDemo, ct);
     [HttpGet("appointments")] public async Task<IActionResult> List([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, int skip = 0, int take = 100, CancellationToken ct = default)
     {
@@ -20,7 +23,7 @@ public sealed class AppointmentsController(PostgresAppointments service) : ApiCo
         if (to.HasValue) query = query.Where(a => a.Start < to.Value.ToUniversalTime());
         return Ok(new { total = await query.CountAsync(ct), items = await query.OrderBy(a => a.Start).ThenBy(a => a.Id).Skip(skip).Take(take).ToListAsync(ct) });
     }
-    [HttpGet("slots")] public Task<IReadOnlyList<Slot>> Slots(string doctorId, DateOnly date, string? excludeId, CancellationToken ct) => service.SlotsAsync(Actor, doctorId, date, excludeId, ct);
+    [HttpGet("slots")] public Task<IReadOnlyList<Slot>> Slots(string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null) => service.SlotsAsync(Actor, doctorId, date, excludeId, ct, serviceId);
     [HttpGet("exceptions")] public Task<IReadOnlyList<AvailabilityException>> Exceptions(string doctorId, CancellationToken ct) => service.ExceptionsAsync(Actor, doctorId, ct);
     [HttpPost("appointments")] public Task<Appointment> Book(BookingCommand input, CancellationToken ct) => service.BookAsync(Actor, input, ct);
     [HttpPost("appointments/{id}/move")] public Task<Appointment> Move(string id, MoveCommand input, CancellationToken ct) => service.MoveAsync(Actor, id, input, ct);

@@ -2269,3 +2269,11 @@ dialog::backdrop {
   .calendar-context .calendar-aside { padding: 0 16px 20px; }
   .report-presets .primary { width: 100%; }
 }
+
+.catalogue-subtext { display: block; margin-top: 5px; color: var(--muted); }
+.catalogue-assignments { border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin: 22px 0; max-height: 260px; overflow-y: auto; }
+.catalogue-assignments legend { font-size: 13px; padding: 0 8px; }
+.catalogue-assignments label, .catalogue-toggle { display: flex; align-items: center; gap: 12px; padding: 10px 0; font-size: 13px; }
+.catalogue-assignments input, .catalogue-toggle input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--green); }
+.catalogue-assignments small { display: block; color: var(--muted); }
+#catalogue-error { color: #a02d2d; margin-top: 14px; }

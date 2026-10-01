@@ -19,6 +19,7 @@ public sealed class DatabaseInitializer(AppointmentsDbContext db, SchedulingCloc
         {
             var file = Path.Combine(AppContext.BaseDirectory, "Seed", "doctors.json");
             var seed = DemoSeed.Create(await File.ReadAllTextAsync(file, ct), clock);
+            db.Specialties.AddRange(seed.Specialties);
             db.Doctors.AddRange(seed.Doctors);
             if (environment.IsDevelopment() && configuration.GetValue<bool>("Demo:Enabled"))
             {

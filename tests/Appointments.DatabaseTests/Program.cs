@@ -39,3 +39,4 @@ await using (var tx = await connection.BeginTransactionAsync())
     await tx.RollbackAsync(); passed++; Console.WriteLine("PASS SQL cancelled intervals do not reserve a slot");
 }
 Console.WriteLine($"{passed}/{passed} direct PostgreSQL constraint checks passed.");
+await CatalogueUpgrade.Verify(connectionString);

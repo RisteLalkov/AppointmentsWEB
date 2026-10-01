@@ -30,6 +30,7 @@ public static class DemoSeed
                     UpdatedAt = clock.UtcNow });
             }
         }
+        CatalogueService.Initialize(state);
         return state;
     }
     public static List<DemoActor> Actors(IEnumerable<Doctor> doctors, IEnumerable<Patient> patients) =>

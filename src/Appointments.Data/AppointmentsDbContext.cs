@@ -5,6 +5,9 @@ namespace Appointments.Data;
 
 public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext> options) : DbContext(options)
 {
+    public DbSet<Specialty> Specialties => Set<Specialty>();
+    public DbSet<MedicalService> Services => Set<MedicalService>();
+    public DbSet<DoctorService> DoctorServices => Set<DoctorService>();
     public DbSet<Doctor> Doctors => Set<Doctor>();
     public DbSet<Patient> Patients => Set<Patient>();
     public DbSet<Appointment> Appointments => Set<Appointment>();
@@ -18,8 +21,23 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
     protected override void OnModelCreating(ModelBuilder b)
     {
         b.HasPostgresExtension("btree_gist");
+        b.Entity<Specialty>(x => { x.HasKey(s => s.Id); x.Property(s => s.Name).HasMaxLength(200); x.Property(s => s.Version).IsConcurrencyToken(); x.HasIndex(s => s.Name).IsUnique(); });
+        b.Entity<MedicalService>(x => {
+            x.ToTable("Services", t => t.HasCheckConstraint("CK_Service_Duration", "\"DurationMinutes\" BETWEEN 10 AND 120 AND \"DurationMinutes\" % 5 = 0"));
+            x.HasKey(s => s.Id); x.Property(s => s.Name).HasMaxLength(200); x.Property(s => s.Version).IsConcurrencyToken();
+            x.HasOne<Specialty>().WithMany().HasForeignKey(s => s.SpecialtyId).OnDelete(DeleteBehavior.Restrict);
+            x.HasIndex(s => new { s.SpecialtyId, s.Name }).IsUnique();
+        });
+        b.Entity<DoctorService>(x => { x.HasKey(s => new { s.DoctorId, s.ServiceId });
+            x.HasOne<Doctor>().WithMany().HasForeignKey(s => s.DoctorId).OnDelete(DeleteBehavior.Restrict);
+            x.HasOne<MedicalService>().WithMany().HasForeignKey(s => s.ServiceId).OnDelete(DeleteBehavior.Restrict);
+        });
         var doctor = b.Entity<Doctor>();
         doctor.ToTable("Doctors", t => t.HasCheckConstraint("CK_Doctor_Duration", "\"DurationMinutes\" BETWEEN 10 AND 120 AND \"DurationMinutes\" % 5 = 0"));
+        doctor.Property(d => d.Enabled).HasDefaultValue(true);
+        doctor.Property(d => d.CatalogVersion).IsConcurrencyToken().HasDefaultValue(1);
+        doctor.Property(d => d.Subspecialty).HasMaxLength(200);
+        doctor.HasOne<Specialty>().WithMany().HasForeignKey(d => d.SpecialtyId).OnDelete(DeleteBehavior.Restrict);
         doctor.HasKey(d => d.Id); doctor.Property(d => d.Id).HasMaxLength(64); doctor.Property(d => d.Name).HasMaxLength(200);
         doctor.Property(d => d.Specialty).HasMaxLength(200); doctor.Property(d => d.ScheduleVersion).IsConcurrencyToken().HasDefaultValue(1);
         doctor.OwnsMany(d => d.WorkingPeriods, p =>
@@ -43,6 +61,8 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
             t.HasCheckConstraint("CK_Appointment_Status", "\"Status\" IN ('Scheduled','Confirmed','Completed','Cancelled','NoShow')");
             t.HasCheckConstraint("CK_Appointment_Version", "\"Version\" > 0");
         });
+        appointment.Property(a => a.ServiceName).HasMaxLength(200);
+        appointment.HasOne<MedicalService>().WithMany().HasForeignKey(a => a.ServiceId).OnDelete(DeleteBehavior.Restrict);
         appointment.HasKey(a => a.Id); appointment.Property(a => a.Id).HasMaxLength(64);
         appointment.Property(a => a.Status).HasConversion<string>().HasMaxLength(20);
         appointment.Property(a => a.Version).IsConcurrencyToken();

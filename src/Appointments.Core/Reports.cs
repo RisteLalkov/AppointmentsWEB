@@ -22,18 +22,22 @@ public static class ReportBuilder
             throw new RuleException("Изберете важечки период од најмногу 366 дена.");
         if (q.GroupBy is not ("day" or "week" or "month")) throw new RuleException("Изберете групирање по ден, недела или месец.");
     }
-    public static ReportResult Build(DemoActor actor, ReportQuery q, DemoState state, SchedulingClock clock)
+    public static ReportResult Build(DemoActor actor, ReportQuery q, DemoState state, SchedulingClock clock) => BuildInternal(actor, q, state, clock, true);
+    private static ReportResult BuildInternal(DemoActor actor, ReportQuery q, DemoState state, SchedulingClock clock, bool serviceRows)
     {
         if (actor.Role != DemoRole.Administrator) throw new RuleException("Извештаите се достапни само за администратори.", 403);
         Validate(q);
         if (!string.IsNullOrEmpty(q.DoctorId) && !state.Doctors.Any(d => d.Id == q.DoctorId)) throw new RuleException("Изберете важечки лекар.");
         if (!string.IsNullOrEmpty(q.Specialty) && !state.Doctors.Any(d => d.Specialty == q.Specialty)) throw new RuleException("Изберете важечка специјалност.");
-        if (!string.IsNullOrEmpty(q.ServiceId) && q.ServiceId != "unassigned" && !state.Doctors.Any(d => d.IsService && d.Id == q.ServiceId)) throw new RuleException("Изберете важечка услуга.");
+        if (!string.IsNullOrEmpty(q.ServiceId) && q.ServiceId != "unassigned" && !state.Services.Any(s => s.Id == q.ServiceId) && !state.Doctors.Any(d => d.IsService && d.Id == q.ServiceId)) throw new RuleException("Изберете важечка услуга.");
+        string ServiceKey(Appointment a) => a.ServiceId ?? (state.Doctors.Any(d => d.Id == a.DoctorId && d.IsService) ? a.DoctorId : "unassigned");
         var doctors = state.Doctors.Where(d => (string.IsNullOrEmpty(q.DoctorId) || d.Id == q.DoctorId)
             && (string.IsNullOrEmpty(q.Specialty) || d.Specialty == q.Specialty)
-            && (string.IsNullOrEmpty(q.ServiceId) || (q.ServiceId == "unassigned" ? !d.IsService : d.IsService && d.Id == q.ServiceId))).ToList();
+            && (string.IsNullOrEmpty(q.ServiceId) || (q.ServiceId == "unassigned" && !d.IsService) || d.Id == q.ServiceId
+                || state.DoctorServices.Any(x => x.DoctorId == d.Id && x.ServiceId == q.ServiceId)
+                || state.Appointments.Any(a => a.DoctorId == d.Id && ServiceKey(a) == q.ServiceId))).ToList();
         var ids = doctors.Select(d => d.Id).ToHashSet();
-        var appointments = state.Appointments.Where(a => ids.Contains(a.DoctorId))
+        var appointments = state.Appointments.Where(a => ids.Contains(a.DoctorId) && (string.IsNullOrEmpty(q.ServiceId) || ServiceKey(a) == q.ServiceId))
             .Where(a => { var date = DateOnly.FromDateTime(clock.Local(a.Start)); return date >= q.From && date <= q.To; }).ToList();
         var daily = new List<(Doctor Doctor, DateOnly Date, List<Appointment> Visits, double Capacity, double Occupied, double Outside)>();
         var baseline = new DemoState { Exceptions = state.Exceptions };
@@ -43,7 +47,8 @@ public static class ReportBuilder
         {
             var visits = byDay[(doctor.Id, date)].ToList();
             // Physical capacity, independent of Tuesday-first release preference.
-            var capacity = Merge(SchedulingRules.Slots(baseline, doctor, date, clock, includePast: true, applyPreference: false).Select(s => (s.Start, s.End)));
+            var capacityDoctor = doctor with { DurationMinutes = state.Services.Find(x => x.Id == q.ServiceId)?.DurationMinutes ?? doctor.DurationMinutes };
+            var capacity = Merge(SchedulingRules.Slots(baseline, capacityDoctor, date, clock, includePast: true, applyPreference: false).Select(s => (s.Start, s.End)));
             var busy = Merge(visits.Where(a => a.Status != AppointmentStatus.Cancelled).Select(a => (a.Start, a.End)));
             var occupied = capacity.Sum(c => busy.Sum(b => Math.Max(0, (Min(c.End, b.End) - Max(c.Start, b.Start)).TotalMinutes)));
             daily.Add((doctor, date, visits, capacity.Sum(c => (c.End - c.Start).TotalMinutes), occupied,
@@ -66,8 +71,12 @@ public static class ReportBuilder
         return new(q, clock.Zone.Id, clock.UtcNow, state.Patients.Count, Metrics(daily), periods,
             daily.GroupBy(r => r.Doctor.Id).Select(g => new ReportRow(g.Key, g.First().Doctor.Name, Metrics(g))).OrderBy(r => r.Label).ToList(),
             daily.GroupBy(r => r.Doctor.Specialty).Select(g => new ReportRow(g.Key, g.Key, Metrics(g))).OrderBy(r => r.Label).ToList(),
-            daily.GroupBy(r => r.Doctor.IsService ? r.Doctor.Id : "unassigned")
-                .Select(g => new ReportRow(g.Key, g.Key == "unassigned" ? "Без заведена услуга (лекарски прегледи)" : g.First().Doctor.Name, Metrics(g))).OrderBy(r => r.Label).ToList());
+            serviceRows ? state.Services.Select(x => (x.Id, x.Name)).Concat(state.Doctors.Where(d => d.IsService).Select(d => (d.Id, d.Name)))
+                .Append(("unassigned", "Без заведена услуга (лекарски прегледи)"))
+                .Where(x => (string.IsNullOrEmpty(q.ServiceId) || x.Item1 == q.ServiceId) && (x.Item1 == "unassigned" ? doctors.Any(d => !d.IsService) : ids.Contains(x.Item1) || state.DoctorServices.Any(a => ids.Contains(a.DoctorId) && a.ServiceId == x.Item1) || appointments.Any(a => a.ServiceId == x.Item1)))
+                .Select(x => new ReportRow(x.Item1, x.Item2, BuildInternal(actor, q with { ServiceId = x.Item1 }, state, clock, false).Summary))
+                .OrderBy(r => r.Label).ToList() : []);
+
     }
     private static DateTimeOffset Min(DateTimeOffset a, DateTimeOffset b) => a < b ? a : b;
     private static DateTimeOffset Max(DateTimeOffset a, DateTimeOffset b) => a > b ? a : b;

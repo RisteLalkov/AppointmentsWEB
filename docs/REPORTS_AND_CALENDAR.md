@@ -18,10 +18,12 @@ Administrators open **Извештаи**. Choose inclusive start/end dates (maxi
 - Day/week/month tables include zero periods. Weeks begin Monday; endpoint weeks/months may be partial.
 - **Estimated utilisation** = occupied minutes inside reconstructed capacity / reconstructed capacity minutes. All non-cancelled appointments, including no-shows, consume reserved time. Available slots are reconstructed using CURRENT weekly schedules, current appointment duration and saved dated exceptions. Complete slot intervals are merged to avoid counting overlapping additions twice. DST-invalid/ambiguous intervals are omitted consistently with booking rules. Tuesday-first release preference does not reduce physical capacity.
 - There are no historical schedule snapshots. Historical utilisation is therefore an estimate, not a historical capacity audit. Booked time outside today's reconstructed schedule is disclosed separately. A zero-capacity denominator displays —. Cancellations free capacity.
-- **Service grouping uses the existing `Doctor.IsService` profiles.** Bookings against named doctors have no independent service ID and are explicitly grouped under **Без заведена услуга**. No service is inferred from specialty. A future service catalogue/doctor-service relationship is still needed for detailed per-examination reporting. Doctor/profile and specialty descriptions likewise reflect current stored metadata.
+- **Service grouping uses booked service IDs from the catalogue.** Legacy `Doctor.IsService` profiles remain separate groups, and old named-doctor bookings without service IDs remain **Без заведена услуга**. Shared capacity must not be added across service rows. See [SERVICE_CATALOGUE.md](SERVICE_CATALOGUE.md) for duration, history and deployment behavior. Doctor/profile and specialty descriptions reflect current stored metadata.
 - Reports are on-demand snapshots: submit again to refresh. No background report scheduler, delivery or notifications are implied.
 
 ## Deployment
+
+The newer service catalogue release requires its migration; follow [SERVICE_CATALOGUE.md](SERVICE_CATALOGUE.md). The instructions below describe the original calendar/report-only release.
 
 Pull main, rebuild and publish BOTH Appointments.Api and Appointments.Web. Preserve server connection strings, API URL and hosting flags. Ensure the Web publish includes `wwwroot/js/app.js` and `wwwroot/css/site.css`; refresh the browser with Ctrl+F5. Existing patient/appointment data is preserved. No database reset, re-import or migration is needed.
 

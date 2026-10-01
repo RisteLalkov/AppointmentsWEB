@@ -26,7 +26,8 @@ public sealed class JsonDemoStore : IDemoStore, IDisposable
                 : seed();
             if (state.SchemaVersion != 1) throw new InvalidDataException("Unsupported demo data version. Back up the file before resetting.");
             if (state.TimeZoneId != seed().TimeZoneId) throw new InvalidDataException("Scheduling time zone changed. Reset the demo file before restarting.");
-            if (!File.Exists(path)) Persist(state);
+            CatalogueService.Initialize(state);
+            Persist(state);
         }
         catch { ownership.Dispose(); throw; }
     }
@@ -50,6 +51,6 @@ public sealed class JsonDemoStore : IDemoStore, IDisposable
         { JsonSerializer.Serialize(stream, next, JsonOptions); stream.Flush(true); }
         File.Move(temp, path, true);
     }
-    public void Reset() { lock (gate) { var next = seed(); Persist(next); state = next; } }
+    public void Reset() { lock (gate) { var next = seed(); CatalogueService.Initialize(next); Persist(next); state = next; } }
     public void Dispose() => ownership.Dispose();
 }

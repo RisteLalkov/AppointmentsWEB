@@ -136,6 +136,43 @@ Test("Report capacity excludes DST invalid and ambiguous slots", () => {
     }
 });
 
+
+Test("Catalogue is administrator-only and rejects stale edits", () => {
+    using var f=New(); var catalog=new CatalogueService(f.Store);
+    var sp=catalog.SaveSpecialty(admin,new(null,"Cardiology"));
+    Reject(()=>catalog.SaveSpecialty(pat,new(null,"Forbidden")),403);
+    var doc=catalog.SaveDoctor(admin,new(null,"New doctor",sp.Id,"Imaging",true));
+    Equal(0,doc.WorkingPeriods.Count);
+    catalog.SaveDoctor(admin,new(doc.Id,"Renamed",sp.Id,"",false,doc.CatalogVersion));
+    Reject(()=>catalog.SaveDoctor(admin,new(doc.Id,"Stale",sp.Id,"",true,doc.CatalogVersion)),409);
+});
+Test("Service duration, assignment and active flags control booking", () => {
+    using var f=New(); var catalog=new CatalogueService(f.Store); var sp=f.Store.Read(s=>s.Specialties.First());
+    var svc=catalog.SaveService(admin,new(null,"Long examination",sp.Id,45,true,["d1"]));
+    var slot=f.Service.Availability(admin,"d1",monday,serviceId:svc.Id).First(); Equal(45d,(slot.End-slot.Start).TotalMinutes);
+    Reject(()=>f.Service.Book(admin,new("d1","p1",monday,slot.Time,30,Guid.NewGuid().ToString(),svc.Id)),409);
+    Reject(()=>f.Service.Book(admin,new("d2","p1",monday,slot.Time,45,Guid.NewGuid().ToString(),svc.Id)),409);
+    Reject(()=>f.Service.Book(admin,new("d1","p1",monday,slot.Time,30,Guid.NewGuid().ToString())),400);
+    var a=f.Service.Book(admin,new("d1","p1",monday,slot.Time,45,Guid.NewGuid().ToString(),svc.Id)); Equal(svc.Id,a.ServiceId); Equal(svc.Name,a.ServiceName);
+    Reject(()=>f.Service.Book(admin,new("d1","p2",monday,slot.Time,45,Guid.NewGuid().ToString(),svc.Id)),409);
+    catalog.SaveService(admin,new(svc.Id,"Renamed service",sp.Id,60,false,[],svc.Version));
+    Reject(()=>f.Service.Availability(admin,"d1",monday,serviceId:svc.Id),409);
+    var next=f.Service.Availability(admin,"d1",monday.AddDays(1),a.Id).First();
+    var moved=f.Service.Move(admin,a.Id,new(monday.AddDays(1),next.Time,a.Version)); Equal(45d,(moved.End-moved.Start).TotalMinutes); Equal("Long examination",moved.ServiceName);
+    var d=f.Service.Doctors().First(x=>x.Id=="d1"); catalog.SaveDoctor(admin,new(d.Id,d.Name,sp.Id,"",false,d.CatalogVersion));
+    Reject(()=>f.Service.Availability(admin,"d1",monday.AddDays(2),a.Id),409);
+    Equal(AppointmentStatus.Cancelled,f.Service.ChangeStatus(admin,a.Id,AppointmentStatus.Cancelled,moved.Version).Status);
+});
+Test("Reports group actual services without assigning legacy appointments", () => {
+    using var f=New(); var catalog=new CatalogueService(f.Store);var sp=f.Store.Read(s=>s.Specialties.First());
+    f.Service.Book(admin,new("d1","p1",monday,new(8,0),30,Guid.NewGuid().ToString()));
+    var svc=catalog.SaveService(admin,new(null,"Consultation",sp.Id,45,true,["d1"]));
+    f.Service.Book(admin,new("d1","p2",monday,new(9,30),45,Guid.NewGuid().ToString(),svc.Id));
+    var state=f.Store.Read(s=>s); var report=ReportBuilder.Build(admin,new(monday,monday),state,f.Clock);
+    Equal(2,report.Summary.Total);Equal(1,report.Services.Single(x=>x.Key==svc.Id).Metrics.Total);Equal(1,report.Services.Single(x=>x.Key=="unassigned").Metrics.Total);
+    Equal(1,ReportBuilder.Build(admin,new(monday,monday,ServiceId:svc.Id),state,f.Clock).Summary.Total);
+});
+
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

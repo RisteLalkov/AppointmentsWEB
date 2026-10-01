@@ -16,7 +16,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         var doctors = await db.Doctors.AsNoTracking().AsSplitQuery().OrderBy(d => d.Id).ToListAsync(ct);
         var patients = await db.Patients.AsNoTracking().Where(p => actor.Role != DemoRole.Patient || p.Id == actor.PatientId).OrderBy(p => p.Name).ToListAsync(ct);
         var appointments = await Visible(actor).AsNoTracking().OrderBy(a => a.Start).ToListAsync(ct);
-        return new(actor, doctors, patients, appointments, clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, demo, false);
+        return new(actor, doctors, patients, appointments, clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, demo, false, "Api", await db.Specialties.AsNoTracking().ToListAsync(ct), await db.Services.AsNoTracking().ToListAsync(ct), await db.DoctorServices.AsNoTracking().ToListAsync(ct));
     }
     public async Task<ReportResult> ReportAsync(DemoActor actor, ReportQuery query, CancellationToken ct)
     {
@@ -28,6 +28,8 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         var state = new DemoState
         {
             Doctors = await db.Doctors.AsNoTracking().AsSplitQuery().ToListAsync(ct),
+            Services = await db.Services.AsNoTracking().ToListAsync(ct),
+            DoctorServices = await db.DoctorServices.AsNoTracking().ToListAsync(ct),
             Patients = await db.Patients.AsNoTracking().ToListAsync(ct),
             Appointments = await db.Appointments.AsNoTracking().Where(a => a.Start >= start && a.Start < end).ToListAsync(ct),
             Exceptions = await db.Exceptions.AsNoTracking().Where(e => e.Date >= query.From && e.Date <= query.To).ToListAsync(ct)
@@ -37,7 +39,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     }
     public IQueryable<Appointment> Visible(DemoActor actor) => db.Appointments.Where(a => actor.Role == DemoRole.Administrator ||
         (actor.Role == DemoRole.Patient && a.PatientId == actor.PatientId) || (actor.Role == DemoRole.Doctor && a.DoctorId == actor.DoctorId));
-    public async Task<IReadOnlyList<Slot>> SlotsAsync(DemoActor actor, string doctorId, DateOnly date, string? excludeId, CancellationToken ct)
+    public async Task<IReadOnlyList<Slot>> SlotsAsync(DemoActor actor, string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null)
     {
         var state = await LoadAsync(doctorId, actor.PatientId, ct);
         if (excludeId != null && state.Appointments.All(a => a.Id != excludeId))
@@ -45,7 +47,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             var appointment = await db.Appointments.AsNoTracking().SingleOrDefaultAsync(a => a.Id == excludeId, ct);
             if (appointment != null) state.Appointments.Add(appointment);
         }
-        return Rules(state).Availability(actor, doctorId, date, excludeId);
+        return Rules(state).Availability(actor, doctorId, date, excludeId, serviceId);
     }
     public async Task<IReadOnlyList<AvailabilityException>> ExceptionsAsync(DemoActor actor, string doctorId, CancellationToken ct)
     {
@@ -66,6 +68,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
                 if (replay.Fingerprint != fingerprint) throw new RuleException("Ова барање веќе е употребено за друг термин. Повторно отворете го формуларот.", 409);
                 return JsonSerializer.Deserialize<Appointment>(replay.ResponseJson, JsonDemoStore.JsonOptions)!;
             }
+            await LockCatalogueSharedAsync(ct);
             await LockAsync("doctor:" + command.DoctorId, ct);
             var state = await LoadAsync(command.DoctorId, command.PatientId, ct);
             var result = Rules(state).Book(actor, command);
@@ -83,6 +86,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             ?? throw new RuleException("Терминот не е пронајден или немате пристап до него.", 404);
         return await TransactionAsync(async () =>
         {
+            await LockCatalogueSharedAsync(ct);
             await LockAsync("doctor:" + reference.DoctorId, ct);
             var state = await LoadAsync(reference.DoctorId, reference.PatientId, ct);
             if (state.Appointments.All(a => a.Id != id)) state.Appointments.Add(await db.Appointments.SingleAsync(a => a.Id == id, ct));
@@ -142,10 +146,34 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         return new DemoState
         {
             Doctors = [doctor],
+            Services = await db.Services.AsNoTracking().ToListAsync(ct),
+            DoctorServices = await db.DoctorServices.AsNoTracking().Where(x => x.DoctorId == doctorId).ToListAsync(ct),
             Patients = patientId == null ? [] : await db.Patients.Where(p => p.Id == patientId).ToListAsync(ct),
             Appointments = await db.Appointments.Where(a => a.End >= now && (a.DoctorId == doctorId || (patientId != null && a.PatientId == patientId))).ToListAsync(ct),
             Exceptions = await db.Exceptions.Where(e => e.DoctorId == doctorId && e.Date >= today).ToListAsync(ct)
         };
+    }
+    private Task<int> LockCatalogueSharedAsync(CancellationToken ct) => db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock_shared(hashtextextended('careline:catalogue', 0))", ct);
+    public async Task<object> SaveCatalogueAsync(DemoActor actor, string kind, object input, CancellationToken ct)
+    {
+        if (actor.Role != DemoRole.Administrator) throw new RuleException("Немате пристап до каталогот.", 403);
+        return await TransactionAsync(async () => {
+            await LockAsync("catalogue", ct);
+            var state = new DemoState { Doctors = await db.Doctors.AsSplitQuery().ToListAsync(ct), Specialties = await db.Specialties.ToListAsync(ct), Services = await db.Services.ToListAsync(ct), DoctorServices = await db.DoctorServices.ToListAsync(ct) };
+            var rules = new CatalogueService(new OperationState(state));
+            object result;
+            if (kind == "doctors") { var data = (DoctorInput)input; var doctor = rules.SaveDoctor(actor, data); if (data.Id == null) db.Doctors.Add(doctor); result = doctor; }
+            else if (kind == "specialties") { var data = (SpecialtyInput)input; var item = rules.SaveSpecialty(actor, data); if (data.Id == null) db.Specialties.Add(item); result = item; }
+            else {
+                var data = (ServiceInput)input; var before = state.DoctorServices.ToList(); var item = rules.SaveService(actor, data);
+                if (data.Id == null) db.Services.Add(item);
+                db.DoctorServices.RemoveRange(before.Where(x => x.ServiceId == item.Id && !state.DoctorServices.Contains(x)));
+                db.DoctorServices.AddRange(state.DoctorServices.Where(x => x.ServiceId == item.Id && !before.Contains(x)));
+                result = item;
+            }
+            Audit(actor, "catalogue." + kind + ".saved", kind == "doctors" ? ((Doctor)result).Id : kind == "specialties" ? ((Specialty)result).Id : ((MedicalService)result).Id);
+            await db.SaveChangesAsync(ct); return result;
+        }, ct);
     }
     private AppointmentService Rules(DemoState state) => new(new OperationState(state), clock);
     public async Task LockAsync(string resource, CancellationToken ct) =>

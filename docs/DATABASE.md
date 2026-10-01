@@ -2,7 +2,7 @@
 
 ## Initial schema
 
-Supported/tested backend: PostgreSQL 17 with `btree_gist`. Use a dedicated database. EF migrations are in `src/Appointments.Data/Migrations`; a reviewed idempotent initial SQL script is in `database/001-initial.sql`. It includes foreign keys, checks, indexes and the two appointment exclusion constraints. The C# migration is the source of truth. The SQL script creates schema only; API initialization imports doctors and configured accounts after the schema exists.
+Supported/tested backend: PostgreSQL 17 with `btree_gist`. Use a dedicated database. EF migrations are in `src/Appointments.Data/Migrations`; a reviewed idempotent initial SQL script is in `database/001-initial.sql`. It includes foreign keys, checks, indexes and the two appointment exclusion constraints. The C# migrations are the source of truth. Apply `database/002-service-catalogue.sql` after the initial SQL when installing the current release; see [catalogue deployment](SERVICE_CATALOGUE.md). The SQL script creates schema only; API initialization imports doctors and configured accounts after the schema exists.
 
 In Development, `Database:ApplyMigrations=true` automatically applies pending migrations. Seeding takes a PostgreSQL advisory lock and is idempotent; existing doctors/patients/appointments are never replaced at startup. Production does not auto-migrate. To migrate explicitly, with the intended connection supplied through a secure environment:
 

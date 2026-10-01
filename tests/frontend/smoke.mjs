@@ -350,6 +350,27 @@ try {
     doc.$("#availability-doctor").disabled,
     "Doctor availability selection stays on own profile",
   );
+  await admin.page("catalogue");
+  admin.click('[data-catalogue-tab="specialties"]'); admin.click("#catalogue-add");
+  admin.$("#catalogue-name").value = "DOM specialty";
+  admin.$("#catalogue-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => !admin.$("#main-dialog").open);
+  assert(admin.$("#app").textContent.includes("DOM specialty"), "Administrator creates specialty through catalogue UI");
+  admin.click('[data-catalogue-tab="services"]'); admin.click("#catalogue-add");
+  admin.$("#catalogue-name").value = "DOM examination";
+  admin.$("#catalogue-specialty").value = [...admin.$("#catalogue-specialty").options].find(o => o.textContent === "DOM specialty").value;
+  admin.$("#catalogue-duration").value = "45";
+  admin.$('[name="doctorIds"][value="d01"]').checked = true;
+  admin.$("#catalogue-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => !admin.$("#main-dialog").open);
+  assert(admin.$("#app").textContent.includes("DOM examination"), "Administrator creates and assigns service through catalogue UI");
+  await admin.page("calendar"); admin.change("#calendar-doctor", "d01"); admin.click('[data-action="book"]');
+  await until(() => admin.$("#booking-service"));
+  assert(admin.$("#booking-service").textContent.includes("DOM examination") && admin.$("#dialog-content").textContent.includes("45 минути"), "Booking offers assigned service and its duration");
+  admin.click("#close-dialog");
+  doc.w.location.hash = "catalogue";
+  await until(() => doc.$('#navigation [data-page="overview"]').classList.contains("active"));
+  assert(!doc.$("#catalogue-add"), "Doctor cannot access catalogue management UI");
   assert(
     [...pat.errors, ...admin.errors, ...doc.errors].length === 0,
     "No uncaught JavaScript errors in exercised flows",

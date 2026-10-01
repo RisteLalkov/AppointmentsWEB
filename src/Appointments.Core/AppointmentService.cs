@@ -25,7 +25,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     public IReadOnlyList<Appointment> Appointments(DemoActor actor) => store.Read(s => s.Appointments.Where(a => CanSee(actor, a)).OrderBy(a => a.Start).ToList());
     public IReadOnlyList<AvailabilityException> Exceptions(DemoActor actor, string doctorId)
     { Staff(actor, doctorId); return store.Read(s => s.Exceptions.Where(e => e.DoctorId == doctorId).ToList()); }
-    public IReadOnlyList<Slot> Availability(DemoActor actor, string doctorId, DateOnly date, string? excludeId = null) => store.Read(s =>
+    public IReadOnlyList<Slot> Availability(DemoActor actor, string doctorId, DateOnly date, string? excludeId = null, string? serviceId = null) => store.Read(s =>
     {
         var doctor = FindDoctor(s, doctorId);
         if (actor.Role == DemoRole.Doctor) Staff(actor, doctorId);
@@ -35,6 +35,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
             var existing = FindAppointment(s, excludeId); CheckAccess(actor, existing); Editable(existing);
             if (existing.DoctorId != doctorId) throw new RuleException("За презакажување изберете го првично избраниот лекар.");
         }
+        doctor = CatalogueService.ForBooking(s, doctor, serviceId, excludeId == null ? null : FindAppointment(s, excludeId));
         var slots = SchedulingRules.Slots(s, doctor, date, clock, excludeId);
         if (actor.Role == DemoRole.Patient)
             slots = slots.Where(slot => !s.Appointments.Any(a => a.Id != excludeId && a.PatientId == actor.PatientId && SchedulingRules.Active(a) && SchedulingRules.Overlaps(a.Start, a.End, slot.Start, slot.End))).ToList();
@@ -50,15 +51,16 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         var duplicate = s.Appointments.FirstOrDefault(a => a.RequestId == command.RequestId && a.CreatedBy == actor.Id);
         if (duplicate != null)
         {
-            if (duplicate.DoctorId != command.DoctorId || duplicate.PatientId != command.PatientId || clock.Local(duplicate.Start) != command.Date.ToDateTime(command.Time))
+            if (duplicate.DoctorId != command.DoctorId || duplicate.PatientId != command.PatientId || duplicate.ServiceId != command.ServiceId || (duplicate.End - duplicate.Start).TotalMinutes != command.DurationMinutes || clock.Local(duplicate.Start) != command.Date.ToDateTime(command.Time))
                 throw new RuleException("Ова барање веќе е употребено. Повторно отворете го формуларот за закажување.", 409);
             return duplicate;
         }
+        doctor = CatalogueService.ForBooking(s, doctor, command.ServiceId);
         if (command.DurationMinutes != doctor.DurationMinutes) throw new RuleException("Времетраењето на прегледот е променето. Освежете ги слободните термини.", 409);
         var slot = SchedulingRules.Slots(s, doctor, command.Date, clock).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException("Тој термин повеќе не е достапен. Изберете друг термин во следните 180 дена.", 409);
         CheckPatientConflict(s, command.PatientId, slot);
-        var appointment = new Appointment { DoctorId = doctor.Id, PatientId = command.PatientId, Start = slot.Start, End = slot.End,
+        var appointment = new Appointment { DoctorId = doctor.Id, PatientId = command.PatientId, ServiceId = command.ServiceId, ServiceName = s.Services.Find(x => x.Id == command.ServiceId)?.Name, Start = slot.Start, End = slot.End,
             Status = doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed,
             CreatedBy = actor.Id, RequestId = command.RequestId, UpdatedAt = clock.UtcNow };
         s.Appointments.Add(appointment); return appointment;
@@ -71,7 +73,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     public Appointment Move(DemoActor actor, string id, MoveCommand command) => store.Write(s =>
     {
         var a = FindAppointment(s, id); CheckAccess(actor, a); Version(a, command.Version); Editable(a);
-        var doctor = FindDoctor(s, a.DoctorId);
+        var doctor = CatalogueService.ForBooking(s, FindDoctor(s, a.DoctorId), a.ServiceId, a);
         if (actor.Role == DemoRole.Patient && doctor.StaffOnly) throw new RuleException("Контактирајте ја рецепцијата за презакажување на овој термин.", 403);
         var slot = SchedulingRules.Slots(s, doctor, command.Date, clock, id).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException("Тој термин е недостапен. Вашиот првичен термин е задржан.", 409);

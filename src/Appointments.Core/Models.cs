@@ -8,8 +8,12 @@ public record SourceSchedule(int Row, string Days, string Start, string End, str
 public record Doctor
 {
     public required string Id { get; init; }
-    public required string Name { get; init; }
-    public required string Specialty { get; init; }
+    public required string Name { get; set; }
+    public required string Specialty { get; set; }
+    public string? SpecialtyId { get; set; }
+    public string Subspecialty { get; set; } = "";
+    public bool Enabled { get; set; } = true;
+    public int CatalogVersion { get; set; } = 1;
     public string BookingMethod { get; init; } = "";
     public string Funding { get; init; } = "Не е наведено";
     public bool IsService { get; init; }
@@ -29,6 +33,8 @@ public record Appointment
     public string Id { get; init; } = Guid.NewGuid().ToString("N");
     public required string DoctorId { get; init; }
     public required string PatientId { get; init; }
+    public string? ServiceId { get; init; }
+    public string? ServiceName { get; init; }
     public required DateTimeOffset Start { get; set; }
     public required DateTimeOffset End { get; set; }
     public AppointmentStatus Status { get; set; }
@@ -38,7 +44,7 @@ public record Appointment
     public string RequestId { get; init; } = Guid.NewGuid().ToString("N");
 }
 public record Slot(DateOnly Date, TimeOnly Time, DateTimeOffset Start, DateTimeOffset End);
-public record BookingCommand(string DoctorId, string PatientId, DateOnly Date, TimeOnly Time, int DurationMinutes, string RequestId);
+public record BookingCommand(string DoctorId, string PatientId, DateOnly Date, TimeOnly Time, int DurationMinutes, string RequestId, string? ServiceId = null);
 public record MoveCommand(DateOnly Date, TimeOnly Time, int Version);
 public sealed class DemoState
 {
@@ -46,6 +52,9 @@ public sealed class DemoState
     public string TimeZoneId { get; set; } = "Europe/Skopje";
     public List<Doctor> Doctors { get; set; } = [];
     public List<Patient> Patients { get; set; } = [];
+    public List<Specialty> Specialties { get; set; } = [];
+    public List<MedicalService> Services { get; set; } = [];
+    public List<DoctorService> DoctorServices { get; set; } = [];
     public List<AvailabilityException> Exceptions { get; set; } = [];
     public List<Appointment> Appointments { get; set; } = [];
 }
@@ -65,7 +74,7 @@ public interface IAppointmentService
     IReadOnlyList<Patient> Patients(DemoActor actor);
     IReadOnlyList<Appointment> Appointments(DemoActor actor);
     IReadOnlyList<AvailabilityException> Exceptions(DemoActor actor, string doctorId);
-    IReadOnlyList<Slot> Availability(DemoActor actor, string doctorId, DateOnly date, string? excludeId = null);
+    IReadOnlyList<Slot> Availability(DemoActor actor, string doctorId, DateOnly date, string? excludeId = null, string? serviceId = null);
     Appointment Book(DemoActor actor, BookingCommand command);
     Appointment Move(DemoActor actor, string id, MoveCommand command);
     Appointment ChangeStatus(DemoActor actor, string id, AppointmentStatus status, int version);

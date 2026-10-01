@@ -11,6 +11,8 @@ namespace Appointments.Web.Controllers;
 public sealed class DataController(IServiceProvider services, DemoIdentity identity, SchedulingClock clock, BackendSettings settings, ApiClient api) : Controller
 {
     private static string Escape(string? value) => Uri.EscapeDataString(value ?? "");
+    private IDemoStore Store => services.GetRequiredService<IDemoStore>();
+    private CatalogueService Catalogue => new(Store);
     private IAppointmentService Demo => services.GetRequiredService<IAppointmentService>();
     private async Task<IActionResult> Execute(string path, object? body, Func<object> demo)
     {
@@ -22,8 +24,11 @@ public sealed class DataController(IServiceProvider services, DemoIdentity ident
     public Task<IActionResult> Reports([FromQuery] ReportQuery query) => Execute(
         $"reports?from={query.From:yyyy-MM-dd}&to={query.To:yyyy-MM-dd}&groupBy={Escape(query.GroupBy)}&doctorId={Escape(query.DoctorId)}&specialty={Escape(query.Specialty)}&serviceId={Escape(query.ServiceId)}", null,
         () => ReportBuilder.Build(identity.Actor, query, services.GetRequiredService<IDemoStore>().Read(s => s), clock));
-    [HttpGet("bootstrap")] public Task<IActionResult> Bootstrap() => Execute("bootstrap", null, () => new BootstrapResponse(identity.Actor, Demo.Doctors(), Demo.Patients(identity.Actor), Demo.Appointments(identity.Actor), clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, true, true, "Demo"));
-    [HttpGet("slots")] public Task<IActionResult> Slots(string doctorId, DateOnly date, string? excludeId) => Execute($"slots?doctorId={Escape(doctorId)}&date={date:yyyy-MM-dd}&excludeId={Uri.EscapeDataString(excludeId ?? "")}", null, () => Demo.Availability(identity.Actor, doctorId, date, excludeId));
+    [Authorize(Roles = "Administrator"), HttpPost("catalogue/doctors")] public Task<IActionResult> Doctor([FromBody] DoctorInput input) => Execute("catalogue/doctors", input, () => Catalogue.SaveDoctor(identity.Actor, input));
+    [Authorize(Roles = "Administrator"), HttpPost("catalogue/specialties")] public Task<IActionResult> Specialty([FromBody] SpecialtyInput input) => Execute("catalogue/specialties", input, () => Catalogue.SaveSpecialty(identity.Actor, input));
+    [Authorize(Roles = "Administrator"), HttpPost("catalogue/services")] public Task<IActionResult> Service([FromBody] ServiceInput input) => Execute("catalogue/services", input, () => Catalogue.SaveService(identity.Actor, input));
+    [HttpGet("bootstrap")] public Task<IActionResult> Bootstrap() => Execute("bootstrap", null, () => new BootstrapResponse(identity.Actor, Demo.Doctors(), Demo.Patients(identity.Actor), Demo.Appointments(identity.Actor), clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, true, true, "Demo", Store.Read(s => s.Specialties), Store.Read(s => s.Services), Store.Read(s => s.DoctorServices)));
+    [HttpGet("slots")] public Task<IActionResult> Slots(string doctorId, DateOnly date, string? excludeId, string? serviceId) => Execute($"slots?doctorId={Escape(doctorId)}&date={date:yyyy-MM-dd}&serviceId={Escape(serviceId)}&excludeId={Uri.EscapeDataString(excludeId ?? "")}", null, () => Demo.Availability(identity.Actor, doctorId, date, excludeId, serviceId));
     [HttpGet("exceptions")] public Task<IActionResult> Exceptions(string doctorId) => Execute("exceptions?doctorId=" + Escape(doctorId), null, () => Demo.Exceptions(identity.Actor, doctorId));
     [HttpPost("appointments")] public Task<IActionResult> Book([FromBody] BookingCommand command) => Execute("appointments", command, () => Demo.Book(identity.Actor, command));
     [HttpPost("appointments/{id}/move")] public Task<IActionResult> Move(string id, [FromBody] MoveCommand command) => Execute($"appointments/{Uri.EscapeDataString(id)}/move", command, () => Demo.Move(identity.Actor, id, command));
