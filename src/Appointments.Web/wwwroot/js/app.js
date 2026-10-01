@@ -934,13 +934,17 @@
               if (date >= state.today && date <= addDays(state.today, 180))
                 dates.push(date);
             }
-            const lists = await Promise.all(
-              dates.map((date) =>
-                (doctor(doctorFilter).enabled === false ? Promise.resolve([]) : (state.services.some(s => s.id === calendarService) ? [calendarService] : servicesFor(doctorFilter).map(s => s.id)).length
-                  ? Promise.all((state.services.some(s => s.id === calendarService) ? [calendarService] : servicesFor(doctorFilter).map(s => s.id)).map(id => api(`slots?doctorId=${doctorFilter}&date=${date}&serviceId=${id}`))).then(lists => lists.flat())
-                  : state.doctorServices.some(x => x.doctorId === doctorFilter) ? Promise.resolve([]) : api(`slots?doctorId=${doctorFilter}&date=${date}`)),
-              ),
-            );
+            const selectedService = state.services.find(s => s.id === calendarService);
+            const availableServices = servicesFor(doctorFilter).filter(s => !selectedService || s.id === selectedService.id);
+            const hasAssignments = state.doctorServices.some(x => x.doctorId === doctorFilter);
+            const lists = await Promise.all(dates.map(async date => {
+              if (doctor(doctorFilter).enabled === false) return [];
+              if (availableServices.length) return (await Promise.all(availableServices.map(s =>
+                api(`slots?doctorId=${doctorFilter}&date=${date}&serviceId=${s.id}`)))).flat();
+              // Retired/unassigned services still show their saved appointments, but no new slots.
+              if (selectedService || hasAssignments) return [];
+              return api(`slots?doctorId=${doctorFilter}&date=${date}`);
+            }));
             events.push(
               ...lists.flat().map((s) => ({
                 start: `${s.date}T${s.time}`,

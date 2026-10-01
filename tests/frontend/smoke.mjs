@@ -368,6 +368,16 @@ try {
   await until(() => admin.$("#booking-service"));
   assert(admin.$("#booking-service").textContent.includes("DOM examination") && admin.$("#dialog-content").textContent.includes("45 минути"), "Booking offers assigned service and its duration");
   admin.click("#close-dialog");
+  await admin.page("catalogue");
+  admin.click("[data-catalogue-edit]");
+  admin.$('[name="enabled"]').checked = false;
+  admin.$("#catalogue-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => !admin.$("#main-dialog").open);
+  await admin.page("calendar");
+  const inactiveId = [...admin.$("#calendar-service").options].find(o => o.textContent === "DOM examination").value;
+  admin.change("#calendar-service", inactiveId); admin.change("#calendar-doctor", "d01");
+  await until(() => admin.$("#calendar-loading")?.textContent.includes("Ажурирана достапност"));
+  assert(admin.$(".fc-view"), "Calendar can filter retired services without requesting unavailable slots");
   doc.w.location.hash = "catalogue";
   await until(() => doc.$('#navigation [data-page="overview"]').classList.contains("active"));
   assert(!doc.$("#catalogue-add"), "Doctor cannot access catalogue management UI");
