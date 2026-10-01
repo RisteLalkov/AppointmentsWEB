@@ -2277,3 +2277,21 @@ dialog::backdrop {
 .catalogue-assignments input, .catalogue-toggle input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--green); }
 .catalogue-assignments small { display: block; color: var(--muted); }
 #catalogue-error { color: #a02d2d; margin-top: 14px; }
+
+/* Appointment filtering and history follow the existing workspace cards. */
+.filter-error:not(:empty) { margin-top: 16px; color: #a02d2d; font-size: 13px; }
+.appointment-history { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 22px; }
+.history-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.history-heading h3 { margin: 0; }
+.history-heading > span { font-size: 11px; }
+.history-timeline { margin: 18px 0 0; padding: 6px 8px; list-style: none; max-height: 340px; overflow-y: auto; }
+.history-timeline > li { position: relative; padding: 0 0 24px 23px; border-left: 1px solid var(--line); }
+.history-timeline > li:last-child { padding-bottom: 0; border-left-color: transparent; }
+.history-timeline > li::before { content: ""; position: absolute; left: -5px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px var(--mint); }
+.history-event-head { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+.history-author { margin: 5px 0 0; font-size: 12px; overflow-wrap: anywhere; }
+.history-timeline time { color: var(--muted); font-size: 11px; }
+.history-changes { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; padding: 14px; margin: 10px 0 0; border-radius: 10px; background: var(--paper); font-size: 12px; }
+.history-changes dt { color: var(--muted); margin-bottom: 5px; }
+.history-changes dd { margin: 0; color: var(--ink); }
+@media (max-width: 650px) { .history-changes { grid-template-columns: 1fr; } }

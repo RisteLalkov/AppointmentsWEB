@@ -70,3 +70,9 @@ Administrator only. Do not create Doctor accounts for unnamed service providers.
 Errors normally have `{"error":"Useful explanation"}`. Authentication/authorization middleware can return an empty 401/403; clients must check HTTP status before decoding. 400 = invalid fields/transition; 401 = missing/expired/revoked session or failed login; 403 = role denied; 404 = missing/inaccessible record or disabled demo endpoint; 409 = conflict, stale version or duplicate; 429 = auth rate limit; 503 = unavailable database. A network timeout does not prove a write failed: refresh, or retry the exact booking with its original request ID.
 
 `GET /health` is anonymous process liveness after startup; it does not continuously check PostgreSQL. `GET /health/database` requires authentication and checks connectivity. API request bodies are limited to 64 KiB. No production OpenAPI route, CORS wildcard, automatic migration outside Development, or public database reset is enabled.
+
+## Appointment history and combined filters
+
+See [APPOINTMENT_HISTORY.md](APPOINTMENT_HISTORY.md) for the role-scoped
+`GET /api/appointments/{id}/history` endpoint, snapshot fields, and optional
+patient/doctor/service/status filters on the appointment list endpoint.

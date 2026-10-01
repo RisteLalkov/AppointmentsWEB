@@ -31,10 +31,10 @@ internal static class CatalogueUpgrade
             var doctor = await db.Doctors.SingleAsync(); var visit = await db.Appointments.SingleAsync();
             var specialty = await db.Specialties.SingleAsync();
             if (!doctor.Enabled || doctor.SpecialtyId != specialty.Id || specialty.Name != "Постоечка специјалност" ||
-                visit.Id != "upgrade-visit" || visit.ServiceId != null || visit.ServiceName != null ||
+                await db.AppointmentHistory.AnyAsync() || visit.Id != "upgrade-visit" || visit.ServiceId != null || visit.ServiceName != null ||
                 (visit.End - visit.Start).TotalMinutes != 30 || await db.Services.AnyAsync())
                 throw new Exception("Catalogue upgrade did not preserve legacy data.");
-            Console.WriteLine("PASS PostgreSQL migration preserves legacy appointment and normalizes exact specialty without inventing services");
+            Console.WriteLine("PASS PostgreSQL migration preserves legacy appointment and normalizes exact specialty without inventing services or appointment history");
         }
         finally { await using var drop = new NpgsqlCommand($"DROP SCHEMA {schema} CASCADE", admin); await drop.ExecuteNonQueryAsync(); }
     }

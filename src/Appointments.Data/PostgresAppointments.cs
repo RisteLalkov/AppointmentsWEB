@@ -37,8 +37,20 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         var result = ReportBuilder.Build(actor, query, state, clock);
         await tx.CommitAsync(ct); return result;
     }
+    public async Task<AppointmentHistoryResult> HistoryAsync(DemoActor actor, string id, CancellationToken ct)
+    {
+        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+        var version = await Visible(actor).Where(a => a.Id == id).Select(a => (int?)a.Version).SingleOrDefaultAsync(ct)
+            ?? throw new RuleException("Терминот не е пронајден или немате пристап до него.", 404);
+        var entries = await db.AppointmentHistory.AsNoTracking().Where(h => h.AppointmentId == id).OrderByDescending(h => h.AppointmentVersion).ToListAsync(ct);
+        await tx.CommitAsync(ct);
+        return new(version, entries.Any(h => h.Kind == AppointmentChangeKind.Created), entries);
+    }
     public IQueryable<Appointment> Visible(DemoActor actor) => db.Appointments.Where(a => actor.Role == DemoRole.Administrator ||
         (actor.Role == DemoRole.Patient && a.PatientId == actor.PatientId) || (actor.Role == DemoRole.Doctor && a.DoctorId == actor.DoctorId));
+    public IQueryable<Appointment> FilterService(IQueryable<Appointment> query, string serviceId) => serviceId == "unassigned"
+        ? query.Where(a => a.ServiceId == null && !db.Doctors.Any(d => d.Id == a.DoctorId && d.IsService))
+        : query.Where(a => a.ServiceId == serviceId || (a.ServiceId == null && a.DoctorId == serviceId && db.Doctors.Any(d => d.Id == a.DoctorId && d.IsService)));
     public async Task<IReadOnlyList<Slot>> SlotsAsync(DemoActor actor, string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null)
     {
         var state = await LoadAsync(doctorId, actor.PatientId, ct);
@@ -73,6 +85,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             var state = await LoadAsync(command.DoctorId, command.PatientId, ct);
             var result = Rules(state).Book(actor, command);
             db.Appointments.Add(result);
+            db.AppointmentHistory.AddRange(state.AppointmentHistory);
             db.IdempotencyRequests.Add(new() { AccountId = actor.Id, RequestId = command.RequestId, Fingerprint = fingerprint, ResponseJson = JsonSerializer.Serialize(result, JsonDemoStore.JsonOptions), CreatedAt = clock.UtcNow });
             Audit(actor, "appointment.created", result.Id);
             await db.SaveChangesAsync(ct); return result;
@@ -90,7 +103,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             await LockAsync("doctor:" + reference.DoctorId, ct);
             var state = await LoadAsync(reference.DoctorId, reference.PatientId, ct);
             if (state.Appointments.All(a => a.Id != id)) state.Appointments.Add(await db.Appointments.SingleAsync(a => a.Id == id, ct));
-            var result = change(Rules(state)); Audit(actor, action, id); await db.SaveChangesAsync(ct); return result;
+            var result = change(Rules(state)); db.AppointmentHistory.AddRange(state.AppointmentHistory); Audit(actor, action, id); await db.SaveChangesAsync(ct); return result;
         }, ct);
     }
     public async Task<Patient> PatientAsync(DemoActor actor, PatientInput input, bool demo, CancellationToken ct)

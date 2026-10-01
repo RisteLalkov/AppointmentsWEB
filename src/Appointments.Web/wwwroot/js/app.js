@@ -193,7 +193,7 @@
     search = "";
     specialty = "";
     statusFilter = "";
-    listService = "";
+    listService = ""; listPatient = ""; listFrom = ""; listTo = "";
     location.hash = next;
     if (page === next) renderPage();
   }
@@ -434,7 +434,14 @@
         "Следете ги претстојните и претходните прегледи.",
         bookButton(),
       ) +
-      `<div class="chip-tabs" role="group" aria-label="Период на термините">${["upcoming", "previous", "all"].map((t) => `<button data-list-tab="${t}" class="${listTab === t ? "active" : ""}" aria-pressed="${listTab === t}">${({ upcoming: "Претстојни", previous: "Претходни", all: "Сите" })[t]}</button>`).join("")}</div><div class="toolbar"><div class="search-field"><label class="visually-hidden" for="appointment-search">Пребарај термини</label><input id="appointment-search" placeholder="Пребарајте ${isPatient() ? "лекари" : "пациенти или лекари"}…" value="${escape(search)}"></div>${isAdmin() ? `<label class="visually-hidden" for="list-doctor">Филтрирај по лекар</label><select id="list-doctor">${doctorOptions(doctorFilter, true)}</select>` : ""}<label class="visually-hidden" for="status-filter">Статус на терминот</label><select id="status-filter"><option value="">Сите статуси</option>${statuses.map((s) => `<option value="${s}" ${statusFilter === s ? "selected" : ""}>${statusLabel(s)}</option>`).join("")}</select></div><div class="toolbar"><label for="list-service">Услуга</label><select id="list-service">${serviceOptions(listService)}</select></div><div id="appointment-results"></div>`;
+      `<div class="chip-tabs" role="group" aria-label="Период на термините">${["upcoming", "previous", "all"].map((t) => `<button data-list-tab="${t}" class="${listTab === t ? "active" : ""}" aria-pressed="${listTab === t}">${({ upcoming: "Претстојни", previous: "Претходни", all: "Сите" })[t]}</button>`).join("")}</div><section class="card workspace-filters appointment-filters"><div class="card-head"><div><h3>Филтри на термините</h3><p class="filter-description">Филтрите се комбинираат во избраниот приказ. Датумите ги вклучуваат двата дена.</p></div><button class="btn secondary small" id="clear-appointment-filters">Исчисти</button></div><div class="card-body"><div class="report-filter-grid"><label>Пребарај<input id="appointment-search" placeholder="Име на лекар или пациент…" value="${escape(search)}"></label>${isAdmin() ? `<label>Лекар<select id="list-doctor">${doctorOptions(doctorFilter, true)}</select></label>` : ""}${!isPatient() ? `<label>Пациент<select id="list-patient"><option value="">Сите пациенти</option>${state.patients.filter(p => isAdmin() || state.appointments.some(a => a.patientId === p.id)).map(p => `<option value="${p.id}" ${listPatient === p.id ? "selected" : ""}>${escape(p.name)}</option>`).join("")}</select></label>` : ""}<label>Статус<select id="status-filter"><option value="">Сите статуси</option>${statuses.map(status => `<option value="${status}" ${statusFilter === status ? "selected" : ""}>${statusLabel(status)}</option>`).join("")}</select></label><label>Услуга<select id="list-service">${serviceOptions(listService)}</select></label><label>Од датум<input id="list-from" type="date" value="${listFrom}"></label><label>До датум<input id="list-to" type="date" value="${listTo}"></label></div><div id="appointment-filter-error" class="filter-error" role="alert"></div></div></section><div id="appointment-results"></div>`;
+    $("#list-patient")?.addEventListener("change", e => { listPatient = e.target.value; appointmentResults(); });
+    $("#list-from").onchange = e => { listFrom = e.target.value; appointmentResults(); };
+    $("#list-to").onchange = e => { listTo = e.target.value; appointmentResults(); };
+    $("#clear-appointment-filters").onclick = () => {
+      search = ""; statusFilter = ""; listService = ""; listPatient = ""; listFrom = ""; listTo = "";
+      doctorFilter = isDoctor() ? state.actor.doctorId : ""; renderAppointments();
+    };
     $("#list-service").onchange = e => { listService = e.target.value; appointmentResults(); };
     $("#appointment-search").addEventListener("input", (e) => {
       search = e.target.value;
@@ -451,6 +458,9 @@
     appointmentResults();
   }
   function appointmentResults() {
+    const invalid = listFrom && listTo && listFrom > listTo;
+    $("#appointment-filter-error").textContent = invalid ? "Почетниот датум не смее да биде по крајниот датум." : "";
+    if (invalid) { $("#appointment-results").innerHTML = ""; return; }
     const list = state.appointments
       .filter(
         (a) =>
@@ -458,6 +468,9 @@
             (listTab === "upcoming" ? upcoming(a) : !upcoming(a))) &&
           (!doctorFilter || a.doctorId === doctorFilter) &&
           (!listService || serviceKey(a) === listService) &&
+          (!listPatient || a.patientId === listPatient) &&
+          (!listFrom || dayOf(a.start) >= listFrom) &&
+          (!listTo || dayOf(a.start) <= listTo) &&
           (!statusFilter || a.status === statusFilter) &&
           (!search ||
             `${doctor(a.doctorId)?.name} ${patient(a.patientId)?.name}`
@@ -499,9 +512,33 @@
       !isPatient() && a.status === "Confirmed" && new Date(a.end) <= new Date();
     openDialog(
       "Детали за терминот",
-      `<div class="booking-context">${avatar(d.name, Number(d.id.slice(1)))}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div>${badge(a.status)}<dl class="detail-list"><div><dt>Пациент</dt><dd>${escape(p?.name || "Пациент")}</dd></div><div><dt>Датум</dt><dd>${formatDate(dayOf(a.start), { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</dd></div><div><dt>Време</dt><dd>${timeOf(a.start)} – ${timeOf(a.end)}</dd></div><div><dt>Временска зона</dt><dd>${escape(state.timeZone)}</dd></div><div><dt>Услуга</dt><dd>${escape(a.serviceName || "Без заведена услуга")}</dd></div><div><dt>Број на резервација</dt><dd>CL-${a.id.slice(0, 8).toUpperCase()}</dd></div><div><dt>Времетраење</dt><dd>${Math.round((new Date(a.end) - new Date(a.start)) / 60000)} минути</dd></div></dl>${a.status === "Scheduled" ? `<div class="inline-note warning">Терминот е резервиран и чека потврда од персоналот. Не е испратено известување.</div>` : ""}<div id="detail-error"></div><div class="dialog-actions">${future ? `<button class="btn danger" data-status="Cancelled" data-id="${id}">Откажи преглед</button>${!isPatient() || !d.staffOnly ? `<button class="btn secondary" data-move="${id}">Презакажи</button>` : ""}` : ""}${!isPatient() && future && a.status === "Scheduled" ? `<button class="btn primary" data-status="Confirmed" data-id="${id}">Потврди преглед</button>` : ""}${complete ? `<button class="btn secondary" data-status="NoShow" data-id="${id}">Означи недоаѓање</button><button class="btn primary" data-status="Completed" data-id="${id}">Заврши преглед</button>` : ""}${!future && !complete ? '<button class="btn secondary" data-action="close">Затвори</button>' : ""}</div>`,
+      `<div class="booking-context">${avatar(d.name, Number(d.id.slice(1)))}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div>${badge(a.status)}<dl class="detail-list"><div><dt>Пациент</dt><dd>${escape(p?.name || "Пациент")}</dd></div><div><dt>Датум</dt><dd>${formatDate(dayOf(a.start), { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</dd></div><div><dt>Време</dt><dd>${timeOf(a.start)} – ${timeOf(a.end)}</dd></div><div><dt>Временска зона</dt><dd>${escape(state.timeZone)}</dd></div><div><dt>Услуга</dt><dd>${escape(a.serviceName || "Без заведена услуга")}</dd></div><div><dt>Број на резервација</dt><dd>CL-${a.id.slice(0, 8).toUpperCase()}</dd></div><div><dt>Времетраење</dt><dd>${Math.round((new Date(a.end) - new Date(a.start)) / 60000)} минути</dd></div></dl>${a.status === "Scheduled" ? `<div class="inline-note warning">Терминот е резервиран и чека потврда од персоналот. Не е испратено известување.</div>` : ""}<section class="appointment-history"><div class="history-heading"><h3>Историја на терминот</h3><span class="muted">${escape(state.timeZone)}</span></div><div id="appointment-history" aria-live="polite"></div></section><div id="detail-error"></div><div class="dialog-actions">${future ? `<button class="btn danger" data-status="Cancelled" data-id="${id}">Откажи преглед</button>${!isPatient() || !d.staffOnly ? `<button class="btn secondary" data-move="${id}">Презакажи</button>` : ""}` : ""}${!isPatient() && future && a.status === "Scheduled" ? `<button class="btn primary" data-status="Confirmed" data-id="${id}">Потврди преглед</button>` : ""}${complete ? `<button class="btn secondary" data-status="NoShow" data-id="${id}">Означи недоаѓање</button><button class="btn primary" data-status="Completed" data-id="${id}">Заврши преглед</button>` : ""}${!future && !complete ? '<button class="btn secondary" data-action="close">Затвори</button>' : ""}</div>`,
       "ТЕРМИН · CL-" + a.id.slice(0, 8).toUpperCase(),
     );
+    loadAppointmentHistory(id);
+  }
+  async function loadAppointmentHistory(id) {
+    const target = $("#appointment-history");
+    if (!target) return;
+    target.innerHTML = '<div class="loading-state" role="status"><span class="spinner"></span> Се вчитува историјата…</div>';
+    try {
+      const result = await api(`appointments/${encodeURIComponent(id)}/history`);
+      if ($("#appointment-history") !== target || !dialog.open) return;
+      const role = value => ({ Administrator: "Рецепција / администратор", Doctor: "Лекар", Patient: "Пациент" })[value] || "Корисник";
+      const range = (start, end) => `${formatDate(dayOf(start), { day: "numeric", month: "short", year: "numeric" })} · ${timeOf(start)}–${timeOf(end)}`;
+      const title = h => h.kind === "Created" ? "Креиран термин" : h.kind === "Rescheduled" ? "Презакажан термин" : h.afterStatus === "Cancelled" ? `Откажан термин · ${role(h.actorRole)}` : `Статус: ${statusLabel(h.afterStatus)}`;
+      target.innerHTML = `${!result.hasCreationRecord ? '<p class="inline-note">Овој термин е креиран пред воведувањето на деталната историја. Претходните промени и нивните автори не се реконструирани.</p>' : ""}
+        ${result.currentVersion !== state.appointments.find(a => a.id === id)?.version ? '<p class="inline-note warning">Терминот е променет во друга сесија. <button class="link-button" id="refresh-history-detail">Освежи детали</button></p>' : ""}
+        ${result.entries.length ? `<ol class="history-timeline" tabindex="0" aria-label="Промени на терминот, од најнова до најстара">${result.entries.map(h => `<li><div class="history-event-head"><strong>${escape(title(h))}</strong><span class="muted">#${h.appointmentVersion}</span></div><p class="history-author">${escape(h.actorName)} · ${escape(role(h.actorRole))}</p><time datetime="${escape(h.occurredAt)}">${escape(formatDate(dayOf(h.occurredAt), { day: "numeric", month: "short", year: "numeric" }))} · ${escape(timeOf(h.occurredAt))}</time><dl class="history-changes">${h.beforeStart ? `<div><dt>Претходно</dt><dd>${escape(range(h.beforeStart, h.beforeEnd))}<br>${escape(statusLabel(h.beforeStatus))}</dd></div>` : ""}<div><dt>${h.beforeStart ? "Потоа" : "Закажано"}</dt><dd>${escape(range(h.afterStart, h.afterEnd))}<br>${escape(statusLabel(h.afterStatus))}</dd></div></dl></li>`).join("")}</ol>` : '<p class="muted">Сè уште нема детално запишани промени за овој термин.</p>'}`;
+      $("#refresh-history-detail")?.addEventListener("click", async () => {
+        try { await load(false); if ($("#appointment-history") === target && dialog.open) details(id); }
+        catch (e) { toast(e.message, true); }
+      });
+    } catch (e) {
+      if ($("#appointment-history") !== target || !dialog.open) return;
+      target.innerHTML = `<p class="inline-error" role="alert">${escape(e.message)}</p><button class="btn secondary small" id="retry-history">Обиди се повторно</button>`;
+      $("#retry-history").onclick = () => loadAppointmentHistory(id);
+    }
   }
   async function confirmAction(message, label = "Потврди") {
     return new Promise((resolve) => {
@@ -1019,7 +1056,7 @@
       }
     };
   }
-  let catalogueTab = "doctors", catalogueSearch = "", listService = "";
+  let catalogueTab = "doctors", catalogueSearch = "", listService = "", listPatient = "", listFrom = "", listTo = "";
   function renderCatalogue() {
     const kinds = { doctors: "Лекари", specialties: "Специјалности", services: "Услуги" };
     const items = state[catalogueTab].filter(x => `${x.name} ${x.specialty || ""}`.toLocaleLowerCase().includes(catalogueSearch.toLocaleLowerCase()));

@@ -173,6 +173,48 @@ Test("Reports group actual services without assigning legacy appointments", () =
     Equal(1,ReportBuilder.Build(admin,new(monday,monday,ServiceId:svc.Id),state,f.Clock).Summary.Total);
 });
 
+Test("History creation is immutable and idempotent", () => {
+    using var f=New(); var command=Cmd(); var a=f.Service.Book(pat,command); f.Service.Book(pat,command);
+    var history=f.Service.History(pat,a.Id); Equal(true,history.HasCreationRecord); Equal(1,history.Entries.Count);
+    var entry=history.Entries.Single(); Equal(AppointmentChangeKind.Created,entry.Kind); Equal(pat.Id,entry.ActorId); Equal(pat.Name,entry.ActorName);
+    Equal(DemoRole.Patient,entry.ActorRole); Equal<DateTimeOffset?>(null,entry.BeforeStart); Equal(a.Start,entry.AfterStart); Equal(a.End,entry.AfterEnd);
+    Equal(a.Status,entry.AfterStatus); Equal(f.Clock.UtcNow,entry.OccurredAt); Equal(1,entry.AppointmentVersion);
+});
+Test("Reschedule and cancellation history captures before after and responsible role", () => {
+    using var f=New(); var a=f.Service.Book(admin,Cmd()); var moved=f.Service.Move(doc,a.Id,new(monday,new(11,0),a.Version));
+    Reject(()=>f.Service.Move(doc,a.Id,new(monday,new(12,0),a.Version)),409);
+    f.Service.ChangeStatus(pat,a.Id,AppointmentStatus.Cancelled,moved.Version);
+    var history=f.Service.History(admin,a.Id); Equal(3,history.CurrentVersion); Equal(3,history.Entries.Count);
+    var move=history.Entries[1]; Equal(AppointmentChangeKind.Rescheduled,move.Kind); Equal(DemoRole.Doctor,move.ActorRole); Equal<DateTimeOffset?>(a.Start,move.BeforeStart); Equal(moved.Start,move.AfterStart);
+    var cancel=history.Entries[0]; Equal(DemoRole.Patient,cancel.ActorRole); Equal<AppointmentStatus?>(moved.Status,cancel.BeforeStatus); Equal(AppointmentStatus.Cancelled,cancel.AfterStatus);
+    Equal(a.Start,history.Entries[2].AfterStart);
+});
+Test("History confirms completion and no-show transitions", () => {
+    foreach(var outcome in new[]{AppointmentStatus.Completed,AppointmentStatus.NoShow}) {
+        using var f=New(); f.Store.Write(s=> { s.Doctors[0]=s.Doctors[0] with {RequiresConfirmation=true}; return true; });
+        var a=f.Service.Book(pat,Cmd()); var confirmed=f.Service.ChangeStatus(admin,a.Id,AppointmentStatus.Confirmed,1);
+        f.Time.Now=a.End.AddMinutes(1); f.Service.ChangeStatus(doc,a.Id,outcome,confirmed.Version);
+        var events=f.Service.History(doc,a.Id).Entries; Equal(3,events.Count); Equal(outcome,events[0].AfterStatus);
+        Equal<AppointmentStatus?>(AppointmentStatus.Scheduled,events[1].BeforeStatus); Equal(AppointmentStatus.Confirmed,events[1].AfterStatus);
+    }
+});
+Test("History follows appointment access and does not reveal other patients", () => {
+    using var f=New();var a=f.Service.Book(pat,Cmd()); Reject(()=>f.Service.History(other,a.Id),404); Reject(()=>f.Service.History(otherDoc,a.Id),404); Reject(()=>f.Service.History(pat,"missing"),404);
+    Equal(1,f.Service.History(doc,a.Id).Entries.Count);Equal(1,f.Service.History(admin,a.Id).Entries.Count);
+});
+Test("Failed conflicts add no history and saved history survives restart", () => {
+    using var f=New();var a=f.Service.Book(pat,Cmd());f.Service.Book(other,Cmd("10:00",patient:"p2"));
+    Reject(()=>f.Service.Move(pat,a.Id,new(monday,new(10,0),1)),409); Equal(1,f.Service.History(pat,a.Id).Entries.Count);
+    f.Store.Dispose(); using var restored=new JsonDemoStore(f.Path,f.Seed); var service=new AppointmentService(restored,f.Clock);
+    Equal(a.Start,service.History(pat,a.Id).Entries.Single().AfterStart);
+});
+Test("Legacy history is not fabricated when an old appointment is changed", () => {
+    using var f=New();var a=f.Service.Book(pat,Cmd());f.Store.Write(s=>{s.AppointmentHistory.Clear();return true;});
+    Equal(false,f.Service.History(pat,a.Id).HasCreationRecord);Equal(0,f.Service.History(pat,a.Id).Entries.Count);
+    f.Service.Move(admin,a.Id,new(monday,new(11,0),1));var result=f.Service.History(pat,a.Id);
+    Equal(false,result.HasCreationRecord);Equal(1,result.Entries.Count);Equal<DateTimeOffset?>(a.Start,result.Entries[0].BeforeStart);
+});
+
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

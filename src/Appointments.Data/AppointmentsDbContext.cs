@@ -10,6 +10,7 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
     public DbSet<DoctorService> DoctorServices => Set<DoctorService>();
     public DbSet<Doctor> Doctors => Set<Doctor>();
     public DbSet<Patient> Patients => Set<Patient>();
+    public DbSet<AppointmentHistoryEntry> AppointmentHistory => Set<AppointmentHistoryEntry>();
     public DbSet<Appointment> Appointments => Set<Appointment>();
     public DbSet<AvailabilityException> Exceptions => Set<AvailabilityException>();
     public DbSet<Account> Accounts => Set<Account>();
@@ -70,6 +71,23 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
         appointment.HasOne<Patient>().WithMany().HasForeignKey(a => a.PatientId).OnDelete(DeleteBehavior.Restrict);
         appointment.HasIndex(a => new { a.DoctorId, a.Start }); appointment.HasIndex(a => new { a.PatientId, a.Start });
         appointment.HasIndex(a => new { a.CreatedBy, a.RequestId }).IsUnique();
+
+        b.Entity<AppointmentHistoryEntry>(h =>
+        {
+            h.ToTable("AppointmentHistory", t => {
+                t.HasCheckConstraint("CK_History_Version", "\"AppointmentVersion\" > 0");
+                t.HasCheckConstraint("CK_History_AfterRange", "\"AfterStart\" < \"AfterEnd\"");
+                t.HasCheckConstraint("CK_History_Before", "(\"Kind\" = 'Created' AND \"BeforeStart\" IS NULL AND \"BeforeEnd\" IS NULL AND \"BeforeStatus\" IS NULL) OR (\"Kind\" <> 'Created' AND \"BeforeStart\" IS NOT NULL AND \"BeforeEnd\" IS NOT NULL AND \"BeforeStart\" < \"BeforeEnd\" AND \"BeforeStatus\" IS NOT NULL)");
+            });
+            h.HasKey(x => x.Id); h.Property(x => x.Id).HasMaxLength(64);
+            h.Property(x => x.ActorId).HasMaxLength(64); h.Property(x => x.ActorName).HasMaxLength(200);
+            h.Property(x => x.ActorRole).HasConversion<string>().HasMaxLength(20);
+            h.Property(x => x.Kind).HasConversion<string>().HasMaxLength(20);
+            h.Property(x => x.BeforeStatus).HasConversion<string>().HasMaxLength(20);
+            h.Property(x => x.AfterStatus).HasConversion<string>().HasMaxLength(20);
+            h.HasOne<Appointment>().WithMany().HasForeignKey(x => x.AppointmentId).OnDelete(DeleteBehavior.Restrict);
+            h.HasIndex(x => new { x.AppointmentId, x.AppointmentVersion }).IsUnique();
+        });
 
         var exception = b.Entity<AvailabilityException>(); exception.ToTable("AvailabilityExceptions", t => t.HasCheckConstraint("CK_Exception_Range", "\"Start\" < \"End\""));
         exception.HasKey(e => e.Id); exception.Property(e => e.Reason).HasMaxLength(120);

@@ -15,14 +15,21 @@ public sealed class AppointmentsController(PostgresAppointments service) : ApiCo
     [Authorize(Roles = "Administrator"), HttpPost("catalogue/specialties")] public Task<object> Specialty(SpecialtyInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "specialties", input, ct);
     [Authorize(Roles = "Administrator"), HttpPost("catalogue/services")] public Task<object> MedicalService(ServiceInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "services", input, ct);
     [HttpGet("bootstrap")] public Task<BootstrapResponse> Bootstrap(CancellationToken ct) => service.BootstrapAsync(Actor, IsDemo, ct);
-    [HttpGet("appointments")] public async Task<IActionResult> List([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, int skip = 0, int take = 100, CancellationToken ct = default)
+    [HttpGet("appointments")] public async Task<IActionResult> List([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, int skip = 0, int take = 100, CancellationToken ct = default, string? doctorId = null, string? patientId = null, string? serviceId = null, AppointmentStatus? status = null)
     {
         if (skip < 0 || take is < 1 or > 500) return BadRequest(new { error = "Use skip >= 0 and take between 1 and 500." });
+        if (from.HasValue && to.HasValue && from >= to) return BadRequest(new { error = "Почетокот мора да биде пред крајот на периодот." });
+        if (status.HasValue && !Enum.IsDefined(status.Value)) return BadRequest(new { error = "Невалиден статус." });
         var query = service.Visible(Actor).AsNoTracking();
+        if (!string.IsNullOrEmpty(doctorId)) query = query.Where(a => a.DoctorId == doctorId);
+        if (!string.IsNullOrEmpty(patientId)) query = query.Where(a => a.PatientId == patientId);
+        if (!string.IsNullOrEmpty(serviceId)) query = service.FilterService(query, serviceId);
+        if (status.HasValue) query = query.Where(a => a.Status == status.Value);
         if (from.HasValue) query = query.Where(a => a.End > from.Value.ToUniversalTime());
         if (to.HasValue) query = query.Where(a => a.Start < to.Value.ToUniversalTime());
         return Ok(new { total = await query.CountAsync(ct), items = await query.OrderBy(a => a.Start).ThenBy(a => a.Id).Skip(skip).Take(take).ToListAsync(ct) });
     }
+    [HttpGet("appointments/{id}/history")] public Task<AppointmentHistoryResult> History(string id, CancellationToken ct) => service.HistoryAsync(Actor, id, ct);
     [HttpGet("slots")] public Task<IReadOnlyList<Slot>> Slots(string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null) => service.SlotsAsync(Actor, doctorId, date, excludeId, ct, serviceId);
     [HttpGet("exceptions")] public Task<IReadOnlyList<AvailabilityException>> Exceptions(string doctorId, CancellationToken ct) => service.ExceptionsAsync(Actor, doctorId, ct);
     [HttpPost("appointments")] public Task<Appointment> Book(BookingCommand input, CancellationToken ct) => service.BookAsync(Actor, input, ct);

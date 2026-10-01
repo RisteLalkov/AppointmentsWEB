@@ -23,6 +23,13 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     public IReadOnlyList<Doctor> Doctors() => store.Read(s => s.Doctors);
     public IReadOnlyList<Patient> Patients(DemoActor actor) => store.Read(s => s.Patients.Where(p => actor.Role != DemoRole.Patient || actor.PatientId == p.Id).ToList());
     public IReadOnlyList<Appointment> Appointments(DemoActor actor) => store.Read(s => s.Appointments.Where(a => CanSee(actor, a)).OrderBy(a => a.Start).ToList());
+    public AppointmentHistoryResult History(DemoActor actor, string id) => store.Read(s =>
+    {
+        var appointment = s.Appointments.FirstOrDefault(a => a.Id == id && CanSee(actor, a))
+            ?? throw new RuleException("Терминот не е пронајден или немате пристап до него.", 404);
+        var entries = s.AppointmentHistory.Where(h => h.AppointmentId == id).OrderByDescending(h => h.AppointmentVersion).ToList();
+        return new AppointmentHistoryResult(appointment.Version, entries.Any(h => h.Kind == AppointmentChangeKind.Created), entries);
+    });
     public IReadOnlyList<AvailabilityException> Exceptions(DemoActor actor, string doctorId)
     { Staff(actor, doctorId); return store.Read(s => s.Exceptions.Where(e => e.DoctorId == doctorId).ToList()); }
     public IReadOnlyList<Slot> Availability(DemoActor actor, string doctorId, DateOnly date, string? excludeId = null, string? serviceId = null) => store.Read(s =>
@@ -63,7 +70,9 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         var appointment = new Appointment { DoctorId = doctor.Id, PatientId = command.PatientId, ServiceId = command.ServiceId, ServiceName = s.Services.Find(x => x.Id == command.ServiceId)?.Name, Start = slot.Start, End = slot.End,
             Status = doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed,
             CreatedBy = actor.Id, RequestId = command.RequestId, UpdatedAt = clock.UtcNow };
-        s.Appointments.Add(appointment); return appointment;
+        s.Appointments.Add(appointment);
+        s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, appointment, null, AppointmentChangeKind.Created, clock.UtcNow));
+        return appointment;
     });
     private static void CheckPatientConflict(DemoState s, string patientId, Slot slot, string? excludeId = null)
     {
@@ -78,8 +87,11 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         var slot = SchedulingRules.Slots(s, doctor, command.Date, clock, id).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException("Тој термин е недостапен. Вашиот првичен термин е задржан.", 409);
         CheckPatientConflict(s, a.PatientId, slot, id);
+        var before = a with { };
         a.Start = slot.Start; a.End = slot.End; a.Status = doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed;
-        a.Version++; a.UpdatedAt = clock.UtcNow; return a;
+        a.Version++; a.UpdatedAt = clock.UtcNow;
+        s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, a, before, AppointmentChangeKind.Rescheduled, clock.UtcNow));
+        return a;
     });
     public Appointment ChangeStatus(DemoActor actor, string id, AppointmentStatus status, int version) => store.Write(s =>
     {
@@ -93,7 +105,10 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
                 || (a.Status == AppointmentStatus.Confirmed && status is AppointmentStatus.Completed or AppointmentStatus.NoShow && a.End <= clock.UtcNow);
             if (!valid) throw new RuleException("Невалидна промена на статус. Потврдете претстојно барање; означете завршен преглед или недоаѓање само по крајот на потврдениот термин.");
         }
-        a.Status = status; a.Version++; a.UpdatedAt = clock.UtcNow; return a;
+        var before = a with { };
+        a.Status = status; a.Version++; a.UpdatedAt = clock.UtcNow;
+        s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, a, before, AppointmentChangeKind.StatusChanged, clock.UtcNow));
+        return a;
     });
     public Patient AddPatient(DemoActor actor, string name, string email, string phone)
     {

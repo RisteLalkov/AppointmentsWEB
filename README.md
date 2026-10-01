@@ -191,3 +191,10 @@ Official references: [Microsoft Visual Studio/.NET compatibility](https://learn.
 Administrators can manage doctors, specialties and services through **Каталог**.
 This update requires the service catalogue migration before publishing API and Web.
 See [catalogue workflows and DBeaver deployment](docs/SERVICE_CATALOGUE.md).
+
+## Appointment history and filters
+
+Appointment details now include attributed before/after history. Appointment lists
+include patient and inclusive date-range filters. This release requires
+`database/003-appointment-history.sql` and API/Web publication. See
+[history behavior and DBeaver deployment](docs/APPOINTMENT_HISTORY.md).

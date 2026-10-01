@@ -207,6 +207,8 @@ try {
   );
   pat.click("[data-detail]");
   assert(pat.$("#dialog-content .badge.Confirmed").textContent === "Потврден", "Status label translated while CSS/protocol status stays stable");
+  await until(() => pat.$(".history-timeline li"));
+  assert(pat.$(".history-timeline").textContent.includes("Креиран термин"), "Patient sees recorded creation in details timeline");
   assert(pat.$("[data-move]"), "Saved appointment offers rescheduling");
   pat.click("[data-move]");
   await until(() => pat.$("#booking-date"));
@@ -230,11 +232,22 @@ try {
     pat.$("#dialog-content .badge.Cancelled"),
     "Cancellation updates displayed status",
   );
+  await until(() => pat.w.document.querySelectorAll(".history-timeline li").length === 3);
+  assert(pat.$(".history-timeline").textContent.includes("Откажан термин · Пациент") && pat.$(".history-timeline").textContent.includes("Презакажан термин"), "Timeline shows move and patient cancellation attribution");
   pat.click("#close-dialog");
   await pat.page("appointments");
   assert(pat.$("#appointment-results"), "Patient appointment list renders");
   assert(/[а-ш]/i.test(pat.$(".table-date strong").textContent) && !/[a-z]/i.test(pat.$(".table-date strong").textContent), "Appointment dates stay Macedonian without browser locale data");
   const admin = await workspace("admin");
+  await admin.page("appointments"); admin.click('[data-list-tab="all"]');
+  admin.change("#list-patient", "p01"); admin.change("#list-from", iso); admin.change("#list-to", iso);
+  admin.change("#status-filter", "Cancelled");
+  const filtered = [...admin.w.document.querySelectorAll("#appointment-results tbody tr")];
+  assert(filtered.length >= 1 && filtered.every(row => row.textContent.includes("Ана") && row.querySelector(".badge.Cancelled")), "Patient date and status filters combine inclusively");
+  admin.change("#list-from", "2099-01-01");
+  assert(admin.$("#appointment-filter-error").textContent && !admin.$("#appointment-results table"), "Invalid appointment date range shows validation");
+  admin.click("#clear-appointment-filters");
+  assert(admin.$("#list-patient").value === "" && admin.$("#list-from").value === "" && admin.$("#status-filter").value === "", "Appointment filters reset together");
   await admin.page("calendar");
   await until(() => admin.$(".fc-view"));
   assert(

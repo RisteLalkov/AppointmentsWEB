@@ -57,6 +57,7 @@ public sealed class DemoState
     public List<DoctorService> DoctorServices { get; set; } = [];
     public List<AvailabilityException> Exceptions { get; set; } = [];
     public List<Appointment> Appointments { get; set; } = [];
+    public List<AppointmentHistoryEntry> AppointmentHistory { get; set; } = [];
 }
 public sealed class RuleException(string message, int statusCode = 400) : Exception(message)
 {
@@ -73,6 +74,7 @@ public interface IAppointmentService
     IReadOnlyList<Doctor> Doctors();
     IReadOnlyList<Patient> Patients(DemoActor actor);
     IReadOnlyList<Appointment> Appointments(DemoActor actor);
+    AppointmentHistoryResult History(DemoActor actor, string id);
     IReadOnlyList<AvailabilityException> Exceptions(DemoActor actor, string doctorId);
     IReadOnlyList<Slot> Availability(DemoActor actor, string doctorId, DateOnly date, string? excludeId = null, string? serviceId = null);
     Appointment Book(DemoActor actor, BookingCommand command);
