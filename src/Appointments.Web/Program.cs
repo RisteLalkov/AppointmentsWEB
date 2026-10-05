@@ -25,6 +25,7 @@ builder.Services.AddHttpClient<ApiClient>(client =>
 builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()))
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddAntiforgery(o => o.HeaderName = "X-CSRF-TOKEN");
+builder.Services.AddSingleton<Microsoft.AspNetCore.Antiforgery.IAntiforgeryAdditionalDataProvider, ClinicAntiforgery>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
 {
     o.LoginPath = settings.UseApi ? "/Account/Login" : "/Demo"; o.AccessDeniedPath = "/Account/Login"; o.Cookie.Name = "Careline.Session"; o.SlidingExpiration = false;
@@ -32,6 +33,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         ? CookieSecurePolicy.SameAsRequest
         : CookieSecurePolicy.Always;
     o.Cookie.HttpOnly = true; o.Cookie.SameSite = SameSiteMode.Strict; o.ExpireTimeSpan = TimeSpan.FromHours(8);
+    o.Events.OnValidatePrincipal = async context =>
+    {
+        if (settings.UseApi && string.IsNullOrEmpty(context.Principal?.FindFirst("clinicId")?.Value))
+        {
+            context.RejectPrincipal();
+            await Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions.SignOutAsync(context.HttpContext, CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+    };
     o.Events.OnRedirectToLogin = c => { if (c.Request.Path.StartsWithSegments("/data")) c.Response.StatusCode = 401; else c.Response.Redirect(c.RedirectUri); return Task.CompletedTask; };
     o.Events.OnRedirectToAccessDenied = c => { if (c.Request.Path.StartsWithSegments("/data")) c.Response.StatusCode = 403; else c.Response.Redirect(c.RedirectUri); return Task.CompletedTask; };
 });
@@ -67,6 +76,22 @@ app.Use(async (context, next) => { context.Response.Headers["X-Content-Type-Opti
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.CacheControl = "no-store";
+    // An old tab must not silently read/write the newly selected clinic's workspace.
+    if (settings.UseApi && context.User.Identity?.IsAuthenticated == true && context.Request.Path.StartsWithSegments("/data"))
+    {
+        var expected = context.Request.Headers["X-Workspace-Clinic"];
+        if (expected.Count != 1 || expected.ToString() != context.User.FindFirst("clinicId")?.Value)
+        {
+            context.Response.StatusCode = 409;
+            await context.Response.WriteAsJsonAsync(new { error = "Клиниката е променета во друг прозорец. Освежете ја страницата пред да продолжите." });
+            return;
+        }
+    }
+    await next();
+});
 app.UseAuthorization();
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 // Initialize once and fail visibly if the demo store is corrupt or already in use.

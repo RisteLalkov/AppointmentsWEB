@@ -1,4 +1,5 @@
 @model IReadOnlyList<DemoActor>
+@inject BackendSettings Backend
 @{ ViewData["Title"] = "Изберете работен простор"; }
 <main class="welcome">
     <div class="welcome-story">
@@ -13,8 +14,12 @@
         <a href="/Account/Login" class="section-link">Најава со лозинка →</a>
         <div class="demo-label"><span class="dot"></span> ИНТЕРАКТИВНА ДЕМО-ВЕРЗИЈА</div>
         <h2>Ваш простор.<br />Ваша перспектива.</h2><p class="muted">Изберете работен простор за да го разгледате целиот процес на закажување.</p>
+        @if (Backend.UseApi) {
+            <form asp-action="Index" method="get"><partial name="_ClinicPicker" /><button class="btn secondary small" type="submit">Прикажи демо-корисници</button></form>
+        }
         <div class="role-tabs" role="group" aria-label="Изберете демо-улога"><button type="button" class="active" data-role="Patient">Пациент</button><button type="button" data-role="Administrator">Рецепција</button><button type="button" data-role="Doctor">Лекар</button></div>
         <form asp-controller="Demo" asp-action="Enter" method="post" id="demo-form">
+            <input type="hidden" name="ClinicId" value="@ViewData["SelectedClinic"]" />
             <label for="demo-user">Продолжете како</label>
             <select id="demo-user" name="userId" required>
                 @foreach (var actor in Model) { <option value="@actor.Id" data-role="@actor.Role">@actor.Name</option> }

@@ -59,3 +59,7 @@ MVC cookies are HttpOnly/SameSite Strict and Secure outside Development. API bea
 The database is now the shared authority; multiple API processes are supported. API list queries support date windows and pagination. The current UI bootstrap still returns all appointments visible to its actor for continuity with phase one; adapt the UI to windowed queries before very large datasets. Administrative patient/account listings are also unpaged in this first backend release.
 
 Separate migration and runtime database roles, move bootstrap configuration out after provisioning, add operational audit export and retention, verified recovery/OIDC, a transactional notification outbox and observability. Authentication rate limiting is per process; a deployed cluster needs a gateway/distributed limiter. Local cookie data-protection keys must be shared safely before multiple MVC hosts are used. Data migrations must never silently reinterpret the scheduling timezone or auto-import unverified legacy demo identities.
+
+## Clinic boundary
+
+The API uses database-per-tenant isolation: an operator-owned `ClinicRegistry` resolves `X-Clinic`, an immutable scoped `ClinicContext` supplies the DbContext connection and SchedulingClock, and database identity plus session checks reject mismatches. Web forwards the protected session clinic and binds anti-forgery tokens to that clinic. All clinical/application tables remain in each clinic database; Core/domain models need no row filters. See [multi-tenancy](MULTI_TENANCY.md).

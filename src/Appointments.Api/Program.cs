@@ -13,13 +13,27 @@ using Npgsql;
 // Macedonian is the application default on every host, regardless of OS language.
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("mk-MK");
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("mk-MK");
-var builder = WebApplication.CreateBuilder(args);
+// Maintenance switches are valueless; remove them before ASP.NET configuration parsing.
+var hostingArgs = new List<string>();
+for (var i = 0; i < args.Length; i++)
+{
+    if (args[i] == "--migrate") continue;
+    if (args[i] == "--clinic")
+    {
+        if (i + 1 >= args.Length || args[i + 1].StartsWith("--", StringComparison.Ordinal))
+            throw new InvalidOperationException("--clinic requires a clinic ID.");
+        i++; continue;
+    }
+    hostingArgs.Add(args[i]);
+}
+var builder = WebApplication.CreateBuilder(hostingArgs.ToArray());
 builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 64 * 1024);
-var connection = builder.Configuration.GetConnectionString("Appointments");
-if (string.IsNullOrWhiteSpace(connection)) throw new InvalidOperationException("PostgreSQL is not configured. Run scripts/setup-local.ps1 or set ConnectionStrings:Appointments with dotnet user-secrets.");
-builder.Services.AddDbContext<AppointmentsDbContext>(o => o.UseNpgsql(connection));
+var clinics = new ClinicRegistry(builder.Configuration);
+builder.Services.AddSingleton(clinics);
+builder.Services.AddScoped<ClinicContext>();
+builder.Services.AddDbContext<AppointmentsDbContext>((sp, o) => o.UseNpgsql(sp.GetRequiredService<ClinicContext>().Current.ConnectionString));
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddSingleton(sp => new SchedulingClock(sp.GetRequiredService<TimeProvider>(), builder.Configuration["Scheduling:TimeZone"] ?? "Europe/Skopje"));
+builder.Services.AddScoped(sp => new SchedulingClock(sp.GetRequiredService<TimeProvider>(), sp.GetRequiredService<ClinicContext>().Current.TimeZone));
 builder.Services.AddScoped<PostgresAppointments>(); builder.Services.AddScoped<AccountService>(); builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
 builder.Services.Configure<PasswordHasherOptions>(o => o.IterationCount = 210000);
@@ -60,18 +74,42 @@ if (!app.Environment.IsDevelopment()
 {
     app.UseHttpsRedirection();
 }
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value?.TrimEnd('/') ?? "";
+    var directory = path.Equals("/api/clinics", StringComparison.OrdinalIgnoreCase);
+    if (!directory && (context.Request.Path.StartsWithSegments("/api") || path.Equals("/health/database", StringComparison.OrdinalIgnoreCase)))
+    {
+        var values = context.Request.Headers["X-Clinic"];
+        if (values.Count > 1) throw new RuleException("Изберете една клиника.");
+        var clinic = clinics.Resolve(values.ToString());
+        context.RequestServices.GetRequiredService<ClinicContext>().Select(clinic);
+        // Also fail closed if a database is restored/repointed while the API is running.
+        var db = context.RequestServices.GetRequiredService<AppointmentsDbContext>();
+        var binding = await db.Settings.AsNoTracking().SingleOrDefaultAsync(s => s.Key == "ClinicId", context.RequestAborted);
+        if (binding?.Value != clinic.Id) throw new RuleException("Клиниката е привремено недостапна. Контактирајте го администраторот.", 503);
+    }
+    await next();
+});
 app.UseRateLimiter(); app.UseAuthentication(); app.UseAuthorization();
 app.MapControllers();
+app.MapGet("/api/clinics", () => clinics.Clinics.Where(c => c.Enabled).Select(c => c.Summary())).AllowAnonymous();
 app.MapGet("/health", () => Results.Ok(new { status = "ready" })).AllowAnonymous();
 app.MapGet("/health/database", async (AppointmentsDbContext db, CancellationToken ct) => await db.Database.CanConnectAsync(ct) ? Results.Ok(new { status = "ready" }) : Results.StatusCode(503)).RequireAuthorization();
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
-await using (var scope = app.Services.CreateAsyncScope())
+var explicitMigration = args.Contains("--migrate");
+var selectedIndex = Array.IndexOf(args, "--clinic");
+if (selectedIndex >= 0 && (!explicitMigration || selectedIndex + 1 >= args.Length))
+    throw new InvalidOperationException("Use --clinic <id> only together with --migrate.");
+var initialize = selectedIndex >= 0 ? new[] { clinics.Resolve(args[selectedIndex + 1]) } : clinics.Clinics.Where(c => c.Enabled);
+foreach (var clinic in initialize)
 {
-    var explicitMigration = args.Contains("--migrate");
+    await using var scope = app.Services.CreateAsyncScope();
+    scope.ServiceProvider.GetRequiredService<ClinicContext>().Select(clinic);
     var auto = app.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("Database:ApplyMigrations");
     await scope.ServiceProvider.GetRequiredService<DatabaseInitializer>().InitializeAsync(explicitMigration || auto, CancellationToken.None);
-    if (explicitMigration) return;
 }
+if (explicitMigration) return;
 await app.RunAsync();
 
 public partial class Program { }

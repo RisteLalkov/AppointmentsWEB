@@ -62,6 +62,7 @@ async function workspace(user) {
     const url = new URL(path, base).href;
     const headers = new Headers(options.headers);
     headers.set("Cookie", await jar.getCookieString(url));
+    if (new URL(url).pathname.startsWith("/data/") && !headers.has("X-Workspace-Clinic")) headers.set("X-Workspace-Clinic", "main");
     const res = await fetch(url, { ...options, headers, redirect: "manual" });
     for (const c of res.headers.getSetCookie()) await jar.setCookie(c, url);
     if (res.status === 302) return request(res.headers.get("location"));

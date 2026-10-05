@@ -13,7 +13,8 @@ public record ExceptionInput(DateOnly Date, TimeOnly Start, TimeOnly End, bool I
 public record LoginInput([Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(128)] string Password);
 public record RegisterInput([Required, StringLength(80, MinimumLength = 2)] string Name, [Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(128)] string Password);
 public record ChangePasswordInput([Required] string CurrentPassword, [Required] string NewPassword);
-public record SessionResponse(string AccessToken, DateTimeOffset ExpiresAt, DemoActor Actor, bool DemoMode);
+public record ClinicSummary(string Id, string Name, string TimeZone, bool AllowRegistration);
+public record SessionResponse(string AccessToken, DateTimeOffset ExpiresAt, DemoActor Actor, bool DemoMode, ClinicSummary? Clinic = null);
 public record AccountInput([Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(80, MinimumLength = 2)] string Name, DemoRole Role,
     string? DoctorId, string? PatientId, [Required, StringLength(128)] string Password);
 public record AccountSummary(string Id, string Email, string Name, DemoRole Role, string? DoctorId, string? PatientId, bool Enabled);

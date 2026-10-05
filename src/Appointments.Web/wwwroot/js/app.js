@@ -158,13 +158,13 @@
       method: data === undefined ? "GET" : "POST",
       credentials: "same-origin",
       cache: "no-store",
-      headers:
-        data === undefined
-          ? {}
-          : {
-              "Content-Type": "application/json",
-              "X-CSRF-TOKEN": $("#csrf input").value,
-            },
+      headers: {
+        "X-Workspace-Clinic": document.querySelector('meta[name="careline-clinic"]')?.content || "",
+        ...(data === undefined ? {} : {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": $("#csrf input").value,
+        }),
+      },
       body: data === undefined ? undefined : JSON.stringify(data),
     });
     if (response.status === 401) {
@@ -598,7 +598,7 @@
       ownDoctors().find(
         (d) => d.enabled !== false && d.workingPeriods.length && (!isPatient() || !d.staffOnly),
       )?.id ||
-      ownDoctors()[0].id;
+      ownDoctors()[0]?.id;
     if (!selected || !doctor(selected)?.enabled) { toast("Изберете активен лекар.", true); return; }
     if (isPatient() && doctor(selected).staffOnly) {
       profile(selected);
@@ -1214,7 +1214,12 @@
     };
   }
   async function renderAvailability() {
-    if (!doctorFilter) doctorFilter = ownDoctors()[0].id;
+    if (!ownDoctors().length) {
+      app.innerHTML = heading("Работно време и достапност", "Прво додајте лекар во каталогот на клиниката.") +
+        `<section class="card account-section">${empty("Клиниката сè уште нема лекари", "Додајте специјалност и лекар, па внесете го неговото работно време.")}<a class="btn secondary" href="#catalogue">Отвори каталог</a></section>`;
+      return;
+    }
+    if (!doctorFilter) doctorFilter = ownDoctors()[0]?.id;
     const d = doctor(doctorFilter);
     app.innerHTML =
       heading(

@@ -3,6 +3,7 @@ using Npgsql;
 var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__Appointments") ?? throw new Exception("Disposable test connection required.");
 var settings = new NpgsqlConnectionStringBuilder(connectionString);
 if (!(settings.Database?.Contains("test", StringComparison.OrdinalIgnoreCase) == true || settings.Database?.Contains("integration", StringComparison.OrdinalIgnoreCase) == true)) throw new Exception("Refusing a non-test database.");
+if (args.Length == 2 && args[0].StartsWith("--tenant-", StringComparison.Ordinal)) { await TenantFixtures.Run(args[0], args[1], connectionString); return; }
 await using var connection = new NpgsqlConnection(connectionString);
 await connection.OpenAsync();
 var passed = 0;

@@ -64,3 +64,7 @@ Phase-one JSON records are left where they were. There is no implicit migration 
 - **409 schedule changed:** refresh; another editor changed `ScheduleVersion`.
 - **Old sample appointments:** the sample seed runs once. Use future real availability or intentionally reset a disposable Development database.
 - **Database timezone differs:** restore the original setting and plan an explicit timezone/data conversion.
+
+## Multi-clinic databases
+
+Each clinic has its own instance of this schema in a separate PostgreSQL database. There are no shared patient or appointment tables. The existing `Settings` table stores an immutable `ClinicId` binding, initialized on API startup. This addition requires no schema migration. Do not clone a populated clinic database to onboard a different clinic. Apply schema migrations and backups per clinic, with separate PostgreSQL roles. See [DBeaver and operator instructions](MULTI_TENANCY.md).

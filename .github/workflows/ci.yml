@@ -60,3 +60,7 @@ jobs:
         env:
           CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
         run: python tests/api_integration.py --dom
+      - name: Multi-tenant database, session and workspace isolation
+        env:
+          CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
+        run: python tests/tenancy_integration.py

@@ -1,0 +1,13 @@
+@{
+    var clinics = ViewData["Clinics"] as IReadOnlyList<Appointments.Contracts.ClinicSummary> ?? [];
+    var selected = ViewData["SelectedClinic"] as string;
+    if (string.IsNullOrEmpty(selected) && clinics.Count == 1) selected = clinics[0].Id;
+}
+<div class="field">
+    <label for="clinic-id">Клиника</label>
+    <select id="clinic-id" name="ClinicId" required>
+        @if (clinics.Count != 1) { <option value="">Изберете ја вашата клиника</option> }
+        @foreach (var clinic in clinics) { <option value="@clinic.Id" selected="@(clinic.Id == selected)">@clinic.Name</option> }
+    </select>
+    <p class="field-help">Сметката и термините се однесуваат само на избраната клиника.</p>
+</div>

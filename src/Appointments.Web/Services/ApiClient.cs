@@ -8,16 +8,19 @@ namespace Appointments.Web.Services;
 
 public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor)
 {
-    public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default)
+    public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default, string? clinicId = null)
     {
         using var request = new HttpRequestMessage(body == null ? HttpMethod.Get : HttpMethod.Post, path);
         if (body != null) request.Content = JsonContent.Create(body, options: JsonDemoStore.JsonOptions);
         if (authenticated)
         {
-            var token = await accessor.HttpContext!.GetTokenAsync("api_token");
+            clinicId = accessor.HttpContext!.User.FindFirst("clinicId")?.Value;
+            if (string.IsNullOrEmpty(clinicId)) throw new RuleException("Најавете се повторно и изберете клиника.", 401);
+            var token = await accessor.HttpContext.GetTokenAsync("api_token");
             if (string.IsNullOrEmpty(token)) throw new RuleException("Најавете се повторно.", 401);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
+        if (!string.IsNullOrEmpty(clinicId)) request.Headers.Add("X-Clinic", clinicId);
         try
         {
             using var response = await client.SendAsync(request, ct);

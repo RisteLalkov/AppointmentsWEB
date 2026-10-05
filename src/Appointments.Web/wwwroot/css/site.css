@@ -2295,3 +2295,9 @@ dialog::backdrop {
 .history-changes dt { color: var(--muted); margin-bottom: 5px; }
 .history-changes dd { margin: 0; color: var(--ink); }
 @media (max-width: 650px) { .history-changes { grid-template-columns: 1fr; } }
+
+/* Clinic context follows the existing workspace card palette and spacing. */
+.clinic-badge { margin: 18px 12px 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.clinic-badge .eyebrow { display: block; margin-bottom: 5px; font-size: 9px; }
+.clinic-badge strong { display: block; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
+.clinic-context { color: var(--muted); margin: 12px 0 24px; }

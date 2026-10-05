@@ -6,6 +6,7 @@
 <div class="app-shell">
     <aside class="sidebar" id="sidebar">
         <a class="brand" href="/"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
+        @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">КЛИНИКА</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? "РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА" : Model.Role == DemoRole.Doctor ? "РАБОТЕН ПРОСТОР ЗА ЛЕКАР" : "РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ")</div>
         <nav aria-label="Главна навигација" id="navigation">
             <button class="nav-item active" data-page="overview"><span aria-hidden="true">▦</span> Преглед</button>

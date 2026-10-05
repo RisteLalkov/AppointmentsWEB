@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Appointments.Api.Services;
 
-public sealed class AccountService(AppointmentsDbContext db, PostgresAppointments operations, IPasswordHasher<Account> hasher, SchedulingClock clock)
+public sealed class AccountService(AppointmentsDbContext db, PostgresAppointments operations, IPasswordHasher<Account> hasher, SchedulingClock clock, ClinicContext clinicContext)
 {
     public static string HashToken(string token) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
     public static string Email(string email) => email.Trim().ToLowerInvariant();
@@ -49,16 +49,17 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
     }, ct);
     private async Task<SessionResponse> IssueAsync(Account account, bool demo, CancellationToken ct)
     {
-        var token = WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(48));
+        var token = "c1." + clinicContext.Current.Id + "." + WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(48));
         var expires = clock.UtcNow.AddHours(2);
         db.Sessions.Add(new() { TokenHash = HashToken(token), AccountId = account.Id, ExpiresAt = expires, IsDemo = demo });
         // Opportunistic expiry cleanup; no session token or password is written to audit logs.
         await db.Sessions.Where(s => s.AccountId == account.Id && s.ExpiresAt < clock.UtcNow).ExecuteDeleteAsync(ct);
         operations.Audit(account.Actor(), demo ? "session.demo.created" : "session.created", account.Id);
-        await db.SaveChangesAsync(ct); return new(token, expires, account.Actor(), demo);
+        await db.SaveChangesAsync(ct); return new(token, expires, account.Actor(), demo, clinicContext.Current.Summary());
     }
     public async Task<AccountSummary> RegisterAsync(RegisterInput input, CancellationToken ct)
     {
+        if (!clinicContext.Current.AllowRegistration) throw new RuleException("За создавање сметка контактирајте ја рецепцијата на клиниката.", 403);
         ValidatePassword(input.Password);
         if (input.Name.Trim().Length < 2) throw new RuleException("Внесете име со најмалку два знака.");
         return await operations.TransactionAsync(async () =>

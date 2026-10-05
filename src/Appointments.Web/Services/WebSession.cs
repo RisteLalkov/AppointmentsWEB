@@ -11,6 +11,11 @@ public static class WebSession
     {
         var actor = session.Actor;
         var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, actor.Id), new(ClaimTypes.Name, actor.Name), new(ClaimTypes.Role, actor.Role.ToString()), new("demo", session.DemoMode.ToString()) };
+        if (session.Clinic != null)
+        {
+            claims.Add(new("clinicId", session.Clinic.Id));
+            claims.Add(new("clinicName", session.Clinic.Name));
+        }
         if (actor.DoctorId != null) claims.Add(new("doctorId", actor.DoctorId)); if (actor.PatientId != null) claims.Add(new("patientId", actor.PatientId));
         var properties = new AuthenticationProperties { ExpiresUtc = session.ExpiresAt, IsPersistent = false, AllowRefresh = false };
         properties.StoreTokens([new() { Name = "api_token", Value = session.AccessToken }]);

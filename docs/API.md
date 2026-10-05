@@ -76,3 +76,7 @@ Errors normally have `{"error":"Useful explanation"}`. Authentication/authorizat
 See [APPOINTMENT_HISTORY.md](APPOINTMENT_HISTORY.md) for the role-scoped
 `GET /api/appointments/{id}/history` endpoint, snapshot fields, and optional
 patient/doctor/service/status filters on the appointment list endpoint.
+
+## Clinic selection
+
+`GET /api/clinics` is anonymous and returns enabled clinics (ID/name/timezone/registration policy only). Send `X-Clinic: <id>` on all other `/api/*` calls and `/health/database`. It is mandatory with multiple configured clinics; one configured enabled clinic permits omission for compatibility. Unknown/disabled IDs return 404, missing selection returns 400, and another clinic's bearer returns 401. Login/registration/demo endpoints use the same clinic header. Login sessions and `/api/auth/me` include a `clinic` object. MVC authenticates to the API using the clinic stored in its protected cookie; `/data/*` AJAX also requires `X-Workspace-Clinic` matching the rendered page. See [operator setup](MULTI_TENANCY.md).

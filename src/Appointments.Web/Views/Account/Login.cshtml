@@ -5,8 +5,8 @@
     <section class="welcome-form"><span class="eyebrow">ДОБРЕДОЈДОВТЕ ПОВТОРНО</span><h2>Драго ни е што сте тука.</h2><p class="muted">Најавете се во вашиот работен простор.</p>
         @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error</div> }
         @if (TempData["Notice"] is string notice) { <div class="inline-note">@notice</div> }
-        <form asp-action="Login" method="post"><div class="field"><label for="email">Е-пошта</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">Лозинка</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">Најави се ↗</button></form>
-        <div class="divider"></div><p>Првпат сте тука? <a href="/Account/Register">Создајте пациентска сметка</a></p>
+        <form asp-action="Login" method="post"><partial name="_ClinicPicker" /><div class="field"><label for="email">Е-пошта</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">Лозинка</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">Најави се ↗</button></form>
+        <div class="divider"></div><p>Првпат сте тука? <a asp-action="Register" asp-route-clinicId="@ViewData["SelectedClinic"]">Создајте пациентска сметка</a></p>
         @if (Backend.DemoEnabled) { <a class="btn secondary wide" href="/Demo">Разгледајте ја демо-верзијата</a> }
         <p class="field-help" style="margin-top:20px">Ви треба помош за пристап до постоечки профил? Контактирајте ја рецепцијата. Обновувањето лозинка преку е-пошта не е овозможено.</p>
     </section>

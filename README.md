@@ -198,3 +198,7 @@ Appointment details now include attributed before/after history. Appointment lis
 include patient and inclusive date-range filters. This release requires
 `database/003-appointment-history.sql` and API/Web publication. See
 [history behavior and DBeaver deployment](docs/APPOINTMENT_HISTORY.md).
+
+## Multiple clinics
+
+One Web/API deployment can now serve multiple clinics with an isolated PostgreSQL database per clinic, clinic-bound sessions and clinic selection at sign-in. Existing installations adopt their current database as `main`. See [multi-clinic setup, existing-server update and isolation guarantees](docs/MULTI_TENANCY.md). Publish both applications; existing users must sign in again after this update. No additional schema migration is required beyond scripts 001–003.

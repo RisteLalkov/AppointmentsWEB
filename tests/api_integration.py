@@ -52,6 +52,7 @@ class Client:
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
     def request(self, path, data=None, form=False, csrf=True):
         headers = {'Authorization': 'Bearer ' + self.token} if self.token else {}
+        if path.startswith('/data/'): headers['X-Workspace-Clinic'] = 'main'
         if data is not None:
             headers['Content-Type'] = 'application/x-www-form-urlencoded' if form else 'application/json'
             data = urllib.parse.urlencode(data).encode() if form else json.dumps(data).encode()
