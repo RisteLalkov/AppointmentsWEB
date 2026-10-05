@@ -52,7 +52,12 @@ try {
   await until(() => $("[data-action=book]"));
   $("[data-action=book]").click();
   await wait(100);
-  check($("#toast").textContent.includes("активен лекар"),"Empty-clinic booking gives useful feedback");
+  check($("#toast").textContent.includes("Нема профили"),"Empty-clinic calendar booking gives useful feedback");
+  w.location.hash = "overview";
+  await until(() => $('[data-page="overview"]').classList.contains("active"));
+  $("[data-action=book]").click();
+  await wait(100);
+  check($("#toast").textContent.includes("активен лекар"),"Empty-clinic overview booking gives useful feedback");
   check(!errors.length,"No JavaScript errors in empty-clinic workflows");
   console.log(`${checks}/${checks} tenant DOM checks passed. No visual/layout assertions.`);
 } finally { w.close(); }

@@ -124,6 +124,8 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
                 'ImportSourceDoctors':str(i==1).lower(),'SeedDemoData':str(i<2).lower(),
                 'AllowRegistration':str(i<2).lower(),'BootstrapEmail':'owner@tenancy.test',
                 'BootstrapPassword':password if i!=1 else password+'-east'}.items(): env[prefix+key]=value
+        migration = subprocess.run([dotnet,str(root/'src/Appointments.Api/bin/Release/net10.0/Appointments.Api.dll'),'--migrate','--clinic','empty'], cwd=root/'src/Appointments.Api',env=env,capture_output=True,text=True,timeout=60)
+        check(migration.returncode==0, 'Operator can migrate and initialize one selected clinic with CLI')
         one = start('Appointments.Api', first, env, temporary)
         two = start('Appointments.Api', second, env, temporary)
         a = Client(first,'main',old.token)
@@ -214,6 +216,18 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         browser.csrf=''
         check(browser.request('/Accounts/Access',{'id':rb['id'],'enabled':False,'__RequestVerificationToken':old_csrf},form=True)[0]==400,'Razor forms are also bound to original clinic')
         check(all(x['id']!=aa['id'] for x in browser.ok('/data/bootstrap')['appointments']),'After explicit login switch MVC sees only new clinic')
+        # Both demo admins have the same ID; only the added clinic binding distinguishes their CSRF tokens.
+        demo_browser=Client(web_url)
+        old_demo_csrf=None
+        for selected in ['main','east']:
+            demo_browser.csrf=''
+            _,page=demo_browser.request('/Demo?clinicId='+selected)
+            form_token=re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"',page)[1]
+            code,page=demo_browser.request('/Demo/Enter',{'userId':'admin','ClinicId':selected,'__RequestVerificationToken':form_token},form=True)
+            check(code==200 and 'main-content' in page,'Demo workspace selected in '+selected)
+            if selected=='main': old_demo_csrf=re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"',page)[1]
+        demo_browser.clinic='east'; demo_browser.csrf=old_demo_csrf
+        check(demo_browser.request('/data/patients',{'name':'Wrong clinic form'})[0]==400,'Clinic-bound CSRF rejects old form when both account IDs are identical')
         subprocess.run([dotnet,fixture_dll,'--tenant-check',fixture],env=fixture_env,check=True)
         # Disable a clinic by controlled registry reload. Other clinic sessions remain valid.
         one.terminate(); one.wait(timeout=15)
