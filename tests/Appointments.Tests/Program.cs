@@ -215,6 +215,40 @@ Test("Legacy history is not fabricated when an old appointment is changed", () =
     Equal(false,result.HasCreationRecord);Equal(1,result.Entries.Count);Equal<DateTimeOffset?>(a.Start,result.Entries[0].BeforeStart);
 });
 
+Test("Patient profiles scope history by role and protect other patients", () => {
+    using var f=New(); f.Service.Book(admin,Cmd()); f.Service.Book(admin,Cmd("11:00",doctor:"d2"));
+    Equal(2,f.Service.PatientDetails(admin,"p1").Appointments.Count); Equal(1,f.Service.PatientDetails(doc,"p1").Appointments.Count);
+    Equal(2,f.Service.PatientDetails(pat,"p1").Appointments.Count); Equal(false,f.Service.PatientDetails(pat,"p1").CanEdit);
+    Equal(true,f.Service.PatientDetails(doc,"p2").CanEdit); Equal(0,f.Service.PatientDetails(doc,"p2").Appointments.Count);
+    Reject(()=>f.Service.PatientDetails(other,"p1"),404); Reject(()=>f.Service.PatientDetails(admin,"missing"),404);
+});
+Test("Staff edit normalized patient contacts without changing identity or appointments", () => {
+    using var f=New();var a=f.Service.Book(admin,Cmd());
+    var updated=f.Service.UpdatePatient(doc,"p1",new(" Updated Name "," NEW@EXAMPLE.TEST "," +389 70 123 ",1));
+    Equal("Updated Name",updated.Name);Equal("new@example.test",updated.Email);Equal("+389 70 123",updated.Phone);Equal(2,updated.Version);Equal(true,updated.IsDemonstration);
+    Equal(a.Id,f.Service.PatientDetails(pat,"p1").Appointments.Single().Id);Equal("Patient",pat.Name);
+    Reject(()=>f.Service.UpdatePatient(pat,"p1",new("Forbidden","","",2)),403);
+    Reject(()=>f.Service.UpdatePatient(admin,"missing",new("Name","","",1)),404);
+});
+Test("Patient contact updates validate fields and prevent duplicates", () => {
+    using var f=New();
+    foreach(var command in new PatientUpdateCommand[]{new(" ","","",1),new(new string('x',81),"","",1),new("Name","bad email","",1),new("Name","", "phone!",1),new("Name","",new string('1',31),1)})
+        Reject(()=>f.Service.UpdatePatient(admin,"p1",command));
+    Reject(()=>f.Service.UpdatePatient(admin,"p1",new("Name","TWO@EXAMPLE.TEST","",1)),409);
+    Equal(1,f.Service.PatientDetails(admin,"p1").Patient.Version);
+    var a=f.Service.UpdatePatient(admin,"p1",new("Name",null,null,1));Equal("",a.Email);Equal("",a.Phone);
+    var b=f.Service.UpdatePatient(admin,"p2",new("Name",null,null,1));Equal("",b.Email);
+});
+Test("Concurrent patient edits save exactly once and survive JSON restart", () => {
+    using var f=New();var results=new ConcurrentBag<int>();
+    Parallel.For(0,8,i=>{try{f.Service.UpdatePatient(admin,"p1",new("Editor "+i,"","",1));results.Add(200);}catch(RuleException e){results.Add(e.StatusCode);}});
+    Equal(1,results.Count(x=>x==200));Equal(7,results.Count(x=>x==409));
+    var saved=f.Service.PatientDetails(admin,"p1").Patient;
+    f.Store.Dispose();using var restored=new JsonDemoStore(f.Path,f.Seed);var service=new AppointmentService(restored,f.Clock);
+    Equal(saved,service.PatientDetails(admin,"p1").Patient);
+    Reject(()=>service.UpdatePatient(admin,"p1",new("Stale","","",1)),409);
+});
+
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

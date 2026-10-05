@@ -47,6 +47,7 @@
     slotRequest = 0,
     refreshInFlight = false;
   let toastTimer, lastFocus;
+  let patientRequest = 0, patientProfile, patientProfileId = "", patientFilters;
   let calendarSpecialty = "", calendarService = "", calendarRange, reportRequest = 0, reportFilters;
   const serviceOptions = selected => `<option value="">Сите услуги / прегледи</option><option value="unassigned" ${selected === "unassigned" ? "selected" : ""}>Без заведена услуга</option>${[...state.services, ...state.doctors.filter(d => d.isService)].map(d => `<option value="${d.id}" ${selected === d.id ? "selected" : ""}>${escape(d.name)}</option>`).join("")}`;
   const specialtyOptions = selected => `<option value="">Сите специјалности</option>${[...new Set(state.doctors.map(d => d.specialty))].sort().map(v => `<option value="${escape(v)}" ${selected === v ? "selected" : ""}>${escape(v)}</option>`).join("")}`;
@@ -180,7 +181,7 @@
       );
     }
     if (!response.ok)
-      throw new Error(result.error || "Проверете го формуларот и обидете се повторно.");
+      throw Object.assign(new Error(result.error || "Проверете го формуларот и обидете се повторно."), { status: response.status });
     return result;
   }
   async function load(render = true) {
@@ -199,31 +200,35 @@
   }
   function renderPage() {
     reportRequest++;
+    patientRequest++;
     if (calendar) {
       calendar.destroy();
       calendar = null;
     }
     page = location.hash.slice(1) || "overview";
+    if (page.startsWith("patient/")) page = "profile";
     const allowed = isPatient()
-      ? ["overview", "doctors", "appointments"]
+      ? ["overview", "doctors", "appointments", "profile"]
       : isDoctor()
-        ? ["overview", "calendar", "appointments", "patients", "availability"]
+        ? ["overview", "calendar", "appointments", "patients", "availability", "profile"]
         : [
             "overview",
             "calendar",
             "appointments",
             "patients",
+            "profile",
             "availability",
             "doctors",
             "reports",
             "catalogue",
           ];
     if (!allowed.includes(page)) page = "overview";
+    const navigationPage = page === "profile" && !isPatient() ? "patients" : page;
     $$(".nav-item").forEach((n) => {
-      n.classList.toggle("active", n.dataset.page === page);
+      n.classList.toggle("active", n.dataset.page === navigationPage);
       n.setAttribute(
         "aria-current",
-        n.dataset.page === page ? "page" : "false",
+        n.dataset.page === navigationPage ? "page" : "false",
       );
     });
     $("#page-label").textContent = {
@@ -234,6 +239,7 @@
       doctors: isPatient() ? "Пронајди лекар" : "Список на лекари",
       appointments: "Термини",
       patients: "Пациенти",
+      profile: isPatient() ? "Мој профил" : "Профил на пациент",
       availability: "Достапност",
     }[page];
     $("#zone-label").textContent = state.timeZone;
@@ -245,6 +251,7 @@
       appointments: renderAppointments,
       calendar: renderCalendar,
       patients: renderPatients,
+      profile: renderPatientProfile,
       availability: renderAvailability,
     })[page]();
   }
@@ -1172,7 +1179,81 @@
         .includes(search.toLowerCase()),
     );
     $("#patient-results").innerHTML =
-      `<p class="results-count">${list.length} пациенти</p><div class="patient-card-list">${list.map((p, i) => `<article class="card patient-card">${avatar(p.name, i)}<h3>${escape(p.name)}</h3><p>${escape(p.email || "Не е наведена е-пошта")}</p><p>${escape(p.phone || "Не е наведен телефон")}</p><span class="badge">${p.isDemonstration ? "Измислен пациент" : "Пациент"}</span><br><button class="btn secondary small" data-patient-book="${p.id}">Закажи термин ↗</button></article>`).join("")}</div>${list.length ? "" : empty("Нема соодветни пациенти", "Обидете се со друго пребарување или додајте пациент.")}`;
+      `<p class="results-count">${list.length} пациенти</p><div class="patient-card-list">${list.map((p, i) => `<article class="card patient-card">${avatar(p.name, i)}<h3>${escape(p.name)}</h3><p>${escape(p.email || "Не е наведена е-пошта")}</p><p>${escape(p.phone || "Не е наведен телефон")}</p><span class="badge">${p.isDemonstration ? "Измислен пациент" : "Пациент"}</span><div class="patient-card-actions"><button class="btn secondary small" data-patient-profile="${escape(p.id)}">Види профил</button><button class="btn primary small" data-patient-book="${escape(p.id)}">Закажи ↗</button></div></article>`).join("")}</div>${list.length ? "" : empty("Нема соодветни пациенти", "Обидете се со друго пребарување или додајте пациент.")}`;
+  }
+  const defaultPatientFilters = () => ({ period: "all", status: "", doctor: "", service: "", from: "", to: "" });
+  async function renderPatientProfile(quiet = false) {
+    const request = ++patientRequest;
+    patientProfile = null;
+    let id;
+    try { id = location.hash.startsWith("#patient/") ? decodeURIComponent(location.hash.slice(9)) : state.actor.patientId; } catch { id = null; }
+    if (patientProfileId !== id) { patientProfileId = id; patientFilters = defaultPatientFilters(); }
+    patientFilters ||= defaultPatientFilters();
+    const back = `<button class="btn secondary small" data-nav="${isPatient() ? "appointments" : "patients"}">← ${isPatient() ? "Мои термини" : "Сите пациенти"}</button>`;
+    if (quiet !== true) app.innerHTML = heading("Профил на пациент", "Контактни податоци и преглед на термините.", back) + '<div class="loading-state" role="status"><span class="spinner"></span> Се вчитува профилот…</div>';
+    try {
+      if (!id) throw new Error("Изберете пациент од списокот.");
+      const result = await api("patients/" + encodeURIComponent(id));
+      if (request !== patientRequest || page !== "profile") return;
+      patientProfile = result;
+      const p = result.patient;
+      state.patients = [...state.patients.filter(x => x.id !== p.id), p];
+      state.appointments = [...state.appointments.filter(a => a.patientId !== p.id), ...result.appointments];
+      const count = status => result.appointments.filter(a => a.status === status).length;
+      const stats = [["Претстојни", result.appointments.filter(upcoming).length], ["Завршени", count("Completed")], ["Откажани", count("Cancelled")], ["Недоаѓања", count("NoShow")]];
+      app.innerHTML = heading("Грижата започнува со добар преглед.", "Контактите и термините на пациентот, на едно место.", back, "ПРОФИЛ НА ПАЦИЕНТ") +
+        `<section class="card patient-summary"><div class="patient-summary-main">${avatar(p.name, 0, "lg")}<div><h2>${escape(p.name)}</h2><span class="badge">${p.isDemonstration ? "Измислен демо-пациент" : "Пациент"}</span></div><div class="patient-summary-actions">${result.canEdit ? '<button class="btn secondary" id="edit-patient">Уреди податоци</button>' : ""}<button class="btn primary" data-patient-book="${escape(p.id)}">＋ Закажи термин</button></div></div><dl class="patient-contacts"><div><dt>Е-пошта за контакт</dt><dd>${escape(p.email || "Не е наведена")}</dd></div><div><dt>Телефон</dt><dd>${escape(p.phone || "Не е наведен")}</dd></div></dl><p class="filter-description">Контактните податоци се користат за закажување. ${result.canEdit ? "Нивното уредување не ја менува сметката или е-поштата за најава." : "За промена на контактните податоци обратете се во рецепција."}</p></section>` +
+        `<p class="results-count">${isDoctor() ? "Прикажани се само термините со вас. Контактите се споделени со тимот во оваа клиника." : "Прикажани се термините на пациентот во оваа клиника."}</p><div class="stats-grid patient-stats">${stats.map(([label, value]) => `<div class="stat-card"><span class="stat-label">${label}</span><strong class="stat-value">${value}</strong></div>`).join("")}</div>` +
+        `<section class="card workspace-filters appointment-filters"><div class="card-head"><div><h3>Историја на термини</h3><p class="filter-description">Филтрирајте по период, статус, лекар или услуга. Датумите ги вклучуваат двата дена.</p></div><button class="btn secondary small" id="clear-patient-filters">Исчисти</button></div><div class="card-body"><div class="chip-tabs" role="group" aria-label="Период на термините">${[["all", "Сите"], ["upcoming", "Претстојни"], ["past", "Претходни"]].map(([value, label]) => `<button data-patient-period="${value}" class="${patientFilters.period === value ? "active" : ""}" aria-pressed="${patientFilters.period === value}">${label}</button>`).join("")}</div><div class="report-filter-grid"><label>Статус<select id="profile-status"><option value="">Сите статуси</option>${statuses.map(x => `<option value="${x}" ${patientFilters.status === x ? "selected" : ""}>${statusLabel(x)}</option>`).join("")}</select></label>${!isDoctor() ? `<label>Лекар<select id="profile-doctor">${doctorOptions(patientFilters.doctor, true)}</select></label>` : ""}<label>Услуга<select id="profile-service">${serviceOptions(patientFilters.service)}</select></label><label>Од датум<input type="date" id="profile-from" value="${escape(patientFilters.from)}"></label><label>До датум<input type="date" id="profile-to" value="${escape(patientFilters.to)}"></label></div><div id="profile-filter-error" class="filter-error" role="alert"></div></div></section><div id="profile-appointments" aria-live="polite"></div>`;
+      $("#edit-patient")?.addEventListener("click", editPatientForm);
+      for (const key of ["status", "doctor", "service", "from", "to"]) {
+        $("#profile-" + key)?.addEventListener("change", e => { patientFilters[key] = e.target.value; patientAppointmentResults(); });
+      }
+      $$("[data-patient-period]").forEach(button => button.onclick = () => {
+        patientFilters.period = button.dataset.patientPeriod;
+        $$("[data-patient-period]").forEach(b => { const active = b === button; b.classList.toggle("active", active); b.setAttribute("aria-pressed", String(active)); });
+        patientAppointmentResults();
+      });
+      $("#clear-patient-filters").onclick = () => { patientFilters = defaultPatientFilters(); renderPatientProfile(); };
+      patientAppointmentResults();
+    } catch (error) {
+      if (request !== patientRequest || page !== "profile") return;
+      app.innerHTML = heading("Профилот не е достапен.", "Проверете го изборот на пациент и обидете се повторно.", back) + `<div class="inline-error" role="alert">${escape(error.message)}</div><button class="btn secondary" id="retry-patient">Обиди се повторно</button>`;
+      $("#retry-patient").onclick = renderPatientProfile;
+    }
+  }
+  function patientAppointmentResults() {
+    if (!patientProfile || !$("#profile-appointments")) return;
+    const f = patientFilters, invalid = f.from && f.to && f.from > f.to;
+    $("#profile-filter-error").textContent = invalid ? "Почетниот датум не смее да биде по крајниот датум." : "";
+    if (invalid) { $("#profile-appointments").innerHTML = ""; return; }
+    const list = patientProfile.appointments.filter(a =>
+      (f.period === "all" || (f.period === "upcoming" ? upcoming(a) : new Date(a.end) <= new Date())) &&
+      (!f.status || a.status === f.status) && (!f.doctor || a.doctorId === f.doctor) &&
+      (!f.service || serviceKey(a) === f.service) && (!f.from || dayOf(a.start) >= f.from) && (!f.to || dayOf(a.start) <= f.to)
+    ).sort((a, b) => f.period === "upcoming" ? new Date(a.start) - new Date(b.start) : new Date(b.start) - new Date(a.start));
+    $("#profile-appointments").innerHTML = `<p class="results-count">${list.length} термини · ${escape(state.timeZone)}</p><section class="card table-wrap">${list.length ? `<table><thead><tr><th>Лекар / услуга</th><th>Датум и време</th><th>Статус</th><th><span class="visually-hidden">Постапки</span></th></tr></thead><tbody>${list.map(a => `<tr><td><div class="table-person">${avatar(doctor(a.doctorId)?.name || "Лекар", 0)}<span><strong>${escape(doctor(a.doctorId)?.name || "Лекар")}</strong><small>${escape(a.serviceName || "Преглед")}</small></span></div></td><td class="table-date"><strong>${formatDate(dayOf(a.start))}</strong><small>${timeOf(a.start)} – ${timeOf(a.end)}</small></td><td>${badge(a.status)}</td><td><button class="table-action" data-detail="${escape(a.id)}" aria-label="Детали за термин на ${escape(formatDate(dayOf(a.start)))} во ${timeOf(a.start)}">Детали ↗</button></td></tr>`).join("")}</tbody></table>` : empty("Нема термини во овој приказ", "Променете ги филтрите или закажете нов термин за пациентот.")}</section>`;
+  }
+  function editPatientForm() {
+    if (!patientProfile?.canEdit) return;
+    const p = patientProfile.patient;
+    openDialog("Уреди податоци за пациентот", `<p class="inline-note">Промените важат за контактите во оваа клиника. Сметката и е-поштата за најава остануваат исти.</p><form id="edit-patient-form"><div class="field"><label for="edit-patient-name">Име и презиме</label><input id="edit-patient-name" name="name" required minlength="2" maxlength="80" value="${escape(p.name)}" autocomplete="name"></div><div class="field"><label for="edit-patient-email">Е-пошта за контакт · незадолжително</label><input id="edit-patient-email" name="email" type="email" maxlength="120" value="${escape(p.email)}" autocomplete="email"></div><div class="field"><label for="edit-patient-phone">Телефон · незадолжително</label><input id="edit-patient-phone" name="phone" type="tel" maxlength="30" value="${escape(p.phone)}" autocomplete="tel"></div><div id="edit-patient-error" role="alert"></div><div class="dialog-actions"><button type="button" class="btn secondary" data-action="close">Откажи</button><button type="submit" class="btn primary">Зачувај промени</button></div></form>`, "КОНТАКТНИ ПОДАТОЦИ");
+    $("#edit-patient-form").onsubmit = async e => {
+      e.preventDefault();
+      const button = $("button[type=submit]", e.target), errorBox = $("#edit-patient-error");
+      button.disabled = true; errorBox.textContent = "";
+      try {
+        await api("patients/" + encodeURIComponent(p.id), { ...Object.fromEntries(new FormData(e.target)), version: p.version });
+        closeDialog();
+        await load(false); renderPage();
+        toast("Податоците за пациентот се зачувани.");
+      } catch (error) {
+        if (errorBox.isConnected) {
+          errorBox.innerHTML = `<div class="inline-error">${escape(error.message)}</div>${error.status === 409 ? '<button type="button" class="btn secondary small" id="reload-patient-contact">Отфрли ги внесените промени и вчитај ги тековните податоци</button>' : ""}`;
+          $("#reload-patient-contact")?.addEventListener("click", () => { closeDialog(); renderPatientProfile(); });
+        }
+      } finally { button.disabled = false; }
+    };
   }
   function addPatientForm(returnBooking) {
     openDialog(
@@ -1373,6 +1454,7 @@
       listTab = target.dataset.listTab;
       renderAppointments();
     }
+    if (target.dataset.patientProfile) navigate("patient/" + encodeURIComponent(target.dataset.patientProfile));
     if (target.dataset.patientBook)
       openBooking(null, null, null, null, target.dataset.patientBook);
     if (target.dataset.action === "book") {
@@ -1424,6 +1506,8 @@
       if (page === "calendar") calendar?.refetchEvents();
       else if (page === "overview") renderOverview();
       else if (page === "appointments") appointmentResults();
+      else if (page === "profile") await renderPatientProfile(true);
+      else if (page === "patients") patientResults();
     } catch {
     } finally {
       refreshInFlight = false;

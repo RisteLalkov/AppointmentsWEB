@@ -50,9 +50,10 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
         doctor.OwnsMany(d => d.SourceSchedules, p =>
         { p.ToTable("SourceSchedules"); p.WithOwner().HasForeignKey("DoctorId"); p.Property<long>("Id").ValueGeneratedOnAdd(); p.HasKey("Id"); });
 
-        var patient = b.Entity<Patient>(); patient.ToTable("Patients"); patient.HasKey(p => p.Id);
+        var patient = b.Entity<Patient>(); patient.ToTable("Patients", t => t.HasCheckConstraint("CK_Patient_Version", "\"Version\" > 0")); patient.HasKey(p => p.Id);
         patient.Property(p => p.Id).HasMaxLength(64); patient.Property(p => p.Name).HasMaxLength(80);
         patient.Property(p => p.Email).HasMaxLength(120); patient.Property(p => p.Phone).HasMaxLength(30);
+        patient.Property(p => p.Version).HasDefaultValue(1).IsConcurrencyToken();
         patient.HasIndex(p => p.Email).IsUnique().HasFilter("\"Email\" <> ''");
 
         var appointment = b.Entity<Appointment>();

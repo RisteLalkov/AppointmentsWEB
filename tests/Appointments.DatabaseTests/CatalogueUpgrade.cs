@@ -27,14 +27,19 @@ internal static class CatalogueUpgrade
                 INSERT INTO "Appointments" ("Id","DoctorId","PatientId","Start","End","Status","Version","CreatedBy","UpdatedAt","RequestId")
                 VALUES ('upgrade-visit','upgrade-doctor','upgrade-patient','2026-09-01 08:00Z','2026-09-01 08:30Z','Completed',1,'admin',now(),'old-request');
                 """);
+            await db.GetService<IMigrator>().MigrateAsync("20261001070652_AppointmentHistory");
+            var script = await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "004-patient-profiles.sql"));
+            await db.Database.ExecuteSqlRawAsync(script);
+            await db.Database.ExecuteSqlRawAsync(script); // Deployed DBeaver script must be safe to rerun.
             await db.Database.MigrateAsync();
             var doctor = await db.Doctors.SingleAsync(); var visit = await db.Appointments.SingleAsync();
             var specialty = await db.Specialties.SingleAsync();
-            if (!doctor.Enabled || doctor.SpecialtyId != specialty.Id || specialty.Name != "Постоечка специјалност" ||
+            var patient = await db.Patients.SingleAsync();
+            if (patient.Version != 1 || patient.Name != "Existing patient" || !doctor.Enabled || doctor.SpecialtyId != specialty.Id || specialty.Name != "Постоечка специјалност" ||
                 await db.AppointmentHistory.AnyAsync() || visit.Id != "upgrade-visit" || visit.ServiceId != null || visit.ServiceName != null ||
                 (visit.End - visit.Start).TotalMinutes != 30 || await db.Services.AnyAsync())
                 throw new Exception("Catalogue upgrade did not preserve legacy data.");
-            Console.WriteLine("PASS PostgreSQL migration preserves legacy appointment and normalizes exact specialty without inventing services or appointment history");
+            Console.WriteLine("PASS PostgreSQL legacy upgrade and repeated patient-profile SQL preserve contacts, appointments and exact specialty without inventing history");
         }
         finally { await using var drop = new NpgsqlCommand($"DROP SCHEMA {schema} CASCADE", admin); await drop.ExecuteNonQueryAsync(); }
     }

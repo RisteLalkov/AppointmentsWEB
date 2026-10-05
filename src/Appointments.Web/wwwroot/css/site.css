@@ -2301,3 +2301,23 @@ dialog::backdrop {
 .clinic-badge .eyebrow { display: block; margin-bottom: 5px; font-size: 9px; }
 .clinic-badge strong { display: block; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
 .clinic-context { color: var(--muted); margin: 12px 0 24px; }
+
+/* Patient profiles extend the shared workspace cards, filters and dialogs. */
+.patient-summary { padding: 24px; margin-bottom: 24px; }
+.patient-summary-main { display: flex; align-items: center; gap: 18px; }
+.patient-summary-main h2 { margin: 0 0 8px; overflow-wrap: anywhere; }
+.patient-summary-actions { margin-left: auto; display: flex; flex-wrap: wrap; gap: 10px; }
+.patient-contacts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; border-top: 1px solid var(--line); margin: 24px 0 16px; padding-top: 20px; }
+.patient-contacts dt { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.patient-contacts dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.patient-card-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.patient-summary .avatar { flex-shrink: 0; }
+@media (max-width: 1100px) {
+  .patient-summary-main { flex-wrap: wrap; }
+  .patient-summary-actions { margin-left: 0; flex-basis: 100%; }
+}
+@media (max-width: 650px) {
+  .patient-summary { padding: 20px 16px; }
+  .patient-contacts { grid-template-columns: minmax(0, 1fr); }
+  .patient-summary-actions .btn { flex: 1 1 auto; }
+}

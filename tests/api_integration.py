@@ -201,6 +201,24 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         linked = admin.ok('/api/accounts', {'email': 'phone-login@integration.test', 'name': 'Phone Patient', 'password': password, 'role': 'Patient', 'patientId': new_patient['id']})
         linked_client = Client(api2).login('phone-login@integration.test')
         check(linked_client.ok('/api/auth/me')['actor']['patientId'] == new_patient['id'], 'Reception provisions account linked to existing patient')
+        profile_path = '/api/patients/' + registration['patientId']
+        profile = admin.ok(profile_path)
+        check(profile['canEdit'] and any(x['id'] == appt['id'] for x in profile['appointments']), 'Patient profile includes cancelled appointment history')
+        check(all(x['doctorId'] == 'd01' for x in doctor.ok(profile_path)['appointments']) and not other_doctor.ok(profile_path)['appointments'], 'Doctor profile history is restricted to own appointments')
+        check(not patient.ok(profile_path)['canEdit'] and patient2.request(profile_path)[0] == 404, 'Patient profile read is self-only')
+        check(anon.request(profile_path)[0] == 401 and admin.request('/api/patients/missing')[0] == 404, 'Profile endpoint requires authentication and handles missing records')
+        edit_path = '/api/patients/' + new_patient['id']
+        contact = {'name':'Updated Phone Patient','email':' UPDATED@INTEGRATION.TEST ','phone':'+389 70 123 456','version':new_patient['version']}
+        check(linked_client.request(edit_path, contact)[0] == 403, 'Patient cannot edit contact data through staff endpoint')
+        with concurrent.futures.ThreadPoolExecutor(2) as pool:
+            edits = list(pool.map(lambda c: c.request(edit_path, contact), [admin, admin2]))
+        check(sorted(code for code,_ in edits) == [200,409], 'Concurrent patient edits across API processes save exactly once')
+        updated = admin.ok(edit_path)['patient']
+        check(updated['version'] == 2 and updated['email'] == 'updated@integration.test' and updated['name'] == contact['name'], 'Updated normalized patient contacts persist')
+        check(linked_client.ok(edit_path)['patient']['name'] == contact['name'] and Client(api2).login('phone-login@integration.test').ok('/api/auth/me')['actor']['patientId'] == new_patient['id'], 'Contact edits preserve linked account credentials and patient identity')
+        check(doctor.request(edit_path, dict(contact,version=2,email='phone@integration.test'))[0] == 200, 'Doctor may edit clinic patient contacts')
+        check(admin.request(edit_path, dict(contact,version=3,email='patient@integration.test'))[0] == 409, 'Patient edit prevents duplicate email')
+        check(admin.request(edit_path, dict(contact,version=3,name=' '))[0] == 400 and admin.request(edit_path,dict(contact,version=3,phone='invalid!'))[0] == 400, 'Patient edit validates name and phone on server')
         # Direct SQL checks deliberately bypass all API validation; constraints must still hold.
         subprocess.run([args.dotnet, str(root/'tests/Appointments.DatabaseTests/bin/Release/net10.0/Appointments.DatabaseTests.dll')], env=env, check=True)
         # API-backed MVC does not need a JSON store; its browser-facing requests use anti-forgery.
@@ -208,6 +226,8 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         start('Appointments.Web', web_url, web_env, temporary)
         web = Client(web_url)
         html = web.web_login('patient@integration.test')
+        check(web.ok('/data/patients/' + registration['patientId'])['patient']['id'] == registration['patientId'], 'MVC proxies own patient profile')
+        check(web.request('/data/patients/' + new_patient['id'])[0] == 404, 'MVC proxy does not disclose another patient profile')
         check('ПОВРЗАНО' in unescape(html) and 'ДЕМО-РЕЖИМ' not in unescape(html), 'Password workspace clearly identifies connected mode')
         check('accessToken' not in html and patient.token not in html, 'API session token is not rendered into HTML')
         check(any(a['id'] == appt['id'] and a['status'] == 'Cancelled' for a in web.ok('/data/bootstrap')['appointments']), 'MVC reads shared database state through API')

@@ -68,3 +68,5 @@ Phase-one JSON records are left where they were. There is no implicit migration 
 ## Multi-clinic databases
 
 Each clinic has its own instance of this schema in a separate PostgreSQL database. There are no shared patient or appointment tables. The existing `Settings` table stores an immutable `ClinicId` binding, initialized on API startup. This addition requires no schema migration. Do not clone a populated clinic database to onboard a different clinic. Apply schema migrations and backups per clinic, with separate PostgreSQL roles. See [DBeaver and operator instructions](MULTI_TENANCY.md).
+
+Patient profile updates require `database/004-patient-profiles.sql` after scripts 001–003 in each clinic database. This adds `Patients.Version` for optimistic concurrency, preserving existing records. See [deployment instructions](PATIENT_PROFILES.md#upgrade-existing-deployments).

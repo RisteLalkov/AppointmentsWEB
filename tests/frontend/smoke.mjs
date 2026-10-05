@@ -318,6 +318,47 @@ try {
     admin.$("#patient-results").textContent.includes("DOM Example"),
     "Fictional patient creation updates directory",
   );
+  const directory = await (await admin.request("/data/bootstrap")).json();
+  const contact = directory.patients.find(p => p.email === "dom@example.test");
+  admin.click(`[data-patient-profile="${contact.id}"]`);
+  await until(() => admin.$("#edit-patient"));
+  assert(admin.$(".patient-summary h2").textContent === "DOM Example (Demo)" && admin.$('[data-page="patients"]').classList.contains("active"), "Patient profile opens from directory with matching navigation");
+  assert(admin.$("#profile-appointments").textContent.includes("Нема термини"), "Patient profile shows useful empty appointment state");
+  admin.click("#edit-patient");
+  admin.$("#edit-patient-name").value = "DOM Updated Patient";
+  admin.$("#edit-patient-phone").value = "+389 70 123 456";
+  admin.$("#edit-patient-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => !admin.$("#main-dialog").open && admin.$(".patient-summary h2")?.textContent === "DOM Updated Patient");
+  assert(admin.$(".patient-contacts").textContent.includes("+389 70 123 456"), "Patient contact edit persists and refreshes profile");
+  admin.click("#edit-patient");
+  // A second staff request changes the same patient after this form was opened.
+  const currentContact = (await (await admin.request('/data/patients/' + contact.id)).json()).patient;
+  await admin.request('/data/patients/' + contact.id, { method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':admin.$('[name=__RequestVerificationToken]').value},body:JSON.stringify({...currentContact,name:'Other session update'}) });
+  admin.$("#edit-patient-name").value = "Stale form edit";
+  admin.$("#edit-patient-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
+  await until(() => admin.$("#edit-patient-error").textContent.length > 0);
+  assert(admin.$("#main-dialog").open && admin.$("#edit-patient-name").value === "Stale form edit", "Stale contact edit is rejected without discarding typed input");
+  admin.click("#reload-patient-contact");
+  await until(() => admin.$(".patient-summary h2")?.textContent === "Other session update");
+  assert(!admin.$("#main-dialog").open, "Conflict recovery reloads the current profile explicitly");
+  admin.click(`[data-patient-book="${contact.id}"]`);
+  await until(() => admin.$("#booking-patient"));
+  assert(admin.$("#booking-patient").value === contact.id, "Booking from patient profile keeps selected patient");
+  admin.click("#close-dialog");
+  await pat.page("profile");
+  await until(() => pat.$("#profile-appointments"));
+  assert(!pat.$("#edit-patient") && pat.$("#profile-appointments").textContent.includes("Откажан"), "Patient sees own appointment history without staff edit controls");
+  pat.change("#profile-status", "Cancelled");
+  assert([...pat.w.document.querySelectorAll("#profile-appointments tbody tr")].every(row => row.textContent.includes("Откажан")), "Patient history status filter narrows appointment rows");
+  pat.change("#profile-from", "2030-02-02"); pat.change("#profile-to", "2030-01-01");
+  assert(pat.$("#profile-filter-error").textContent.length > 0 && !pat.$("#profile-appointments table"), "Patient history rejects reversed date range");
+  pat.click("#clear-patient-filters");
+  await until(() => pat.$("#profile-status")?.value === "");
+  pat.click('[data-patient-period="past"]');
+  assert(pat.$('[data-patient-period="past"]').getAttribute("aria-pressed") === "true", "Patient history period tabs update accessible selection");
+  pat.w.location.hash = 'patient/' + encodeURIComponent(contact.id);
+  await until(() => pat.$("#retry-patient"));
+  assert(!pat.$(".patient-summary"), "Patient cannot open another profile by changing hash");
   await admin.page("availability");
   await until(() => admin.$("#exception-form"));
   assert(

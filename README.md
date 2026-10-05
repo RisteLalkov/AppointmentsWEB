@@ -202,3 +202,7 @@ include patient and inclusive date-range filters. This release requires
 ## Multiple clinics
 
 One Web/API deployment can now serve multiple clinics with an isolated PostgreSQL database per clinic, clinic-bound sessions and clinic selection at sign-in. Existing installations adopt their current database as `main`. See [multi-clinic setup, existing-server update and isolation guarantees](docs/MULTI_TENANCY.md). Publish both applications; existing users must sign in again after this update. No additional schema migration is required beyond scripts 001–003.
+
+### Patient details and contact editing
+
+Open **Пациенти → Види профил** for contacts and filtered appointment history. Patient accounts also have **Мој профил**. Existing installations must apply `database/004-patient-profiles.sql` in each clinic database before publishing both applications. See [patient profiles and deployment](docs/PATIENT_PROFILES.md).

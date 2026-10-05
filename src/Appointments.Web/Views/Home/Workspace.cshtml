@@ -16,6 +16,7 @@
                 <button class="nav-item" data-page="calendar"><span aria-hidden="true">▤</span> Календар</button>
             }
             <button class="nav-item" data-page="appointments"><span aria-hidden="true">◷</span> Термини</button>
+            @if (Model.Role == DemoRole.Patient) { <button class="nav-item" data-page="profile"><span aria-hidden="true">♧</span> Мој профил</button> }
             @if (Model.Role != DemoRole.Patient) {
                 <button class="nav-item" data-page="patients"><span aria-hidden="true">♧</span> Пациенти</button>
                 <button class="nav-item" data-page="availability"><span aria-hidden="true">☷</span> Достапност</button>

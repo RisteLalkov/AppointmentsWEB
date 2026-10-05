@@ -106,6 +106,33 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             var result = change(Rules(state)); db.AppointmentHistory.AddRange(state.AppointmentHistory); Audit(actor, action, id); await db.SaveChangesAsync(ct); return result;
         }, ct);
     }
+    public async Task<PatientDetailsResult> PatientDetailsAsync(DemoActor actor, string id, CancellationToken ct)
+    {
+        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+        var patient = await db.Patients.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id && (actor.Role != DemoRole.Patient || p.Id == actor.PatientId), ct)
+            ?? throw new RuleException("Пациентот не е пронајден или немате пристап до него.", 404);
+        var appointments = await Visible(actor).AsNoTracking().Where(a => a.PatientId == id).OrderByDescending(a => a.Start).ToListAsync(ct);
+        await tx.CommitAsync(ct);
+        return new(patient, appointments, actor.Role != DemoRole.Patient);
+    }
+    public Task<Patient> UpdatePatientAsync(DemoActor actor, string id, PatientUpdateCommand input, CancellationToken ct)
+    {
+        Staff(actor);
+        return TransactionAsync(async () =>
+        {
+            await LockAsync("patient:" + id, ct);
+            var patient = await db.Patients.SingleOrDefaultAsync(p => p.Id == id, ct)
+                ?? throw new RuleException("Пациентот не е пронајден.", 404);
+            var email = (input.Email ?? "").Trim().ToLowerInvariant();
+            var state = new DemoState { Patients = [patient] };
+            state.Patients.AddRange(await db.Patients.AsNoTracking().Where(p => p.Id != id && email != "" && p.Email.ToLower() == email).ToListAsync(ct));
+            var updated = Rules(state).UpdatePatient(actor, id, input);
+            db.Entry(patient).CurrentValues.SetValues(updated);
+            Audit(actor, "patient.updated", id);
+            await db.SaveChangesAsync(ct);
+            return updated;
+        }, ct);
+    }
     public async Task<Patient> PatientAsync(DemoActor actor, PatientInput input, bool demo, CancellationToken ct)
     {
         Staff(actor);

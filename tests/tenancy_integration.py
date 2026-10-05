@@ -196,6 +196,11 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         exception = c.ok('/api/exceptions/'+doctor['id'],{'date':day,'start':'10:00:00','end':'11:00:00','isAvailable':False,'reason':'Пауза'})
         check(b.request('/api/exceptions/'+exception['id']+'/remove',{})[0]==404,'Foreign clinic exception cannot be deleted')
         check(not any(x['time']=='10:00:00' for x in c.ok('/api/slots?'+urllib.parse.urlencode({'doctorId':doctor['id'],'date':day,'serviceId':service['id']}))), 'Availability exceptions apply in owning clinic')
+        private_profile = '/api/patients/' + patient['id']
+        check(b.request(private_profile)[0] == 404 and a.request(private_profile)[0] == 404, 'Patient details cannot cross clinic databases')
+        check(b.request(private_profile, {'name':'Cross clinic','email':'','phone':'','version':1})[0] == 404, 'Patient contact edits cannot cross clinic databases')
+        before = c.ok(private_profile)['patient']
+        check(c.ok(private_profile, {'name':'Clinic-local update','email':'','phone':'','version':before['version']})['version'] == before['version'] + 1, 'Patient contact update stays in selected clinic')
         report_path = '/api/reports?'+urllib.parse.urlencode({'from':day,'to':day,'groupBy':'day'})
         check(c.ok(report_path)['summary']['total']==1 and a.ok(report_path)['summary']['total']==1 and b.ok(report_path)['summary']['total']==1,'Reports aggregate each clinic independently')
         with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:

@@ -112,15 +112,48 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     });
     public Patient AddPatient(DemoActor actor, string name, string email, string phone)
     {
-        Staff(actor); name = name.Trim(); email = email.Trim(); phone = phone.Trim();
+        Staff(actor);
+        (name, email, phone) = NormalizeContact(name, email, phone);
+        return store.Write(s =>
+        {
+            UniquePatientEmail(s, email);
+            var patient = new Patient(Guid.NewGuid().ToString("N"), name, email, phone); s.Patients.Add(patient); return patient;
+        });
+    }
+    public PatientDetailsResult PatientDetails(DemoActor actor, string id) => store.Read(s =>
+    {
+        var patient = FindPatient(s, actor, id);
+        return new PatientDetailsResult(patient, s.Appointments.Where(a => a.PatientId == id && CanSee(actor, a)).OrderByDescending(a => a.Start).ToList(), actor.Role != DemoRole.Patient);
+    });
+    public Patient UpdatePatient(DemoActor actor, string id, PatientUpdateCommand command)
+    {
+        Staff(actor);
+        var (name, email, phone) = NormalizeContact(command.Name, command.Email, command.Phone);
+        return store.Write(s =>
+        {
+            var patient = FindPatient(s, actor, id);
+            if (command.Version < 1 || patient.Version != command.Version) throw new RuleException("Податоците за пациентот се променети во друга сесија. Вчитајте ги тековните податоци пред уредување.", 409);
+            UniquePatientEmail(s, email, id);
+            var updated = patient with { Name = name, Email = email, Phone = phone, Version = patient.Version + 1 };
+            s.Patients[s.Patients.IndexOf(patient)] = updated;
+            return updated;
+        });
+    }
+    private static Patient FindPatient(DemoState s, DemoActor actor, string id) =>
+        s.Patients.SingleOrDefault(p => p.Id == id && (actor.Role != DemoRole.Patient || actor.PatientId == id))
+        ?? throw new RuleException("Пациентот не е пронајден или немате пристап до него.", 404);
+    private static void UniquePatientEmail(DemoState s, string email, string? excludeId = null)
+    {
+        if (email.Length > 0 && s.Patients.Any(p => p.Id != excludeId && p.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
+            throw new RuleException("Веќе постои пациент со оваа е-пошта.", 409);
+    }
+    private static (string Name, string Email, string Phone) NormalizeContact(string? name, string? email, string? phone)
+    {
+        name = (name ?? "").Trim(); email = (email ?? "").Trim().ToLowerInvariant(); phone = (phone ?? "").Trim();
         if (name.Length is < 2 or > 80) throw new RuleException("Внесете име со должина од 2 до 80 знаци.");
         if (email.Length > 120 || (email.Length > 0 && (!MailAddress.TryCreate(email, out var address) || address.Address != email))) throw new RuleException("Внесете важечка е-пошта или оставете го полето празно.");
         if (phone.Length > 30 || phone.Any(c => !char.IsAsciiDigit(c) && !"+ -()".Contains(c))) throw new RuleException("Внесете важечки телефонски број или оставете го полето празно.");
-        return store.Write(s =>
-        {
-            if (email.Length > 0 && s.Patients.Any(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase))) throw new RuleException("Веќе постои пациент со оваа е-пошта.", 409);
-            var patient = new Patient(Guid.NewGuid().ToString("N"), name, email, phone); s.Patients.Add(patient); return patient;
-        });
+        return (name, email, phone);
     }
     public void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes)
     {

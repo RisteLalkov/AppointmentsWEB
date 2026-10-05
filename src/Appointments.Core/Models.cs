@@ -26,7 +26,12 @@ public record Doctor
     public bool DemoScheduleEdited { get; set; }
     public int ScheduleVersion { get; set; } = 1;
 }
-public record Patient(string Id, string Name, string Email, string Phone, bool IsDemonstration = true);
+public record Patient(string Id, string Name, string Email, string Phone, bool IsDemonstration = true)
+{
+    public int Version { get; init; } = 1;
+}
+public record PatientDetailsResult(Patient Patient, IReadOnlyList<Appointment> Appointments, bool CanEdit);
+public record PatientUpdateCommand(string Name, string? Email, string? Phone, int Version);
 public record AvailabilityException(string Id, string DoctorId, DateOnly Date, TimeOnly Start, TimeOnly End, bool IsAvailable, string Reason);
 public record Appointment
 {
@@ -80,6 +85,8 @@ public interface IAppointmentService
     Appointment Book(DemoActor actor, BookingCommand command);
     Appointment Move(DemoActor actor, string id, MoveCommand command);
     Appointment ChangeStatus(DemoActor actor, string id, AppointmentStatus status, int version);
+    PatientDetailsResult PatientDetails(DemoActor actor, string id);
+    Patient UpdatePatient(DemoActor actor, string id, PatientUpdateCommand command);
     Patient AddPatient(DemoActor actor, string name, string email, string phone);
     void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes);
     AvailabilityException AddException(DemoActor actor, string doctorId, DateOnly date, TimeOnly start, TimeOnly end, bool isAvailable, string reason);
