@@ -602,20 +602,36 @@ input[type="time"] {
   width: 235px;
   background: #fafbf7;
   border-right: 1px solid var(--line);
-  padding: 29px 22px 22px;
+  padding: 24px 22px max(22px, env(safe-area-inset-bottom));
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #b5c5b5 transparent;
+  scroll-padding-block: 16px;
   display: flex;
   flex-direction: column;
   z-index: 30;
 }
+.sidebar > * {
+  flex-shrink: 0;
+}
+.sidebar:focus-visible {
+  outline: 3px solid #dfab67;
+  outline-offset: -3px;
+}
 .sidebar .brand {
   padding: 0 7px;
-  margin-bottom: 49px;
+  margin-bottom: 18px;
 }
 .workspace-label {
   font-size: 11px;
   letter-spacing: 1.6px;
   color: #6e7968;
-  margin: 0 12px 17px;
+  margin: 0 12px 12px;
+  line-height: 1.6;
   font-weight: 600;
 }
 .nav-item {
@@ -637,6 +653,8 @@ input[type="time"] {
   font-size: 19px;
   line-height: 1;
   width: 21px;
+  flex-shrink: 0;
+  text-align: center;
   color: #8e9b8e;
 }
 .nav-item:hover {
@@ -652,7 +670,31 @@ input[type="time"] {
 }
 .sidebar-bottom {
   margin-top: auto;
-  padding-top: 30px;
+  padding-top: 18px;
+}
+.sidebar-account-actions {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.sidebar-bottom .switch-user {
+  align-items: center;
+  width: 100%;
+  margin: 2px 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.sidebar-bottom .switch-user:hover {
+  background: #eff3eb;
+  color: var(--ink);
+}
+.sidebar-bottom .switch-user > span[aria-hidden] {
+  width: 21px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 17px;
 }
 .help-card {
   background: #eef2e7;
@@ -686,8 +728,8 @@ input[type="time"] {
 }
 .sidebar-bottom .demo-label {
   font-size: 11px;
-  padding-left: 12px;
-  color: #87967d;
+  padding: 12px 14px 0;
+  color: #63785d;
 }
 .main-shell {
   margin-left: 235px;
@@ -1795,7 +1837,7 @@ dialog::backdrop {
 @media (max-width: 900px) {
   .sidebar {
     width: 180px;
-    padding: 25px 12px;
+    padding: 25px 12px max(25px, env(safe-area-inset-bottom));
   }
   .sidebar .brand {
     font-size: 23px;
@@ -1918,12 +1960,14 @@ dialog::backdrop {
   }
   .sidebar {
     transform: translateX(-100%);
-    transition: transform 0.2s;
+    visibility: hidden;
+    transition: transform 0.2s, visibility 0.2s;
     width: 225px;
     box-shadow: 15px 0 50px #23432825;
   }
   .sidebar.open {
     transform: translateX(0);
+    visibility: visible;
   }
   .sidebar .brand {
     font-size: 28px;
@@ -2297,9 +2341,9 @@ dialog::backdrop {
 @media (max-width: 650px) { .history-changes { grid-template-columns: 1fr; } }
 
 /* Clinic context follows the existing workspace card palette and spacing. */
-.clinic-badge { margin: 18px 12px 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
-.clinic-badge .eyebrow { display: block; margin-bottom: 5px; font-size: 9px; }
-.clinic-badge strong { display: block; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
+.clinic-badge { margin: 0 0 20px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #f0f4ec; }
+.clinic-badge .eyebrow { display: block; margin-bottom: 4px; font-size: 9px; letter-spacing: 1.4px; color: #63785d; }
+.clinic-badge strong { display: block; color: var(--ink); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
 .clinic-context { color: var(--muted); margin: 12px 0 24px; }
 
 /* Patient profiles extend the shared workspace cards, filters and dialogs. */

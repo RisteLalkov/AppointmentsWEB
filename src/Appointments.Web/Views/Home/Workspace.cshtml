@@ -4,7 +4,7 @@
 @{ ViewData["Title"] = "Работен простор"; }
 <a class="skip-link" href="#main-content">Прескокни до содржината</a>
 <div class="app-shell">
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar" tabindex="0" aria-label="Навигација и корисничка сметка">
         <a class="brand" href="/"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
         @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">КЛИНИКА</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? "РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА" : Model.Role == DemoRole.Doctor ? "РАБОТЕН ПРОСТОР ЗА ЛЕКАР" : "РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ")</div>
@@ -23,11 +23,24 @@
                 @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Список на лекари</button> }
             }
         @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="catalogue"><span aria-hidden="true">☷</span> Каталог</button><button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
+            @if (Backend.UseApi && Model.Role == DemoRole.Administrator) {
+                <a class="nav-item" href="/Accounts"><span aria-hidden="true">♧</span> Сметки и пристап</a>
+            }
         </nav>
-        @if (Backend.UseApi && Model.Role == DemoRole.Administrator) { <a class="nav-item" href="/Accounts">♧ Сметки и пристап</a> }
-        <div class="sidebar-bottom"><div class="help-card"><span class="mini-cross">✚</span><strong>Простор за подобра грижа.</strong><p>Сите термини, добро организирани.</p></div>@if (Backend.DemoEnabled) { <a class="switch-user" href="/Demo">⇄ <span>Промени демо-корисник</span></a> }
-        @if (Backend.UseApi && !isDemo) { <a class="switch-user" href="/Account/Password">Промени лозинка</a> }
-        <form asp-controller="Account" asp-action="Logout" method="post"><button class="switch-user logout-button" type="submit">Одјави се</button></form><div class="demo-label"><span class="dot"></span> @(isDemo ? "ДЕМО-РЕЖИМ" : "ПОВРЗАНО")</div></div>
+        <div class="sidebar-bottom">
+            <div class="sidebar-account-actions">
+                @if (Backend.DemoEnabled) {
+                    <a class="switch-user" href="/Demo"><span aria-hidden="true">⇄</span> Промени демо-корисник</a>
+                }
+                @if (Backend.UseApi && !isDemo) {
+                    <a class="switch-user" href="/Account/Password"><span aria-hidden="true">⚿</span> Промени лозинка</a>
+                }
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button class="switch-user logout-button" type="submit"><span aria-hidden="true">↪</span> Одјави се</button>
+                </form>
+                <div class="demo-label"><span class="dot" aria-hidden="true"></span> @(isDemo ? "ДЕМО-РЕЖИМ" : "ПОВРЗАНО")</div>
+            </div>
+        </div>
     </aside>
     <div class="main-shell">
         <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Отвори или затвори навигација" aria-expanded="false">☰</button><span class="breadcrumb">Работен простор <span>/</span> <strong id="page-label">Преглед</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? "Рецепционер" : Model.Role.RoleLabel())@(isDemo ? " · Демо" : "")</small></div></div></header>
