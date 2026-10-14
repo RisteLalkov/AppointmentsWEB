@@ -49,6 +49,18 @@ internal static class TenantFixtures
                 try { await using var wrong = new NpgsqlConnection(a.ConnectionString); await wrong.OpenAsync(); throw new Exception("Cross-clinic database connection accepted."); }
                 catch (PostgresException e) when (e.SqlState == "42501") { Console.WriteLine("PASS PostgreSQL clinic role cannot connect to another clinic database"); }
             }
+            else if (operation is "--tenant-contaminate" or "--tenant-clean" or "--tenant-duplicate" or "--tenant-restore-identity")
+            {
+                // Only generated, strictly validated disposable fixture databases above.
+                await using var pool = new NpgsqlConnection(fixtures[2]); await pool.OpenAsync();
+                var sql = operation switch {
+                    "--tenant-contaminate" => "CREATE TABLE \"UnrelatedFixture\" (\"Id\" integer PRIMARY KEY)",
+                    "--tenant-clean" => "DROP TABLE \"UnrelatedFixture\"",
+                    "--tenant-duplicate" => "UPDATE \"Accounts\" SET \"Email\"='owner@platform.test', \"NormalizedEmail\"='owner@platform.test' WHERE \"NormalizedEmail\"='new-owner@platform.test'",
+                    _ => "UPDATE \"Accounts\" SET \"Email\"='new-owner@platform.test', \"NormalizedEmail\"='new-owner@platform.test' WHERE \"NormalizedEmail\"='owner@platform.test'"
+                };
+                await new NpgsqlCommand(sql, pool).ExecuteNonQueryAsync();
+            }
             else throw new Exception("Unknown fixture operation.");
         }
     }

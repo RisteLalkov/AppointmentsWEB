@@ -27,6 +27,8 @@ jobs:
         run: dotnet run --project tests/Appointments.Tests -c Release --no-build
       - name: MVC HTTP integration checks
         run: python tests/http_smoke.py
+      - name: Public discovery and company MVC contract checks
+        run: python tests/discovery_web_smoke.py
       - name: Install optional DOM test dependencies
         run: npm ci --prefix tests/frontend --ignore-scripts --no-audit --no-fund
       - name: DOM workflow checks
@@ -64,3 +66,8 @@ jobs:
         env:
           CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
         run: python tests/tenancy_integration.py
+
+      - name: Platform provisioning, public discovery and automatic tenant login
+        env:
+          CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
+        run: python tests/platform_integration.py

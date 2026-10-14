@@ -65,7 +65,7 @@ class Client:
         if code != 200: raise AssertionError(f'{path}: {code}: {body}')
         return body
     def login(self, secret=password):
-        session = self.ok('/api/auth/login', {'email': 'owner@tenancy.test', 'password': secret})
+        session = self.ok('/api/auth/login', {'email': ('owner@tenancy.test' if self.clinic == 'main' else self.clinic+'-owner@tenancy.test'), 'password': secret})
         check(session['clinic']['id'] == self.clinic, 'Session identifies selected clinic ' + self.clinic)
         self.token = session['accessToken']
         return self
@@ -76,7 +76,7 @@ class Client:
         self.csrf = ''
         _, page = self.request('/Account/Login?clinicId=' + clinic)
         token = re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"', page)[1]
-        code, page = self.request('/Account/Login', {'Email':'owner@tenancy.test','Password':secret,'ClinicId':clinic,'__RequestVerificationToken':token}, form=True)
+        code, page = self.request('/Account/Login', {'Email':('owner@tenancy.test' if clinic == 'main' else clinic+'-owner@tenancy.test'),'Password':secret,'ClinicId':clinic,'__RequestVerificationToken':token}, form=True)
         check(code == 200 and 'main-content' in page and f'content="{clinic}"' in page, 'MVC signs into ' + clinic + ' and labels workspace')
         self.clinic = clinic
         self.csrf = re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"', page)[1]
@@ -122,7 +122,7 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
             env['ConnectionStrings__Clinic'+str(i)] = conns[i]
             for key,value in {'Id':cid,'Name':name,'ConnectionStringName':'Clinic'+str(i),'TimeZone':zone,
                 'ImportSourceDoctors':str(i==1).lower(),'SeedDemoData':str(i<2).lower(),
-                'AllowRegistration':str(i<2).lower(),'BootstrapEmail':'owner@tenancy.test',
+                'AllowRegistration':str(i<2).lower(),'BootstrapEmail':('owner@tenancy.test' if cid == 'main' else cid+'-owner@tenancy.test'),
                 'BootstrapPassword':password if i!=1 else password+'-east'}.items(): env[prefix+key]=value
         migration = subprocess.run([dotnet,str(root/'src/Appointments.Api/bin/Release/net10.0/Appointments.Api.dll'),'--migrate','--clinic','empty'], cwd=root/'src/Appointments.Api',env=env,capture_output=True,text=True,timeout=60)
         check(migration.returncode==0, 'Operator can migrate and initialize one selected clinic with CLI')
@@ -136,10 +136,10 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check({x['id'] for x in directory} == {'main','east','empty'} and all(set(x)=={'id','name','timeZone','allowRegistration'} for x in directory), 'Public clinic directory contains only intended public metadata')
         check(a.ok('/api/bootstrap')['appointments'] == original['appointments'], 'Existing clinic appointments and session survive adoption')
         check(anon.request('/api/bootstrap')[0] == 400, 'Multi-clinic API refuses missing clinic')
-        check(Client(first,'unknown').request('/api/auth/login', {'email':'owner@tenancy.test','password':password})[0] == 404, 'Unknown clinic never falls back')
+        check(Client(first,'unknown').ok('/api/auth/login', {'email':'owner@tenancy.test','password':password})['clinic']['id'] == 'main', 'Login resolves credentials and ignores untrusted clinic hints')
         check(Client(first,'MAIN').request('/api/bootstrap')[0] == 404, 'Malformed/case-changed clinic cannot select a different database')
         check(Client(first,'main,east').request('/api/bootstrap')[0] == 404, 'Ambiguous combined clinic header rejected')
-        check(Client(first,'east').request('/api/auth/login', {'email':'owner@tenancy.test','password':password})[0] == 401, 'Same email in two clinics has independent passwords')
+        check(Client(first,'east').ok('/api/auth/login', {'email':'owner@tenancy.test','password':password})['clinic']['id']=='main', 'Client cannot choose a login tenant with X-Clinic')
         for cid,token in [('east',a.token),('main',b.token),('empty',a.token)]:
             check(Client(second,cid,token).request('/api/bootstrap')[0] == 401, 'Cross-clinic bearer rejected for '+cid)
         check(Client(second,'east',a.token.replace('c1.main.','c1.east.')).request('/api/auth/me')[0] == 401, 'Editing token clinic prefix cannot transfer a session')
@@ -150,8 +150,9 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(Client(first,'empty').request('/api/auth/demo-login',{'userId':'admin'})[0]==404,'Demo login disabled for unseeded clinic')
         registration = {'name':'Same Person','email':'same@tenancy.test','password':password}
         ra = Client(first,'main').ok('/api/auth/register',registration)
-        rb = Client(first,'east').ok('/api/auth/register',registration)
-        check(ra['id']!=rb['id'], 'Patient self-registration creates separate clinic identities for same email')
+        check(Client(first,'east').request('/api/auth/register',registration)[0] == 409, 'Duplicate global sign-in email is rejected safely')
+        rb = Client(first,'east').ok('/api/auth/register',dict(registration,email='east-same@tenancy.test'))
+        check(ra['id']!=rb['id'], 'Separate clinic identities remain isolated')
         a2 = Client(second,'main',a.token)
         b2 = Client(second,'east',b.token)
         day = dt.date.fromisoformat(original['today'])+dt.timedelta(days=35)
@@ -208,7 +209,7 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(results==['Cancelled' if i%2==0 else 'Confirmed' for i in range(24)],'Concurrent mixed-clinic requests do not leak scoped DbContext state')
         browser=Client(web_url)
         page=browser.ok('/Account/Login')
-        check(all(name in page for name in ['Прва клиника','Втора клиника','Нова клиника']), 'Login presents available clinic names in Macedonian')
+        check('<select' not in page and 'Клиниката се препознава автоматски.' in page, 'Login asks for credentials without a clinic selector')
         browser.web_login('main')
         old_csrf=browser.csrf
         check(any(x['id']==aa['id'] for x in browser.ok('/data/bootstrap')['appointments']), 'MVC uses clinic from protected session')

@@ -1,0 +1,6 @@
+<header class="public-header">
+    <a class="brand" href="/Discover"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
+    <nav aria-label="Јавна навигација"><a href="/Discover?view=clinics">Клиники</a><a href="/Discover?view=doctors">Лекари</a>
+    @if (User.Identity?.IsAuthenticated == true) { <a class="btn primary small" href="/Workspace">Мој работен простор ↗</a> }
+    else { <a class="btn primary small" href="/Account/Login">Најави се ↗</a> }</nav>
+</header>

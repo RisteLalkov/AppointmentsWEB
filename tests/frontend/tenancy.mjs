@@ -18,7 +18,7 @@ async function request(path, options = {}) {
 const entry = new JSDOM(await (await request("/Account/Login?clinicId=empty")).text());
 const token = entry.window.document.querySelector('[name="__RequestVerificationToken"]').value;
 const response = await request("/Account/Login", { method: "POST", body: new URLSearchParams({
-  Email: "owner@tenancy.test", Password: process.env.TEST_TENANT_PASSWORD,
+  Email: "empty-owner@tenancy.test", Password: process.env.TEST_TENANT_PASSWORD,
   ClinicId: "empty", __RequestVerificationToken: token,
 }) });
 entry.window.close();
@@ -44,7 +44,7 @@ try {
   check($("#zone-label").textContent.includes("UTC"),"Workspace uses clinic timezone");
   for (const page of ["calendar","appointments","patients","doctors","availability","catalogue","reports"]) {
     w.location.hash = page;
-    await until(() => $(`[data-page="${page}"]`).classList.contains("active"));
+    await until(() => $(`[data-page="${page === "availability" ? "doctors" : page}"]`)?.classList.contains("active") || page === "catalogue" && !!$("#catalogue-nav .nav-item.active"));
     await wait(150);
     check(!!$(".page-heading") && !$("#app").textContent.includes("Серверот не можеше"),"Empty clinic renders " + page);
   }

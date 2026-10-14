@@ -1,0 +1,60 @@
+@using Appointments.Contracts
+@{
+    ViewData["Title"] = "Пронајдете ја вашата грижа";
+    var q = ViewData["Query"] as DiscoveryQuery ?? new();
+    var view = ViewData["DirectoryView"] as string ?? "doctors";
+    var doctors = ViewData["Doctors"] as PublicPage<PublicDoctor>;
+    var clinics = ViewData["Clinics"] as PublicPage<PublicClinic>;
+    var clinic = ViewData["Clinic"] as PublicClinic;
+    var total = doctors?.Total ?? clinics?.Total ?? 0;
+}
+<partial name="_PublicHeader" />
+<main class="public-main" id="main-content">
+    <section class="public-hero">
+        <div><span class="eyebrow">ГРИЖА ШТО НÈ ПОВРЗУВА</span><h1>@(clinic?.Name ?? "Вашиот следен чекор кон подобра грижа.")</h1>
+        <p>@(clinic?.Description ?? "Пронајдете клиника, запознајте ги лекарите и продолжете до вашиот следен термин. Разгледувањето е слободно, без регистрација.")</p>
+        @if (clinic?.Address != null) { <p class="public-contact">Адреса: @clinic.Address</p> }
+        @if (clinic?.Phone != null) { <p class="public-contact">Телефон: @clinic.Phone</p> }
+        @if (clinic != null) { <a href="/Discover?view=clinics">← Сите клиники</a> }
+        </div>
+        <div class="public-intro"><span class="public-symbol" aria-hidden="true">✚</span><h2>Најдете. Изберете. Закажете.</h2><p>Пребарајте според лекар, специјалност или услуга. За закажување, најавете се во соодветната клиника.</p><span class="badge Confirmed">Вашата грижа, на едно место</span></div>
+    </section>
+    <section aria-labelledby="directory-title">
+        <div class="public-section-heading"><div><span class="eyebrow">ИМЕНИК</span><h2 id="directory-title">@(clinic != null ? "Лекари во клиниката" : view == "clinics" ? "Пронајдете клиника" : "Пронајдете лекар")</h2></div>
+        @if (clinic == null) { <div class="chip-tabs"><a class="@(view == "doctors" ? "active" : "")" href="/Discover?view=doctors" aria-current="@(view == "doctors" ? "page" : "false")">Лекари</a><a class="@(view == "clinics" ? "active" : "")" href="/Discover?view=clinics" aria-current="@(view == "clinics" ? "page" : "false")">Клиники</a></div> }</div>
+        <form method="get" action="/Discover" class="card public-filters">
+            <input type="hidden" name="view" value="@view" /><input type="hidden" name="ClinicId" value="@q.ClinicId" />
+            <div class="field"><label for="search">@(view == "clinics" ? "Име на клиника" : "Име на лекар")</label><input id="search" name="Search" value="@q.Search" maxlength="100" placeholder="Внесете име…" /></div>
+            @if (view == "doctors") {
+                @if (clinic == null) { <div class="field"><label for="clinic-search">Клиника</label><input id="clinic-search" name="Clinic" value="@q.Clinic" maxlength="100" placeholder="Име на клиника…" /></div> }
+                <div class="field"><label for="specialty">Специјалност</label><input id="specialty" name="Specialty" value="@q.Specialty" maxlength="100" placeholder="Пребарајте специјалност…" /></div>
+                <div class="field"><label for="service">Услуга</label><input id="service" name="Service" value="@q.Service" maxlength="100" placeholder="Пребарајте услуга…" /></div>
+            }
+            <button class="btn primary" type="submit">Пребарај ↗</button>
+        </form>
+        @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error <a href="/Discover">Обидете се повторно</a></div> }
+        else if (total == 0) { <div class="card empty-state"><h3>Нема резултати за избраните филтри.</h3><p>Обидете се со друго име, специјалност или услуга.</p></div> }
+        else {
+            <p class="results-count">@total резултати · Страница @q.Page</p>
+            <div class="doctor-grid public-grid">
+            @if (clinics != null) { foreach (var c in clinics.Items) {
+                <article class="card public-card"><span class="avatar tone-1" aria-hidden="true">✚</span><h3>@c.Name</h3>
+                @if (!string.IsNullOrWhiteSpace(c.Description)) { <p>@c.Description</p> }
+                @if (!string.IsNullOrWhiteSpace(c.Address)) { <p class="muted">@c.Address</p> }
+                <a class="btn secondary" asp-action="Clinic" asp-route-id="@c.Id">Клиника и лекари ↗</a></article>
+            } }
+            @if (doctors != null) { foreach (var d in doctors.Items) {
+                <article class="card public-card"><span class="avatar tone-2" aria-hidden="true">✚</span><a class="public-clinic-link" asp-action="Clinic" asp-route-id="@d.Clinic.Id">@d.Clinic.Name</a><h3>@d.Name</h3><p class="specialty">@d.Specialty</p>
+                @if (!string.IsNullOrWhiteSpace(d.Subspecialty)) { <p>@d.Subspecialty</p> }
+                @if (d.Services.Count > 0) { <p class="muted">@string.Join(" · ", d.Services.Select(s => s.Name))</p> }
+                <a class="btn secondary" asp-action="Doctor" asp-route-clinicId="@d.Clinic.Id" asp-route-id="@d.Id">Види профил ↗</a></article>
+            } }
+            </div>
+            <nav class="public-pagination" aria-label="Страници од именикот">
+            @if (q.Page > 1) { <a class="btn secondary" asp-action="Index" asp-route-view="@view" asp-route-Search="@q.Search" asp-route-ClinicId="@q.ClinicId" asp-route-Clinic="@q.Clinic" asp-route-Specialty="@q.Specialty" asp-route-Service="@q.Service" asp-route-Page="@(q.Page - 1)" asp-route-PageSize="@q.PageSize">← Претходна</a> }
+            @if (q.Page * q.PageSize < total && q.Page < 100) { <a class="btn secondary" asp-action="Index" asp-route-view="@view" asp-route-Search="@q.Search" asp-route-ClinicId="@q.ClinicId" asp-route-Clinic="@q.Clinic" asp-route-Specialty="@q.Specialty" asp-route-Service="@q.Service" asp-route-Page="@(q.Page + 1)" asp-route-PageSize="@q.PageSize">Следна →</a> }
+            </nav>
+        }
+    </section>
+    <footer class="public-footer">Careline · Повеќе спокој во секојдневието. <a href="/Platform/Login">Пристап за компанијата</a></footer>
+</main>

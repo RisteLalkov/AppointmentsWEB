@@ -31,20 +31,26 @@ builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 64 * 1024);
 var clinics = new ClinicRegistry(builder.Configuration);
 builder.Services.AddSingleton(clinics);
 builder.Services.AddScoped<ClinicContext>();
+builder.Services.AddSingleton<ClinicConnections>();
+builder.Services.AddScoped<AutomaticLogin>();
+builder.Services.AddScoped<PublicDiscovery>();
+builder.Services.AddScoped<PlatformService>();
 builder.Services.AddDbContext<AppointmentsDbContext>((sp, o) => o.UseNpgsql(sp.GetRequiredService<ClinicContext>().Current.ConnectionString));
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped(sp => new SchedulingClock(sp.GetRequiredService<TimeProvider>(), sp.GetRequiredService<ClinicContext>().Current.TimeZone));
 builder.Services.AddScoped<PostgresAppointments>(); builder.Services.AddScoped<AccountService>(); builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
 builder.Services.Configure<PasswordHasherOptions>(o => o.IterationCount = 210000);
-builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOptions, SessionAuthentication>("Session", _ => { });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOptions, SessionAuthentication>("Session", _ => { })
+    .AddScheme<AuthenticationSchemeOptions, PlatformAuthentication>("PlatformSession", _ => { });
+builder.Services.AddAuthorization(o => o.AddPolicy("Platform", p => p.AddAuthenticationSchemes("PlatformSession").RequireAuthenticatedUser().RequireRole("PlatformAdministrator")));
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(new { error = "Невалидни податоци. Проверете ги задолжителните полиња, е-поштата, датумите, времињата и должината на текстот." }));
 builder.Services.AddOpenApi();
 builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = 429;
+    o.AddPolicy("discovery", context => RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions { PermitLimit = 90, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
     o.AddPolicy("auth", context => RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "unknown", _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
 });
 var app = builder.Build();
@@ -74,10 +80,14 @@ if (!app.Environment.IsDevelopment()
 {
     app.UseHttpsRedirection();
 }
+app.UseRouting();
+app.UseRateLimiter();
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path.Value?.TrimEnd('/') ?? "";
-    var directory = path.Equals("/api/clinics", StringComparison.OrdinalIgnoreCase);
+    if (context.Request.Path.StartsWithSegments("/api")) await clinics.RefreshAsync(context.RequestAborted);
+    var directory = path.Equals("/api/clinics", StringComparison.OrdinalIgnoreCase) || path.Equals("/api/auth/login", StringComparison.OrdinalIgnoreCase)
+        || context.Request.Path.StartsWithSegments("/api/public") || context.Request.Path.StartsWithSegments("/api/platform");
     if (!directory && (context.Request.Path.StartsWithSegments("/api") || path.Equals("/health/database", StringComparison.OrdinalIgnoreCase)))
     {
         var values = context.Request.Headers["X-Clinic"];
@@ -91,9 +101,9 @@ app.Use(async (context, next) =>
     }
     await next();
 });
-app.UseRateLimiter(); app.UseAuthentication(); app.UseAuthorization();
+app.UseAuthentication(); app.UseAuthorization();
 app.MapControllers();
-app.MapGet("/api/clinics", () => clinics.Clinics.Where(c => c.Enabled).Select(c => c.Summary())).AllowAnonymous();
+app.MapGet("/api/clinics", () => clinics.Clinics.Where(c => c.Enabled && c.Discoverable).Select(c => c.Summary())).AllowAnonymous();
 app.MapGet("/health", () => Results.Ok(new { status = "ready" })).AllowAnonymous();
 app.MapGet("/health/database", async (AppointmentsDbContext db, CancellationToken ct) => await db.Database.CanConnectAsync(ct) ? Results.Ok(new { status = "ready" }) : Results.StatusCode(503)).RequireAuthorization();
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
@@ -101,6 +111,8 @@ var explicitMigration = args.Contains("--migrate");
 var selectedIndex = Array.IndexOf(args, "--clinic");
 if (selectedIndex >= 0 && (!explicitMigration || selectedIndex + 1 >= args.Length))
     throw new InvalidOperationException("Use --clinic <id> only together with --migrate.");
+await using (var platformScope = app.Services.CreateAsyncScope())
+    await platformScope.ServiceProvider.GetRequiredService<PlatformService>().InitializeAsync(explicitMigration || app.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("Database:ApplyMigrations"), CancellationToken.None);
 var initialize = selectedIndex >= 0 ? new[] { clinics.Resolve(args[selectedIndex + 1]) } : clinics.Clinics.Where(c => c.Enabled);
 foreach (var clinic in initialize)
 {

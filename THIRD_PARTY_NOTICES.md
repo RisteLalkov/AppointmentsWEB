@@ -34,3 +34,5 @@ Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettie
 | dotnet-ef (optional development tool) | 10.0.12 | MIT — EF Core repository license above |
 
 NuGet restores package licenses and notices with the packages. None of these application dependencies requires a paid license. Microsoft ASP.NET Core PasswordHasher is part of the shared framework; no proprietary identity service is required. The optional local Compose recipe uses the official PostgreSQL image. The container engine is separately installed software; Docker Desktop has separate terms and is not required because native PostgreSQL is supported.
+
+Optional real-browser UI checks in `tests/frontend/discovery-browser.cjs` use Playwright (Apache-2.0; https://github.com/microsoft/playwright/blob/main/LICENSE). It is not an application dependency or browser asset. The separately downloaded test browser has its own notices.

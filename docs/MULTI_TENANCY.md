@@ -6,18 +6,22 @@ One published **Appointments.Web** and one **Appointments.Api** serve multiple
 clinics. Every clinic has its own PostgreSQL database, accounts, patients, doctors,
 catalogue, schedules, exceptions, appointments, history, audit events, sessions,
 idempotency records and timezone setting. No clinical data is shared between
-clinics. The same email address can have a separate account/password in each clinic.
+clinics. Sign-in emails are now unique across clinics. Existing duplicate emails require
+operator resolution before credentials-only login; patient records are not merged.
 Patient self-service remains available; registration can be disabled per clinic.
 
-Users choose a clinic on the Macedonian login/registration page. The workspace and
+Login resolves the clinic automatically from credentials. Patient registration still
+selects its intended clinic. The workspace and
 account-management page show the active clinic. To change clinics, sign out and
 sign into the other clinic. This is not a cross-clinic account or a global patient
 record. A clinic administrator has no platform-administration privileges.
 
 This is **database-per-tenant multi-tenancy**, not a separate Web/API installation
 per customer. Databases may run on the same PostgreSQL server. Operator-managed
-configuration is the clinic registry. There is no billing, automatic clinic
-signup, platform-admin dashboard, cross-clinic reporting or custom-domain routing.
+configuration retains existing clinics; an optional separate platform registry adds
+company-managed onboarding. See [public discovery and platform setup](PLATFORM_AND_DISCOVERY.md)
+for the new database, provisioning workflow and email migration. There is no billing,
+public clinic signup, cross-clinic reporting or custom-domain routing.
 
 ## Existing server: preserve the current clinic
 
@@ -182,7 +186,8 @@ can delete rows from its `Sessions` table during the maintenance window.
 
 - API resolves `X-Clinic` from the operator's registry before creating a scoped
   DbContext/clock or authenticating. Unknown/disabled clinics never fall back.
-  With multiple configured clinics the header is required. Exactly one enabled
+  Public discovery, platform routes and credentials-only login are separate boundaries
+  and do not use this header. With multiple clinics other clinical routes require it. Exactly one enabled
   configured clinic supports missing-header compatibility for old API clients.
 - The database's `Settings.ClinicId` must match the selected clinic. Startup checks
   it and every tenant API request verifies it, protecting against configuration
@@ -197,12 +202,14 @@ can delete rows from its `Sessions` table during the maintenance window.
   echo the page's clinic and are rejected after a switch in another tab. Form
   anti-forgery tokens also carry the clinic binding, even if IDs coincide.
 - Authentication/bootstrap responses include public clinic metadata. The anonymous
-  `/api/clinics` endpoint lists enabled clinic IDs, names, timezones and registration
-  policies; these names are intentionally public on the login page. No database
+  `/api/clinics` endpoint lists enabled, discoverable clinic IDs, names, timezones and registration
+  policies; these names are intentionally public in the directory and registration form. No database
   names, addresses, credentials or patient information are exposed by it.
-- Configuration is snapshotted at startup; there is no partially applied hot
+- Configured routing is snapshotted at startup; ready company-managed clinic entries
+  are refreshed from the separate platform registry on API requests. For configured routing there is no partially applied hot
   switching. A startup validation/database failure prevents that API instance
-  starting. After startup a database outage returns an error for that clinic;
+  starting. After startup a clinic database outage returns an error for its clinical requests
+  and fails closed for global identity resolution/writes;
   it never switches to another DB or to demo data. Health `/health` is liveness,
   `/health/database` is authenticated and clinic-specific.
 - JSON `Backend:Mode=Demo` remains an isolated **single-clinic development sandbox**.
@@ -216,7 +223,7 @@ can delete rows from its `Sessions` table during the maintenance window.
 
 `tests/tenancy_integration.py` creates three disposable databases with distinct
 non-superuser PostgreSQL roles and exercises a shared Web plus two API instances.
-It checks legacy adoption, empty-clinic onboarding, same-email independence,
+It checks legacy adoption, empty-clinic onboarding, global-email uniqueness,
 clinic-specific sessions/registration/timezone, cross-clinic reads and writes,
 booking/idempotency, history, schedules, accounts/audits/reports, concurrent scopes,
 stale tabs/forms, disabled clinics, duplicate routing and DB identity mismatches.

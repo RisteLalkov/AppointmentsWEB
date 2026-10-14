@@ -5,4 +5,5 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
     <Content Include="../Appointments.Web/Seed/doctors.json" Link="Seed/doctors.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup><Content Include="../../database/005-platform-registry.sql" Link="database/005-platform-registry.sql" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
 </Project>

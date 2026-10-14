@@ -2,6 +2,8 @@ using System.Text.RegularExpressions;
 using Appointments.Contracts;
 using Appointments.Core;
 using Npgsql;
+using Appointments.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Appointments.Api.Services;
 
@@ -13,6 +15,10 @@ public sealed class ClinicDefinition
     public required string ConnectionString { get; init; }
     public required string TimeZone { get; init; }
     public bool Enabled { get; init; } = true;
+    public bool Discoverable { get; init; } = true;
+    public string? Description { get; init; }
+    public string? Address { get; init; }
+    public string? Phone { get; init; }
     public bool AllowRegistration { get; init; } = true;
     public bool ImportSourceDoctors { get; init; }
     public bool SeedDemoData { get; init; }
@@ -23,16 +29,22 @@ public sealed class ClinicDefinition
 
 public sealed class ClinicRegistry
 {
-    public IReadOnlyList<ClinicDefinition> Clinics { get; }
+    private readonly IConfiguration configuration;
+    private ClinicDefinition[] managed = [];
+    private readonly SemaphoreSlim refresh = new(1, 1);
+    public IReadOnlyList<ClinicDefinition> Configured { get; }
+    public IReadOnlyList<ClinicDefinition> Clinics => Configured.Concat(Volatile.Read(ref managed)).ToArray();
     public ClinicRegistry(IConfiguration configuration)
     {
+        this.configuration = configuration;
         var sections = configuration.GetSection("Tenancy:Clinics").GetChildren().ToArray();
-        Clinics = sections.Length == 0
+        Configured = sections.Length == 0
             ? [CreateLegacy(configuration)]
             : sections.Select(s => new ClinicDefinition {
                 Id = s["Id"] ?? "", Name = s["Name"] ?? "",
                 ConnectionString = configuration.GetConnectionString(s["ConnectionStringName"] ?? "") ?? "",
                 TimeZone = s["TimeZone"] ?? "Europe/Skopje",
+                Discoverable = s.GetValue("Discoverable", true), Description = s["Description"], Address = s["Address"], Phone = s["Phone"],
                 Enabled = s.GetValue("Enabled", true), AllowRegistration = s.GetValue("AllowRegistration", true),
                 ImportSourceDoctors = s.GetValue<bool>("ImportSourceDoctors"), SeedDemoData = s.GetValue<bool>("SeedDemoData"),
                 BootstrapEmail = s["BootstrapEmail"], BootstrapPassword = s["BootstrapPassword"]
@@ -56,10 +68,32 @@ public sealed class ClinicRegistry
                 throw new InvalidOperationException("Each clinic must use a different PostgreSQL database.");
         }
     }
+    public PlatformDbContext PlatformDb() => new(new DbContextOptionsBuilder<PlatformDbContext>().UseNpgsql(configuration.GetConnectionString("Platform") ?? throw new RuleException("Платформата не е конфигурирана.", 503)).Options);
+    public bool HasPlatform => !string.IsNullOrWhiteSpace(configuration.GetConnectionString("Platform"));
+    public async Task RefreshAsync(CancellationToken ct)
+    {
+        if (!HasPlatform) return;
+        await refresh.WaitAsync(ct);
+        try
+        {
+            await using var db = PlatformDb();
+            var rows = await db.Clinics.AsNoTracking().Where(c => c.State == "Ready").ToListAsync(ct);
+            var all = rows.Select(Definition).ToArray();
+            if (all.Any(c => Configured.Any(x => x.Id == c.Id))) throw new InvalidOperationException("Managed and configured clinic IDs overlap.");
+            Volatile.Write(ref managed, all);
+        }
+        finally { refresh.Release(); }
+    }
+    public ClinicDefinition Definition(PlatformClinic c) => new() {
+        Id = c.Id, Name = c.Name, TimeZone = c.TimeZone, Discoverable = c.Discoverable,
+        Description = c.Description, Address = c.Address, Phone = c.Phone, AllowRegistration = c.AllowRegistration,
+        ConnectionString = configuration.GetConnectionString(c.ConnectionName) ?? throw new InvalidOperationException("A provisioned clinic connection is missing.")
+    };
     private static ClinicDefinition CreateLegacy(IConfiguration c) => new() {
         Id = "main", Name = c["Tenancy:ClinicName"] ?? "Мојата клиника",
         ConnectionString = c.GetConnectionString("Appointments") ?? "",
         TimeZone = c["Scheduling:TimeZone"] ?? "Europe/Skopje",
+        Discoverable = c.GetValue("Tenancy:Discoverable", true), Description = c["Tenancy:Description"], Address = c["Tenancy:Address"], Phone = c["Tenancy:Phone"],
         ImportSourceDoctors = true, SeedDemoData = true,
         BootstrapEmail = c["Bootstrap:Email"], BootstrapPassword = c["Bootstrap:Password"]
     };

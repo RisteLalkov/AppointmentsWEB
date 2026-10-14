@@ -43,8 +43,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     };
     o.Events.OnRedirectToLogin = c => { if (c.Request.Path.StartsWithSegments("/data")) c.Response.StatusCode = 401; else c.Response.Redirect(c.RedirectUri); return Task.CompletedTask; };
     o.Events.OnRedirectToAccessDenied = c => { if (c.Request.Path.StartsWithSegments("/data")) c.Response.StatusCode = 403; else c.Response.Redirect(c.RedirectUri); return Task.CompletedTask; };
+}).AddCookie("PlatformCookie", o => {
+    o.Cookie.Name = "Careline.Platform"; o.LoginPath = "/Platform/Login"; o.AccessDeniedPath = "/Platform/Login";
+    o.Cookie.HttpOnly = true; o.Cookie.SameSite = SameSiteMode.Strict;
+    o.Cookie.SecurePolicy = allowHttp ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+    o.SlidingExpiration = false; o.ExpireTimeSpan = TimeSpan.FromHours(2);
 });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(o => o.AddPolicy("Platform", p => p.AddAuthenticationSchemes("PlatformCookie").RequireAuthenticatedUser().RequireRole("PlatformAdministrator")));
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton(sp => new SchedulingClock(sp.GetRequiredService<TimeProvider>(), builder.Configuration["Scheduling:TimeZone"] ?? "Europe/Skopje"));
 if (!settings.UseApi)

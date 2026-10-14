@@ -3,11 +3,14 @@
   --ink: #19382f;
   --text: #32483f;
   --muted: #66736b;
-  --green: #176c60;
-  --green-dark: #105649;
-  --mint: #e8f2ec;
+  --green: #087969;
+  --green-dark: #075c50;
+  --mint: #e0f4ed;
+  --accent: #6953ad;
+  --accent-soft: #f0ecfb;
+  --focus: #b85f16;
   --line: #e3e8e2;
-  --paper: #f7f8f4;
+  --paper: #f5f8f7;
   --white: #fff;
   --orange: #d99458;
   --shadow: 0 8px 30px #1c3b2d08;
@@ -56,7 +59,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid #dfab67;
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 h1,
@@ -619,7 +622,7 @@ input[type="time"] {
   flex-shrink: 0;
 }
 .sidebar:focus-visible {
-  outline: 3px solid #dfab67;
+  outline: 3px solid var(--focus);
   outline-offset: -3px;
 }
 .sidebar .brand {
@@ -2364,4 +2367,72 @@ dialog::backdrop {
   .patient-summary { padding: 20px 16px; }
   .patient-contacts { grid-template-columns: minmax(0, 1fr); }
   .patient-summary-actions .btn { flex: 1 1 auto; }
+}
+
+/* Shared accents and public/company surfaces use the existing component system. */
+.nav-group > summary { list-style: none; cursor: pointer; position: relative; padding-right: 30px; }
+.nav-group > summary::-webkit-details-marker { display: none; }
+.nav-group > summary::after { content: '⌄'; position: absolute; right: 14px; transition: transform .15s; }
+.nav-group[open] > summary::after { transform: rotate(180deg); }
+.nav-group.active > summary { color: var(--green-dark); background: var(--mint); }
+.nav-submenu { margin: 5px 0 10px 22px; padding-left: 10px; border-left: 2px solid var(--line); }
+.nav-child { font-size: 13px; min-height: 40px; }
+.nav-item.active { box-shadow: inset 3px 0 var(--green); }
+summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 8px; }
+.doctor-card-actions { flex-wrap: wrap; }
+.doctor-card-actions [data-availability] { flex-basis: 100%; color: var(--accent); border-color: #d7cee9; background: var(--accent-soft); }
+.availability-back { display: inline-block; margin-bottom: 20px; font-weight: 600; }
+.public-header { max-width: 1280px; margin: auto; padding: 25px 36px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.public-header .brand { margin: 0; }
+.public-header nav { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; font-weight: 600; }
+.public-header form { margin: 0; }
+.public-main { max-width: 1280px; margin: auto; padding: 15px 36px 48px; }
+.public-hero { display: grid; grid-template-columns: 1.45fr 1fr; gap: 60px; padding: 50px 0 65px; align-items: center; }
+.public-hero h1 { max-width: 700px; font-size: clamp(32px,4.2vw,54px); line-height: 1.12; letter-spacing: -1.5px; margin: 16px 0 24px; }
+.public-hero p { font-size: 16px; max-width: 600px; }
+.public-intro { padding: 34px; background: var(--mint); border-radius: 24px; border: 1px solid #c6e6d9; }
+.public-intro h2 { font-size: 25px; }
+.public-symbol { display: flex; align-items: center; justify-content: center; width: 62px; height: 62px; font-size: 32px; color: white; background: var(--green); border-radius: 18px; margin-bottom: 22px; }
+.public-section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: center; margin-bottom: 22px; }
+.public-section-heading h2 { margin: 8px 0 0; font-size: 27px; }
+.chip-tabs a { padding: 9px 16px; border-radius: 8px; display: inline-block; }
+.chip-tabs a.active { background: var(--green); color: white; }
+.public-filters { padding: 24px; display: flex; gap: 16px; align-items: flex-end; margin-bottom: 24px; }
+.public-filters .field { flex: 1; margin: 0; min-width: 0; }
+.public-grid { margin-bottom: 30px; }
+.public-card { display: flex; flex-direction: column; align-items: flex-start; padding: 28px; overflow-wrap: anywhere; }
+.public-card h3 { font-size: 20px; margin: 18px 0 8px; }
+.public-card .btn { margin-top: auto; }
+.public-clinic-link { margin-top: 16px; font-size: 12px; font-weight: 600; }
+.public-pagination { display: flex; justify-content: center; gap: 16px; margin: 30px 0; }
+.public-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-top: 45px; margin-top: 30px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+.public-profile { max-width: 960px; }
+.public-profile-card { padding: 32px; margin: 25px 0; }
+.public-profile-card .eyebrow { display: block; margin: 18px 0 10px; }
+.public-profile-card h1 { font-size: 34px; }
+.public-profile-card h2 { margin-bottom: 20px; }
+.public-profile-card summary { cursor: pointer; font-weight: 600; }
+.public-profile-card details form, .public-profile-card summary + form { margin-top: 24px; }
+.public-services { padding: 0; list-style: none; }
+.public-services li { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.public-services span { color: var(--muted); white-space: nowrap; }
+.platform-form { max-width: 900px; }
+.platform-form textarea { min-height: 100px; width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 10px; }
+.platform-options { display: flex; flex-wrap: wrap; gap: 18px; margin: 20px 0 28px; }
+.platform-options label { display: flex; align-items: center; gap: 8px; }
+.platform-options input { width: auto; }
+@media(max-width: 760px) {
+ .public-header { padding: 20px; align-items: flex-start; gap: 15px; }
+ .public-header nav { justify-content: flex-end; gap: 10px 16px; font-size: 12px; }
+ .public-header .brand { font-size: 24px; }
+ .public-main { padding: 10px 20px 32px; }
+ .public-hero { grid-template-columns: 1fr; gap: 24px; padding: 26px 0 40px; }
+ .public-intro { padding: 24px; }
+ .public-filters { flex-wrap: wrap; padding: 20px; }
+ .public-filters .field { flex-basis: 100%; }
+ .public-filters .btn { width: 100%; }
+ .public-section-heading { align-items: flex-start; flex-direction: column; gap: 15px; }
+ .platform-form .form-row { grid-template-columns: minmax(0, 1fr); }
+ .public-profile-card { padding: 22px; }
+ .public-profile-card h1 { font-size: 28px; }
 }

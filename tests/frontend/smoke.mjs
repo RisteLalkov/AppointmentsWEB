@@ -148,7 +148,7 @@ async function workspace(user) {
     async page(name) {
       w.location.hash = name;
       await until(() =>
-        $(`#navigation [data-page="${name}"]`).classList.contains("active"),
+        $(`#navigation [data-page="${name === "availability" ? "doctors" : name}"]`)?.classList.contains("active") || name === "catalogue" && !!$("#catalogue-nav .nav-item.active"),
       );
     },
   };
@@ -359,7 +359,11 @@ try {
   pat.w.location.hash = 'patient/' + encodeURIComponent(contact.id);
   await until(() => pat.$("#retry-patient"));
   assert(!pat.$(".patient-summary"), "Patient cannot open another profile by changing hash");
-  await admin.page("availability");
+  await admin.page("doctors");
+  assert(!admin.$('#navigation [data-page="availability"]'), "Availability has no standalone navigation entry");
+  admin.click('[data-availability="d01"]');
+  await until(() => admin.$("#schedule-form"));
+  assert(admin.w.location.hash === "#availability", "Doctor directory opens existing availability editor");
   await until(() => admin.$("#exception-form"));
   assert(
     admin.w.document.querySelectorAll(".period-row").length === 5,
@@ -405,7 +409,8 @@ try {
     doc.$("#availability-doctor").disabled,
     "Doctor availability selection stays on own profile",
   );
-  await admin.page("catalogue");
+  await admin.page("catalogue/specialties");
+  assert(admin.$("#catalogue-nav").open && admin.$('[data-page="catalogue/specialties"]').getAttribute("aria-current") === "page", "Catalogue submenu expands and identifies the deep-linked section");
   admin.click('[data-catalogue-tab="specialties"]'); admin.click("#catalogue-add");
   admin.$("#catalogue-name").value = "DOM specialty";
   admin.$("#catalogue-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));

@@ -8,14 +8,21 @@ namespace Appointments.Web.Services;
 
 public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor)
 {
-    public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default, string? clinicId = null)
+    public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default, string? clinicId = null, bool platform = false)
     {
         using var request = new HttpRequestMessage(body == null ? HttpMethod.Get : HttpMethod.Post, path);
         if (body != null) request.Content = JsonContent.Create(body, options: JsonDemoStore.JsonOptions);
-        if (authenticated)
+        if (authenticated && platform)
+        {
+            clinicId = null;
+            var platformToken = await accessor.HttpContext!.GetTokenAsync("PlatformCookie", "api_token");
+            if (string.IsNullOrEmpty(platformToken)) throw new RuleException("Најавете се повторно.", 401);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", platformToken);
+        }
+        else if (authenticated)
         {
             clinicId = accessor.HttpContext!.User.FindFirst("clinicId")?.Value;
-            if (string.IsNullOrEmpty(clinicId)) throw new RuleException("Најавете се повторно и изберете клиника.", 401);
+            if (string.IsNullOrEmpty(clinicId)) throw new RuleException("Најавете се повторно.", 401);
             var token = await accessor.HttpContext.GetTokenAsync("api_token");
             if (string.IsNullOrEmpty(token)) throw new RuleException("Најавете се повторно.", 401);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

@@ -1,0 +1,30 @@
+@using Appointments.Contracts
+@{
+    ViewData["Title"] = "Управување со клиники";
+    var clinics = ViewData["Clinics"] as IReadOnlyList<PlatformClinicSummary> ?? [];
+    var input = ViewData["Input"] as ProvisionClinicInput;
+    string State(string s) => s switch { "Ready" => "Подготвена", "Failed" => "Потребно повторување", "Provisioning" => "Подготовка", _ => "Неактивна" };
+}
+<header class="public-header"><a class="brand" href="/Discover"><span class="brand-mark">✚</span> careline.</a><nav><span>@User.Identity?.Name</span><form asp-action="Logout" method="post"><button class="btn secondary small">Одјави се</button></form></nav></header>
+<main class="public-main">
+<div class="page-heading"><div><span class="eyebrow">КОМПАНИСКИ РАБОТЕН ПРОСТОР</span><h1>Клиники и нови партнери.</h1><p>Регистрација на клиника и нејзиниот прв администратор.</p></div></div>
+@if ((ViewData["Error"] ?? TempData["Error"]) is string error) { <div class="inline-error" role="alert">@error</div> }
+@if (TempData["Notice"] is string notice) { <div class="inline-note" role="status">@notice</div> }
+<section class="card public-profile-card"><h2>Регистрирани клиники</h2><div class="table-wrap"><table><thead><tr><th>Клиника</th><th>Идентификатор</th><th>Состојба</th><th>Јавен именик</th></tr></thead><tbody>
+@foreach (var c in clinics) { <tr><td>@c.Name</td><td>@c.Id</td><td>@State(c.State)@(!c.Managed ? " · Конфигурација" : "")</td><td>@(c.Discoverable ? "Вклучена" : "Скриена")</td></tr> }
+</tbody></table></div></section>
+<section class="card public-profile-card"><h2>Додај нова клиника</h2><p class="muted">Податоците означени како јавни се прикажуваат во именикот само кога клиниката е подготвена. Не внесувајте медицински податоци.</p>
+<form method="post" asp-action="Create" class="platform-form" data-prevent-duplicate>
+<div class="form-row"><div class="field"><label for="id">Единствен идентификатор</label><input id="id" name="Id" value="@input?.Id" pattern="[a-z0-9][a-z0-9-]{0,39}" maxlength="40" required /><small>Мали латинични букви, броеви и цртичка. Не се менува по создавање.</small></div><div class="field"><label for="clinic-name">Име на клиниката</label><input id="clinic-name" name="Name" value="@input?.Name" minlength="2" maxlength="100" required /></div></div>
+<div class="field"><label for="description">Јавен опис (незадолжително)</label><textarea id="description" name="Description" maxlength="1000">@input?.Description</textarea></div>
+<div class="form-row"><div class="field"><label for="address">Јавна адреса (незадолжително)</label><input id="address" name="Address" value="@input?.Address" maxlength="200" /></div><div class="field"><label for="phone">Јавен телефон (незадолжително)</label><input id="phone" name="Phone" value="@input?.Phone" maxlength="30" /></div></div>
+<div class="field"><label for="timezone">Временска зона</label><input id="timezone" name="TimeZone" value="@(input?.TimeZone ?? "Europe/Skopje")" maxlength="100" required /></div>
+<div class="platform-options"><label><input type="checkbox" name="Discoverable" value="true" checked="@(input?.Discoverable ?? true)" /> Прикажи во јавниот именик</label><label><input type="checkbox" name="AllowRegistration" value="true" checked="@(input?.AllowRegistration ?? true)" /> Дозволи пациентска регистрација</label></div>
+<h3>Почетен администратор на клиниката</h3>
+<div class="form-row"><div class="field"><label for="admin-name">Име и презиме</label><input id="admin-name" name="AdminName" value="@input?.AdminName" minlength="2" maxlength="80" required /></div><div class="field"><label for="admin-email">Е-пошта за најава</label><input id="admin-email" name="AdminEmail" value="@input?.AdminEmail" type="email" maxlength="120" autocomplete="off" required /></div></div>
+<div class="field"><label for="admin-password">Единствена почетна лозинка</label><input id="admin-password" name="AdminPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" required /><p class="field-help">Најмалку 12 знаци. Предадете ја преку безбеден канал и побарајте промена при првата најава. Не се испраќа е-пошта.</p></div>
+<button class="btn primary" type="submit">Создај клиника и администратор ↗</button><p class="field-help" role="status" data-submit-status></p>
+</form></section>
+<details class="card public-profile-card"><summary>Промени ја компаниската лозинка</summary><form method="post" asp-action="Password"><div class="field"><label for="current">Тековна лозинка</label><input id="current" name="CurrentPassword" type="password" autocomplete="current-password" maxlength="128" required /></div><div class="field"><label for="new">Нова лозинка</label><input id="new" name="NewPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required /></div><button class="btn secondary">Промени лозинка</button></form></details>
+</main>
+@section Scripts { <script src="~/js/platform.js" asp-append-version="true"></script> }

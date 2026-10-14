@@ -12,7 +12,6 @@ namespace Appointments.Api.Controllers;
 [ApiController, Route("api/auth"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public sealed class AuthController(AccountService service, AppointmentsDbContext db, IWebHostEnvironment environment, IConfiguration configuration, ClinicContext clinicContext) : ApiControllerBase
 {
-    [HttpPost("login"), EnableRateLimiting("auth")] public Task<SessionResponse> Login(LoginInput input, CancellationToken ct) => service.LoginAsync(input, ct);
     [HttpPost("register"), EnableRateLimiting("auth")] public Task<AccountSummary> Register(RegisterInput input, CancellationToken ct) => service.RegisterAsync(input, ct);
     [Authorize, HttpGet("me")] public object Me() => new { actor = Actor, demoMode = IsDemo, clinic = clinicContext.Current.Summary() };
     [Authorize, HttpPost("logout")] public async Task<object> Logout(CancellationToken ct) { var hash = HttpContext.Items["SessionHash"] as string; await db.Sessions.Where(s => s.TokenHash == hash).ExecuteDeleteAsync(ct); return new { signedOut = true }; }

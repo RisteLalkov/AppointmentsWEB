@@ -10,24 +10,31 @@ namespace Appointments.Web.Controllers;
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public sealed class AccountController(ApiClient api, BackendSettings settings) : Controller
 {
-    [HttpGet] public async Task<IActionResult> Login(string? clinicId, CancellationToken ct)
+    private string SafeReturn(string? returnUrl) => Url.IsLocalUrl(returnUrl) ? returnUrl! : "/Workspace";
+    [HttpGet] public IActionResult Login(string? clinicId, string? returnUrl)
     {
         if (!settings.UseApi) return RedirectToAction("Index", "Demo");
-        await Clinics(clinicId, ct); return View();
+        ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl); return View();
     }
-    [HttpPost] public async Task<IActionResult> Login(LoginInput input, string? clinicId, CancellationToken ct)
+    [HttpPost] public async Task<IActionResult> Login(LoginInput input, string? clinicId, string? returnUrl, CancellationToken ct)
     {
-        await Clinics(clinicId, ct);
+        ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl);
         if (!ModelState.IsValid) { ViewData["Error"] = "Внесете е-пошта и лозинка."; return View(); }
-        try { var session = await api.SendAsync<SessionResponse>("api/auth/login", input, false, ct, clinicId); await WebSession.SignInAsync(HttpContext, session); return RedirectToAction("Index", "Home"); }
+        try { var session = await api.SendAsync<SessionResponse>("api/auth/login", input, false, ct); await WebSession.SignInAsync(HttpContext, session); return LocalRedirect(SafeReturn(returnUrl)); }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
-    [HttpGet] public async Task<IActionResult> Register(string? clinicId, CancellationToken ct) { await Clinics(clinicId, ct); return View(); }
-    [HttpPost] public async Task<IActionResult> Register(RegisterInput input, string? clinicId, CancellationToken ct)
+    [HttpGet] public async Task<IActionResult> Register(string? clinicId, string? returnUrl, CancellationToken ct)
+    { ViewData["ReturnUrl"] = SafeReturn(returnUrl); await Clinics(clinicId, ct); return View(); }
+    [HttpPost] public async Task<IActionResult> Register(RegisterInput input, string? clinicId, string? returnUrl, CancellationToken ct)
     {
-        await Clinics(clinicId, ct);
+        ViewData["ReturnUrl"] = SafeReturn(returnUrl); await Clinics(clinicId, ct);
         if (!ModelState.IsValid) { ViewData["Error"] = "Внесете име, важечка е-пошта и лозинка."; return View(); }
-        try { await api.SendAsync<AccountSummary>("api/auth/register", input, false, ct, clinicId); TempData["Notice"] = "Вашата пациентска сметка е подготвена. Најавете се за да закажете термин."; return RedirectToAction(nameof(Login), new { clinicId }); }
+        try
+        {
+            await api.SendAsync<AccountSummary>("api/auth/register", input, false, ct, clinicId);
+            TempData["Notice"] = "Вашата пациентска сметка е подготвена. Најавете се за да продолжите.";
+            return RedirectToAction(nameof(Login), new { clinicId, returnUrl = SafeReturn(returnUrl) });
+        }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
     private async Task Clinics(string? clinicId, CancellationToken ct)

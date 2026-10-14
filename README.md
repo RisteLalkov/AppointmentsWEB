@@ -201,8 +201,12 @@ include patient and inclusive date-range filters. This release requires
 
 ## Multiple clinics
 
-One Web/API deployment can now serve multiple clinics with an isolated PostgreSQL database per clinic, clinic-bound sessions and clinic selection at sign-in. Existing installations adopt their current database as `main`. See [multi-clinic setup, existing-server update and isolation guarantees](docs/MULTI_TENANCY.md). Publish both applications; existing users must sign in again after this update. No additional schema migration is required beyond scripts 001–003.
+One Web/API deployment can now serve multiple clinics with an isolated PostgreSQL database per clinic, clinic-bound sessions and automatic clinic resolution at sign-in. Existing installations adopt their current database as `main`. See [multi-clinic setup, existing-server update and isolation guarantees](docs/MULTI_TENANCY.md). Publish both applications; existing users must sign in again after this update. Current clinic databases need scripts 001–004. Company onboarding additionally uses script 005 in a separate platform database; see below.
 
 ### Patient details and contact editing
 
 Open **Пациенти → Види профил** for contacts and filtered appointment history. Patient accounts also have **Мој профил**. Existing installations must apply `database/004-patient-profiles.sql` in each clinic database before publishing both applications. See [patient profiles and deployment](docs/PATIENT_PROFILES.md).
+
+## Public directory and company onboarding
+
+See [PLATFORM_AND_DISCOVERY.md](docs/PLATFORM_AND_DISCOVERY.md) for the six product improvements, credentials-only login migration, the separate platform database, safe database-pool provisioning, setup and test commands. **Do not run script 005 in a clinic database.** The platform database is optional for existing-clinic login/discovery, but required for `/Platform` onboarding. Existing duplicate login emails require operator resolution before credentials-only login can work for those accounts.

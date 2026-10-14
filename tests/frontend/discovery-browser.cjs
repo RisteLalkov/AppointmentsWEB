@@ -1,0 +1,90 @@
+// Optional real Chromium UI checks. Requires Playwright installed separately.
+// Invoked by discovery_web_smoke.py when TEST_BROWSER_EXECUTABLE is provided.
+const { chromium } = require('playwright');
+const { spawn } = require('node:child_process');
+const { mkdtemp, rm, mkdir } = require('node:fs/promises');
+const { tmpdir } = require('node:os');
+const { resolve } = require('node:path');
+const net = require('node:net');
+const root = resolve(__dirname, '../..');
+let count = 0;
+function check(ok, label) { if (!ok) throw new Error(label); console.log('PASS browser ' + label); count++; }
+async function noOverflow(page, label) { check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), label + ' fits viewport'); }
+(async () => {
+ const browser = await chromium.launch({headless:true, executablePath:process.env.TEST_BROWSER_EXECUTABLE, args:['--no-sandbox']});
+ const temp = await mkdtemp(resolve(tmpdir(),'careline-browser-'));
+ const screenshots = process.env.TEST_SCREENSHOTS;
+ if (screenshots) await mkdir(screenshots,{recursive:true});
+ let demo;
+ try {
+  const context = await browser.newContext({viewport:{width:1440,height:1000}});
+  const page = await context.newPage(); const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  const publicUrl = process.env.TEST_PUBLIC_WEB;
+  await page.goto(publicUrl+'/Discover');
+  await page.getByRole('heading',{name:'Тест лекар'}).waitFor();
+  await noOverflow(page,'Desktop public directory');
+  if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
+  await page.locator('#search').fill('Тест');
+  await page.locator('#clinic-search').fill('Клиника');
+  await page.getByRole('button',{name:/Пребарај/}).click();
+  check(new URL(page.url()).searchParams.get('Clinic')==='Клиника','Public search submits clinic filter');
+  for(const width of [768,390]) {
+   await page.setViewportSize({width,height:900}); await noOverflow(page,`Public directory at ${width}px`);
+  }
+  if(screenshots) await page.screenshot({path:resolve(screenshots,'public-mobile.png'),fullPage:true});
+  await page.getByRole('link',{name:/Види профил/}).click();
+  await page.getByRole('link',{name:/Продолжи до закажување/}).click();
+  await page.locator('#email').waitFor();
+  check(page.url().includes('/Account/Login') && page.url().includes('returnUrl'),'Public booking enters login with continuation');
+  check(await page.locator('select').count()===0,'Login has no clinic selector');
+  await noOverflow(page,'Mobile login');
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto(publicUrl+'/Platform/Login');
+  await page.locator('input[name=Email]').fill('company@test.test');
+  await page.locator('input[name=Password]').fill('Test-password-123');
+  await page.locator('form button[type=submit], form button').first().click();
+  await page.getByRole('heading',{name:'Додај нова клиника'}).waitFor();
+  await noOverflow(page,'Desktop company onboarding');
+  if(screenshots) await page.screenshot({path:resolve(screenshots,'company-desktop.png'),fullPage:true});
+  await page.setViewportSize({width:390,height:900});await noOverflow(page,'Mobile company onboarding');
+  if(screenshots) await page.screenshot({path:resolve(screenshots,'company-mobile.png'),fullPage:true});
+  const port=await new Promise(res=>{const s=net.createServer();s.listen(0,'127.0.0.1',()=>{const p=s.address().port;s.close(()=>res(p));});});
+  const demoUrl=`http://127.0.0.1:${port}`;
+  demo=spawn(process.env.TEST_DOTNET || 'dotnet',[resolve(root,'src/Appointments.Web/bin/Release/net10.0/Appointments.Web.dll'),'--urls',demoUrl],{cwd:resolve(root,'src/Appointments.Web'),env:{...process.env,Backend__Mode:'Demo',Demo__Enabled:'true',Demo__DataPath:resolve(temp,'demo.json'),ASPNETCORE_ENVIRONMENT:'Development'},stdio:'ignore'});
+  for(let i=0;i<150;i++){try{if((await fetch(demoUrl+'/Demo')).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
+  await page.setViewportSize({width:1440,height:1000});await page.goto(demoUrl+'/Demo');
+  await page.locator('[data-role=Administrator]').click();
+  await page.locator('#demo-user').selectOption('admin');
+  await page.locator('#demo-form button[type=submit]').click();
+  await page.locator('.overview-grid').waitFor();
+  check(await page.locator('.nav-item[data-page=availability]').count()===0,'Availability is absent from sidebar');
+  const summary=page.locator('#catalogue-nav > summary');
+  await summary.focus();await page.keyboard.press('Space');
+  check(await page.locator('#catalogue-nav').evaluate(e=>e.open),'Catalogue submenu opens with keyboard');
+  await page.locator('[data-page="catalogue/services"]').click();
+  await page.locator('[data-catalogue-tab=services][aria-pressed=true]').waitFor();
+  check(await page.locator('[data-page="catalogue/services"]').getAttribute('aria-current')==='page','Deep section marks active navigation');
+  await page.locator('[data-page=doctors]').click();await page.locator('[data-availability=d01]').click();
+  await page.locator('#schedule-form').waitFor();
+  check(await page.locator('#availability-doctor').inputValue()==='d01','Doctor card opens selected availability');
+  if(screenshots) await page.screenshot({path:resolve(screenshots,'availability-desktop.png'),fullPage:true});
+  await page.goto(demoUrl+'/Workspace?book=d01#doctors');
+  await page.locator('#booking-doctor').waitFor();
+  check(!new URL(page.url()).searchParams.has('book'),'Booking continuation opens dialog and consumes query parameter');
+  const mobile=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+  const m=await mobile.newPage();await m.goto(demoUrl+'/Demo');
+  await m.locator('[data-role=Administrator]').tap();await m.locator('#demo-user').selectOption('admin');
+  await m.locator('#demo-form button[type=submit]').tap();await m.locator('.overview-grid').waitFor();
+  await m.locator('#menu-toggle').tap();await m.locator('#catalogue-nav > summary').tap();
+  await m.locator('[data-page="catalogue/specialties"]').tap();await m.locator('[data-catalogue-tab=specialties][aria-pressed=true]').waitFor();
+  check(true,'Touch submenu opens and selects specialties');
+  await noOverflow(m,'Mobile catalogue');
+  await m.locator('#menu-toggle').tap();
+  await m.locator('.sidebar-bottom .logout-button').scrollIntoViewIfNeeded();
+  check(await m.locator('.sidebar-bottom .logout-button').isVisible(),'Sidebar bottom logout action is reachable');
+  if(screenshots) await m.screenshot({path:resolve(screenshots,'sidebar-mobile.png'),fullPage:true});
+  check(errors.length===0,'No uncaught browser JavaScript errors in exercised pages');
+  console.log(`\n${count}/${count} Chromium UI checks passed (stub public API, JSON demo workspace).`);
+ } finally {if(demo){demo.kill();await new Promise(res=>demo.once('exit',res));}await browser.close();await rm(temp,{recursive:true,force:true});}
+})().catch(e=>{console.error(e);process.exit(1)});

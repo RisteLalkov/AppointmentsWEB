@@ -4,7 +4,7 @@ Base URL in local Development: `http://localhost:5181`. OpenAPI schema: `/openap
 
 ## Sessions
 
-`POST /api/auth/login` accepts `{"email":"you@example.test","password":"your-password"}` and returns `accessToken`, `expiresAt`, `actor`, `demoMode`. Use `Authorization: Bearer <accessToken>` thereafter. Never log or commit tokens/passwords. The MVC client stores this token in its protected HttpOnly authentication cookie, not localStorage.
+`POST /api/auth/login` accepts `{"email":"you@example.test","password":"your-password"}` and returns `accessToken`, `expiresAt`, `actor`, `demoMode`, `clinic`. The API resolves a unique clinic account from the email; a clinic hint cannot choose the account. Use `Authorization: Bearer <accessToken>` thereafter. Never log or commit tokens/passwords. The MVC client stores this token in its protected HttpOnly authentication cookie, not localStorage.
 
 | Method / route | Access / purpose |
 | --- | --- |
@@ -69,7 +69,7 @@ Administrator only. Do not create Doctor accounts for unnamed service providers.
 
 Errors normally have `{"error":"Useful explanation"}`. Authentication/authorization middleware can return an empty 401/403; clients must check HTTP status before decoding. 400 = invalid fields/transition; 401 = missing/expired/revoked session or failed login; 403 = role denied; 404 = missing/inaccessible record or disabled demo endpoint; 409 = conflict, stale version or duplicate; 429 = auth rate limit; 503 = unavailable database. A network timeout does not prove a write failed: refresh, or retry the exact booking with its original request ID.
 
-`GET /health` is anonymous process liveness after startup; it does not continuously check PostgreSQL. `GET /health/database` requires authentication and checks connectivity. API request bodies are limited to 64 KiB. No production OpenAPI route, CORS wildcard, automatic migration outside Development, or public database reset is enabled.
+`GET /health` is anonymous process liveness after startup; it does not continuously check PostgreSQL. `GET /health/database` requires authentication and checks connectivity. API request bodies are limited to 64 KiB. No production OpenAPI route, CORS wildcard or public database reset is enabled. Existing clinic migrations remain explicit outside Development; company onboarding explicitly migrates only its reserved empty clinic database.
 
 ## Appointment history and combined filters
 
@@ -79,8 +79,27 @@ patient/doctor/service/status filters on the appointment list endpoint.
 
 ## Clinic selection
 
-`GET /api/clinics` is anonymous and returns enabled clinics (ID/name/timezone/registration policy only). Send `X-Clinic: <id>` on all other `/api/*` calls and `/health/database`. It is mandatory with multiple configured clinics; one configured enabled clinic permits omission for compatibility. Unknown/disabled IDs return 404, missing selection returns 400, and another clinic's bearer returns 401. Login/registration/demo endpoints use the same clinic header. Login sessions and `/api/auth/me` include a `clinic` object. MVC authenticates to the API using the clinic stored in its protected cookie; `/data/*` AJAX also requires `X-Workspace-Clinic` matching the rendered page. See [operator setup](MULTI_TENANCY.md).
+`GET /api/clinics` returns enabled, discoverable clinic summaries. Clinical calls use `X-Clinic: <id>`; multiple clinics require it and a single enabled clinic supports omission for compatibility. Unknown/disabled IDs return 404, missing selection returns 400, and another clinic's bearer returns 401. **Credentials-only `/api/auth/login`, `/api/public/*`, and `/api/platform/*` do not select a clinic from this header.** Registration/demo endpoints still use it. Login sessions and `/api/auth/me` include a `clinic` object. MVC sends the clinic stored in its protected cookie; `/data/*` AJAX also requires `X-Workspace-Clinic` matching the rendered page. See [operator setup](MULTI_TENANCY.md) and [identity migration](PLATFORM_AND_DISCOVERY.md).
 
 ## Patient profiles
 
 `GET /api/patients/{id}` returns the patient, role-scoped appointments and `canEdit`. `POST /api/patients/{id}` accepts `{ name, email, phone, version }` for staff contact edits. Stale versions/duplicate email return 409; inaccessible profiles return 404; patient edits return 403. Login credentials remain independent of contacts. See [patient profiles](PATIENT_PROFILES.md).
+
+## Public discovery and company operations
+
+| Method / route | Access / purpose |
+|---|---|
+| GET `/api/public/clinics` | Anonymous paginated public clinic search |
+| GET `/api/public/clinics/{id}` | Anonymous public clinic profile |
+| GET `/api/public/doctors` | Anonymous paginated doctor search: `search`, `clinic`, `clinicId`, `specialty`, `service`, `page`, `pageSize` |
+| GET `/api/public/clinics/{clinicId}/doctors/{doctorId}` | Anonymous public doctor projection |
+| POST `/api/platform/login` | Separate company credentials; returns platform token, expiry, ID/name |
+| GET `/api/platform/clinics` | Platform token only; configured and managed clinic summaries |
+| POST `/api/platform/clinics` | Platform token only; validated `ProvisionClinicInput`, resumable clinic + admin provisioning |
+| POST `/api/platform/password` | Platform token only; `currentPassword`, `newPassword`; revoke all operator sessions |
+| POST `/api/platform/logout` | Platform token only; revoke current session; body `{}` |
+
+Public pages are limited to 24 rows/page and pages 1–100; query text is bounded.
+Company tokens use the separate `PlatformSession` authentication policy and do not
+authorize clinical endpoints. Clinic Administrator tokens do not authorize platform
+operations. Full provisioning/configuration and failure recovery: [PLATFORM_AND_DISCOVERY.md](PLATFORM_AND_DISCOVERY.md).

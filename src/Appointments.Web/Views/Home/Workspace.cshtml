@@ -19,16 +19,15 @@
             @if (Model.Role == DemoRole.Patient) { <button class="nav-item" data-page="profile"><span aria-hidden="true">♧</span> Мој профил</button> }
             @if (Model.Role != DemoRole.Patient) {
                 <button class="nav-item" data-page="patients"><span aria-hidden="true">♧</span> Пациенти</button>
-                <button class="nav-item" data-page="availability"><span aria-hidden="true">☷</span> Достапност</button>
-                @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Список на лекари</button> }
+                <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Список на лекари</button>
             }
-        @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="catalogue"><span aria-hidden="true">☷</span> Каталог</button><button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
+        @if (Model.Role == DemoRole.Administrator) { <details class="nav-group" id="catalogue-nav"><summary class="nav-item"><span aria-hidden="true">☷</span> Шифрарници</summary><div class="nav-submenu"><button class="nav-item nav-child" data-page="catalogue/doctors">Лекари</button><button class="nav-item nav-child" data-page="catalogue/specialties">Специјалности</button><button class="nav-item nav-child" data-page="catalogue/services">Услуги</button></div></details><button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
             @if (Backend.UseApi && Model.Role == DemoRole.Administrator) {
                 <a class="nav-item" href="/Accounts"><span aria-hidden="true">♧</span> Сметки и пристап</a>
             }
         </nav>
         <div class="sidebar-bottom">
-            <div class="sidebar-account-actions">
+            <div class="sidebar-account-actions"><a class="switch-user" href="/Discover"><span aria-hidden="true">⌕</span> Јавен именик</a>
                 @if (Backend.DemoEnabled) {
                     <a class="switch-user" href="/Demo"><span aria-hidden="true">⇄</span> Промени демо-корисник</a>
                 }
