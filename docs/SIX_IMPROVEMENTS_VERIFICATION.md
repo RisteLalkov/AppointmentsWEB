@@ -37,24 +37,37 @@ cross-process compiler limitations. Normal Visual Studio builds do not need thos
 Browser tests used fixture content, not private patient data. No new application package
 or paid dependency is required. Playwright is optional test tooling only.
 
-## Not executed here — required before production rollout
+## GitHub validation after publication
 
-A usable PostgreSQL test server was unavailable. This execution environment maps only
-UID 0 and could not install/start a normal PostgreSQL service. Therefore:
+Implementation commit: `2f5d0aa00b245b28ee56ad6b87bc2229f46966f7`.
+[GitHub Actions run 38642580321](https://github.com/RisteLalkov/AppointmentsWEB/actions/runs/38642580321)
+completed successfully. All three jobs passed: Windows verification, Linux verification,
+and PostgreSQL integration.
 
-- Real PostgreSQL API/database suites were **not run** for this update.
-- `tests/platform_integration.py` was added and syntax checked, but its real migrations,
-  provisioning/retry, two-instance identity locks, database-backed role/token isolation,
-  duplicate-email handling and public SQL projections remain **unverified at runtime**.
-- Existing PostgreSQL API and multi-tenant integration suites were updated where needed,
-  but also require execution on a disposable PostgreSQL server.
-- The workflow file includes the new checks. The results above are local results; consult
-  the GitHub Actions run for the published commit for remote PostgreSQL/Windows results.
-- Windows/IIS publishing, the actual server configuration and real-data migration were
-  not tested in this environment. No live server was contacted.
+| PostgreSQL-backed check | Result |
+|---|---|
+| API/MVC integration | 107/107 passed |
+| Direct database constraints | 7/7 passed |
+| Legacy catalogue upgrade and repeated SQL preserving patient/contact/history data | Passed |
+| DOM suite against the real API | 66/66 passed |
+| Multi-tenant API/MVC isolation | 70/70 passed |
+| Empty-clinic tenant DOM suite | 12/12 passed |
+| Platform/discovery integration | 43/43 passed |
 
-The Web stub tests and JSON tests do **not** prove database-backed onboarding or security
-correctness. Run all three PostgreSQL suites and a staging deployment before release.
+Platform checks exercised two API instances, provisioning failure/retry and concurrent
+onboarding, nonempty pool rejection, automatic clinic login, global email uniqueness,
+legacy ambiguous-login rejection, company/clinical token isolation, session revocation,
+lockout and safe public projections. These are real PostgreSQL results, supplementing
+the local stub/JSON checks above. PostgreSQL could not run in the local execution
+environment; GitHub's disposable PostgreSQL service supplied that validation.
+
+## Still required before production rollout
+
+Windows/IIS publishing, the actual server configuration and real-data migration were
+not tested. No live server was contacted or database modified. Configure the separate
+platform database and prepared clinic pool as documented, then verify the deployment
+in staging before release. Passing automated tests does not validate your IIS settings,
+server permissions, backups, secrets or live migration procedure.
 
 ## Deliberate constraints
 
