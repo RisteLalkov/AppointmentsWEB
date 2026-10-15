@@ -44,7 +44,7 @@ public sealed class PlatformDbContext(DbContextOptions<PlatformDbContext> option
     public DbSet<PlatformAccessSession> Sessions => Set<PlatformAccessSession>();
     protected override void OnModelCreating(ModelBuilder b)
     {
-        b.Entity<PlatformClinic>(x => { x.ToTable("PlatformClinics"); x.HasKey(c => c.Id); x.HasIndex(c => c.ConnectionName).IsUnique(); });
+        b.Entity<PlatformClinic>(x => { x.ToTable("PlatformClinics"); x.HasKey(c => c.Id);  });
         b.Entity<PlatformOperator>(x => { x.ToTable("PlatformOperators"); x.HasKey(c => c.Id); x.HasIndex(c => c.Email).IsUnique(); });
         b.Entity<PlatformAccessSession>(x => { x.ToTable("PlatformSessions"); x.HasKey(c => c.TokenHash); x.HasOne(c => c.Operator).WithMany().HasForeignKey(c => c.OperatorId); });
     }

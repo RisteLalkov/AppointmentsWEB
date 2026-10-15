@@ -96,7 +96,7 @@ app.Use(async (context, next) =>
         context.RequestServices.GetRequiredService<ClinicContext>().Select(clinic);
         // Also fail closed if a database is restored/repointed while the API is running.
         var db = context.RequestServices.GetRequiredService<AppointmentsDbContext>();
-        var binding = await db.Settings.AsNoTracking().SingleOrDefaultAsync(s => s.Key == "ClinicId", context.RequestAborted);
+        var binding = await ClinicConnections.BindingAsync(db, clinic, context.RequestAborted);
         if (binding?.Value != clinic.Id) throw new RuleException("Клиниката е привремено недостапна. Контактирајте го администраторот.", 503);
     }
     await next();

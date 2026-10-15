@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Appointments.Data;
 
+// Tables are intentionally unqualified: API connections have a server-generated,
+// clinic-only search path (plus the extension schema), never another tenant schema.
 public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext> options) : DbContext(options)
 {
     public DbSet<Specialty> Specialties => Set<Specialty>();

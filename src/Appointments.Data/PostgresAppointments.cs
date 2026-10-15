@@ -193,7 +193,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             Exceptions = await db.Exceptions.Where(e => e.DoctorId == doctorId && e.Date >= today).ToListAsync(ct)
         };
     }
-    private Task<int> LockCatalogueSharedAsync(CancellationToken ct) => db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock_shared(hashtextextended('careline:catalogue', 0))", ct);
+    private Task<int> LockCatalogueSharedAsync(CancellationToken ct) => db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock_shared(hashtextextended(current_schema() || ':careline:catalogue', 0))", ct);
     public async Task<object> SaveCatalogueAsync(DemoActor actor, string kind, object input, CancellationToken ct)
     {
         if (actor.Role != DemoRole.Administrator) throw new RuleException("Немате пристап до каталогот.", 403);
@@ -217,7 +217,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     }
     private AppointmentService Rules(DemoState state) => new(new OperationState(state), clock);
     public async Task LockAsync(string resource, CancellationToken ct) =>
-        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({"careline:" + resource}, 0))", ct);
+        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended(current_schema() || {":careline:" + resource}, 0))", ct);
     public void Audit(DemoActor actor, string action, string target) => db.AuditEvents.Add(new() { ActorId = actor.Id, Action = action, TargetId = target, OccurredAt = clock.UtcNow });
     public static void Staff(DemoActor actor, string? doctorId = null)
     {

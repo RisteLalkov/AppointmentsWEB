@@ -1,6 +1,6 @@
 """Real PostgreSQL discovery/identity/platform regression suite. No production connections.
 Requires Release build and CARELINE_TEST_CONNECTION with CREATEDB/CREATEROLE on a
-DISPOSABLE test server. Creates three uniquely named databases and removes only those.
+DISPOSABLE test server. Creates a shared clinic database and a separate platform database and removes only those.
 """
 import concurrent.futures
 import json
@@ -88,10 +88,10 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         env = {k:v for k,v in os.environ.items() if not k.startswith(('Tenancy__','Bootstrap__','Platform__','ConnectionStrings__'))}
         env.update(ASPNETCORE_ENVIRONMENT='Development', Database__ApplyMigrations='true', Demo__Enabled='false',
             Logging__LogLevel__Default='Warning', Logging__LogLevel__Microsoft='Warning',
-            ConnectionStrings__Appointments=conns[0], ConnectionStrings__Platform=conns[1], ConnectionStrings__PoolOne=conns[2],
+            ConnectionStrings__Appointments=conns[0], ConnectionStrings__Platform=conns[1],
             Bootstrap__Email='owner@platform.test', Bootstrap__Password=password,
             Platform__Bootstrap__Email='company@platform.test', Platform__Bootstrap__Password=password,
-            Platform__ClinicPool__0='PoolOne',Tenancy__ClinicName='Existing Test Clinic')
+            Tenancy__ClinicName='Existing Test Clinic')
         first, second = address(), address()
         one = start(first,env,temporary)
         two = start(second,env,temporary)
@@ -118,7 +118,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(company.request('/api/platform/clinics',dict(payload,id='../bad'))[0] == 400, 'Invalid clinic identity rejected before provisioning')
         check(company.request('/api/platform/clinics',dict(payload,adminEmail='owner@platform.test'))[0] == 409, 'Existing global login email cannot become a new clinic admin')
         sql('--tenant-contaminate')
-        check(company.request('/api/platform/clinics',payload)[0] == 409, 'Provisioning refuses nonempty unbound database')
+        check(company.request('/api/platform/clinics',payload)[0] == 409, 'Provisioning refuses nonempty unbound schema in shared database')
         check(any(c['id']=='new-clinic' and c['state']=='Failed' for c in company.ok('/api/platform/clinics')), 'Failure is durably recorded for retry')
         check(anon.request('/api/public/clinics/new-clinic')[0] == 404, 'Incomplete clinic is not publicly discoverable')
         sql('--tenant-clean')
@@ -169,6 +169,11 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
             check(anon.request('/api/auth/login',{'email':'owner@platform.test','password':secret})==missing,'Legacy ambiguous identity rejected with generic login error')
         sql('--tenant-restore-identity')
         check(Client(first).login('new-owner@platform.test',secret=password+'-new').clinic=='new-clinic','Explicitly resolving duplicate restores credentials-only login')
+        extra=dict(payload,id='third-clinic',name='Third Test Clinic',adminEmail='third-owner@platform.test')
+        check(company.ok('/api/platform/clinics',extra)['state']=='Ready', 'Another clinic provisions without a database pool or additional connection string')
+        third=Client(second).login('third-owner@platform.test',secret=password+'-new')
+        check(not third.ok('/api/bootstrap')['doctors'], 'Additional clinic remains empty and isolated in shared database')
+        sql('--tenant-platform-check')
         company.ok('/api/platform/password',{'currentPassword':password,'newPassword':password+'-changed'})
         check(company2.request('/api/platform/clinics')[0]==401,'Platform password change revokes sessions across instances')
         changed = Client(first).login('company@platform.test',True,password+'-changed')
@@ -183,6 +188,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         start(first,hidden,temporary)
         check(Client(first).request('/api/public/clinics/main')[0]==404,'Hidden configured clinic excluded from public profile')
         check(Client(first).login('owner@platform.test').clinic=='main','Hidden clinic still supports secure login')
+        check(Client(first).login('third-owner@platform.test',secret=password+'-new').clinic=='third-clinic', 'Managed clinic survives API restart in shared database')
         print(f'\n{count}/{count} PostgreSQL platform/discovery checks passed.',flush=True)
     except Exception:
         for log in logs:

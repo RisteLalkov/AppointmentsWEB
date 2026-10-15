@@ -15,7 +15,7 @@ internal static class CatalogueUpgrade
         await using (var create = new NpgsqlCommand($"CREATE SCHEMA {schema}", admin)) await create.ExecuteNonQueryAsync();
         try
         {
-            var settings = new NpgsqlConnectionStringBuilder(connectionString) { SearchPath = schema + ",public" };
+            var settings = new NpgsqlConnectionStringBuilder(connectionString) { SearchPath = schema + ",careline_extensions,public" };
             var options = new DbContextOptionsBuilder<AppointmentsDbContext>().UseNpgsql(settings.ConnectionString,
                 o => o.MigrationsHistoryTable("__EFMigrationsHistory", schema)).Options;
             await using var db = new AppointmentsDbContext(options);

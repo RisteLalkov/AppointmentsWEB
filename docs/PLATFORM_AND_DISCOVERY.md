@@ -1,8 +1,7 @@
 # Public discovery, automatic login and company onboarding
 
-This change is based on main commit `dcbe0f78d99b921e2f08939a9f35e18190e229fc`.
-It preserves existing clinical database schemas and appointment rules. No live database
-was changed during development. Read the verification report before deployment.
+See [shared database setup](SHARED_DATABASE.md) for the current storage architecture.
+Appointment rules and public/private application boundaries remain unchanged.
 
 ## What users see
 
@@ -60,93 +59,18 @@ entry. **Шифрарници** has a keyboard/touch-operated native expandable 
 catalogue tabs and API operations are reused. Shared teal, mint and violet tokens provide
 the slightly stronger accents; no dashboard layout rewrite was made.
 
-## Database layout and why it stays separate
+## Database layout and deployment
 
-Each clinic retains its own PostgreSQL database and database role. Existing clinics
-remain configured using `Tenancy:Clinics` or the legacy `ConnectionStrings:Appointments`.
-A new optional **platform database** contains only:
+All clinics now share `ConnectionStrings:Appointments`, with isolated schemas in
+that database. The platform database still holds company operators, platform
+sessions and clinic registration metadata. Clinical data stays in the shared
+clinical database. There is no database pool or per-clinic connection string.
 
-- `PlatformOperators`: company identities and password hashes, enabled flag, lockout counters.
-- `PlatformSessions`: hashes of opaque company tokens, operator link and expiry.
-- `PlatformClinics`: provisioning state, public metadata, first-admin email/name, creator,
-  and a **configuration connection name**, never a connection password.
-- `PlatformSchemaVersions`: applied version of the separate platform SQL migration.
-
-Clinical data never moves to this database. The initial admin is written into the new
-clinic's existing `Accounts` table. A `CarelineProvisioning` marker inside newly provisioned
-clinic databases binds a provisioning attempt to its clinic ID. Existing clinical
-`Settings.ClinicId` remains the authoritative runtime database binding.
-
-Platform schema evolution deliberately uses the separate, versioned, repeatable
-`database/005-platform-registry.sql`; it is **not** an EF migration for clinic databases.
-Do not run it against `appointments`. Existing clinic schemas need no new migration for
-these six features. A fresh pool database receives the existing clinical EF migrations
-001–004 during provisioning, including the overlap constraints and history/profile schema.
-
-## Safe deployment sequence
-
-1. Back up existing clinic databases and host configurations. Resolve duplicate login
-   emails as described below. Test this update on an isolated copy first.
-2. Stop **all API instances** while enabling this version or changing the identity lock
-   coordinator. Do not run old and new account-writing APIs side by side.
-3. In DBeaver, connected to the intended PostgreSQL host, create a new database such as
-   `appointments_platform` with its own owner/login role. Also prepare one or more
-   **empty databases**, each with its own owner/login role, for future clinics.
-   These roles must not be superusers and need no CREATEDB or CREATEROLE permissions.
-   Do not reuse `appointments`, another clinic DB, or the platform DB as a pool entry.
-4. Open a SQL editor explicitly attached to `appointments_platform`. Execute the entire
-   `database/005-platform-registry.sql` script. It refuses known clinical schemas and
-   records version 1. Keep the existing clinic database and its rows unchanged.
-5. Add the settings below to the **API's effective private configuration**, preserving
-   existing connection strings and tenancy configuration. Environment variables/secrets
-   are preferred for passwords. Never commit populated connection strings.
-6. Start the API. First-run platform bootstrap creates an operator only if there are
-   **no platform operators**. Remove the bootstrap email/password settings after verifying
-   sign-in. They do not reset an existing account's password on restart.
-7. Publish the matching Web build and preserve its actual API URL and production HTTPS
-   settings. No platform database connection belongs in Web configuration.
-8. Visit `/Platform/Login`, sign in with the company credentials, and onboard a test clinic.
-   Deliver that clinic's unique initial administrator password through a secure channel.
-   Ask the administrator to use **Промени лозинка** at first sign-in. There is no email
-   activation, automatic password delivery or forced first-login reset in this version.
-9. Verify public search, credentials-only login and cross-clinic denial, then the existing
-   booking workflows. Run the real PostgreSQL integration suites before production rollout.
-
-Example **API additions** (merge, do not replace your whole configuration):
-
-```json
-{
-  "ConnectionStrings": {
-    "Platform": "Host=YOUR_DB_HOST;Port=5432;Database=appointments_platform;Username=platform_owner;Password=SET_PRIVATELY",
-    "ClinicPool01": "Host=YOUR_DB_HOST;Port=5432;Database=appointments_pool_01;Username=clinic_pool_01_owner;Password=SET_PRIVATELY"
-  },
-  "Platform": {
-    "ClinicPool": ["ClinicPool01"],
-    "Bootstrap": {
-      "Email": "YOUR_COMPANY_OPERATOR_EMAIL",
-      "Password": "SET_A_UNIQUE_PRIVATE_PASSWORD_OF_AT_LEAST_12_CHARACTERS"
-    }
-  }
-}
-```
-
-The database host is wherever your PostgreSQL databases actually run; it need not be the
-IIS host. For your reported topology, PostgreSQL moved to `10.20.1.102`; use the actual
-current database host in all three kinds of connection strings. API/Web ports remain
-independent. Preserve the Web's working `Backend:ApiBaseUrl`; don't use a database port there.
-
-Pool roles need schema-creation/migration permissions in **their own database**, including
-installation of the existing `btree_gist` extension where permitted. Ask the PostgreSQL
-operator to prepare that extension if local policy prevents its installation. The API
-holds these restricted per-database migration credentials for onboarding; it never receives
-cluster administrator credentials. Separating migration and runtime roles further is an
-operational hardening task, not something this change silently implements.
-
-If you already use `dotnet Appointments.Api.dll --migrate`, that maintenance command also
-applies the platform SQL when the platform connection is configured. In production,
-`Database:ApplyMigrations=false` remains appropriate: explicit maintenance or the DBeaver
-step above initializes the platform schema. Pool initialization is the explicitly requested
-company onboarding operation and applies clinical migrations only to the reserved pool DB.
+Follow [shared database setup and deployment](SHARED_DATABASE.md), including the
+explicit `--migrate` step and platform script **006** after **005**. Do not run
+platform scripts in the clinical database. Preserve the Web's API URL and HTTPS
+settings when publishing. The current single test clinic keeps its existing
+`public` tables as `main`; adding a clinic creates a schema in that same database.
 
 ### Existing clinic public metadata
 
@@ -172,26 +96,23 @@ Company-created clinics choose discovery and registration policies during onboar
 Editing those managed metadata/policy values later has no dedicated screen yet; it is an
 operator-controlled registry/configuration task. No billing/subscription features are added.
 
-### Database pool and recovery
+### Schema provisioning and recovery
 
-The company screen assigns the next unused connection from `Platform:ClinicPool`; it does
-not ask the company user to enter server passwords. Add more empty databases and private
-connection entries when the pool is exhausted, retaining existing connection entries.
-All API instances must have identical registry and pool configuration.
+The company screen registers clinics in the shared clinical database without a
+finite pool, new database credentials or cluster administrator access. All API
+instances must use the same clinical and platform connections.
 
-Onboarding reserves a durable row (`Provisioning`), binds an empty pool DB, migrates it,
-then commits Settings + initial administrator + audit entry in one clinic transaction.
-Only after that commit does the platform state become `Ready` and join public/auth routing.
-This is a resumable operation across two databases, **not a distributed atomic transaction**.
+Onboarding reserves a durable platform row (`Provisioning`), binds an empty clinic
+schema with `CarelineProvisioning`, applies the clinical EF migrations and commits
+Settings, the initial administrator and audit entry in one clinic transaction.
+Only then does platform state become `Ready` and join discovery/auth routing.
+The operation is resumable across the platform and shared clinic databases, not
+a distributed atomic transaction.
 
-If it fails or times out, `Failed`/`Provisioning` is never published as a usable clinic.
-Check logs and the pool database. Retry **the same ID, metadata, admin email/name and password**.
-The password is never stored in the platform registry. A repeated successful request returns
-the existing clinic without changing credentials. A conflicting retry is rejected. A
-nonempty unbound database is rejected without migration/reset/deletion. Never delete real
-clinic data to repair a failed onboarding attempt; correct the connection or permissions
-and retry. If provisioning committed the clinical transaction, keep its assigned database
-and retry with the original credentials. Company screens retain nonsecret fields on errors.
+If it fails, inspect logs and schema permissions, then retry **the same ID, metadata,
+admin email/name and password**. Passwords are not stored in the platform registry.
+Conflicting retries and nonempty unbound schemas are rejected. Provisioning never
+deletes or resets a schema; existing credentials are not overwritten by retries.
 
 ## Credentials-only login and existing duplicates
 

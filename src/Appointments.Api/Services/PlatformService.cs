@@ -12,22 +12,13 @@ namespace Appointments.Api.Services;
 public sealed class PlatformService(ClinicRegistry registry, ClinicConnections connections, IConfiguration configuration,
     IPasswordHasher<Account> hasher)
 {
-    private static string DatabaseKey(string connection)
-    { var b = new NpgsqlConnectionStringBuilder(connection); return $"{b.Host}:{b.Port}/{b.Database}".ToLowerInvariant(); }
     public async Task InitializeAsync(bool migrate, CancellationToken ct)
     {
         if (!registry.HasPlatform) return;
-        var names = configuration.GetSection("Platform:ClinicPool").Get<string[]>() ?? [];
-        var all = registry.Configured.Select(c => DatabaseKey(c.ConnectionString)).ToList();
-        all.Add(DatabaseKey(configuration.GetConnectionString("Platform")!));
-        foreach (var name in names)
-        {
-            var value = configuration.GetConnectionString(name) ?? throw new InvalidOperationException("A clinic pool connection is missing.");
-            var b = new NpgsqlConnectionStringBuilder(value);
-            if (string.IsNullOrWhiteSpace(b.Database) || string.IsNullOrWhiteSpace(b.Host) || !string.IsNullOrEmpty(b.SearchPath) && b.SearchPath != "public") throw new InvalidOperationException("Pool entries need a named database and public schema.");
-            all.Add(DatabaseKey(value));
-        }
-        if (all.Distinct().Count() != all.Count) throw new InvalidOperationException("Platform, configured clinics and pool entries must use separate databases.");
+        if (configuration.GetSection("Platform:ClinicPool").GetChildren().Any())
+            throw new InvalidOperationException("Platform:ClinicPool is obsolete. Use the shared Appointments database; see docs/SHARED_DATABASE.md.");
+        if (SharedClinicDatabase.DatabaseKey(registry.Configured[0].ConnectionString) == SharedClinicDatabase.DatabaseKey(configuration.GetConnectionString("Platform")!))
+            throw new InvalidOperationException("The platform registry must use a separate database from the shared clinic database.");
         await using var db = registry.PlatformDb();
         if (migrate)
         {
@@ -35,6 +26,8 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             await c.OpenAsync(ct);
             await using var command = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "database", "005-platform-registry.sql"), ct), c);
             await command.ExecuteNonQueryAsync(ct);
+            await using var upgrade = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "database", "006-shared-clinic-registry.sql"), ct), c);
+            await upgrade.ExecuteNonQueryAsync(ct);
         }
         // Explicit bootstrap only; never reset an existing operator's credentials on restart.
         var email = configuration["Platform:Bootstrap:Email"]; var password = configuration["Platform:Bootstrap:Password"];
@@ -116,29 +109,29 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             if (registry.Configured.Any(c => c.Id == input.Id)) throw new RuleException("Идентификаторот е веќе зафатен.", 409);
             await connections.RequireUniqueAsync(email, input.Id, null, ct);
             if (await db.Clinics.AnyAsync(c => c.AdminEmail == email && c.State != "Ready", ct)) throw new RuleException("Оваа е-пошта не може да се користи за нов пристап.", 409);
-            var pool = configuration.GetSection("Platform:ClinicPool").Get<string[]>() ?? [];
-            var used = await db.Clinics.Select(c => c.ConnectionName).ToListAsync(ct);
-            var available = pool.FirstOrDefault(x => !used.Contains(x)) ?? throw new RuleException("Нема подготвена база за нова клиника. Контактирајте го техничкиот администратор.", 409);
-            row = new() { Id = input.Id, Name = input.Name.Trim(), ConnectionName = available, TimeZone = input.TimeZone, AdminName = input.AdminName.Trim(), AdminEmail = email,
+            row = new() { Id = input.Id, Name = input.Name.Trim(), ConnectionName = "Appointments", TimeZone = input.TimeZone, AdminName = input.AdminName.Trim(), AdminEmail = email,
                 Discoverable = input.Discoverable, AllowRegistration = input.AllowRegistration, Description = input.Description?.Trim(), Address = input.Address?.Trim(), Phone = input.Phone?.Trim(), CreatedBy = actor, CreatedAt = DateTimeOffset.UtcNow };
-            db.Clinics.Add(row); await db.SaveChangesAsync(ct); // Durable reservation before touching the clinic DB.
+            db.Clinics.Add(row); await db.SaveChangesAsync(ct); // Durable reservation before touching the clinic schema.
         }
         try
         {
             var clinic = registry.Definition(row);
             await using var clinicDb = connections.Create(clinic);
-            // A fresh pool entry must be empty. Resume only a database explicitly bound by this provisioning attempt.
+            await SharedClinicDatabase.PrepareAsync(clinic, ct);
+            // Refuse existing unbound schema contents; never adopt another clinic's data.
             await using (var raw = new NpgsqlConnection(clinic.ConnectionString))
             {
                 await raw.OpenAsync(ct);
-                await using var tables = new NpgsqlCommand("SELECT count(*) FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'", raw);
+                await using var tables = new NpgsqlCommand("SELECT count(*) FROM information_schema.tables WHERE table_schema=@schema AND table_type='BASE TABLE'", raw);
+                tables.Parameters.AddWithValue("schema", clinic.Schema);
                 var count = (long)(await tables.ExecuteScalarAsync(ct))!;
                 if (count > 0)
                 {
-                    await using var bound = new NpgsqlCommand("SELECT to_regclass('public.\"CarelineProvisioning\"') IS NOT NULL", raw);
-                    if (!(bool)(await bound.ExecuteScalarAsync(ct))!) throw new RuleException("Подготвената база не е празна. Потребна е техничка проверка; податоците не се променети.", 409);
+                    await using var bound = new NpgsqlCommand("SELECT to_regclass(@marker) IS NOT NULL", raw);
+                    bound.Parameters.AddWithValue("marker", $"\"{clinic.Schema}\".\"CarelineProvisioning\"");
+                    if (!(bool)(await bound.ExecuteScalarAsync(ct))!) throw new RuleException("Подготвената шема не е празна. Потребна е техничка проверка; податоците не се променети.", 409);
                     await using var marker = new NpgsqlCommand("SELECT \"ClinicId\" FROM \"CarelineProvisioning\"", raw);
-                    if ((string?)(await marker.ExecuteScalarAsync(ct)) != clinic.Id) throw new RuleException("Базата е доделена на друга клиника.", 409);
+                    if ((string?)(await marker.ExecuteScalarAsync(ct)) != clinic.Id) throw new RuleException("Шемата е доделена на друга клиника.", 409);
                 }
                 else
                 {
@@ -150,12 +143,12 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             await using var tx = await clinicDb.Database.BeginTransactionAsync(ct);
             await clinicDb.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock(734251894)", ct);
             var binding = await clinicDb.Settings.FindAsync(["ClinicId"], ct);
-            if (binding != null && binding.Value != clinic.Id) throw new RuleException("Базата е доделена на друга клиника.", 409);
+            if (binding != null && binding.Value != clinic.Id) throw new RuleException("Шемата е доделена на друга клиника.", 409);
             if (binding == null) { clinicDb.Settings.Add(new() { Key = "ClinicId", Value = clinic.Id }); clinicDb.Settings.Add(new() { Key = "TimeZone", Value = clinic.TimeZone }); }
             var admin = await clinicDb.Accounts.SingleOrDefaultAsync(a => a.NormalizedEmail == email, ct);
             if (admin == null)
             {
-                if (await clinicDb.Accounts.AnyAsync(ct)) throw new RuleException("Базата веќе содржи сметки.", 409);
+                if (await clinicDb.Accounts.AnyAsync(ct)) throw new RuleException("Шемата веќе содржи сметки.", 409);
                 admin = new() { Email = email, NormalizedEmail = email, Name = row.AdminName, Role = DemoRole.Administrator };
                 admin.PasswordHash = hasher.HashPassword(admin, input.AdminPassword); clinicDb.Accounts.Add(admin);
                 clinicDb.AuditEvents.Add(new() { ActorId = "platform:" + actor, Action = "clinic.provisioned", TargetId = clinic.Id, OccurredAt = DateTimeOffset.UtcNow });
@@ -168,7 +161,7 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
         }
         catch
         {
-            // Never delete or reset a database on failure. Retry this clinic ID to resume safely.
+            // Never delete or reset a schema on failure. Retry this clinic ID to resume safely.
             row.State = "Failed";
             using var cleanup = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             await db.SaveChangesAsync(cleanup.Token);

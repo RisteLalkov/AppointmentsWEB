@@ -9,13 +9,17 @@ public sealed class DatabaseInitializer(AppointmentsDbContext db, SchedulingCloc
 {
     public async Task InitializeAsync(bool migrate, CancellationToken ct)
     {
-        if (migrate) await db.Database.MigrateAsync(ct);
+        if (migrate)
+        {
+            await SharedClinicDatabase.PrepareAsync(clinicContext.Current, ct);
+            await db.Database.MigrateAsync(ct);
+        }
         await using var tx = await db.Database.BeginTransactionAsync(ct);
         await db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock(734251894)", ct);
         var clinic = clinicContext.Current;
         var binding = await db.Settings.FindAsync(["ClinicId"], ct);
         if (binding != null && binding.Value != clinic.Id)
-            throw new InvalidOperationException($"Database belongs to clinic '{binding.Value}', not '{clinic.Id}'. Refusing to start.");
+            throw new InvalidOperationException($"Schema belongs to clinic '{binding.Value}', not '{clinic.Id}'. Refusing to start.");
         if (binding == null) db.Settings.Add(new() { Key = "ClinicId", Value = clinic.Id });
         var zone = await db.Settings.FindAsync(["TimeZone"], ct);
         if (zone != null && zone.Value != clock.Zone.Id) throw new InvalidOperationException("Configured timezone differs from the database. Plan a data migration before changing it.");

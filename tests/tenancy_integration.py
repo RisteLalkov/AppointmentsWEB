@@ -1,4 +1,4 @@
-"""Shared Web/API, three isolated PostgreSQL databases, two API instances.
+"""Shared Web/API, three isolated schemas in one PostgreSQL database, two API instances.
 Uses disposable databases/roles created under CARELINE_TEST_CONNECTION; never a production DB.
 No third-party Python dependencies. Run after Release build.
 """
@@ -116,10 +116,11 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         old = Client(first,'main').login()
         original = old.ok('/api/bootstrap')
         legacy.terminate(); legacy.wait(timeout=15)
+        subprocess.run([dotnet,fixture_dll,'--tenant-legacy-extension',fixture],env=fixture_env,check=True)
         # Adopt existing database without importing/moving any existing rows.
         for i, (cid,name,zone) in enumerate([('main','Прва клиника','Europe/Skopje'),('east','Втора клиника','Europe/Skopje'),('empty','Нова клиника','UTC')]):
             prefix = f'Tenancy__Clinics__{i}__'
-            env['ConnectionStrings__Clinic'+str(i)] = conns[i]
+            env['ConnectionStrings__Clinic'+str(i)] = conns[0]
             for key,value in {'Id':cid,'Name':name,'ConnectionStringName':'Clinic'+str(i),'TimeZone':zone,
                 'ImportSourceDoctors':str(i==1).lower(),'SeedDemoData':str(i<2).lower(),
                 'AllowRegistration':str(i<2).lower(),'BootstrapEmail':('owner@tenancy.test' if cid == 'main' else cid+'-owner@tenancy.test'),
@@ -137,7 +138,7 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(a.ok('/api/bootstrap')['appointments'] == original['appointments'], 'Existing clinic appointments and session survive adoption')
         check(anon.request('/api/bootstrap')[0] == 400, 'Multi-clinic API refuses missing clinic')
         check(Client(first,'unknown').ok('/api/auth/login', {'email':'owner@tenancy.test','password':password})['clinic']['id'] == 'main', 'Login resolves credentials and ignores untrusted clinic hints')
-        check(Client(first,'MAIN').request('/api/bootstrap')[0] == 404, 'Malformed/case-changed clinic cannot select a different database')
+        check(Client(first,'MAIN').request('/api/bootstrap')[0] == 404, 'Malformed/case-changed clinic cannot select a different schema')
         check(Client(first,'main,east').request('/api/bootstrap')[0] == 404, 'Ambiguous combined clinic header rejected')
         check(Client(first,'east').ok('/api/auth/login', {'email':'owner@tenancy.test','password':password})['clinic']['id']=='main', 'Client cannot choose a login tenant with X-Clinic')
         for cid,token in [('east',a.token),('main',b.token),('empty',a.token)]:
@@ -198,8 +199,8 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(b.request('/api/exceptions/'+exception['id']+'/remove',{})[0]==404,'Foreign clinic exception cannot be deleted')
         check(not any(x['time']=='10:00:00' for x in c.ok('/api/slots?'+urllib.parse.urlencode({'doctorId':doctor['id'],'date':day,'serviceId':service['id']}))), 'Availability exceptions apply in owning clinic')
         private_profile = '/api/patients/' + patient['id']
-        check(b.request(private_profile)[0] == 404 and a.request(private_profile)[0] == 404, 'Patient details cannot cross clinic databases')
-        check(b.request(private_profile, {'name':'Cross clinic','email':'','phone':'','version':1})[0] == 404, 'Patient contact edits cannot cross clinic databases')
+        check(b.request(private_profile)[0] == 404 and a.request(private_profile)[0] == 404, 'Patient details cannot cross clinic schemas')
+        check(b.request(private_profile, {'name':'Cross clinic','email':'','phone':'','version':1})[0] == 404, 'Patient contact edits cannot cross clinic schemas')
         before = c.ok(private_profile)['patient']
         check(c.ok(private_profile, {'name':'Clinic-local update','email':'','phone':'','version':before['version']})['version'] == before['version'] + 1, 'Patient contact update stays in selected clinic')
         report_path = '/api/reports?'+urllib.parse.urlencode({'from':day,'to':day,'groupBy':'day'})
@@ -241,11 +242,14 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         one=start('Appointments.Api',first,disabled,temporary)
         check(b.request('/api/bootstrap')[0]==404 and 'east' not in {x['id'] for x in Client(first).ok('/api/clinics')},'Disabled clinic rejects existing sessions and disappears from directory')
         check(a.ok('/api/auth/me')['clinic']['id']=='main','Other clinic remains available after disabling tenant')
-        # Misconfiguration cannot silently bind one database to two clients.
-        duplicate=dict(env,ConnectionStrings__Clinic1=conns[0])
-        start('Appointments.Api',url(),duplicate,temporary,expect_failure='Each clinic must use a different PostgreSQL database')
-        renamed=dict(env,Tenancy__Clinics__0__Id='wrong-clinic')
-        start('Appointments.Api',url(),renamed,temporary,expect_failure="Database belongs to clinic 'main', not 'wrong-clinic'")
+        # Misconfiguration cannot silently route clinics to separate databases or duplicate IDs.
+        duplicate=dict(env,ConnectionStrings__Clinic1=conns[1])
+        start('Appointments.Api',url(),duplicate,temporary,expect_failure='All clinics must use ConnectionStrings:Appointments')
+        renamed=dict(env,Tenancy__Clinics__0__Id='east')
+        start('Appointments.Api',url(),renamed,temporary,expect_failure="Clinic IDs must be unique lowercase slugs")
+        subprocess.run([dotnet,fixture_dll,'--tenant-misbind',fixture],env=fixture_env,check=True)
+        check(Client(second,'east',b.token).request('/api/bootstrap')[0]==503, 'Running API fails closed when a schema binding is changed')
+        start('Appointments.Api',url(),env,temporary,expect_failure="Schema belongs to clinic 'wrong-clinic', not 'east'")
         print(f'\n{checks}/{checks} multi-tenant API/MVC isolation checks passed.',flush=True)
     except Exception:
         # Test accounts are disposable. Avoid dumping connection strings or session-bearing payloads.

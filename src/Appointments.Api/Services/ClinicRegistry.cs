@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 using Appointments.Contracts;
 using Appointments.Core;
-using Npgsql;
 using Appointments.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +12,7 @@ public sealed class ClinicDefinition
     public required string Id { get; init; }
     public required string Name { get; init; }
     public required string ConnectionString { get; init; }
+    public string Schema => SharedClinicDatabase.Schema(Id);
     public required string TimeZone { get; init; }
     public bool Enabled { get; init; } = true;
     public bool Discoverable { get; init; } = true;
@@ -42,7 +42,7 @@ public sealed class ClinicRegistry
             ? [CreateLegacy(configuration)]
             : sections.Select(s => new ClinicDefinition {
                 Id = s["Id"] ?? "", Name = s["Name"] ?? "",
-                ConnectionString = configuration.GetConnectionString(s["ConnectionStringName"] ?? "") ?? "",
+                ConnectionString = SharedClinicDatabase.Connection(configuration, s["Id"] ?? "", s["ConnectionStringName"]),
                 TimeZone = s["TimeZone"] ?? "Europe/Skopje",
                 Discoverable = s.GetValue("Discoverable", true), Description = s["Description"], Address = s["Address"], Phone = s["Phone"],
                 Enabled = s.GetValue("Enabled", true), AllowRegistration = s.GetValue("AllowRegistration", true),
@@ -50,7 +50,6 @@ public sealed class ClinicRegistry
                 BootstrapEmail = s["BootstrapEmail"], BootstrapPassword = s["BootstrapPassword"]
             }).ToArray();
         var ids = new HashSet<string>(StringComparer.Ordinal);
-        var databases = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var clinic in Clinics)
         {
             if (!Regex.IsMatch(clinic.Id, "^[a-z0-9][a-z0-9-]{0,39}$") || !ids.Add(clinic.Id))
@@ -60,12 +59,6 @@ public sealed class ClinicRegistry
             _ = TimeZoneInfo.FindSystemTimeZoneById(clinic.TimeZone);
             if (string.IsNullOrWhiteSpace(clinic.ConnectionString))
                 throw new InvalidOperationException($"Clinic '{clinic.Id}' needs a PostgreSQL connection string.");
-            var connection = new NpgsqlConnectionStringBuilder(clinic.ConnectionString);
-            if (string.IsNullOrWhiteSpace(connection.Host) || string.IsNullOrWhiteSpace(connection.Database)
-                || !string.IsNullOrEmpty(connection.SearchPath) && connection.SearchPath != "public")
-                throw new InvalidOperationException($"Clinic '{clinic.Id}' must use a named database with the public schema.");
-            if (!databases.Add($"{connection.Host}:{connection.Port}/{connection.Database}"))
-                throw new InvalidOperationException("Each clinic must use a different PostgreSQL database.");
         }
     }
     public PlatformDbContext PlatformDb() => new(new DbContextOptionsBuilder<PlatformDbContext>().UseNpgsql(configuration.GetConnectionString("Platform") ?? throw new RuleException("Платформата не е конфигурирана.", 503)).Options);
@@ -87,11 +80,12 @@ public sealed class ClinicRegistry
     public ClinicDefinition Definition(PlatformClinic c) => new() {
         Id = c.Id, Name = c.Name, TimeZone = c.TimeZone, Discoverable = c.Discoverable,
         Description = c.Description, Address = c.Address, Phone = c.Phone, AllowRegistration = c.AllowRegistration,
-        ConnectionString = configuration.GetConnectionString(c.ConnectionName) ?? throw new InvalidOperationException("A provisioned clinic connection is missing.")
+        ConnectionString = c.ConnectionName == "Appointments" ? SharedClinicDatabase.Connection(configuration, c.Id)
+            : throw new InvalidOperationException("A managed clinic still uses a separate database. Consolidate its data and update its platform ConnectionName to Appointments; see docs/SHARED_DATABASE.md.")
     };
     private static ClinicDefinition CreateLegacy(IConfiguration c) => new() {
         Id = "main", Name = c["Tenancy:ClinicName"] ?? "Мојата клиника",
-        ConnectionString = c.GetConnectionString("Appointments") ?? "",
+        ConnectionString = SharedClinicDatabase.Connection(c, "main"),
         TimeZone = c["Scheduling:TimeZone"] ?? "Europe/Skopje",
         Discoverable = c.GetValue("Tenancy:Discoverable", true), Description = c["Tenancy:Description"], Address = c["Tenancy:Address"], Phone = c["Tenancy:Phone"],
         ImportSourceDoctors = true, SeedDemoData = true,

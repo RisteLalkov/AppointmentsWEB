@@ -13,11 +13,19 @@ public sealed class ClinicConnections(ClinicRegistry clinics, IConfiguration con
         var db = Create(clinic);
         try
         {
-            var binding = await db.Settings.AsNoTracking().SingleOrDefaultAsync(x => x.Key == "ClinicId", ct);
+            var binding = await BindingAsync(db, clinic, ct);
             if (binding?.Value != clinic.Id) throw new RuleException("Клиниката е привремено недостапна.", 503);
             return db;
         }
         catch { await db.DisposeAsync(); throw; }
+    }
+    // Fully qualify this check: a missing tenant schema must never resolve a table elsewhere.
+    public static Task<ClinicSetting?> BindingAsync(AppointmentsDbContext db, ClinicDefinition clinic, CancellationToken ct)
+    {
+        // Schema() validates a slug and generates the identifier; identifiers cannot be SQL parameters.
+        var schema = new NpgsqlCommandBuilder().QuoteIdentifier(clinic.Schema);
+        var sql = "SELECT * FROM " + schema + ".\"Settings\"";
+        return db.Settings.FromSqlRaw(sql).AsNoTracking().SingleOrDefaultAsync(x => x.Key == "ClinicId", ct);
     }
     // Distributed lock shared by registration, credentials, provisioning and login.
     // When the platform DB is added, stop all hosts together before changing this coordinator.

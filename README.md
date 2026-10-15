@@ -1,6 +1,8 @@
 # Careline · AppointmentsWEB
 
-The user interface now opens in **Macedonian (`mk-MK`)** by default, including the calendar, booking flow, all three roles, account management and validation messages. Existing database records and API identifiers remain compatible; **no database migration or reset is needed**. Republish **both Web and API** to update all messages. See [localization and update instructions](docs/LOCALIZATION.md).
+**Current storage:** all clinics share one PostgreSQL database with separate clinic schemas; the optional platform database stays separate. See [setup and deployment](docs/SHARED_DATABASE.md).
+
+The user interface now opens in **Macedonian (`mk-MK`)** by default, including the calendar, booking flow, all three roles, account management and validation messages. Existing database records and API identifiers remain compatible; **localization alone needs no database migration or reset**. Republish **both Web and API** to update all messages. See [localization and update instructions](docs/LOCALIZATION.md).
 
 
 Doctor appointment scheduling with **ASP.NET Core MVC, a separate ASP.NET Core API, and PostgreSQL**. The existing patient, reception and doctor interfaces now share durable relational data through the API. All projects are in one Visual Studio solution.
@@ -166,7 +168,7 @@ npm ci --prefix tests/frontend --ignore-scripts --no-audit --no-fund
 npm test --prefix tests/frontend
 ```
 
-The dependency-free executable runner contains **56** domain/JSON tests, including scheduling boundaries, overlaps, permissions, versions, status transitions, exceptions and DST. **`dotnet test` does not execute it**. HTTP tests contain **36** checks and DOM tests **21** checks against the explicitly isolated legacy demo mode.
+The dependency-free executable runner contains **76** domain/JSON tests, including scheduling boundaries, overlaps, permissions, versions, status transitions, exceptions and DST. **`dotnet test` does not execute it**. HTTP tests contain **38** checks and DOM tests **66** checks against the explicitly isolated legacy demo mode.
 
 For the real backend, create a **new empty disposable** PostgreSQL database whose name contains `test` or `integration`, set `CARELINE_TEST_CONNECTION` to its connection string, and run:
 
@@ -174,9 +176,9 @@ For the real backend, create a **new empty disposable** PostgreSQL database whos
 python tests/api_integration.py --dom
 ```
 
-This starts **two API processes and the MVC app**, applies the actual migration, exercises real password sessions and browser-to-API workflows, verifies persistence after API restart and races, and invokes **7 direct SQL constraint checks** that bypass application validation. It also repeats the 21 DOM checks against the PostgreSQL-backed application. It deliberately leaves fixture records in that disposable database; use a new database for every run.
+This starts **two API processes and the MVC app**, applies the actual migration, exercises real password sessions and browser-to-API workflows, verifies persistence after API restart and races, and invokes **7 direct SQL constraint checks** that bypass application validation. It also repeats the 66 DOM checks against the PostgreSQL-backed application. It deliberately leaves fixture records in that disposable database; use a new database for every run.
 
-GitHub Actions builds and runs the domain/legacy HTTP/DOM suites on **Windows and Ubuntu**, plus an **Ubuntu PostgreSQL 17 service** for the full backend suite. Verified backend source: [GitHub Actions run 35777736060](https://github.com/RisteLalkov/AppointmentsWEB/actions/runs/35777736060). The backend suite passed **64/64 API/MVC checks**, **7/7 direct SQL checks**, and **21/21 API-backed DOM checks**. The unchanged legacy suites passed **56/56 domain**, **36/36 HTTP**, and **21/21 DOM** checks; Release build had zero warnings/errors. See [verification details](docs/VERIFICATION.md). Browser visual/mobile/pointer-drag QA and interactive Windows F5 setup remain manual; jsdom does not measure layout. The development environment cannot run a local PostgreSQL server, so database execution is verified in GitHub Actions rather than described as a local test.
+GitHub Actions is configured to build and run the domain/HTTP/DOM suites on Windows and Ubuntu, plus PostgreSQL integration on Ubuntu. The shared-database change was verified locally in the Codex Linux environment with PostgreSQL 17: **107 API/MVC**, **7 SQL constraint**, **66 API-backed DOM**, **73 tenant-isolation**, and **55 platform/discovery** checks passed. The Release build had zero warnings/errors; domain, HTTP and discovery contract suites also passed. See [verification details](docs/VERIFICATION.md). New GitHub CI and deployed IIS validation have not been run for this change. Browser visual/mobile/pointer-drag QA and interactive Windows F5 setup remain manual; jsdom does not measure layout.
 
 ## Scope and next development steps
 
@@ -201,7 +203,7 @@ include patient and inclusive date-range filters. This release requires
 
 ## Multiple clinics
 
-One Web/API deployment can now serve multiple clinics with an isolated PostgreSQL database per clinic, clinic-bound sessions and automatic clinic resolution at sign-in. Existing installations adopt their current database as `main`. See [multi-clinic setup, existing-server update and isolation guarantees](docs/MULTI_TENANCY.md). Publish both applications; existing users must sign in again after this update. Current clinic databases need scripts 001–004. Company onboarding additionally uses script 005 in a separate platform database; see below.
+One Web/API deployment serves all clinics in **one PostgreSQL database**, with an isolated schema per clinic, clinic-bound sessions and automatic clinic resolution at sign-in. The existing clinic keeps its `public` tables as `main`. Future clinics get schemas in that same database; no database pool is needed. The optional platform database stays separate. See [shared database setup and deployment](docs/SHARED_DATABASE.md), including `--migrate` and platform script **006** after **005**. Publish both API and Web.
 
 ### Patient details and contact editing
 
@@ -209,4 +211,4 @@ Open **Пациенти → Види профил** for contacts and filtered ap
 
 ## Public directory and company onboarding
 
-See [PLATFORM_AND_DISCOVERY.md](docs/PLATFORM_AND_DISCOVERY.md) for the six product improvements, credentials-only login migration, the separate platform database, safe database-pool provisioning, setup and test commands. **Do not run script 005 in a clinic database.** The platform database is optional for existing-clinic login/discovery, but required for `/Platform` onboarding. Existing duplicate login emails require operator resolution before credentials-only login can work for those accounts.
+See [PLATFORM_AND_DISCOVERY.md](docs/PLATFORM_AND_DISCOVERY.md) for the six product improvements, credentials-only login migration, the separate platform database, shared-database schema provisioning, setup and test commands. **Do not run script 005 in a clinic database.** The platform database is optional for existing-clinic login/discovery, but required for `/Platform` onboarding. Existing duplicate login emails require operator resolution before credentials-only login can work for those accounts.
