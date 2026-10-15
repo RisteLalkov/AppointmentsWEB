@@ -26,10 +26,17 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await noOverflow(page,'Desktop public directory');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
   const motion=page.locator('[data-motion-toggle]');
+  const line = page.locator('.care-flow-trace');
+  const before = await line.evaluate(e=>getComputedStyle(e).strokeDashoffset);
+  await page.waitForTimeout(180);
+  check(await line.evaluate(e=>getComputedStyle(e).strokeDashoffset)!==before,'Decorative line actually moves when motion is enabled');
   await motion.click();
-  check(await motion.getAttribute('aria-pressed')==='true' && await page.locator('.care-orbit-one').evaluate(e=>getComputedStyle(e).animationPlayState)==='paused','Motion can be paused');
+  check(await motion.getAttribute('aria-pressed')==='true' && await page.locator('.care-flow-trace').evaluate(e=>getComputedStyle(e).animationPlayState)==='paused','Motion can be paused');
+  check(await page.locator('.care-glow, .care-seal').evaluateAll(elements=>elements.every(e=>getComputedStyle(e).animationPlayState==='paused')),'Pause stops the floating gradients and care symbol too');
+  await page.reload();
+  check(await motion.getAttribute('aria-pressed')==='true','Motion pause preference survives navigation');
   await page.emulateMedia({reducedMotion:'reduce'});
-  check(await page.locator('.care-orbit-one').evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced-motion preference disables decorative animation');
+  check(await page.locator('.care-flow-trace').evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced-motion preference disables decorative animation');
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.locator('.discovery-refinements summary').click();
   await page.locator('#clinic-search').fill('Клиника');
@@ -58,6 +65,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   const plain=await noJs.newPage();await plain.goto(publicUrl+'/Discover');
   await plain.locator('#search').fill('Горан');await plain.getByRole('button',{name:/Пребарај/}).click();
   check(new URL(plain.url()).searchParams.get('Search')==='Горан','Search works without JavaScript');
+  check(await plain.locator('.care-flow-trace, .care-glow, .care-seal').evaluateAll(elements=>elements.every(e=>getComputedStyle(e).animationName==='none')),'Decorative art stays still without JavaScript');
   await noJs.close();
   await page.getByRole('link',{name:/Види профил/}).click();
   await page.getByRole('link',{name:/Продолжи до закажување/}).click();

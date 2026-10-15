@@ -1,6 +1,6 @@
 <header class="public-header">
     <a class="brand" href="/Discover"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
     <nav aria-label="Јавна навигација"><a href="/Discover?view=clinics">Клиники</a><a href="/Discover?view=doctors">Лекари</a>
-    @if (User.Identity?.IsAuthenticated == true) { <a class="btn primary small" href="/Workspace">Мој работен простор ↗</a> }
-    else { <a class="btn primary small" href="/Account/Login">Најави се ↗</a> }</nav>
+    @if (User.Identity?.IsAuthenticated == true) { <a class="btn primary small" href="/Workspace">Мој работен простор <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 18 18 6M6 6h12v12" /></svg></a> }
+    else { <a class="btn primary small" href="/Account/Login">Најави се <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 18 18 6M6 6h12v12" /></svg></a> }</nav>
 </header>

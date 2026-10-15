@@ -34,7 +34,7 @@ Public eligibility, private-data exclusions, pagination limits and booking permi
 remain unchanged.
 
 Discovery has a scoped stylesheet and a small script for decorative motion only. Slow
-CSS orbit/drift animation has a pause button (remembered for the browser tab session),
+SVG line tracing, softly drifting mint/lilac gradients and a floating care symbol have a pause button (remembered for the browser tab session),
 respects reduced-motion preferences, and stays static without JavaScript. No external
 assets, tracking, animation libraries or new production dependencies are required.
 
@@ -246,3 +246,27 @@ With `TEST_BROWSER_EXECUTABLE` set, the Web suite runs `tests/frontend/discovery
 against its temporary stub API and a temporary JSON demo host. It checks desktop/mobile
 widths, keyboard/touch submenu access, selected-doctor continuation and sidebar access.
 It does not contact your published server and does not validate PostgreSQL provisioning.
+
+## Discover visual refinement — 15 October 2026
+
+The public directory retains Careline's mint, teal and violet palette. The hero
+now uses a flowing SVG line with a traveling highlight, softly drifting gradients
+and a floating care symbol instead of rotating orbit rings and floating text cards.
+The three care steps stay still for reading. Search controls, segmented directory
+tabs, result cards and profile links have lighter borders and refined spacing.
+Arrow icons use inline SVG so they do not depend on system-font glyph support.
+
+Motion remains optional: pause persists for the browser session, reduced-motion
+preferences disable all decorative movement, and no-JavaScript rendering is static.
+Existing GET search, filter chips, pagination and booking continuation are preserved.
+
+Verified locally: Release build with zero warnings/errors, 39 MVC contract checks
+and 30 real Chromium UI checks. Browser coverage includes moving line detection,
+pause for every animated element, pause persistence, reduced motion, static no-JS
+rendering, filters, empty results and navigation. The actual PostgreSQL-backed
+38-doctor directory was also visually reviewed and checked for overflow at 1440,
+768, 390 and 320 pixels. These are local results, not a new GitHub CI claim.
+
+Deployment: pull main and publish **Appointments.Web** including `wwwroot`,
+preserving server configuration. Refresh with Ctrl+F5. No API publication or SQL
+script is required for this visual refinement.
