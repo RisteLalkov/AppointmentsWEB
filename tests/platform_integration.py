@@ -155,7 +155,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(search(service='Public')['total']==1 and search(specialty='Test Specialty')['total']==2, 'Service and specialty filters work alone')
         first_match=search(search='Горан',pageSize=1,page=1)
         second_match=search(search='Горан',pageSize=1,page=2)
-        check(first_match['total']>=2 and first_match['items'][0]['clinic']['id']!=second_match['items'][0]['clinic']['id'], 'Broad cross-clinic search retains stable server pagination')
+        check(first_match['total']==second_match['total']==named['total'] and (first_match['items'][0]['clinic']['id'],first_match['items'][0]['id'])!=(second_match['items'][0]['clinic']['id'],second_match['items'][0]['id']), 'Broad cross-clinic search retains stable server pagination')
         admin.ok('/api/catalogue/doctors',{'id':other_doc['id'],'name':other_doc['name'],'specialtyId':spec['id'],'subspecialty':'','enabled':False,'version':other_doc['catalogVersion']})
         admin.ok('/api/catalogue/doctors',{'id':doctor['id'],'name':doctor['name'],'specialtyId':spec['id'],'subspecialty':'','enabled':False,'version':doctor['catalogVersion']})
         check(anon.ok('/api/public/doctors?clinicId=new-clinic')['total']==0, 'Disabled doctor disappears from public results')
