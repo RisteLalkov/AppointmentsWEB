@@ -166,6 +166,11 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check(company.request('/Platform/Create',{})[0]==400,'Company onboarding POST requires CSRF')
             csrf=company.csrf('/Platform');secret='Never-render-this-12345'
             payload=dict(Id='new',Name='New Clinic',TimeZone='UTC',AdminName='New Admin',AdminEmail='new@test.test',AdminPassword=secret,Discoverable='true',AllowRegistration='true',__RequestVerificationToken=csrf)
+            status,html,_=company.request('/Platform/Create',dict(payload,Id='test_creation'))
+            check(status==200 and 'Единствен идентификатор:' in html and 'moja-klinika-2' in html and 'Почетна лозинка на администраторот:' not in html, 'Clinic ID containing an underscore reports identifier rules instead of blaming a valid password')
+            check(secret not in html and 'New Clinic' in html, 'Validation preserves nonsecret input without rendering administrator password')
+            status,html,_=company.request('/Platform/Create',dict(payload,AdminPassword='short'))
+            check(status==200 and 'Почетна лозинка на администраторот:' in html and '12 до 128' in html and 'Единствен идентификатор:' not in html, 'Short administrator password reports its own length requirement')
             status,html,_=company.request('/Platform/Create',payload)
             check(status==200 and 'Потребна е проверка на базата.' in html and secret not in html,'Provisioning error preserves form without exposing password')
             check(calls[-2][2].get('discoverable') is True and calls[-2][2].get('allowRegistration') is True,'Company checkbox values bind correctly')

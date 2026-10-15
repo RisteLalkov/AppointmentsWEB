@@ -34,7 +34,25 @@ public sealed class PlatformController(ApiClient api) : Controller
     }
     [HttpPost] public async Task<IActionResult> Create(ProvisionClinicInput input, CancellationToken ct)
     {
-        if (!ModelState.IsValid) ViewData["Error"] = "Проверете ги полињата. Лозинката треба да има најмалку 12 знаци.";
+        if (!ModelState.IsValid)
+        {
+            // Do not echo attempted values or framework errors: they can contain passwords.
+            ViewData["Error"] = string.Join(" ", ModelState.Where(x => x.Value?.Errors.Count > 0)
+                .Select(x => x.Key.Split('.').Last().ToLowerInvariant() switch
+                {
+                    "id" => "Единствен идентификатор: внесете 1–40 мали латинични букви, броеви или цртички; првиот знак мора да биде буква или број (пример: moja-klinika-2).",
+                    "name" => "Име на клиниката: внесете од 2 до 100 знаци.",
+                    "timezone" => "Временска зона: внесете вредност до 100 знаци (пример: Europe/Skopje).",
+                    "description" => "Јавен опис: дозволени се најмногу 1000 знаци.",
+                    "address" => "Јавна адреса: дозволени се најмногу 200 знаци.",
+                    "phone" => "Јавен телефон: дозволени се најмногу 30 знаци.",
+                    "adminname" => "Име и презиме на администраторот: внесете од 2 до 80 знаци.",
+                    "adminemail" => "Е-пошта на администраторот: внесете важечка адреса до 120 знаци.",
+                    "adminpassword" => "Почетна лозинка на администраторот: внесете од 12 до 128 знаци.",
+                    "discoverable" or "allowregistration" => "Повторно изберете ги опциите за јавен именик и пациентска регистрација.",
+                    _ => "Проверете ги задолжителните полиња и обидете се повторно."
+                }).Distinct());
+        }
         else try
         {
             var c = await api.SendAsync<PlatformClinicSummary>("api/platform/clinics", input, ct: ct, platform: true);
