@@ -1,0 +1,120 @@
+/* Public directory only: reuse the workspace palette, controls and spacing. */
+.discovery-page { --discovery-border: #d7e7e0; }
+.discovery-hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; padding: 35px 0 50px; }
+.discovery-eyebrow { display: inline-flex; gap: 9px; align-items: center; }
+.discovery-eyebrow > span { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px var(--mint); }
+.discovery-copy h1 { font-size: clamp(34px, 4vw, 54px); line-height: 1.14; letter-spacing: -1.8px; margin: 21px 0; overflow-wrap: anywhere; }
+.discovery-copy h1 > span { color: var(--green); }
+.discovery-copy > p { max-width: 540px; font-size: 16px; color: var(--muted); }
+.discovery-copy .discovery-contact { margin-bottom: 8px; font-size: 14px; }
+.discovery-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin: 25px 0 18px; }
+.discovery-copy .discovery-reassurance { display: flex; align-items: baseline; gap: 8px; font-size: 12px; max-width: 430px; margin-bottom: 0; }
+.discovery-reassurance > span { color: var(--green); font-weight: 700; }
+.discovery-art { position: relative; min-height: 345px; border-radius: 36px; overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 25% 10%, #e1f4e9 0, transparent 65%), radial-gradient(ellipse at 90% 90%, #ece6fa 0, transparent 65%), #eef5f1; border: 1px solid #e0eae3; }
+.care-orbit { position: absolute; pointer-events: none; width: 315px; height: 195px; left: calc(50% - 157px); top: 72px; border-radius: 50%; border: 1px solid #08796928; box-shadow: 0 0 0 10px #08796906, 0 0 0 24px #08796905, 0 0 0 38px #08796904; transform: rotate(-30deg); }
+.care-orbit-two { transform: rotate(35deg); border-color: #6953ad28; width: 290px; height: 170px; left: calc(50% - 145px); top: 83px; }
+.care-orbit-three { transform: rotate(90deg); width: 270px; height: 175px; left: calc(50% - 135px); top: 80px; border-color: #0879691a; }
+.care-center { position: absolute; left: calc(50% - 37px); top: 131px; width: 74px; height: 74px; display: grid; place-items: center; color: white; background: linear-gradient(145deg, #148a75, var(--green-dark)); font-size: 42px; border-radius: 24px; box-shadow: 0 15px 35px #08796924, inset 0 1px 0 #ffffff40; transform: rotate(-8deg); }
+.care-steps { list-style: none; margin: 0; padding: 0; }
+.care-step { position: absolute; display: flex; align-items: center; gap: 11px; padding: 13px 17px; border-radius: 16px; background: #fffffff5; box-shadow: 0 8px 28px #19382f0a; border: 1px solid #ffffff; }
+.care-step > span { color: var(--green); background: var(--mint); border-radius: 10px; padding: 7px; font-size: 11px; font-weight: 700; }
+.care-step strong { display: block; color: var(--ink); font-size: 14px; }
+.care-step small { color: var(--muted); font-size: 11px; }
+.care-step-one { top: 33px; left: 22px; }
+.care-step-two { top: 110px; right: 18px; }
+.care-step-two > span { color: var(--accent); background: var(--accent-soft); }
+.care-step-three { bottom: 45px; left: 38px; }
+.motion-toggle { position: absolute; bottom: 10px; right: 16px; background: transparent; border: 0; padding: 6px; color: #52685e; font-size: 10px; text-decoration: underline; text-underline-offset: 3px; }
+.motion-toggle[hidden] { display: none; }
+.motion-enabled .care-orbit { animation: care-orbit-turn 38s linear infinite; }
+.motion-enabled .care-orbit-two { animation-direction: reverse; animation-duration: 47s; }
+.motion-enabled .care-orbit-three { animation-duration: 56s; }
+.motion-enabled .care-step { animation: care-step-drift 7s ease-in-out infinite alternate; }
+.motion-enabled .care-step-two { animation-delay: -3s; }
+.motion-enabled .care-step-three { animation-delay: -5s; }
+.motion-paused .care-orbit, .motion-paused .care-step { animation-play-state: paused; }
+@keyframes care-orbit-turn { to { rotate: 360deg; } }
+@keyframes care-step-drift { to { translate: 0 -6px; } }
+.discovery-directory { scroll-margin-top: 24px; }
+.discovery-tabs { border: 1px solid var(--line); background: white; padding: 5px; border-radius: 13px; flex-shrink: 0; }
+.discovery-search-panel { border: 1px solid var(--discovery-border); padding: 26px; box-shadow: 0 8px 30px #1c3b2d05; }
+.discovery-search { display: flex; gap: 14px; align-items: flex-end; }
+.discovery-search .field { flex: 1; margin: 0; min-width: 0; }
+.discovery-input { position: relative; }
+.discovery-input > svg { position: absolute; width: 22px; height: 22px; top: calc(50% - 11px); left: 16px; color: var(--green); pointer-events: none; }
+.discovery-input > input { min-height: 52px; padding-left: 49px; background: #f8fbf9; border-color: #d4e4db; font-size: 15px; }
+.discovery-search > .btn { min-height: 52px; padding-inline: 27px; }
+.discovery-search-help { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+.discovery-refinements { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.discovery-refinements summary { color: var(--green-dark); cursor: pointer; font-weight: 600; width: fit-content; }
+.discovery-filter-count { margin-left: 8px; background: var(--mint); color: var(--green-dark); padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; display: inline-block; }
+.discovery-refinements > p { font-size: 12px; color: var(--muted); margin: 15px 0; }
+.discovery-refine-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: end; gap: 14px; }
+.discovery-refine-form .field { margin: 0; min-width: 0; }
+.discovery-refine-form .btn { min-height: 44px; }
+.discovery-scope { grid-column: 1 / -1; margin: 0; padding: 12px 14px; background: var(--accent-soft); border-radius: 10px; overflow-wrap: anywhere; }
+.discovery-scope a { text-decoration: underline; text-underline-offset: 3px; }
+.discovery-active-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 0; }
+.discovery-filter-chip { display: inline-flex; align-items: center; gap: 14px; padding: 7px 12px; border-radius: 24px; background: #e8f1ec; border: 1px solid #d4e4db; color: var(--green-dark); font-size: 12px; overflow-wrap: anywhere; max-width: 100%; }
+.discovery-filter-chip > span:first-child { min-width: 0; }
+.discovery-filter-chip > span:last-child { font-size: 18px; line-height: 1; }
+.discovery-filter-chip:hover { background: var(--mint); border-color: var(--green); }
+.discovery-clear { padding: 8px; text-decoration: underline; text-underline-offset: 3px; font-size: 12px; }
+.discovery-results-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 26px 0 16px; }
+.discovery-results-heading .results-count { margin: 0; color: var(--text); }
+.discovery-results-heading > span { color: var(--muted); font-size: 12px; }
+.discovery-results-heading strong { color: var(--green-dark); }
+.discovery-grid { gap: 20px; }
+.discovery-card { border: 1px solid var(--line); transition: border-color .2s, box-shadow .2s, transform .2s; }
+.discovery-card:hover, .discovery-card:focus-within { border-color: #a6cabb; box-shadow: 0 12px 30px #1c3b2d0c; transform: translateY(-2px); }
+.discovery-card-top { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.discovery-card-label { font-size: 9px; letter-spacing: 1.8px; color: var(--muted); }
+.discovery-card h3 { margin-bottom: 7px; }
+.discovery-card .specialty { margin-bottom: 7px; }
+.discovery-card .public-clinic-link { margin: 0 0 16px; }
+.discovery-subspecialty { font-size: 12px; margin: 0 0 12px; }
+.discovery-service-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 24px; }
+.discovery-service-tags li { font-size: 11px; border-radius: 6px; padding: 4px 8px; color: #596756; background: #f2f5f0; }
+.discovery-card .btn { width: 100%; justify-content: space-between; border-color: #d9e6de; }
+.discovery-card-description { color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.discovery-empty { padding: 40px 24px; margin-top: 24px; }
+.discovery-empty-symbol { font-size: 40px; color: var(--green); }
+.discovery-empty h3 { margin-top: 12px; }
+.discovery-empty .btn { margin-top: 8px; }
+.discovery-directory > .inline-error { margin-top: 24px; }
+@media (max-width: 1000px) {
+    .discovery-hero { grid-template-columns: 1.1fr 1fr; gap: 25px; }
+    .discovery-art { min-height: 345px; }
+    .care-step { padding: 10px 12px; gap: 8px; }
+    .care-step-one { left: 12px; }
+    .care-step-two { right: 12px; top: 139px; }
+    .care-step-three { left: 18px; }
+    .discovery-refine-form { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .discovery-refine-form > .btn { justify-self: start; grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+    .discovery-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px 0 32px; }
+    .discovery-copy h1 { letter-spacing: -1px; font-size: clamp(32px, 7.8vw, 46px); }
+    .discovery-copy > p { font-size: 14px; }
+    .discovery-art { min-height: 275px; max-width: 520px; width: 100%; justify-self: center; border-radius: 24px; }
+    .care-center { top: 96px; }
+    .care-orbit { top: 45px; }
+    .care-orbit-two, .care-orbit-three { top: 55px; }
+    .care-step-one { top: 20px; left: 18px; }
+    .care-step-two { top: 100px; right: 15px; }
+    .care-step-three { bottom: 35px; left: 25px; }
+    .discovery-search-panel { padding: 20px; }
+    .discovery-search { flex-direction: column; align-items: stretch; gap: 12px; }
+    .discovery-input > input { font-size: 16px; }
+    .discovery-input > input::placeholder { font-size: 12px; }
+    .discovery-refine-form { grid-template-columns: minmax(0, 1fr); }
+    .discovery-refine-form > .btn { justify-self: stretch; }
+    .discovery-tabs { width: 100%; display: flex; }
+    .discovery-tabs a { flex: 1; text-align: center; }
+    .discovery-card { padding: 23px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .discovery-art .care-orbit, .discovery-art .care-step { animation: none; }
+    .discovery-card { transition: none; }
+    .discovery-card:hover, .discovery-card:focus-within { transform: none; }
+}

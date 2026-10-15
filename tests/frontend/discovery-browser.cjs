@@ -25,14 +25,40 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.getByRole('heading',{name:'Тест лекар'}).waitFor();
   await noOverflow(page,'Desktop public directory');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
-  await page.locator('#search').fill('Тест');
+  const motion=page.locator('[data-motion-toggle]');
+  await motion.click();
+  check(await motion.getAttribute('aria-pressed')==='true' && await page.locator('.care-orbit-one').evaluate(e=>getComputedStyle(e).animationPlayState)==='paused','Motion can be paused');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  check(await page.locator('.care-orbit-one').evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced-motion preference disables decorative animation');
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.locator('.discovery-refinements summary').click();
   await page.locator('#clinic-search').fill('Клиника');
+  await page.locator('#specialty').fill('Кардио');
+  await page.getByRole('button',{name:'Примени филтри'}).click();
+  check(new URL(page.url()).searchParams.get('Clinic')==='Клиника' && new URL(page.url()).searchParams.get('Specialty')==='Кардио','Optional filters combine explicitly');
+  await page.locator('[data-filter="Specialty"]').click();
+  check(!new URL(page.url()).searchParams.has('Specialty') && new URL(page.url()).searchParams.get('Clinic')==='Клиника','A filter chip clears only its own criterion');
+  await page.locator('#search').fill('Горан');
+  await page.locator('#search').press('Enter');
+  check(new URL(page.url()).searchParams.get('Search')==='Горан' && !new URL(page.url()).searchParams.has('Clinic'),'New name search clears old refinements');
+  await page.goto(publicUrl+'/Discover/Clinic/main');
+  await page.locator('#search').fill('Горан');
   await page.getByRole('button',{name:/Пребарај/}).click();
-  check(new URL(page.url()).searchParams.get('Clinic')==='Клиника','Public search submits clinic filter');
-  for(const width of [768,390]) {
+  check(!new URL(page.url()).searchParams.has('ClinicId'),'Global search escapes a previously selected clinic');
+  for(const width of [768,390,320]) {
    await page.setViewportSize({width,height:900}); await noOverflow(page,`Public directory at ${width}px`);
   }
+  await page.setViewportSize({width:390,height:900});
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-mobile.png'),fullPage:true});
+  await page.locator('#search').fill('без-резултат');await page.locator('#search').press('Enter');
+  await page.getByRole('heading',{name:'Нема резултати за ова пребарување.'}).waitFor();
+  await page.getByRole('link',{name:'Прикажи ги сите лекари'}).click();
+  check(!new URL(page.url()).searchParams.has('Search'),'Empty-state reset restores unfiltered directory');
+  const noJs=await browser.newContext({javaScriptEnabled:false});
+  const plain=await noJs.newPage();await plain.goto(publicUrl+'/Discover');
+  await plain.locator('#search').fill('Горан');await plain.getByRole('button',{name:/Пребарај/}).click();
+  check(new URL(plain.url()).searchParams.get('Search')==='Горан','Search works without JavaScript');
+  await noJs.close();
   await page.getByRole('link',{name:/Види профил/}).click();
   await page.getByRole('link',{name:/Продолжи до закажување/}).click();
   await page.locator('#email').waitFor();

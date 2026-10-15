@@ -51,7 +51,9 @@ class Stub(BaseHTTPRequestHandler):
         calls.append((path.path,urllib.parse.parse_qs(path.query),body,dict(self.headers)))
         code=200
         if path.path=='/api/public/doctors':
-            result=dict(items=[doctor],total=25,page=1,pageSize=12)
+            term=urllib.parse.parse_qs(path.query).get('search',[''])[0]
+            result=dict(items=[] if term=='без-резултат' else [doctor],total=0 if term=='без-резултат' else 25,page=1,pageSize=12)
+            if term=='unavailable-test': code,result=503,dict(error='Именикот е привремено недостапен.')
         elif path.path=='/api/public/clinics': result=dict(items=[clinic],total=1,page=1,pageSize=12)
         elif path.path=='/api/public/clinics/main': result=clinic
         elif path.path=='/api/public/clinics/main/doctors/d01': result=doctor
@@ -109,6 +111,22 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check('Следна' in html and 'name="Clinic"' in html,'Directory exposes pagination and clinic filter')
             anon.request('/Discover?Search=Ana&Clinic=Test&Specialty=Cardio&Service=Visit&Page=2')
             check(calls[-1][1].get('page')==['2'] and calls[-1][1].get('clinic')==['Test'] and calls[-1][1].get('search')==['Ana'],'Search and page parameters reach the API')
+            status,html,_=anon.request('/Discover?Search='+urllib.parse.quote('Горан')+'&ClinicId=main&Specialty=Cardio&Service=Visit&Page=2')
+            quick=re.search(r'<form[^>]*id="discovery-search".*?</form>',html,re.S)[0]
+            check('name="Search"' in quick and not any('name="'+key+'"' in quick for key in ['ClinicId','Clinic','Specialty','Service','Page']), 'New broad search cannot retain hidden clinic or refinement restrictions')
+            check('data-filter="ClinicId"' in html and 'data-filter="Specialty"' in html and 'data-filter="Service"' in html, 'Active scope and refinements are visible and removable')
+            removal=re.search(r'data-filter="Specialty" href="([^"]+)"',html)[1]
+            params=urllib.parse.parse_qs(urllib.parse.urlparse(removal).query)
+            check('Specialty' not in params and params.get('Search')==['Горан'] and params.get('ClinicId')==['main'] and params.get('Page')==['1'], 'Removing one chip preserves other criteria and resets pagination')
+            check('Пребарај во сите клиники' in html and '<details class="discovery-refinements" open=' in html, 'Clinic restriction is explicit and active refinements open automatically')
+            anon.request('/Discover?Search='+urllib.parse.quote('Горан'))
+            check(calls[-1][1].get('search')==['Горан'] and not any(calls[-1][1].get(key) for key in ['clinicId','clinic','specialty','service']), 'Unrestricted Cyrillic search reaches API without refinements')
+            status,html,_=anon.request('/Discover?Search='+urllib.parse.quote('без-резултат'))
+            check(status==200 and 'Нема резултати' in html and 'Прикажи ги сите лекари' in html, 'Empty search offers a complete reset')
+            status,html,_=anon.request('/Discover?Search=unavailable-test')
+            check(status==503 and 'role="alert"' in html and 'Обидете се повторно' in html, 'API outage renders a retryable public error')
+            anon.request('/Discover?view=clinics&ClinicId=main&Specialty=Hidden&Service=Hidden')
+            check(calls[-1][0]=='/api/public/clinics' and not any(calls[-1][1].get(key) for key in ['clinicId','specialty','service']), 'Clinic directory removes irrelevant hidden doctor restrictions')
             check(anon.request('/Discover?PageSize=99')[0]==400,'Invalid public page size rejected by MVC')
             check(anon.request('/Discover/Clinic/main?page=0')[0]==400,'Clinic route validates internally constructed query')
             status,html,_=anon.request('/Discover/Clinic/main')

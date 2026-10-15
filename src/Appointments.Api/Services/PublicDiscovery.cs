@@ -23,9 +23,17 @@ public sealed class PublicDiscovery(ClinicRegistry registry, ClinicConnections c
             await using var db = await connections.OpenAsync(c, ct);
             var doctors = db.Doctors.AsNoTracking().Where(d => d.Enabled && !d.IsService);
             if (doctorId != null) doctors = doctors.Where(d => d.Id == doctorId);
-            if (!string.IsNullOrWhiteSpace(q.Search)) { var term = q.Search.Trim().ToLower(); doctors = doctors.Where(d => d.Name.ToLower().Contains(term)); }
-            if (!string.IsNullOrWhiteSpace(q.Specialty)) { var term = q.Specialty.Trim().ToLower(); doctors = doctors.Where(d => d.Specialty.ToLower().Contains(term)); }
-            if (!string.IsNullOrWhiteSpace(q.Service)) { var term = q.Service.Trim().ToLower(); doctors = doctors.Where(d => db.DoctorServices.Any(a => a.DoctorId == d.Id && db.Services.Any(s => s.Id == a.ServiceId && s.Enabled && s.Name.ToLower().Contains(term)))); }
+            // One broad search across public fields. Explicit refinements still combine with AND.
+            if (!string.IsNullOrWhiteSpace(q.Search))
+            {
+                var term = q.Search.Trim().ToLowerInvariant();
+                var clinicMatches = c.Name.Contains(q.Search.Trim(), StringComparison.OrdinalIgnoreCase);
+                doctors = doctors.Where(d => clinicMatches || d.Name.ToLower().Contains(term)
+                    || d.Specialty.ToLower().Contains(term) || d.Subspecialty.ToLower().Contains(term)
+                    || db.DoctorServices.Any(a => a.DoctorId == d.Id && db.Services.Any(s => s.Id == a.ServiceId && s.Enabled && s.Name.ToLower().Contains(term))));
+            }
+            if (!string.IsNullOrWhiteSpace(q.Specialty)) { var term = q.Specialty.Trim().ToLowerInvariant(); doctors = doctors.Where(d => d.Specialty.ToLower().Contains(term) || d.Subspecialty.ToLower().Contains(term)); }
+            if (!string.IsNullOrWhiteSpace(q.Service)) { var term = q.Service.Trim().ToLowerInvariant(); doctors = doctors.Where(d => db.DoctorServices.Any(a => a.DoctorId == d.Id && db.Services.Any(s => s.Id == a.ServiceId && s.Enabled && s.Name.ToLower().Contains(term)))); }
             var count = await doctors.CountAsync(ct); total += count;
             if (skip >= count) { skip -= count; continue; }
             if (rows.Count == q.PageSize) continue;

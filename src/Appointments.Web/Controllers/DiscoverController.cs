@@ -12,6 +12,9 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
     private static string E(string? value) => Uri.EscapeDataString(value ?? "");
     public async Task<IActionResult> Index(DiscoveryQuery query, string view = "doctors", CancellationToken ct = default)
     {
+        view = view == "clinics" ? "clinics" : "doctors";
+        // Do not carry invisible doctor refinements into the clinic directory.
+        if (view == "clinics") query = query with { ClinicId = null, Clinic = null, Specialty = null, Service = null };
         ViewData["Query"] = query; ViewData["DirectoryView"] = view == "clinics" ? "clinics" : "doctors";
         if (!TryValidateModel(query) || !ModelState.IsValid) { Response.StatusCode = 400; ViewData["Error"] = "Проверете ги филтрите и бројот на страницата."; return View("Index"); }
         if (!backend.UseApi) { ViewData["Error"] = "Јавниот именик е достапен со API. За локалното демо отворете Демо-режим."; return View("Index"); }

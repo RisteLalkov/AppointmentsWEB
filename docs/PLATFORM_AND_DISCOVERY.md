@@ -19,6 +19,26 @@ was changed during development. Read the verification report before deployment.
 | `/Platform/Login` | Separate company operator sign-in | Public sign-in, no public onboarding |
 | `/Platform` | Company clinic list, onboarding and company password change | Platform operator only |
 
+### Discovery search and motion
+
+The main search matches part of a doctor's name, clinic name, specialty/subspecialty,
+or active assigned service (OR across those fields). A new main search clears previous
+refinements, including a clinic profile's scope, and starts at page 1. On the Clinics tab,
+it searches clinic names. Search is case-insensitive and trims outer whitespace; it does
+not transliterate Latin and Cyrillic or fuzzy-match spelling mistakes.
+
+Optional clinic, specialty and service refinements work independently, or combine with
+AND when more than one is supplied. All active criteria, including a clinic ID, have
+visible removal chips. Removing a chip preserves the other criteria and resets page 1.
+Pagination preserves criteria. These are ordinary GET forms/links and work without JS.
+Public eligibility, private-data exclusions, pagination limits and booking permissions
+remain unchanged.
+
+Discovery has a scoped stylesheet and a small script for decorative motion only. Slow
+CSS orbit/drift animation has a pause button (remembered for the browser tab session),
+respects reduced-motion preferences, and stays static without JavaScript. No external
+assets, tracking, animation libraries or new production dependencies are required.
+
 The public directory does not fabricate reviews, hours, ratings, location or availability.
 Optional clinic details appear only when configured. Source spreadsheet notes, patient
 records, account fields, schedules/exceptions and appointment records are not public DTOs.
