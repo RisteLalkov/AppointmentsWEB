@@ -53,10 +53,11 @@ class Stub(BaseHTTPRequestHandler):
         if path.path=='/api/public/doctors':
             term=urllib.parse.parse_qs(path.query).get('search',[''])[0]
             result=dict(items=[] if term=='без-резултат' else [doctor],total=0 if term=='без-резултат' else 25,page=1,pageSize=12)
-            if term=='unavailable-test': code,result=503,dict(error='Именикот е привремено недостапен.')
+            if term=='unavailable-test': code,result=503,dict(error='Пребарувањето е привремено недостапно.')
         elif path.path=='/api/public/clinics': result=dict(items=[clinic],total=1,page=1,pageSize=12)
         elif path.path=='/api/public/clinics/main': result=clinic
         elif path.path=='/api/public/clinics/main/doctors/d01': result=doctor
+        elif path.path=='/api/public/clinics/main/doctors/staff': result=dict(doctor,id='staff',staffOnly=True)
         elif path.path=='/api/public/clinics/east/doctors/d01': result=dict(doctor,clinic=dict(clinic,id='east'))
         elif path.path=='/api/clinics': result=[clinic]
         elif path.path=='/api/auth/register': result=dict(id='a01',email=body['email'],name=body['name'],role='Patient',patientId='p01',doctorId=None,enabled=True)
@@ -107,7 +108,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             else:raise AssertionError('Web startup failed')
             check(anon.request('/')[2].get('Location')=='/Discover','Anonymous root opens public discovery')
             status,html,_=anon.request('/Discover')
-            check(status==200 and 'Тест лекар' in html and 'Јавен' not in html and 'ИМЕНИК' in html,'Anonymous doctor directory renders public DTOs')
+            check(status==200 and 'Тест лекар' in html and 'Јавен' not in html and 'ПРЕБАРУВАЊЕ' in html,'Anonymous doctor directory renders public DTOs')
             check('Следна' in html and 'name="Clinic"' in html,'Directory exposes pagination and clinic filter')
             anon.request('/Discover?Search=Ana&Clinic=Test&Specialty=Cardio&Service=Visit&Page=2')
             check(calls[-1][1].get('page')==['2'] and calls[-1][1].get('clinic')==['Test'] and calls[-1][1].get('search')==['Ana'],'Search and page parameters reach the API')
@@ -127,12 +128,18 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check(status==503 and 'role="alert"' in html and 'Обидете се повторно' in html, 'API outage renders a retryable public error')
             anon.request('/Discover?view=clinics&ClinicId=main&Specialty=Hidden&Service=Hidden')
             check(calls[-1][0]=='/api/public/clinics' and not any(calls[-1][1].get(key) for key in ['clinicId','specialty','service']), 'Clinic directory removes irrelevant hidden doctor restrictions')
+            _,clean_search,_=anon.request('/Discover')
+            check('На пример „Горан“' not in clean_search and 'Доволно е едно поле.' not in clean_search and 'именик' not in clean_search.lower(), 'Search page omits removed instructional copy and directory wording')
             check(anon.request('/Discover?PageSize=99')[0]==400,'Invalid public page size rejected by MVC')
             check(anon.request('/Discover/Clinic/main?page=0')[0]==400,'Clinic route validates internally constructed query')
             status,html,_=anon.request('/Discover/Clinic/main')
             check(status==200 and 'Јавен опис' in html and 'Тест лекар' in html,'Clinic profile renders real public description and doctors')
             status,html,_=anon.request('/Discover/Doctor/d01?clinicId=main')
             check(status==200 and 'Преглед' in html and '30 минути' in html,'Doctor profile renders active services')
+            check('Продолжи кон закажување' in html and 'Слободните термини се проверуваат' not in html and 'doctor-profile-specialty' in html, 'Doctor profile emphasizes specialty and uses concise booking copy')
+            check('именик' not in html.lower(), 'Doctor profile uses the new search terminology')
+            _,staff_html,_=anon.request('/Discover/Doctor/staff?clinicId=main')
+            check('закажувањето е преку рецепција' in staff_html and 'Продолжи кон закажување' not in staff_html, 'Reception-only doctors retain their booking boundary and notice')
             book='/Discover/Book?clinicId=main&doctorId=d01'
             status,_,h=anon.request(book)
             check(status==302 and '/Account/Login?' in h['Location'] and 'returnUrl=' in h['Location'],'Anonymous booking preserves a protected return action')

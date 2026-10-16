@@ -60,7 +60,7 @@
         </div>
     </section>
     <section id="directory" class="discovery-directory" aria-labelledby="directory-title">
-        <div class="public-section-heading"><div><span class="eyebrow">ИМЕНИК</span><h2 id="directory-title">@(clinic != null ? "Лекари во клиниката" : view == "clinics" ? "Пронајдете клиника" : "Пронајдете лекар")</h2></div>
+        <div class="public-section-heading"><div><span class="eyebrow">ПРЕБАРУВАЊЕ</span><h2 id="directory-title">@(clinic != null ? "Лекари во клиниката" : view == "clinics" ? "Пронајдете клиника" : "Пронајдете лекар")</h2></div>
             <nav class="chip-tabs discovery-tabs" aria-label="Вид на пребарување"><a class="@(view == "doctors" ? "active" : "")" href="/Discover?view=doctors#directory" aria-current="@(view == "doctors" ? "page" : "false")">Лекари</a><a class="@(view == "clinics" ? "active" : "")" href="/Discover?view=clinics#directory" aria-current="@(view == "clinics" ? "page" : "false")">Клиники</a></nav>
         </div>
         <div class="card discovery-search-panel">
@@ -68,16 +68,15 @@
             <form method="get" action="/Discover#directory" class="discovery-search" id="discovery-search" role="search">
                 <input type="hidden" name="view" value="@view" />
                 <div class="field"><label for="search">@(view == "clinics" ? "Која клиника ја барате?" : "Кого или што барате?")</label>
-                    <div class="discovery-input"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input type="search" id="search" name="Search" value="@q.Search" maxlength="100" placeholder="@(view == "clinics" ? "Внесете цело име или дел од името…" : "Име на лекар, клиника, специјалност или услуга…")" aria-describedby="search-help" /></div>
+                    <div class="discovery-input"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input type="search" id="search" name="Search" value="@q.Search" maxlength="100" placeholder="@(view == "clinics" ? "Внесете цело име или дел од името…" : "Име на лекар, клиника, специјалност или услуга…")" aria-describedby="@(view == "clinics" ? "search-help" : null)" /></div>
                 </div>
                 <button class="btn primary" type="submit">Пребарај <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></button>
             </form>
-            <p id="search-help" class="discovery-search-help">@(view == "clinics" ? "Пребарувајте низ сите јавни клиники, со цело име или само дел од него." : "На пример „Горан“ — низ сите клиники и специјалности. Новото пребарување ги отстранува претходните филтри.")</p>
+            @if (view == "clinics") { <p id="search-help" class="discovery-search-help">Пребарувајте низ сите јавни клиники, со цело име или само дел од него.</p> }
             @if (view == "doctors") {
                 <details class="discovery-refinements" open="@(refinements > 0)">
                     <summary>Дополнителни филтри <span class="discovery-filter-count">@(refinements > 0 ? refinements + " активни" : "незадолжително")</span></summary>
-                    <p id="refine-help">Доволно е едно поле. Ако пополните повеќе, резултатите треба да одговараат на сите. @if (!string.IsNullOrWhiteSpace(q.Search)) { <text>Во пребарувањето „@q.Search“.</text> }</p>
-                    <form method="get" action="/Discover#directory" class="discovery-refine-form" id="discovery-refine" aria-describedby="refine-help">
+                    <form method="get" action="/Discover#directory" class="discovery-refine-form" id="discovery-refine">
                         <input type="hidden" name="view" value="doctors" /><input type="hidden" name="Search" value="@q.Search" />
                         @if (!string.IsNullOrWhiteSpace(q.ClinicId)) { <input type="hidden" name="ClinicId" value="@q.ClinicId" /><p class="discovery-scope">Само во: <strong>@(clinic?.Name ?? q.ClinicId)</strong> · <a href="@DirectoryUrl("ClinicId")">Пребарај во сите клиники</a></p> }
                         <div class="field"><label for="clinic-search">Клиника</label><input id="clinic-search" name="Clinic" value="@q.Clinic" maxlength="100" placeholder="Сите клиники" /></div>
@@ -116,7 +115,7 @@
                     </article>
                 } }
             </div>
-            <nav class="public-pagination" aria-label="Страници од именикот">
+            <nav class="public-pagination" aria-label="Страници со резултати">
                 @if (q.Page > 1) { <a class="btn secondary" href="@DirectoryUrl(page: q.Page - 1)">← Претходна</a> }
                 @if (q.Page * q.PageSize < total && q.Page < 100) { <a class="btn secondary" href="@DirectoryUrl(page: q.Page + 1)">Следна →</a> }
             </nav>

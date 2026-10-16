@@ -270,3 +270,32 @@ rendering, filters, empty results and navigation. The actual PostgreSQL-backed
 Deployment: pull main and publish **Appointments.Web** including `wwwroot`,
 preserving server configuration. Refresh with Ctrl+F5. No API publication or SQL
 script is required for this visual refinement.
+
+## Profile and search polish — 16 October 2026
+
+Doctor profiles now emphasize the specialty with a larger mint badge and use a
+compact heading, subtle ambient background and clear booking action. The button
+reads «Продолжи кон закажување». The redundant protected-workspace explanation is
+removed; reception-only notices and clinic/service details are retained.
+
+Public-facing directory terminology is replaced by search or «Лекари и клиники»
+throughout the Web UI, including workspace navigation and platform visibility
+controls. The sample-name explanation and multi-filter instructions are removed
+from Discover. Search semantics, filtering, pagination and booking continuation
+remain unchanged, including when JavaScript is disabled.
+
+The landing page keeps the existing brand palette and flowing SVG composition,
+with ambient shading, restrained button/icon transitions and one-time card
+entrances using native IntersectionObserver. Cards remain visible without JS.
+The existing pause setting also controls entrances; reduced motion disables them.
+No animation library, remote assets or new dependency is introduced.
+
+Local verification: clean Release build, 61 Chromium UI checks, 43 MVC contracts,
+16 password-control checks, 78 DOM checks and 38 HTTP checks. The actual local
+PostgreSQL-backed doctor profile and 38-doctor search were visually reviewed at
+desktop and mobile widths. Reception-only notices, long names, specialty size,
+removed copy and reduced-motion card entrances have explicit regression checks.
+These are local results; new GitHub CI and server deployment are not claimed.
+
+Deploy Appointments.Web including wwwroot, preserve server configuration and
+refresh with Ctrl+F5. No API publication or database changes are required.

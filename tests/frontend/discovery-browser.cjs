@@ -36,6 +36,9 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
    check(await password.getAttribute('type')==='password',path+' supports keyboard masking');
    await formPage.close();
   }
+  await page.locator('.discovery-card').first().scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>document.querySelector('.discovery-card')?.classList.contains('is-arriving'));
+  check(await page.locator('.discovery-card').first().evaluate(e=>getComputedStyle(e).animationName)==='discovery-arrive','Result cards have a subtle entrance when scrolled into view');
   const motion=page.locator('[data-motion-toggle]');
   const line = page.locator('.care-flow-trace');
   const before = await line.evaluate(e=>getComputedStyle(e).strokeDashoffset);
@@ -48,6 +51,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await motion.getAttribute('aria-pressed')==='true','Motion pause preference survives navigation');
   await page.emulateMedia({reducedMotion:'reduce'});
   check(await page.locator('.care-flow-trace').evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced-motion preference disables decorative animation');
+  check(await page.locator('.discovery-card').first().evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced motion disables card entrances too');
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.locator('.discovery-refinements summary').click();
   await page.locator('#clinic-search').fill('Клиника');
@@ -79,7 +83,12 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await plain.locator('.care-flow-trace, .care-glow, .care-seal').evaluateAll(elements=>elements.every(e=>getComputedStyle(e).animationName==='none')),'Decorative art stays still without JavaScript');
   await noJs.close();
   await page.getByRole('link',{name:/Види профил/}).click();
-  await page.getByRole('link',{name:/Продолжи до закажување/}).click();
+  check(await page.locator('.doctor-profile-specialty').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=18),'Doctor specialty has stronger visual emphasis');
+  check(!(await page.locator('body').innerText()).includes('Слободните термини се проверуваат') && !(await page.locator('body').innerText()).toLowerCase().includes('именик'),'Profile removes redundant copy and directory terminology');
+  if(screenshots)await page.screenshot({path:resolve(screenshots,'doctor-profile-desktop.png'),fullPage:true});
+  for(const width of [390,320]) {await page.setViewportSize({width,height:900});await noOverflow(page,'Doctor profile at '+width+'px');}
+  if(screenshots)await page.screenshot({path:resolve(screenshots,'doctor-profile-mobile.png'),fullPage:true});
+  await page.getByRole('link',{name:/Продолжи кон закажување/}).click();
   await page.locator('#email').waitFor();
   check(page.url().includes('/Account/Login') && page.url().includes('returnUrl'),'Public booking enters login with continuation');
   check(await page.locator('select').count()===0,'Login has no clinic selector');

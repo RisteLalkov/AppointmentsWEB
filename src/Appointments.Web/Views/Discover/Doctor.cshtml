@@ -1,18 +1,24 @@
 @using Appointments.Contracts
 @model PublicDoctor
 @{ ViewData["Title"] = Model?.Name ?? "Профил на лекар"; }
+@section Styles { <link rel="stylesheet" href="~/css/discover.css" asp-append-version="true" /> }
 <partial name="_PublicHeader" />
-<main class="public-main public-profile">
+<main class="public-main public-profile doctor-profile-page" id="main-content">
     @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error</div> }
     @if (Model != null) {
-        <a asp-action="Clinic" asp-route-id="@Model.Clinic.Id">← @Model.Clinic.Name</a>
-        <section class="card public-profile-card"><span class="avatar tone-2" aria-hidden="true">✚</span><span class="eyebrow">ПРОФИЛ НА ЛЕКАР</span><h1>@Model.Name</h1><p class="specialty">@Model.Specialty</p>
-        @if (!string.IsNullOrWhiteSpace(Model.Subspecialty)) { <p>@Model.Subspecialty</p> }
-        <p>Клиника: <a asp-action="Clinic" asp-route-id="@Model.Clinic.Id">@Model.Clinic.Name</a></p>
-        @if (Model.Services.Count > 0) { <h2>Услуги</h2><ul class="public-services">@foreach (var s in Model.Services) { <li><strong>@s.Name</strong><span>@s.DurationMinutes минути</span></li> }</ul> }
-        @if (Model.StaffOnly) { <p class="inline-note">За овој лекар закажувањето е преку рецепција.</p> @if (!string.IsNullOrWhiteSpace(Model.Clinic.Phone)) { <p>Телефон: @Model.Clinic.Phone</p> } }
-        else { <p class="muted">Слободните термини се проверуваат во заштитениот работен простор пред потврдување.</p><a class="btn primary" asp-action="Book" asp-route-clinicId="@Model.Clinic.Id" asp-route-doctorId="@Model.Id">Продолжи до закажување ↗</a> }
+        <a class="doctor-profile-back" asp-action="Clinic" asp-route-id="@Model.Clinic.Id">← @Model.Clinic.Name</a>
+        <section class="card public-profile-card doctor-profile-card" aria-labelledby="doctor-name">
+            <div class="doctor-profile-heading"><span class="avatar tone-2" aria-hidden="true">✚</span><span class="eyebrow">ПРОФИЛ НА ЛЕКАР</span></div>
+            <h1 id="doctor-name">@Model.Name</h1>
+            <p class="doctor-profile-specialty"><span aria-hidden="true"></span>@Model.Specialty</p>
+            @if (!string.IsNullOrWhiteSpace(Model.Subspecialty)) { <p class="doctor-profile-subspecialty">@Model.Subspecialty</p> }
+            <p class="doctor-profile-clinic">Клиника: <a asp-action="Clinic" asp-route-id="@Model.Clinic.Id">@Model.Clinic.Name <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a></p>
+            @if (Model.Services.Count > 0) { <section class="doctor-profile-services" aria-labelledby="doctor-services"><h2 id="doctor-services">Услуги</h2><ul class="public-services">@foreach (var s in Model.Services) { <li><strong>@s.Name</strong><span>@s.DurationMinutes минути</span></li> }</ul></section> }
+            <div class="doctor-profile-booking">
+            @if (Model.StaffOnly) { <p class="inline-note">За овој лекар закажувањето е преку рецепција.</p> @if (!string.IsNullOrWhiteSpace(Model.Clinic.Phone)) { <p>Телефон: @Model.Clinic.Phone</p> } }
+            else { <a class="btn primary" asp-action="Book" asp-route-clinicId="@Model.Clinic.Id" asp-route-doctorId="@Model.Id">Продолжи кон закажување <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a> }
+            </div>
         </section>
     }
-    <a href="/Discover">Разгледај го именикот</a>
+    <a class="doctor-profile-back" href="/Discover">Разгледај лекари и клиники <span aria-hidden="true">→</span></a>
 </main>
