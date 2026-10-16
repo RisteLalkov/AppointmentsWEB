@@ -50,3 +50,29 @@ The C# rule suite and real HTTP tests have executed successfully. The provided c
 - Validate TLS/cookie behavior with your actual production reverse proxy before deployment.
 
 The automated PostgreSQL suite exercises these server-side behaviors and jsdom workflows. It does not certify visual layouts, interactive Visual Studio installation/setup, browser autofill or pointer dragging.
+
+
+## Searchable booking fields
+
+- Booking labels use **Лекар**, **Услуга / преглед**, and **Пациент**. Type into
+  each field to filter its own dropdown; the separate patient search is removed.
+- Check Cyrillic and Latin names, case-insensitive matching, no results, mouse
+  selection, touch selection, arrow keys, Enter, Escape and Tab. Escape closes an
+  open dropdown before dismissing the dialog. Unselected search text must block
+  review rather than silently submitting the previous ID.
+- Changing doctor refreshes assigned services and slots; changing service updates
+  duration and clears the old slot. Patient selection survives those changes.
+- Patient booking remains self-only. Doctor-only booking and rescheduling keep
+  their locked fields disabled. Adding a patient still returns to booking.
+- Timezone is displayed only in the workspace top bar. Booking/review/success,
+  appointment lists/details/history, calendar hints and reports omit repeated
+  timezone labels. Time calculations still use the clinic's configured zone.
+  Platform creation submits the default zone through a hidden field.
+- Deployment: publish **Appointments.Web**, including `wwwroot`, preserving
+  server configuration; refresh with Ctrl+F5. No API or database update is needed.
+
+Local automated verification for this change: Release build with zero warnings or
+errors, 78 DOM checks in both JSON-demo and PostgreSQL-backed modes, 42 Chromium
+UI checks (including keyboard/touch booking), 39 MVC contracts, 38 HTTP checks,
+107 PostgreSQL/API/MVC checks, and 7 direct SQL constraint checks. New GitHub CI
+and the IIS deployment are separate from this local verification.

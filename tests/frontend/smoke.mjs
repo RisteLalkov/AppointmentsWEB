@@ -189,6 +189,17 @@ try {
   pat.click("#close-dialog");
   pat.click("[data-book]");
   await until(() => pat.$("#booking-date"));
+  assert(pat.$('label[for="booking-doctor-input"]').textContent === "Лекар", "Booking doctor label is concise and labels the searchable input");
+  assert(pat.$('#booking-doctor-input').getAttribute('role') === 'combobox', "Booking doctor is a searchable combobox");
+  assert(!pat.$('#booking-patient-search') && !pat.$('#dialog-content').textContent.includes('Europe/Skopje'), "Booking omits redundant patient search and timezone labels");
+  const doctorInput = pat.$('#booking-doctor-input');
+  const chosenDoctor = pat.$('#booking-doctor').value;
+  doctorInput.focus();
+  doctorInput.value = doctorInput.value.toLocaleUpperCase('mk-MK');
+  doctorInput.dispatchEvent(new pat.w.Event('input', {bubbles:true}));
+  assert(pat.$('#booking-doctor-list [role="option"]') && [...pat.w.document.querySelectorAll('#booking-doctor-list [role="option"]')].every(o => o.textContent.toLocaleUpperCase('mk-MK').includes(doctorInput.value)), "Doctor dropdown searches Macedonian names without case sensitivity");
+  doctorInput.dispatchEvent(new pat.w.KeyboardEvent('keydown', {key:'Enter',bubbles:true,cancelable:true}));
+  assert(pat.$('#booking-doctor').value === chosenDoctor && pat.$('#booking-doctor-input').validity.valid, "Keyboard choice keeps a real doctor ID");
   const now = await (await pat.request("/data/bootstrap")).json();
   let date = new Date(now.today + "T12:00:00Z");
   date.setUTCDate(date.getUTCDate() + 20);
@@ -198,6 +209,13 @@ try {
   pat.change("#booking-date", iso);
   await until(() => pat.$(".slot"));
   pat.click(".slot");
+  const pendingDoctor = pat.$('#booking-doctor-input');
+  pendingDoctor.value = 'nonexistent-doctor-xyz';
+  pendingDoctor.dispatchEvent(new pat.w.Event('input', {bubbles:true}));
+  assert(pat.$('#booking-doctor-list').textContent.includes('Нема резултати'), "Unknown doctor search shows an empty state");
+  pat.click('#review-booking');
+  assert(!pat.$('#submit-booking') && pat.$('#booking-error').textContent.includes('од соодветната листа'), "Uncommitted search text cannot silently book the previously selected doctor");
+  pendingDoctor.dispatchEvent(new pat.w.KeyboardEvent('keydown', {key:'Escape',bubbles:true,cancelable:true}));
   pat.click("#review-booking");
   assert(pat.$("#submit-booking"), "Review step appears after choosing slot");
   pat.click("#submit-booking");
@@ -206,6 +224,7 @@ try {
     pat.$(".success-view").textContent.includes("Терминот е потврден"),
     "Patient booking completes in DOM flow",
   );
+  assert(!pat.$('.success-view').textContent.includes('Europe/Skopje'), "Booking confirmation has no repeated timezone");
   pat.click("[data-detail]");
   assert(pat.$("#dialog-content .badge.Confirmed").textContent === "Потврден", "Status label translated while CSS/protocol status stays stable");
   await until(() => pat.$(".history-timeline li"));
@@ -344,6 +363,12 @@ try {
   admin.click(`[data-patient-book="${contact.id}"]`);
   await until(() => admin.$("#booking-patient"));
   assert(admin.$("#booking-patient").value === contact.id, "Booking from patient profile keeps selected patient");
+  const patientInput = admin.$('#booking-patient-input');
+  patientInput.focus(); patientInput.value = 'OTHER SESSION';
+  patientInput.dispatchEvent(new admin.w.Event('input', {bubbles:true}));
+  assert(admin.$('#booking-patient-list').textContent.includes('Other session update'), "Patient field directly filters its dropdown");
+  admin.click('#booking-patient-list [role="option"]');
+  assert(admin.$('#booking-patient').value === contact.id && patientInput.value === 'Other session update', "Patient dropdown commits the actual patient ID and display name");
   admin.click("#close-dialog");
   await pat.page("profile");
   await until(() => pat.$("#profile-appointments"));
@@ -427,6 +452,12 @@ try {
   await admin.page("calendar"); admin.change("#calendar-doctor", "d01"); admin.click('[data-action="book"]');
   await until(() => admin.$("#booking-service"));
   assert(admin.$("#booking-service").textContent.includes("DOM examination") && admin.$("#dialog-content").textContent.includes("45 минути"), "Booking offers assigned service and its duration");
+  const serviceInput = admin.$('#booking-service-input');
+  serviceInput.focus(); serviceInput.value = 'DOM examination';
+  serviceInput.dispatchEvent(new admin.w.Event('input', {bubbles:true}));
+  assert(admin.$('#booking-service-list').textContent.includes('DOM examination'), "Service field searches the selected doctor's assigned services");
+  serviceInput.dispatchEvent(new admin.w.KeyboardEvent('keydown', {key:'Enter',bubbles:true,cancelable:true}));
+  assert(admin.$('#booking-service-input').validity.valid && admin.$('#dialog-content').textContent.includes('45 минути'), "Service keyboard selection retains the correct visit duration");
   admin.click("#close-dialog");
   await admin.page("catalogue");
   admin.click("[data-catalogue-edit]");

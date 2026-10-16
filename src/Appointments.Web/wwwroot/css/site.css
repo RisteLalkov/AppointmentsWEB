@@ -2436,3 +2436,17 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; bo
  .public-profile-card { padding: 22px; }
  .public-profile-card h1 { font-size: 28px; }
 }
+
+/* Booking selects retain their IDs, with a searchable, keyboard-friendly surface. */
+.booking-combobox { position: relative; min-width: 0; }
+.booking-combobox > input { width: 100%; padding-right: 48px; }
+.booking-combobox > input:disabled { cursor: not-allowed; background: #f1f4f0; color: #66736b; opacity: 1; }
+.booking-combobox-toggle { position: absolute; top: 0; right: 0; bottom: 0; width: 44px; display: grid; place-items: center; border: 0; background: transparent; border-radius: 0 9px 9px 0; color: var(--green-dark); }
+.booking-combobox-toggle:disabled { cursor: not-allowed; opacity: .45; }
+.booking-combobox-list { position: absolute; top: 100%; left: 0; right: 0; z-index: 20; max-height: 220px; overflow-y: auto; overscroll-behavior: contain; margin-top: 6px; padding: 5px; border: 1px solid #cadfd4; border-radius: 10px; background: #fff; box-shadow: 0 8px 22px #19382f0d; }
+.booking-combobox-list.opens-up { top: auto; bottom: calc(100% + 6px); margin-top: 0; }
+.booking-combobox-list[hidden] { display: none; }
+.booking-combobox-option { padding: 11px 12px; min-height: 44px; border-radius: 6px; cursor: pointer; overflow-wrap: anywhere; }
+.booking-combobox-option[aria-selected="true"] { font-weight: 600; color: var(--green-dark); }
+.booking-combobox-option.highlighted, .booking-combobox-option:hover { background: var(--mint); color: var(--green-dark); }
+.booking-combobox-empty { padding: 13px 12px; color: var(--muted); font-size: 12px; }
