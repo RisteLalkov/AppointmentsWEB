@@ -8,6 +8,19 @@
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let paused = false;
     try { paused = sessionStorage.getItem('careline.discovery.paused') === 'true'; } catch { /* Storage may be disabled. */ }
+    let frame = 0;
+    function paintScroll() {
+        frame = 0;
+        if (!page || paused || preference.matches) return;
+        const rect = page.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(.12, (window.innerHeight - rect.top) / rect.height));
+        page.style.setProperty('--ribbon-progress', progress.toFixed(4));
+    }
+    function queueScroll() {
+        if (!frame && !paused && !preference.matches) frame = requestAnimationFrame(paintScroll);
+    }
+    window.addEventListener('scroll', queueScroll, { passive: true });
+    window.addEventListener('resize', queueScroll, { passive: true });
     function render() {
         page?.classList.toggle('discovery-motion', !preference.matches);
         page?.classList.toggle('discovery-paused', paused);
@@ -16,6 +29,7 @@
         toggle.hidden = preference.matches;
         toggle.setAttribute('aria-pressed', String(paused));
         toggle.textContent = paused ? 'Продолжи анимација' : 'Паузирај анимација';
+        queueScroll();
     }
     toggle.addEventListener('click', () => {
         paused = !paused;
