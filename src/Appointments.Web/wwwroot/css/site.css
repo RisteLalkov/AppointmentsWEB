@@ -2450,3 +2450,11 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; bo
 .booking-combobox-option[aria-selected="true"] { font-weight: 600; color: var(--green-dark); }
 .booking-combobox-option.highlighted, .booking-combobox-option:hover { background: var(--mint); color: var(--green-dark); }
 .booking-combobox-empty { padding: 13px 12px; color: var(--muted); font-size: 12px; }
+
+.password-control { position: relative; width: 100%; min-width: 0; }
+.password-control > input { width: 100%; padding-right: 52px; }
+.password-visibility-toggle { position: absolute; top: 0; right: 0; bottom: 0; width: 44px; min-height: 44px; display: grid; place-items: center; border: 0; border-radius: 0 9px 9px 0; color: #567265; background: transparent; cursor: pointer; }
+.password-visibility-toggle:hover { color: var(--green-dark); background: #08796909; }
+.password-visibility-toggle:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; }
+.password-visibility-toggle:disabled { cursor: not-allowed; opacity: .45; }
+.password-control > input::-ms-reveal { display: none; }

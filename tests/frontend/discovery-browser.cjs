@@ -25,6 +25,17 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.getByRole('heading',{name:'Тест лекар'}).waitFor();
   await noOverflow(page,'Desktop public directory');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
+  for(const path of ['/Account/Login','/Account/Register','/Platform/Login']) {
+   const formPage=await context.newPage();await formPage.goto(publicUrl+path);
+   const password=formPage.locator('.password-control input').first();
+   await password.fill('Visibility-test-only-123');
+   const button=formPage.locator('.password-visibility-toggle').first();
+   await button.click();
+   check(await password.getAttribute('type')==='text' && await password.inputValue()==='Visibility-test-only-123',path+' reveals its password without changing it');
+   await button.focus();await formPage.keyboard.press('Space');
+   check(await password.getAttribute('type')==='password',path+' supports keyboard masking');
+   await formPage.close();
+  }
   const motion=page.locator('[data-motion-toggle]');
   const line = page.locator('.care-flow-trace');
   const before = await line.evaluate(e=>getComputedStyle(e).strokeDashoffset);
@@ -77,8 +88,13 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.goto(publicUrl+'/Platform/Login');
   await page.locator('input[name=Email]').fill('company@test.test');
   await page.locator('input[name=Password]').fill('Test-password-123');
-  await page.locator('form button[type=submit], form button').first().click();
+  await page.getByRole('button',{name:/^Најави се/}).click();
   await page.getByRole('heading',{name:'Додај нова клиника'}).waitFor();
+  check(await page.locator('.password-visibility-toggle').count()===3,'Company onboarding and both password-change fields have toggles');
+  await page.locator('#admin-password').fill('New-clinic-test-only-123');
+  await page.locator('[aria-controls="admin-password"]').click();
+  check(await page.locator('#admin-password').getAttribute('type')==='text' && await page.locator('#current').getAttribute('type')==='password','Company field visibility is independent');
+  await page.locator('[aria-controls="admin-password"]').click();
   await noOverflow(page,'Desktop company onboarding');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'company-desktop.png'),fullPage:true});
   await page.setViewportSize({width:390,height:900});await noOverflow(page,'Mobile company onboarding');
@@ -153,6 +169,11 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('#booking-doctor-input').isDisabled() && await page.locator('#booking-patient-input').isDisabled(),'Rescheduling retains locked doctor and patient selections');
   if(screenshots)await page.locator('#main-dialog').screenshot({path:resolve(screenshots,'booking-desktop.png')});
   await page.locator('#close-dialog').click();
+  await page.goto(demoUrl+'/Account/Password');
+  check(await page.locator('.password-visibility-toggle').count()===2,'Personal password-change form has a toggle for both fields');
+  await page.locator('#new').fill('Personal-test-only-123');
+  await page.locator('[aria-controls="new"]').click();
+  check(await page.locator('#new').getAttribute('type')==='text' && await page.locator('#current').getAttribute('type')==='password','Changing a personal password reveals only the chosen field');
   const mobile=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
   const m=await mobile.newPage();await m.goto(demoUrl+'/Demo');
   await m.locator('[data-role=Administrator]').tap();await m.locator('#demo-user').selectOption('admin');
@@ -175,6 +196,14 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await m.locator('#booking-patient-list [role=option]').first().tap();
   check(await m.locator('#booking-patient').inputValue()===person.id,'Patient dropdown selection works by touch');
   await noOverflow(m,'Mobile searchable booking dialog');
+  await m.goto(publicUrl+'/Account/Login');
+  await m.locator('#password').fill('Mobile-test-only-123');
+  await m.locator('.password-visibility-toggle').tap();
+  check(await m.locator('#password').getAttribute('type')==='text','Password reveal works by touch');
+  await m.locator('.password-visibility-toggle').tap();
+  check(await m.locator('#password').getAttribute('type')==='password','Password masking works by touch');
+  await noOverflow(m,'Mobile password visibility control');
+  if(screenshots)await m.locator('.password-control').screenshot({path:resolve(screenshots,'password-mobile.png')});
   check(errors.length===0,'No uncaught browser JavaScript errors in exercised pages');
   console.log(`\n${count}/${count} Chromium UI checks passed (stub public API, JSON demo workspace).`);
  } finally {if(demo){demo.kill();await new Promise(res=>demo.once('exit',res));}await browser.close();await rm(temp,{recursive:true,force:true});}

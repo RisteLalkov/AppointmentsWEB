@@ -76,3 +76,23 @@ errors, 78 DOM checks in both JSON-demo and PostgreSQL-backed modes, 42 Chromium
 UI checks (including keyboard/touch booking), 39 MVC contracts, 38 HTTP checks,
 107 PostgreSQL/API/MVC checks, and 7 direct SQL constraint checks. New GitHub CI
 and the IIS deployment are separate from this local verification.
+
+## Password visibility controls
+
+- All password inputs in clinic/company login, patient registration, clinic
+  onboarding, personal/company password changes and staff account management
+  receive an independent eye button through the shared layout script.
+- Passwords start hidden. Check showing/hiding with mouse, touch and keyboard;
+  each button controls only its own input and does not submit the form.
+- Labels and pressed state are available to screen readers. Field names,
+  autocomplete, password constraints and submitted values stay unchanged.
+- Submitting, resetting or restoring a page masks revealed fields again. The
+  component does not copy passwords into markup, logs or browser storage.
+- New password inputs inserted later receive controls automatically.
+- Deploy Appointments.Web including wwwroot, preserve server settings and refresh
+  with Ctrl+F5. No API publication or database scripts are required.
+
+Local validation: Release build with zero warnings/errors, 16 password-control
+checks, 78 existing DOM checks, 55 Chromium UI checks, 39 MVC contract checks and
+38 HTTP checks. Browser checks include clinic/company login, registration,
+company and personal password forms, keyboard operation and mobile touch.
