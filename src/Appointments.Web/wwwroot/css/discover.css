@@ -291,3 +291,6 @@
 }
 @media (max-width: 480px) { .benefits-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; } .benefit-icon { margin-bottom: 18px; } }
 @media (prefers-reduced-motion: reduce) { .benefit-card { transition: none; } .benefit-card:hover { transform: none; } .discovery-motion .benefit-card.is-arriving { animation: none; } }
+
+.care-seal .logo-symbol { display: block; width: 54%; height: auto; }
+.discovery-closing-orbit .logo-symbol { display: block; width: 76%; height: auto; }

@@ -2465,3 +2465,8 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; bo
 .overview-date-chip svg { width: 18px; height: 18px; flex-shrink: 0; color: #43866d; }
 .overview-date-chip time { min-width: 0; }
 .overview-day-note { color: var(--muted); font-size: 11px; line-height: 1.6; }
+
+/* The supplied company symbol replaces the former cross; the wordmark stays text. */
+img.brand-mark { display: block; width: 36px; height: 36px; flex-shrink: 0; object-fit: contain; border-radius: 0; background: transparent; }
+.welcome-story img.brand-mark { background: transparent; }
+.hero-plus img { display: block; width: 100px; height: 100px; }

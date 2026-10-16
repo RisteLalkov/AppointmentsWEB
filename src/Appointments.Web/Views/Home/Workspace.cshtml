@@ -5,7 +5,7 @@
 <a class="skip-link" href="#main-content">Прескокни до содржината</a>
 <div class="app-shell">
     <aside class="sidebar" id="sidebar" tabindex="0" aria-label="Навигација и корисничка сметка">
-        <a class="brand" href="/"><span class="brand-mark">✚</span> careline<span class="brand-dot">.</span></a>
+        <a class="brand" href="/"><partial name="_BrandMark" /> careline<span class="brand-dot">.</span></a>
         @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">КЛИНИКА</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? "РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА" : Model.Role == DemoRole.Doctor ? "РАБОТЕН ПРОСТОР ЗА ЛЕКАР" : "РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ")</div>
         <nav aria-label="Главна навигација" id="navigation">

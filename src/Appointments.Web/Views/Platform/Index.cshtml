@@ -5,7 +5,7 @@
     var input = ViewData["Input"] as ProvisionClinicInput;
     string State(string s) => s switch { "Ready" => "Подготвена", "Failed" => "Потребно повторување", "Provisioning" => "Подготовка", _ => "Неактивна" };
 }
-<header class="public-header"><a class="brand" href="/Discover"><span class="brand-mark">✚</span> careline.</a><nav><span>@User.Identity?.Name</span><form asp-action="Logout" method="post"><button class="btn secondary small">Одјави се</button></form></nav></header>
+<header class="public-header"><a class="brand" href="/Discover"><partial name="_BrandMark" /> careline.</a><nav><span>@User.Identity?.Name</span><form asp-action="Logout" method="post"><button class="btn secondary small">Одјави се</button></form></nav></header>
 <main class="public-main">
 <div class="page-heading"><div><span class="eyebrow">КОМПАНИСКИ РАБОТЕН ПРОСТОР</span><h1>Клиники и нови партнери.</h1><p>Регистрација на клиника и нејзиниот прв администратор.</p></div></div>
 @if ((ViewData["Error"] ?? TempData["Error"]) is string error) { <div class="inline-error" role="alert">@error</div> }
