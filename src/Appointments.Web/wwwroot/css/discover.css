@@ -264,3 +264,30 @@
  .discovery-closing .btn { grid-column: 1; white-space: normal; }
  .discovery-ribbon { inset-inline: 0; }
 }
+
+/* Benefits bridge the public search and the clinic's daily workflow. */
+.discovery-benefits { margin-top: 68px; }
+.benefits-heading { display: flex; align-items: end; justify-content: space-between; gap: 35px; margin-bottom: 28px; }
+.benefits-heading .eyebrow { font-size: 10px; letter-spacing: 2px; color: var(--green); }
+.benefits-heading h2 { margin: 15px 0 0; font-size: clamp(25px, 2.8vw, 36px); font-weight: 600; line-height: 1.25; letter-spacing: -1px; }
+.benefits-heading h2 span { color: #648273; font-weight: 400; }
+.benefits-heading > p { max-width: 310px; margin: 0 0 3px; font-size: 13px; line-height: 1.8; color: var(--muted); }
+.benefits-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.benefit-card { min-width: 0; padding: 25px 22px 28px; border: 1px solid #dfe8e1; border-radius: 20px; background: #ffffffed; box-shadow: 0 5px 20px #19382f03; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.benefit-icon { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid #dbece2; border-radius: 15px; background: #edf6f0; color: var(--green); margin-bottom: 24px; }
+.benefit-icon svg { width: 24px; height: 24px; }
+.benefit-card:nth-child(3n + 2) .benefit-icon { background: #f2eef8; color: #8973af; border-color: #e7def1; }
+.benefit-card h3 { margin: 0 0 11px; font-size: 16px; font-weight: 600; line-height: 1.4; letter-spacing: -.3px; overflow-wrap: anywhere; }
+.benefit-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.85; }
+.benefit-card:hover { transform: translateY(-3px); border-color: #bad4c6; box-shadow: 0 12px 30px #19382f08; }
+.discovery-motion .benefit-card.is-arriving { animation: discovery-arrive .55s cubic-bezier(.2,.65,.3,1) both; }
+.discovery-paused .benefit-card.is-arriving { animation-play-state: paused; }
+@media (max-width: 1100px) { .benefits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+ .discovery-benefits { margin-top: 43px; }
+ .benefits-heading { flex-direction: column; align-items: start; gap: 17px; margin-bottom: 24px; }
+ .benefits-heading > p { max-width: 430px; }
+ .benefit-card { padding: 23px 20px; border-radius: 17px; }
+}
+@media (max-width: 480px) { .benefits-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; } .benefit-icon { margin-bottom: 18px; } }
+@media (prefers-reduced-motion: reduce) { .benefit-card { transition: none; } .benefit-card:hover { transform: none; } .discovery-motion .benefit-card.is-arriving { animation: none; } }

@@ -46,6 +46,6 @@
                 observer.unobserve(entry.target);
             }
         }, { threshold: .08 });
-        page.querySelectorAll('.discovery-card').forEach(card => observer.observe(card));
+        page.querySelectorAll('.discovery-card, .benefit-card').forEach(card => observer.observe(card));
     }
 })();
