@@ -144,7 +144,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             status,_,h=anon.request(book)
             check(status==302 and '/Account/Login?' in h['Location'] and 'returnUrl=' in h['Location'],'Anonymous booking preserves a protected return action')
             status,html,_=anon.request(h['Location'])
-            check('<select' not in html and 'Клиниката се препознава автоматски.' in html,'Normal login has credentials only')
+            check('<select' not in html and 'Внесете ги вашите податоци.' in html and 'Клиниката се препознава автоматски.' not in html,'Normal login has credentials only')
             check('Создајте пациентска сметка' in html and 'doctorId' in html,'Login offers registration while preserving selected doctor')
             check(anon.request('/Account/Login',{'Email':'p@test.test','Password':'Test-password-123'})[0]==400,'Login POST requires CSRF')
             csrf=anon.csrf('/Account/Login?returnUrl='+urllib.parse.quote(book))

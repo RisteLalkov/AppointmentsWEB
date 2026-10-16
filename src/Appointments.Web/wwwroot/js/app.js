@@ -136,8 +136,9 @@
     subtitle,
     action = "",
     eyebrow = "ВАШАТА ГРИЖА, НА ЕДНО МЕСТО",
+    overviewDate = false,
   ) =>
-    `<div class="page-heading"><div><span class="eyebrow">${escape(eyebrow)}</span><h1>${escape(title)}</h1><p>${escape(subtitle)}</p></div>${action}</div>`;
+    `<div class="page-heading"><div><span class="eyebrow">${escape(eyebrow)}</span><h1>${escape(title)}</h1><p${overviewDate ? ' class="overview-date"' : ''}>${overviewDate ? `<span class="overview-date-chip"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2"/></svg><time datetime="${escape(state.today)}">${escape(subtitle)}</time></span><span class="overview-day-note">Да направиме простор за убав ден.</span>` : escape(subtitle)}</p></div>${action}</div>`;
   const bookButton = (label) =>
     `<button class="btn primary" data-action="book"><span aria-hidden="true">＋</span> ${escape(label || "Нов термин")}</button>`;
   const doctorOptions = (selected = "", all = false, bookable = false) =>
@@ -362,8 +363,10 @@
     app.innerHTML =
       heading(
         `Здраво, ${firstName}.`,
-        `${formatDate(state.today, { weekday: "long", day: "numeric", month: "long", year: "numeric" })} · Да направиме простор за убав ден.`,
+        `${formatDate(state.today, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}`,
         bookButton(isPatient() ? "Закажи преглед" : "Нов термин"),
+        undefined,
+        true,
       ) +
       (isPatient()
         ? `<section class="hero-banner"><div><span class="eyebrow">ДОБРОТО ЗДРАВЈЕ ЗАПОЧНУВА ТУКА</span><h2>Одвојте време за себе.<br /><em>Чекор кон подобро здравје.</em></h2><p>Пронајдете го соодветниот специјалист и термин што ви одговара. Сите детали ќе бидат на едно место.</p><button class="btn primary" data-nav="doctors">Пронајдете го вашиот лекар <span aria-hidden="true">↗</span></button></div><div class="hero-visual" aria-hidden="true"><span class="hero-plus">✚</span><span class="hero-tag">Вашето здравје. Вашето темпо.</span></div></section>`

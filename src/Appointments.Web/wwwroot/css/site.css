@@ -2344,9 +2344,9 @@ dialog::backdrop {
 @media (max-width: 650px) { .history-changes { grid-template-columns: 1fr; } }
 
 /* Clinic context follows the existing workspace card palette and spacing. */
-.clinic-badge { margin: 0 0 20px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #f0f4ec; }
-.clinic-badge .eyebrow { display: block; margin-bottom: 4px; font-size: 9px; letter-spacing: 1.4px; color: #63785d; }
-.clinic-badge strong { display: block; color: var(--ink); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.clinic-badge { margin: 0 0 22px; padding: 16px 17px; border: 1px solid #d6e7dd; border-left: 3px solid #79ae98; border-radius: 14px; background: linear-gradient(125deg, #e7f2eb, #f4f7ef); box-shadow: 0 5px 16px #19382f04; }
+.clinic-badge .eyebrow { display: block; margin-bottom: 7px; font-size: 10px; letter-spacing: 1.8px; color: #597b69; }
+.clinic-badge strong { display: block; color: var(--green-dark); font-size: 16px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
 .clinic-context { color: var(--muted); margin: 12px 0 24px; }
 
 /* Patient profiles extend the shared workspace cards, filters and dialogs. */
@@ -2458,3 +2458,10 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; bo
 .password-visibility-toggle:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; }
 .password-visibility-toggle:disabled { cursor: not-allowed; opacity: .45; }
 .password-control > input::-ms-reveal { display: none; }
+
+/* A compact calendar accent keeps the overview date distinct from the greeting. */
+.page-heading .overview-date { display: flex; align-items: center; flex-wrap: wrap; gap: 9px 13px; margin-top: 13px; }
+.overview-date-chip { display: inline-flex; align-items: center; gap: 9px; max-width: 100%; padding: 8px 11px; border: 1px solid #d9e8de; border-radius: 10px; background: #edf5ef; color: var(--green-dark); font-size: 12px; font-weight: 500; line-height: 1.5; }
+.overview-date-chip svg { width: 18px; height: 18px; flex-shrink: 0; color: #43866d; }
+.overview-date-chip time { min-width: 0; }
+.overview-day-note { color: var(--muted); font-size: 11px; line-height: 1.6; }
