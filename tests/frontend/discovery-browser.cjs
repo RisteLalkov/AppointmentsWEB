@@ -23,13 +23,15 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   const publicUrl = process.env.TEST_PUBLIC_WEB;
   await page.goto(publicUrl+'/Discover');
   await page.getByRole('heading',{name:'Тест лекар'}).waitFor();
-  check(await page.locator('img.brand-mark').evaluate(e=>e.complete && e.naturalWidth>0 && e.src.includes('/images/company-mark.svg')),'Public header loads the supplied company symbol');
+  check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0 && e.src.includes('/images/company-mark.svg')),'Public header loads the supplied company symbol');
   check((await page.locator('.brand').first().innerText()).includes('careline'),'Careline wordmark is preserved');
+  check(await page.locator('.discovery-footer .footer-company').getAttribute('href')==='https://www.codex.mk/en/home/','Footer credits the supplied CODEX company website');
+  check(await page.locator('.discovery-footer a[href="/Platform/Login"]').count()===0,'Public footer keeps company administration private');
   await noOverflow(page,'Desktop public directory');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
   for(const path of ['/Account/Login','/Account/Register','/Platform/Login']) {
    const formPage=await context.newPage();await formPage.goto(publicUrl+path);
-   check(await formPage.locator('img.brand-mark').evaluate(e=>e.complete && e.naturalWidth>0),path+' loads the company symbol');
+   check(await formPage.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),path+' loads the company symbol');
    const password=formPage.locator('.password-control input').first();
    await password.fill('Visibility-test-only-123');
    const button=formPage.locator('.password-visibility-toggle').first();
@@ -112,7 +114,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('input[name=Password]').fill('Test-password-123');
   await page.getByRole('button',{name:/^Најави се/}).click();
   await page.getByRole('heading',{name:'Додај нова клиника'}).waitFor();
-  check(await page.locator('img.brand-mark').evaluate(e=>e.complete && e.naturalWidth>0),'Company dashboard loads the company symbol');
+  check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),'Company dashboard loads the company symbol');
   check(await page.locator('.password-visibility-toggle').count()===3,'Company onboarding and both password-change fields have toggles');
   await page.locator('#admin-password').fill('New-clinic-test-only-123');
   await page.locator('[aria-controls="admin-password"]').click();
@@ -131,7 +133,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('#demo-user').selectOption('admin');
   await page.locator('#demo-form button[type=submit]').click();
   await page.locator('.overview-grid').waitFor();
-  check(await page.locator('img.brand-mark').evaluate(e=>e.complete && e.naturalWidth>0),'Workspace loads the company symbol');
+  check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),'Workspace loads the company symbol');
   check(await page.locator('.nav-item[data-page=availability]').count()===0,'Availability is absent from sidebar');
   const summary=page.locator('#catalogue-nav > summary');
   await summary.focus();await page.keyboard.press('Space');

@@ -294,3 +294,35 @@
 
 .care-seal .logo-symbol { display: block; width: 54%; height: auto; }
 .discovery-closing-orbit .logo-symbol { display: block; width: 76%; height: auto; }
+
+/* The closing invitation and footer share one calm, grounded surface. */
+.discovery-closing { border-radius: 28px 28px 0 0; padding-bottom: 42px; }
+.discovery-footer { position: relative; padding: 0 42px; background: #163f36; color: #b6cfc2; border-radius: 0 0 28px 28px; margin-bottom: 8px; }
+.discovery-footer-main { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr; gap: 32px; padding: 38px 0 40px; border-top: 1px solid #b6cfc226; }
+.discovery-footer .brand { color: #f2f8f3; font-size: 25px; width: fit-content; }
+.discovery-footer .brand-dot { color: #8cc9b4; }
+.footer-intro > p { font-size: 12px; line-height: 1.9; margin: 18px 0; }
+.footer-company { display: inline-flex; gap: 8px; flex-direction: column; color: #b6cfc2; }
+.footer-company > span { font-size: 10px; }
+.footer-company strong { display: flex; align-items: center; gap: 10px; color: #e3eee6; letter-spacing: 2.5px; font-size: 13px; font-weight: 600; }
+.footer-company .discovery-arrow { width: 13px; height: 13px; }
+.discovery-footer h2 { font-size: 12px; font-weight: 600; color: #eef6ef; margin: 5px 0 20px; letter-spacing: .1px; }
+.footer-links { display: flex; flex-direction: column; align-items: start; gap: 14px; }
+.footer-links h2 { margin-bottom: 6px; }
+.footer-links > a { color: #b6cfc2; font-size: 12px; line-height: 1.6; }
+.discovery-footer a { text-underline-offset: 4px; }
+.discovery-footer a:hover { color: white; text-decoration: underline; }
+.footer-connect > p { font-size: 12px; line-height: 1.8; margin: 0 0 16px; }
+.footer-socials { display: flex; gap: 9px; }
+.footer-social { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; border: 1px solid #b6cfc22b; background: #ffffff06; color: #c8ddd1; }
+.footer-social svg { width: 16px; height: 16px; }
+.footer-soon { display: block; font-size: 9px; margin-top: 11px; color: #9cb9ab; }
+.discovery-footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; padding: 22px 0 25px; border-top: 1px solid #b6cfc226; font-size: 10px; color: #a8c2b4; }
+.footer-legal { display: flex; flex-wrap: wrap; gap: 14px 20px; }
+.footer-legal > span { display: inline-flex; align-items: center; gap: 6px; }
+.footer-legal small { font-size: 8px; border: 1px solid #b6cfc226; padding: 2px 5px; border-radius: 5px; color: #9cb9ab; }
+.footer-back-top { display: inline-flex; gap: 10px; color: #d0e2d6; }
+#benefits-title { scroll-margin-top: 30px; }
+@media (max-width: 1000px) { .discovery-footer { padding-inline: 35px; } .discovery-footer-main { grid-template-columns: 1.3fr 1fr; gap: 34px; } }
+@media (max-width: 760px) { .discovery-footer { padding-inline: 25px; } .discovery-footer-main { padding-top: 30px; gap: 30px 20px; } .footer-intro { grid-column: 1 / -1; } .footer-connect { grid-column: 1 / -1; } .discovery-footer-bottom { flex-direction: column; align-items: start; gap: 17px; } }
+@media (max-width: 360px) { .discovery-footer-main { grid-template-columns: minmax(0, 1fr); } .footer-intro, .footer-connect { grid-column: auto; } }
