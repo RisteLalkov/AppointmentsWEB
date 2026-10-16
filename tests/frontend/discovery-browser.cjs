@@ -93,7 +93,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await plain.locator('.care-flow-trace, .care-glow, .care-seal').evaluateAll(elements=>elements.every(e=>getComputedStyle(e).animationName==='none')),'Decorative art stays still without JavaScript');
   await noJs.close();
   await page.getByRole('link',{name:/Види профил/}).click();
-  check(await page.locator('.doctor-profile-specialty').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=18),'Doctor specialty has stronger visual emphasis');
+  check(await page.locator('.doctor-profile-specialty').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=16 && parseFloat(getComputedStyle(e).fontSize)<=18),'Doctor specialty uses a compact readable size');
   check(!(await page.locator('body').innerText()).includes('Слободните термини се проверуваат') && !(await page.locator('body').innerText()).toLowerCase().includes('именик'),'Profile removes redundant copy and directory terminology');
   if(screenshots)await page.screenshot({path:resolve(screenshots,'doctor-profile-desktop.png'),fullPage:true});
   for(const width of [390,320]) {await page.setViewportSize({width,height:900});await noOverflow(page,'Doctor profile at '+width+'px');}
