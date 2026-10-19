@@ -36,9 +36,14 @@
         try { sessionStorage.setItem('careline.discovery.paused', String(paused)); } catch { /* Optional preference only. */ }
         render();
     });
+    // Stagger only decorative entrances; content remains visible with JS disabled.
+    page?.querySelectorAll('.discovery-copy > *').forEach((element, index) => {
+        element.style.setProperty('--entrance-delay', `${Math.min(index, 5) * 65}ms`);
+    });
     preference.addEventListener('change', render);
     render();
-    // Cards are always visible without JS; animation only runs as they enter view.
+    page?.classList.add('discovery-ready');
+    // Reveal sections once, keeping the controls usable throughout each entrance.
     if ('IntersectionObserver' in window && page) {
         const observer = new IntersectionObserver(entries => {
             for (const entry of entries) if (entry.isIntersecting) {
@@ -46,6 +51,15 @@
                 observer.unobserve(entry.target);
             }
         }, { threshold: .08 });
-        page.querySelectorAll('.discovery-card, .benefit-card').forEach(card => observer.observe(card));
+        page.querySelectorAll('.public-section-heading, .discovery-search-panel, .benefits-heading, .discovery-closing, .discovery-footer-main').forEach(section => {
+            section.classList.add('discovery-reveal');
+            observer.observe(section);
+        });
+        page.querySelectorAll('.discovery-grid, .benefits-grid').forEach(grid => {
+            grid.querySelectorAll('.discovery-card, .benefit-card').forEach((card, index) => {
+                card.style.setProperty('--entrance-delay', `${(index % 3) * 65}ms`);
+                observer.observe(card);
+            });
+        });
     }
 })();

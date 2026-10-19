@@ -217,8 +217,8 @@
 .discovery-page { position: relative; isolation: isolate; }
 .discovery-ribbon { position: absolute; inset: 0 0 100px; z-index: -1; overflow: hidden; pointer-events: none; }
 .discovery-ribbon svg { width: 100%; height: 100%; }
-.ribbon-underlay { stroke: url(#page-ribbon); stroke-width: 64; opacity: .12; }
-.ribbon-ink { stroke: url(#page-ribbon); stroke-width: 1.5; opacity: .6; }
+.ribbon-underlay { stroke: url(#page-ribbon); stroke-width: 76; opacity: .17; }
+.ribbon-ink { stroke: url(#page-ribbon); stroke-width: 2; opacity: .75; }
 .discovery-motion .ribbon-ink { stroke-dasharray: 1000; stroke-dashoffset: calc(1000 - var(--ribbon-progress, .2) * 1000); }
 .discovery-hero { min-height: 510px; gap: 48px; padding-bottom: 65px; }
 .discovery-copy h1 { font-size: clamp(36px, 4.4vw, 62px); letter-spacing: -2.6px; }
@@ -331,3 +331,19 @@
 .footer-socials a.footer-social { transition: background .2s, border-color .2s; }
 .footer-socials a.footer-social:hover { background: #ffffff12; border-color: #b6cfc280; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) { .footer-socials a.footer-social { transition: none; } }
+
+/* Entrances add a little rhythm without concealing content or moving controls far. */
+.discovery-motion.discovery-ready .discovery-copy > *,
+.discovery-motion.discovery-ready .discovery-art { animation: discovery-open .75s cubic-bezier(.2,.65,.3,1) both; animation-delay: var(--entrance-delay, 0ms); }
+.discovery-art { --entrance-delay: 130ms; }
+.discovery-motion .discovery-reveal.is-arriving { animation: discovery-arrive .65s cubic-bezier(.2,.65,.3,1) both; }
+.discovery-motion :is(.discovery-card, .benefit-card).is-arriving { animation-delay: var(--entrance-delay, 0ms); }
+.discovery-paused.discovery-ready .discovery-copy > *,
+.discovery-paused.discovery-ready .discovery-art,
+.discovery-paused .discovery-reveal.is-arriving { animation-play-state: paused; }
+@keyframes discovery-open { from { opacity: .45; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+ .discovery-motion.discovery-ready .discovery-copy > *,
+ .discovery-motion.discovery-ready .discovery-art,
+ .discovery-motion .discovery-reveal.is-arriving { animation: none; }
+}

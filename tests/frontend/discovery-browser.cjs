@@ -27,6 +27,8 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check((await page.locator('.brand').first().innerText()).includes('careline'),'Careline wordmark is preserved');
   check(await page.locator('.discovery-footer .footer-company').getAttribute('href')==='https://www.codex.mk/en/home/','Footer credits the supplied CODEX company website');
   check(await page.locator('.discovery-footer a[href="/Platform/Login"]').count()===0,'Public footer keeps company administration private');
+  check(await page.locator('.discovery-copy h1').evaluate(e=>getComputedStyle(e).animationName)==='discovery-open','Hero heading has a gentle entrance');
+  check(await page.locator('.discovery-art').evaluate(e=>getComputedStyle(e).animationName)==='discovery-open','Hero illustration joins the opening entrance');
   await noOverflow(page,'Desktop public directory');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
   for(const path of ['/Account/Login','/Account/Register','/Platform/Login']) {
@@ -55,6 +57,8 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('.discovery-closing').scrollIntoViewIfNeeded();
   await page.waitForTimeout(100);
   check(await page.locator('.ribbon-ink').evaluate(e=>getComputedStyle(e).strokeDashoffset)!==ribbonStart,'Page ribbon draws as the visitor scrolls');
+  await page.waitForFunction(()=>document.querySelector('.discovery-closing').classList.contains('is-arriving'));
+  check(await page.locator('.discovery-closing').evaluate(e=>getComputedStyle(e).animationName)==='discovery-arrive','Closing section reveals on scroll');
   await motion.click();
   check(await motion.getAttribute('aria-pressed')==='true' && await page.locator('.care-flow-trace').evaluate(e=>getComputedStyle(e).animationPlayState)==='paused','Motion can be paused');
   check(await page.locator('.care-glow, .care-seal').evaluateAll(elements=>elements.every(e=>getComputedStyle(e).animationPlayState==='paused')),'Pause stops the floating gradients and care symbol too');
@@ -64,9 +68,11 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('.ribbon-ink').evaluate(e=>getComputedStyle(e).strokeDashoffset)===pausedRibbon,'Pause freezes the scroll ribbon too');
   await page.reload();
   check(await motion.getAttribute('aria-pressed')==='true','Motion pause preference survives navigation');
+  check(await page.locator('.discovery-copy h1').evaluate(e=>getComputedStyle(e).animationPlayState)==='paused','Pause preference also stops opening entrances');
   await page.emulateMedia({reducedMotion:'reduce'});
   check(await page.locator('.care-flow-trace').evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced-motion preference disables decorative animation');
   check(await page.locator('.discovery-card').first().evaluate(e=>getComputedStyle(e).animationName)==='none','Reduced motion disables card entrances too');
+  check(await page.locator('.discovery-copy h1, .discovery-art, .discovery-reveal').evaluateAll(elements=>elements.every(e=>getComputedStyle(e).animationName==='none')),'Reduced motion disables all opening and section entrances');
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.locator('.discovery-refinements summary').click();
   await page.locator('#clinic-search').fill('Клиника');
