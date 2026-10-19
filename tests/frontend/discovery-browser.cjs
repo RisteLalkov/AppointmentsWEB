@@ -92,7 +92,10 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
    await page.setViewportSize({width,height:900}); await noOverflow(page,`Public directory at ${width}px`);
   }
   await page.setViewportSize({width:390,height:900});
-  if(screenshots) await page.screenshot({path:resolve(screenshots,'public-mobile.png'),fullPage:true});
+  if(screenshots) {
+   await page.screenshot({path:resolve(screenshots,'public-mobile.png'),fullPage:true});
+   await page.locator('.discovery-footer').screenshot({path:resolve(screenshots,'footer-mobile.png')});
+  }
   await page.locator('#search').fill('без-резултат');await page.locator('#search').press('Enter');
   await page.getByRole('heading',{name:'Нема резултати за ова пребарување.'}).waitFor();
   await page.getByRole('link',{name:'Прикажи ги сите лекари'}).click();

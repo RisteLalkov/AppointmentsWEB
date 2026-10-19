@@ -327,7 +327,7 @@
 @media (max-width: 760px) { .discovery-footer { padding-inline: 25px; } .discovery-footer-main { padding-top: 30px; gap: 30px 20px; } .footer-intro { grid-column: 1 / -1; } .footer-connect { grid-column: 1 / -1; } .discovery-footer-bottom { flex-direction: column; align-items: start; gap: 17px; } }
 @media (max-width: 360px) { .discovery-footer-main { grid-template-columns: minmax(0, 1fr); } .footer-intro, .footer-connect { grid-column: auto; } }
 
-.footer-codex-logo { display: block; width: 60px; height: 60px; padding: 8px; border-radius: 12px; background: white; object-fit: contain; box-sizing: border-box; }
+.footer-codex-logo { display: block; width: 180px; max-width: 100%; height: auto; object-fit: contain; }
 .footer-socials a.footer-social { transition: background .2s, border-color .2s; }
 .footer-socials a.footer-social:hover { background: #ffffff12; border-color: #b6cfc280; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) { .footer-socials a.footer-social { transition: none; } }
