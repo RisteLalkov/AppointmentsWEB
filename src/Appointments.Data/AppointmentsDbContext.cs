@@ -24,6 +24,8 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
     protected override void OnModelCreating(ModelBuilder b)
     {
         b.HasPostgresExtension("btree_gist");
+        b.HasDbFunction(typeof(PostgresText).GetMethod(nameof(PostgresText.Translate))!)
+            .HasName("translate").IsBuiltIn();
         b.Entity<Specialty>(x => { x.HasKey(s => s.Id); x.Property(s => s.Name).HasMaxLength(200); x.Property(s => s.Version).IsConcurrencyToken(); x.HasIndex(s => s.Name).IsUnique(); });
         b.Entity<MedicalService>(x => {
             x.ToTable("Services", t => t.HasCheckConstraint("CK_Service_Duration", "\"DurationMinutes\" BETWEEN 10 AND 120 AND \"DurationMinutes\" % 5 = 0"));

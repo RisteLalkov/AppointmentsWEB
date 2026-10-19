@@ -26,6 +26,14 @@ refinements, including a clinic profile's scope, and starts at page 1. On the Cl
 it searches clinic names. Search is case-insensitive and trims outer whitespace; it does
 not transliterate Latin and Cyrillic or fuzzy-match spelling mistakes.
 
+Cyrillic casing is folded explicitly with PostgreSQL's built-in `translate()` before
+`lower()`, so Macedonian names, specialties, subspecialties and services also match
+in UTF-8 databases using the `C`/`POSIX` locale. Those locales do not lowercase
+Cyrillic themselves. No extension, migration or database locale change is required;
+deploy the full API publish output for this correction. Regression coverage includes
+`Јован`, `Нешковски`, the full name, and upper/mixed-case input. The PostgreSQL
+platform suite is verified with both `C` and `C.UTF-8` test clusters.
+
 Optional clinic, specialty and service refinements work independently, or combine with
 AND when more than one is supplied. All active criteria, including a clinic ID, have
 visible removal chips. Removing a chip preserves the other criteria and resets page 1.

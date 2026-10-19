@@ -156,6 +156,15 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         first_match=search(search='Горан',pageSize=1,page=1)
         second_match=search(search='Горан',pageSize=1,page=2)
         check(first_match['total']==second_match['total']==named['total'] and (first_match['items'][0]['clinic']['id'],first_match['items'][0]['id'])!=(second_match['items'][0]['clinic']['id'],second_match['items'][0]['id']), 'Broad cross-clinic search retains stable server pagination')
+        # Real Cyrillic regression: also run this suite against a UTF-8 C-locale cluster.
+        mk_spec=owner.ok('/api/catalogue/specialties',{'id':None,'name':'Ѓинекологија Ќ Тест'})
+        mk_doc=owner.ok('/api/catalogue/doctors',{'id':None,'name':'Јован Нешковски','specialtyId':mk_spec['id'],'subspecialty':'Љубљана Џ Ѕ Тест','enabled':True})
+        for term in ['Јован','Нешковски','Јован Нешковски','јован','НЕШКОВСКИ','  јОвАн нЕшКоВсКи  ']:
+            matches=search(search=term)
+            check(any(d['id']==mk_doc['id'] and d['clinic']['id']=='main' for d in matches['items']), 'Macedonian doctor search matches: '+term)
+        mk_service=owner.ok('/api/catalogue/services',{'id':None,'name':'Ќирилична Ѕ Услуга','specialtyId':mk_spec['id'],'durationMinutes':30,'enabled':True,'doctorIds':[mk_doc['id']]})
+        for field,term in [('search','ѓинекологија'),('specialty','ЃИНЕКОЛОГИЈА'),('search','љубљана'),('specialty','ЉУБЉАНА'),('search','ќирилична'),('service','ЌИРИЛИЧНА')]:
+            check(any(d['id']==mk_doc['id'] for d in search(**{field:term})['items']), 'Macedonian field casing: '+field+'='+term)
         admin.ok('/api/catalogue/doctors',{'id':other_doc['id'],'name':other_doc['name'],'specialtyId':spec['id'],'subspecialty':'','enabled':False,'version':other_doc['catalogVersion']})
         admin.ok('/api/catalogue/doctors',{'id':doctor['id'],'name':doctor['name'],'specialtyId':spec['id'],'subspecialty':'','enabled':False,'version':doctor['catalogVersion']})
         check(anon.ok('/api/public/doctors?clinicId=new-clinic')['total']==0, 'Disabled doctor disappears from public results')
