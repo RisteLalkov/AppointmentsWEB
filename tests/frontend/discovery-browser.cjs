@@ -144,6 +144,13 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('.overview-grid').waitFor();
   check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),'Workspace loads the company symbol');
   check(await page.locator('.nav-item[data-page=availability]').count()===0,'Availability is absent from sidebar');
+  const people=page.locator('#people-nav');
+  await people.locator('summary').focus();await page.keyboard.press('Space');
+  check(await people.evaluate(e=>e.open),'Patients and doctors group expands with keyboard');
+  await people.locator('[data-page=patients]').click();
+  await page.waitForFunction(()=>document.querySelector('#page-label').textContent==='Пациенти');
+  check(await people.evaluate(e=>e.open && e.classList.contains('active')),'Patient navigation opens and highlights its parent group');
+  if(screenshots) await page.locator('#sidebar').screenshot({path:resolve(screenshots,'navigation-desktop.png')});
   const summary=page.locator('#catalogue-nav > summary');
   await summary.focus();await page.keyboard.press('Space');
   check(await page.locator('#catalogue-nav').evaluate(e=>e.open),'Catalogue submenu opens with keyboard');
@@ -155,6 +162,8 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('#availability-doctor').inputValue()==='d01','Doctor card opens selected availability');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'availability-desktop.png'),fullPage:true});
   await page.goto(demoUrl+'/Workspace?book=d01#doctors');
+  await page.waitForFunction(()=>document.querySelector('#people-nav').open);
+  check(await page.locator('#page-label').textContent()==='Лекари','Doctor deep link expands its group and uses the shorter title');
   await page.locator('#booking-doctor-input').waitFor();
   check(!new URL(page.url()).searchParams.has('book'),'Booking continuation opens dialog and consumes query parameter');
   // Booking combobox regression: actual MVC, JS and persisted demo operations.
@@ -213,6 +222,11 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   const m=await mobile.newPage();await m.goto(demoUrl+'/Demo');
   await m.locator('[data-role=Administrator]').tap();await m.locator('#demo-user').selectOption('admin');
   await m.locator('#demo-form button[type=submit]').tap();await m.locator('.overview-grid').waitFor();
+  await m.locator('#menu-toggle').tap();await m.locator('#people-nav > summary').tap();
+  await m.locator('#people-nav [data-page=patients]').tap();
+  await m.waitForFunction(()=>document.querySelector('#page-label').textContent==='Пациенти');
+  check(await m.locator('#people-nav').evaluate(e=>e.open && e.classList.contains('active')),'Touch navigation selects patients from the new group');
+  await noOverflow(m,'Mobile grouped navigation');
   await m.locator('#menu-toggle').tap();await m.locator('#catalogue-nav > summary').tap();
   await m.locator('[data-page="catalogue/specialties"]').tap();await m.locator('[data-catalogue-tab=specialties][aria-pressed=true]').waitFor();
   check(true,'Touch submenu opens and selects specialties');

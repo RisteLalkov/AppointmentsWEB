@@ -2372,8 +2372,12 @@ dialog::backdrop {
 /* Shared accents and public/company surfaces use the existing component system. */
 .nav-group > summary { list-style: none; cursor: pointer; position: relative; padding-right: 30px; }
 .nav-group > summary::-webkit-details-marker { display: none; }
-.nav-group > summary::after { content: '⌄'; position: absolute; right: 14px; transition: transform .15s; }
-.nav-group[open] > summary::after { transform: rotate(180deg); }
+.nav-group > summary { padding-right: 44px; }
+.nav-group-icon { width: 21px; height: 21px; flex-shrink: 0; color: #8e9b8e; }
+.nav-chevron { position: absolute; right: 12px; width: 23px; height: 23px; padding: 4px; border: 1px solid #dbe5dd; border-radius: 7px; color: #647e6d; background: #f3f7f2; transition: transform .2s ease, background .2s ease; }
+.nav-group[open] > summary .nav-chevron { transform: rotate(90deg); background: #e1eee5; }
+.nav-group.active .nav-group-icon { color: var(--green-dark); }
+@media (prefers-reduced-motion: reduce) { .nav-chevron { transition: none; } }
 .nav-group.active > summary { color: var(--green-dark); background: var(--mint); }
 .nav-submenu { margin: 5px 0 10px 22px; padding-left: 10px; border-left: 2px solid var(--line); }
 .nav-child { font-size: 13px; min-height: 40px; }
