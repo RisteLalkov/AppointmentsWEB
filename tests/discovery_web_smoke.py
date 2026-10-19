@@ -61,7 +61,11 @@ class Stub(BaseHTTPRequestHandler):
         elif path.path=='/api/public/clinics/east/doctors/d01': result=dict(doctor,clinic=dict(clinic,id='east'))
         elif path.path=='/api/clinics': result=[clinic]
         elif path.path=='/api/auth/register': result=dict(id='a01',email=body['email'],name=body['name'],role='Patient',patientId='p01',doctorId=None,enabled=True)
-        elif path.path=='/api/auth/login': result=dict(accessToken='c1.main.'+'a'*64,expiresAt=expires,actor=dict(id='a01',name='Тест пациент',role='Patient',patientId='p01',doctorId=None),demoMode=False,clinic=clinic)
+        elif path.path=='/api/auth/login':
+            is_admin=body.get('email')=='accounts-admin@test.test'
+            result=dict(accessToken='c1.main.'+'a'*64,expiresAt=expires,actor=dict(id='a01',name='Тест администратор' if is_admin else 'Тест пациент',role='Administrator' if is_admin else 'Patient',patientId=None if is_admin else 'p01',doctorId=None),demoMode=False,clinic=clinic)
+        elif path.path=='/api/bootstrap': result=dict(actor=dict(id='a01',name='Тест администратор',role='Administrator'),doctors=[dict(id='d01',name='Тест лекар',specialty='Кардиологија')],patients=[dict(id='p01',name='Тест пациент',email='patient@test.test',phone='')],appointments=[],today='2026-10-19',localNow='2026-10-19T10:00:00',timeZone='Europe/Skopje',utcNow=expires)
+        elif path.path=='/api/accounts': result=[] if self.command=='GET' else dict(id='created',email=body['email'],name=body['name'],role=body['role'],patientId=body.get('patientId'),doctorId=body.get('doctorId'),enabled=True)
         elif path.path=='/api/platform/login': result=dict(accessToken='p1.'+'p'*64,expiresAt=expires,id='company',name='Тест компанија')
         elif path.path=='/api/platform/clinics':
             if self.headers.get('Authorization')!='Bearer p1.'+'p'*64: code,result=401,dict(error='Unauthorized')

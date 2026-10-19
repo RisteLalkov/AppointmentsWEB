@@ -118,6 +118,35 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('select').count()===0,'Login has no clinic selector');
   await noOverflow(page,'Mobile login');
   await page.setViewportSize({width:1440,height:1000});
+  const accounts=await context.newPage();
+  await accounts.goto(publicUrl+'/Account/Login?returnUrl=%2FAccounts');
+  await accounts.locator('#email').fill('accounts-admin@test.test');
+  await accounts.locator('#password').fill('Test-password-123');
+  await accounts.getByRole('button',{name:/Најави се/}).click();
+  await accounts.locator('#account-create-form').waitFor();
+  check(await accounts.locator('#patient').isVisible() && await accounts.locator('#doctor').isHidden() && await accounts.locator('#doctor').isDisabled(),'Patient role shows only the patient profile');
+  check(await accounts.locator('#patient').evaluate(e=>e.required && !e.checkValidity()),'Patient profile is required before submission');
+  await accounts.locator('#patient').selectOption('p01');
+  await accounts.locator('#role').selectOption('Doctor');
+  check(await accounts.locator('#patient').isHidden() && await accounts.locator('#patient').inputValue()==='' && await accounts.locator('#doctor').isVisible(),'Switching to doctor clears and hides the patient profile');
+  await accounts.locator('#doctor').selectOption('d01');
+  await accounts.locator('#role').selectOption('Administrator');
+  check(await accounts.locator('#patient').isDisabled() && await accounts.locator('#doctor').isDisabled() && await accounts.locator('#doctor').inputValue()==='' && await accounts.locator('#doctor').isHidden(),'Administrator requires neither profile and clears old selections');
+  for(const role of ['Patient','Doctor','Administrator']) {
+   await accounts.locator('#role').selectOption(role);
+   await accounts.locator('#name').fill('Account test');await accounts.locator('#email').fill('new@test.test');await accounts.locator('#password').fill('Account-test-only-123');
+   if(role==='Patient')await accounts.locator('#patient').selectOption('p01');
+   if(role==='Doctor')await accounts.locator('#doctor').selectOption('d01');
+   const sent=accounts.waitForRequest(r=>r.method()==='POST' && new URL(r.url()).pathname==='/Accounts/Create');
+   await accounts.locator('#account-create-form button[type=submit]').click();
+   const data=new URLSearchParams((await sent).postData());
+   check(data.has('PatientId')===(role==='Patient') && data.has('DoctorId')===(role==='Doctor'),role+' form submits only its applicable profile');
+   await accounts.locator('[role=status]').filter({hasText:'Сметката е создадена.'}).waitFor();
+  }
+  if(screenshots)await accounts.screenshot({path:resolve(screenshots,'accounts-desktop.png'),fullPage:true});
+  for(const width of [390,320]) {await accounts.setViewportSize({width,height:900});await noOverflow(accounts,'Account creation at '+width+'px');}
+  if(screenshots)await accounts.screenshot({path:resolve(screenshots,'accounts-mobile.png'),fullPage:true});
+  await accounts.close();
   await page.goto(publicUrl+'/Platform/Login');
   await page.locator('input[name=Email]').fill('company@test.test');
   await page.locator('input[name=Password]').fill('Test-password-123');

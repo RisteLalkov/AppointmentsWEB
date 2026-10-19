@@ -2474,3 +2474,22 @@ summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; bo
 img.brand-mark { display: block; width: 36px; height: 36px; flex-shrink: 0; object-fit: contain; border-radius: 0; background: transparent; }
 .welcome-story img.brand-mark { background: transparent; }
 .hero-plus img { display: block; width: 100px; height: 100px; }
+
+/* Account creation adapts the profile choice to the selected role. */
+.account-create-section { border: 1px solid #dce7df; border-radius: 22px; box-shadow: 0 12px 35px #19382f04; }
+.account-create-heading { margin-bottom: 26px; }
+.account-create-heading .eyebrow { font-size: 9px; letter-spacing: 1.7px; }
+.account-create-heading h2 { margin: 10px 0 12px; font-size: 23px; letter-spacing: -.6px; font-weight: 600; }
+.account-create-heading p { font-size: 13px; line-height: 1.7; color: var(--muted); margin: 0; }
+.account-create-section .field { margin: 0; min-width: 0; }
+.account-create-section :is(input, select) { min-height: 46px; border-radius: 10px; }
+.account-role-panel { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; padding: 21px; border: 1px solid #dce9df; border-radius: 15px; background: #f1f7f2; }
+.account-role-panel [hidden] { display: none; }
+.account-role-panel select { background-color: white; }
+.account-role-help { grid-column: 1 / -1; margin: 0; color: #567462; font-size: 12px; line-height: 1.7; }
+.account-initial-password { grid-column: 1 / -1; max-width: 520px; width: 100%; }
+.account-initial-password small { display: block; margin-top: 9px; color: var(--muted); font-size: 11px; line-height: 1.7; }
+.account-create-footer { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 21px; margin-top: 3px; border-top: 1px solid var(--line); }
+.account-create-footer p { max-width: 560px; font-size: 11px; line-height: 1.8; color: var(--muted); margin: 0; }
+.account-create-footer .btn { gap: 16px; flex-shrink: 0; border-radius: 10px; min-height: 46px; }
+@media (max-width: 650px) { .account-role-panel { grid-template-columns: minmax(0, 1fr); padding: 17px; } .account-create-footer { flex-direction: column; align-items: stretch; gap: 18px; } }
