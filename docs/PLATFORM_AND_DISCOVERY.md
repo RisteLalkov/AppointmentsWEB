@@ -307,3 +307,13 @@ These are local results; new GitHub CI and server deployment are not claimed.
 
 Deploy Appointments.Web including wwwroot, preserve server configuration and
 refresh with Ctrl+F5. No API publication or database changes are required.
+
+## Configured-clinic adoption and clinic details
+
+Company operators can transfer an existing configured clinic into platform
+management and edit public metadata in the browser. This preserves its immutable
+ID, schema, credentials and scheduling data. See
+[PLATFORM_CLINIC_TRANSFER.md](PLATFORM_CLINIC_TRANSFER.md) for migration 007 and the
+operator workflow. After adoption, its platform metadata overrides old API public
+contact settings; ordinary clinic creation and account management need no new
+per-clinic API configuration.

@@ -32,6 +32,40 @@ public sealed class PlatformController(ApiClient api) : Controller
         catch (RuleException e) { if (e.StatusCode is 401 or 403) { await HttpContext.SignOutAsync("PlatformCookie"); return RedirectToAction(nameof(Login)); } ViewData["Error"] = e.Message; }
         return View();
     }
+    [HttpPost] public async Task<IActionResult> Adopt(string id, CancellationToken ct)
+    {
+        try
+        {
+            var clinic = await api.SendAsync<PlatformClinicSummary>($"api/platform/clinics/{Uri.EscapeDataString(id)}/adopt", new { }, ct: ct, platform: true);
+            TempData["Notice"] = "Клиниката сега се управува преку платформата. Сметките, лозинките и термините се зачувани.";
+            return RedirectToAction(nameof(Edit), new { id = clinic.Id });
+        }
+        catch (RuleException e) { TempData["Error"] = e.Message; return RedirectToAction(nameof(Index)); }
+    }
+    [HttpGet] public async Task<IActionResult> Edit(string id, CancellationToken ct)
+    {
+        try
+        {
+            var clinics = await api.SendAsync<List<PlatformClinicSummary>>("api/platform/clinics", ct: ct, platform: true);
+            var clinic = clinics.SingleOrDefault(c => c.Id == id && c.Managed && c.State == "Ready");
+            if (clinic == null) return NotFound();
+            ViewData["ClinicId"] = clinic.Id;
+            return View(new UpdateClinicInput(clinic.Name, clinic.Description, clinic.Address, clinic.Phone, clinic.Discoverable, clinic.AllowRegistration, clinic.Version));
+        }
+        catch (RuleException e) { TempData["Error"] = e.Message; return RedirectToAction(nameof(Index)); }
+    }
+    [HttpPost] public async Task<IActionResult> Edit(string id, UpdateClinicInput input, CancellationToken ct)
+    {
+        ViewData["ClinicId"] = id;
+        if (!ModelState.IsValid) { ViewData["Error"] = "Проверете го името, должината на полињата и верзијата на податоците."; return View(input); }
+        try
+        {
+            await api.SendAsync<PlatformClinicSummary>($"api/platform/clinics/{Uri.EscapeDataString(id)}/details", input, ct: ct, platform: true);
+            TempData["Notice"] = "Податоците за клиниката се зачувани.";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (RuleException e) { ViewData["Error"] = e.Message; return View(input); }
+    }
     [HttpPost] public async Task<IActionResult> Create(ProvisionClinicInput input, CancellationToken ct)
     {
         if (!ModelState.IsValid)

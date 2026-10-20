@@ -33,7 +33,14 @@ public sealed class ClinicRegistry
     private ClinicDefinition[] managed = [];
     private readonly SemaphoreSlim refresh = new(1, 1);
     public IReadOnlyList<ClinicDefinition> Configured { get; }
-    public IReadOnlyList<ClinicDefinition> Clinics => Configured.Concat(Volatile.Read(ref managed)).ToArray();
+    public IReadOnlyList<ClinicDefinition> Clinics
+    {
+        get
+        {
+            var current = Volatile.Read(ref managed);
+            return Configured.Where(c => !current.Any(m => m.Id == c.Id)).Concat(current).ToArray();
+        }
+    }
     public ClinicRegistry(IConfiguration configuration)
     {
         this.configuration = configuration;
@@ -72,7 +79,12 @@ public sealed class ClinicRegistry
             await using var db = PlatformDb();
             var rows = await db.Clinics.AsNoTracking().Where(c => c.State == "Ready").ToListAsync(ct);
             var all = rows.Select(Definition).ToArray();
-            if (all.Any(c => Configured.Any(x => x.Id == c.Id))) throw new InvalidOperationException("Managed and configured clinic IDs overlap.");
+            foreach (var row in rows)
+            {
+                var configured = Configured.SingleOrDefault(c => c.Id == row.Id);
+                if (configured != null && (!row.Adopted || !configured.Enabled || configured.TimeZone != row.TimeZone))
+                    throw new InvalidOperationException("Configured clinic overlap requires deliberate platform adoption with the original time zone.");
+            }
             Volatile.Write(ref managed, all);
         }
         finally { refresh.Release(); }

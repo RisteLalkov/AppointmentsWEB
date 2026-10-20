@@ -10,8 +10,11 @@
 <div class="page-heading"><div><span class="eyebrow">КОМПАНИСКИ РАБОТЕН ПРОСТОР</span><h1>Клиники и нови партнери.</h1><p>Регистрација на клиника и нејзиниот прв администратор.</p></div></div>
 @if ((ViewData["Error"] ?? TempData["Error"]) is string error) { <div class="inline-error" role="alert">@error</div> }
 @if (TempData["Notice"] is string notice) { <div class="inline-note" role="status">@notice</div> }
-<section class="card public-profile-card"><h2>Регистрирани клиники</h2><div class="table-wrap"><table><thead><tr><th>Клиника</th><th>Идентификатор</th><th>Состојба</th><th>Јавно прикажување</th></tr></thead><tbody>
-@foreach (var c in clinics) { <tr><td>@c.Name</td><td>@c.Id</td><td>@State(c.State)@(!c.Managed ? " · Конфигурација" : "")</td><td>@(c.Discoverable ? "Вклучена" : "Скриена")</td></tr> }
+<section class="card public-profile-card"><h2>Регистрирани клиники</h2><div class="table-wrap"><table><thead><tr><th>Клиника</th><th>Идентификатор</th><th>Состојба</th><th>Јавно прикажување</th><th>Управување</th></tr></thead><tbody>
+@foreach (var c in clinics) { <tr><td>@c.Name</td><td>@c.Id</td><td>@State(c.State)@(!c.Managed ? " · Конфигурација" : "")</td><td>@(c.Discoverable ? "Вклучена" : "Скриена")</td><td>
+@if (c.State == "Ready" && c.Managed) { <a class="btn secondary small" asp-action="Edit" asp-route-id="@c.Id">Измени податоци</a> }
+else if (c.State == "Ready") { <form method="post" asp-action="Adopt" asp-route-id="@c.Id" data-prevent-duplicate><p class="field-help">Префрлете го управувањето во платформата. Постоечките сметки и термини се зачувуваат.</p><button type="submit" class="btn secondary small">Управувај преку платформата</button><p class="field-help" role="status" data-submit-status></p></form> }
+</td></tr> }
 </tbody></table></div></section>
 <section class="card public-profile-card"><h2>Додај нова клиника</h2><p class="muted">Податоците означени како јавни се прикажуваат во пребарувањето само кога клиниката е подготвена. Не внесувајте медицински податоци.</p>
 <form method="post" asp-action="Create" class="platform-form" data-prevent-duplicate>

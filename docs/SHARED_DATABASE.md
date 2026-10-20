@@ -152,3 +152,12 @@ table fallback. The platform suite uses one shared clinical database plus a
 separate platform DB and proves additional clinics provision without a database
 pool and survive restart. Fixture creation/removal needs CREATEDB/CREATEROLE on
 the disposable test server; the API fixture roles themselves have neither.
+
+## Original clinic managed through the platform
+
+The original `main` clinic can now be deliberately adopted from `/Platform` without
+moving its `public` schema or changing accounts. Platform migration 007 adds the
+adoption marker and clinic-metadata version. See the deployment and one-time steps
+in [PLATFORM_CLINIC_TRANSFER.md](PLATFORM_CLINIC_TRANSFER.md). Routine details then
+come from the platform row and are editable in the Web interface; duplicate IDs
+without explicit adoption remain invalid.

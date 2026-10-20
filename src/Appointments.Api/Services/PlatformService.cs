@@ -28,6 +28,8 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             await command.ExecuteNonQueryAsync(ct);
             await using var upgrade = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "database", "006-shared-clinic-registry.sql"), ct), c);
             await upgrade.ExecuteNonQueryAsync(ct);
+            await using var management = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "database", "007-platform-managed-clinics.sql"), ct), c);
+            await management.ExecuteNonQueryAsync(ct);
         }
         // Explicit bootstrap only; never reset an existing operator's credentials on restart.
         var email = configuration["Platform:Bootstrap:Email"]; var password = configuration["Platform:Bootstrap:Password"];
@@ -81,9 +83,55 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
     {
         await using var db = registry.PlatformDb();
         var managed = await db.Clinics.AsNoTracking().OrderBy(x => x.CreatedAt).ToListAsync(ct);
-        return registry.Configured.Select(c => new PlatformClinicSummary(c.Id, c.Name, c.Enabled ? "Ready" : "Disabled", c.Discoverable, c.Address, c.Phone, c.Description, false)).Concat(managed.Select(Summary)).ToArray();
+        return registry.Configured.Where(c => !managed.Any(m => m.Id == c.Id)).Select(c => new PlatformClinicSummary(c.Id, c.Name, c.Enabled ? "Ready" : "Disabled", c.Discoverable, c.Address, c.Phone, c.Description, false, 1, c.AllowRegistration)).Concat(managed.Select(Summary)).ToArray();
     }
-    public static PlatformClinicSummary Summary(PlatformClinic c) => new(c.Id, c.Name, c.State, c.Discoverable, c.Address, c.Phone, c.Description, true);
+    public static PlatformClinicSummary Summary(PlatformClinic c) => new(c.Id, c.Name, c.State, c.Discoverable, c.Address, c.Phone, c.Description, true, c.Version, c.AllowRegistration);
+    public async Task<PlatformClinicSummary> AdoptAsync(string actor, string id, CancellationToken ct)
+    {
+        await using var lease = await connections.IdentityLockAsync(ct);
+        await registry.RefreshAsync(ct);
+        await using var db = registry.PlatformDb();
+        var existing = await db.Clinics.SingleOrDefaultAsync(c => c.Id == id, ct);
+        if (existing != null)
+        {
+            if (existing.Adopted && existing.State == "Ready") return Summary(existing);
+            throw new RuleException("Клиниката веќе има регистрација на платформата.", 409);
+        }
+        var clinic = registry.Configured.SingleOrDefault(c => c.Id == id && c.Enabled)
+            ?? throw new RuleException("Клиниката од конфигурацијата не е пронајдена.", 404);
+        await using var clinicDb = await connections.OpenAsync(clinic, ct);
+        var zone = await clinicDb.Settings.AsNoTracking().SingleOrDefaultAsync(s => s.Key == "TimeZone", ct);
+        if (zone?.Value != clinic.TimeZone) throw new RuleException("Потребна е проверка на временската зона пред преносот.", 409);
+        var admin = await clinicDb.Accounts.AsNoTracking()
+            .Where(a => a.Enabled && a.Role == DemoRole.Administrator && !a.IsDemo && a.PasswordHash != "")
+            .OrderBy(a => a.NormalizedEmail).FirstOrDefaultAsync(ct)
+            ?? throw new RuleException("Прво поставете активна администраторска сметка со лозинка во клиниката.", 409);
+        // Transfer registry ownership only. Never move/reset clinical tables or credentials.
+        var row = new PlatformClinic { Id = clinic.Id, Name = clinic.Name, ConnectionName = "Appointments",
+            TimeZone = clinic.TimeZone, State = "Ready", Adopted = true, AdminEmail = admin.Email, AdminName = admin.Name,
+            Description = clinic.Description, Address = clinic.Address, Phone = clinic.Phone,
+            Discoverable = clinic.Discoverable, AllowRegistration = clinic.AllowRegistration,
+            CreatedBy = actor, CreatedAt = DateTimeOffset.UtcNow };
+        db.Clinics.Add(row); await db.SaveChangesAsync(ct); await registry.RefreshAsync(ct);
+        return Summary(row);
+    }
+    public async Task<PlatformClinicSummary> UpdateAsync(string id, UpdateClinicInput input, CancellationToken ct)
+    {
+        if (input.Name.Trim().Length < 2) throw new RuleException("Внесете име на клиниката од најмалку 2 знаци.");
+        await using var lease = await connections.IdentityLockAsync(ct);
+        await using var db = registry.PlatformDb();
+        var row = await db.Clinics.SingleOrDefaultAsync(c => c.Id == id, ct)
+            ?? throw new RuleException("Прво префрлете ја клиниката во управување преку платформата.", 404);
+        if (row.State != "Ready") throw new RuleException("Прво завршете ја регистрацијата на клиниката.", 409);
+        if (row.Version != input.Version) throw new RuleException("Податоците се променети во друга сесија. Вчитајте ги тековните податоци пред повторно уредување.", 409);
+        row.Name = input.Name.Trim(); row.Description = input.Description?.Trim();
+        row.Address = input.Address?.Trim(); row.Phone = input.Phone?.Trim();
+        row.Discoverable = input.Discoverable; row.AllowRegistration = input.AllowRegistration; row.Version++;
+        try { await db.SaveChangesAsync(ct); }
+        catch (DbUpdateConcurrencyException) { throw new RuleException("Податоците се променети во друга сесија. Вчитајте ги тековните податоци.", 409); }
+        await registry.RefreshAsync(ct);
+        return Summary(row);
+    }
     public async Task<PlatformClinicSummary> ProvisionAsync(string actor, ProvisionClinicInput input, CancellationToken ct)
     {
         AccountService.ValidatePassword(input.AdminPassword);

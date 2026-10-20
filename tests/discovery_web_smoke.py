@@ -24,6 +24,7 @@ dotnet = os.environ.get('TEST_DOTNET', 'dotnet')
 count, calls = 0, []
 clinic = dict(id='main',name='Тест клиника',timeZone='Europe/Skopje',allowRegistration=True,description='Јавен опис',address='Плоштад Македонија, Скопје',phone='+389 2 000 0000')
 doctor = dict(id='d01',name='Тест лекар',specialty='Кардиологија',subspecialty='',clinic=clinic,services=[dict(id='s01',name='Преглед',durationMinutes=30)],staffOnly=False)
+platform_clinic=dict(id='main',name=clinic['name'],state='Ready',discoverable=True,address=clinic['address'],phone=clinic['phone'],description=clinic['description'],managed=False,version=1,allowRegistration=True)
 expires=(dt.datetime.now(dt.timezone.utc)+dt.timedelta(hours=1)).isoformat()
 
 def check(ok, label):
@@ -37,6 +38,7 @@ class Stub(BaseHTTPRequestHandler):
     def do_GET(self): self.handle_request()
     def do_POST(self): self.handle_request()
     def handle_request(self):
+        global platform_clinic
         path = urllib.parse.urlparse(self.path)
         if self.headers.get('Transfer-Encoding','').lower() == 'chunked':
             chunks=[]
@@ -74,7 +76,13 @@ class Stub(BaseHTTPRequestHandler):
         elif path.path=='/api/platform/clinics':
             if self.headers.get('Authorization')!='Bearer p1.'+'p'*64: code,result=401,dict(error='Unauthorized')
             elif self.command=='POST': code,result=409,dict(error='Потребна е проверка на базата.')
-            else: result=[dict(id='main',name=clinic['name'],state='Ready',discoverable=True,address=None,phone=None,description=None,managed=False)]
+            else: result=[platform_clinic]
+        elif path.path=='/api/platform/clinics/main/adopt':
+            platform_clinic=dict(platform_clinic,managed=True);result=platform_clinic
+        elif path.path=='/api/platform/clinics/main/details':
+            if body['version']!=platform_clinic['version']: code,result=409,dict(error='Податоците се променети во друга сесија.')
+            else:
+                platform_clinic=dict(platform_clinic,**body);platform_clinic['version']+=1;result=platform_clinic
         elif path.path=='/api/platform/logout': result=dict(signedOut=True)
         else: code,result=404,dict(error='Not found')
         payload=json.dumps(result).encode();self.send_response(code)
@@ -199,6 +207,19 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             del payload['Discoverable'];del payload['AllowRegistration']
             status,html,_=company.request('/Platform/Create',payload)
             check(calls[-2][2].get('discoverable') is False and calls[-2][2].get('allowRegistration') is False,'Unchecked company policies are sent as false')
+            check(company.request('/Platform/Adopt/main',{})[0]==400,'Platform adoption requires antiforgery protection')
+            check(company.request('/Platform/Edit/main')[0]==404,'Configured clinic cannot edit platform metadata before adoption')
+            csrf=company.csrf('/Platform')
+            status,_,h=company.request('/Platform/Adopt/main',{'__RequestVerificationToken':csrf})
+            check(status==302 and '/Platform/Edit' in h['Location'],'Platform adoption redirects to clinic details')
+            status,edit_html,_=company.request(h['Location'])
+            check(status==200 and 'name="Address"' in edit_html and 'name="Version"' in edit_html and 'name="AdminPassword"' not in edit_html,'Clinic details form edits metadata without recreating credentials')
+            check(company.request('/Platform/Edit/main',{})[0]==400,'Clinic metadata edits require antiforgery protection')
+            csrf=company.csrf('/Platform/Edit/main')
+            details=dict(Name='Edited clinic',Address='Плоштад Македонија, Скопје',Phone='+389 2 000 0000',Description='Edited public description',Discoverable='true',AllowRegistration='false',Version=1,__RequestVerificationToken=csrf)
+            check(company.request('/Platform/Edit/main',details)[0]==302,'Platform metadata form saves successfully')
+            status,stale_html,_=company.request('/Platform/Edit/main',dict(details,Name='Stale edit'))
+            check(status==200 and 'друга сесија' in stale_html and 'Stale edit' in stale_html and 'вчитај ги тековните' in stale_html,'Metadata conflict preserves entered values and offers explicit reload')
             if os.environ.get('TEST_BROWSER_EXECUTABLE'):
                 subprocess.run(['node',str(root/'tests/frontend/discovery-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
             print(f'\n{count}/{count} MVC discovery/company contract checks passed (stub API).',flush=True)

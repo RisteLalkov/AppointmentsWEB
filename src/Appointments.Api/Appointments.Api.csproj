@@ -7,6 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="../../database/005-platform-registry.sql" Link="database/005-platform-registry.sql" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../database/007-platform-managed-clinics.sql" Link="database/007-platform-managed-clinics.sql" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../database/006-shared-clinic-registry.sql" Link="database/006-shared-clinic-registry.sql" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../database/prepare-shared-clinic-database.sql" Link="database/prepare-shared-clinic-database.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

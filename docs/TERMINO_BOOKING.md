@@ -110,3 +110,8 @@ contact fields are API settings `Tenancy:Address`, `Tenancy:Phone` and
 `Tenancy:Description`. Explicit configured clinics use the corresponding fields
 under `Tenancy:Clinics`. Managed clinics use the details supplied during platform
 registration. The map itself does not change or generate those saved details.
+
+Configured clinics can now become platform-managed through the one-time transfer
+button; afterward address/phone edits use `/Platform` just like newly registered
+clinics. See [PLATFORM_CLINIC_TRANSFER.md](PLATFORM_CLINIC_TRANSFER.md). The earlier
+configuration-field instructions apply only before that adoption.
