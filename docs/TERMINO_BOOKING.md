@@ -73,3 +73,17 @@ hours. Successful saves advance the form revision so repeated saves remain valid
 Rescheduling opens on the original appointment date in the clinic's time zone.
 
 Publish both API and Web for these changes. No database migration is required.
+
+## Public doctor availability
+
+Doctor profiles show an anonymous, read-only availability preview with a date picker,
+seven quick day links, and active service selection. Free times use the same schedule,
+service duration, exceptions, booked intervals, Tuesday-first policy, time zone and
+180-day horizon as booking. Staff-only doctors, unpublished schedules, unavailable
+services and fully booked days have distinct messages. No booking or reservation is
+created by viewing times. Availability is checked again during authenticated booking.
+
+The public endpoint returns only the selected date/service and free start/end times.
+It excludes patient identities, appointment identifiers, reasons for absences and
+account data. Hidden clinics, inactive doctors and service-only profiles are excluded.
+Both API and Web must be published. No database changes are needed.

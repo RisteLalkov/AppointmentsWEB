@@ -6,6 +6,8 @@ namespace Appointments.Contracts;
 public record PublicClinic(string Id, string Name, string TimeZone, bool AllowRegistration, string? Description, string? Address, string? Phone);
 public record PublicService(string Id, string Name, int DurationMinutes);
 public record PublicDoctor(string Id, string Name, string Specialty, string Subspecialty, PublicClinic Clinic, IReadOnlyList<PublicService> Services, bool StaffOnly);
+public record PublicFreeSlot(TimeOnly Time, DateTimeOffset Start, DateTimeOffset End);
+public record PublicAvailability(DateOnly Date, DateOnly Today, DateOnly LastDate, string? ServiceId, string? Message, IReadOnlyList<PublicFreeSlot> Slots);
 public record PublicPage<T>(IReadOnlyList<T> Items, int Total, int Page, int PageSize);
 public sealed record DiscoveryQuery
 {

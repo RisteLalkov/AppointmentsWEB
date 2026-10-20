@@ -30,9 +30,20 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
     }
     public Task<IActionResult> Clinic(string id, int page = 1, CancellationToken ct = default)
         => Index(new() { ClinicId = id, Page = page }, "doctors", ct);
-    public async Task<IActionResult> Doctor(string clinicId, string id, CancellationToken ct)
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public async Task<IActionResult> Doctor(string clinicId, string id, DateOnly? date, string? serviceId, CancellationToken ct)
     {
-        try { return View(await api.SendAsync<PublicDoctor>($"api/public/clinics/{E(clinicId)}/doctors/{E(id)}", authenticated: false, ct: ct)); }
+        try
+        {
+            var doctor = await api.SendAsync<PublicDoctor>($"api/public/clinics/{E(clinicId)}/doctors/{E(id)}", authenticated: false, ct: ct);
+            try
+            {
+                if (!ModelState.IsValid) throw new RuleException("Проверете го избраниот датум.");
+                ViewData["Availability"] = await api.SendAsync<PublicAvailability>($"api/public/clinics/{E(clinicId)}/doctors/{E(id)}/availability?date={date?.ToString("yyyy-MM-dd")}&serviceId={E(serviceId)}", authenticated: false, ct: ct);
+            }
+            catch (RuleException e) { ViewData["AvailabilityError"] = e.Message; }
+            return View(doctor);
+        }
         catch (RuleException e) { Response.StatusCode = e.StatusCode; ViewData["Error"] = e.Message; return View("Index"); }
     }
     public async Task<IActionResult> Book(string clinicId, string doctorId, CancellationToken ct)

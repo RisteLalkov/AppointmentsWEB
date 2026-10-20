@@ -14,9 +14,36 @@
             @if (!string.IsNullOrWhiteSpace(Model.Subspecialty)) { <p class="doctor-profile-subspecialty">@Model.Subspecialty</p> }
             <p class="doctor-profile-clinic">Клиника: <a asp-action="Clinic" asp-route-id="@Model.Clinic.Id">@Model.Clinic.Name <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a></p>
             @if (Model.Services.Count > 0) { <section class="doctor-profile-services" aria-labelledby="doctor-services"><h2 id="doctor-services">Услуги</h2><ul class="public-services">@foreach (var s in Model.Services) { <li><strong>@s.Name</strong><span>@s.DurationMinutes минути</span></li> }</ul></section> }
+            <section class="public-availability" id="availability" aria-labelledby="availability-title">
+                <div class="public-availability-heading"><div><span class="eyebrow">ПЛАНИРАЈТЕ ГО ВАШИОТ ПРЕГЛЕД</span><h2 id="availability-title">Слободни термини</h2></div><span class="availability-preview-label">Преглед на достапност</span></div>
+                @if (ViewData["Availability"] is PublicAvailability availability) {
+                    var culture = System.Globalization.CultureInfo.GetCultureInfo("mk-MK");
+                    <form method="get" asp-action="Doctor" asp-route-id="@Model.Id" asp-fragment="availability" class="public-availability-form">
+                        <input type="hidden" name="clinicId" value="@Model.Clinic.Id" />
+                        <div class="field"><label for="preview-date">Изберете датум</label><input id="preview-date" name="date" type="date" value="@availability.Date.ToString("yyyy-MM-dd")" min="@availability.Today.ToString("yyyy-MM-dd")" max="@availability.LastDate.ToString("yyyy-MM-dd")" required /></div>
+                        @if (Model.Services.Count > 0) {
+                            <div class="field"><label for="preview-service">Услуга / преглед</label><select id="preview-service" name="serviceId">@foreach (var service in Model.Services) { <option value="@service.Id" selected="@(service.Id == availability.ServiceId)">@service.Name · @service.DurationMinutes минути</option> }</select></div>
+                        }
+                        <button type="submit" class="btn secondary">Прикажи термини</button>
+                    </form>
+                    <nav class="availability-days" aria-label="Достапност во следните седум дена">
+                        @for (var offset = 0; offset < 7; offset++) {
+                            var day = availability.Today.AddDays(offset);
+                            <a asp-action="Doctor" asp-route-id="@Model.Id" asp-route-clinicId="@Model.Clinic.Id" asp-route-date="@day.ToString("yyyy-MM-dd")" asp-route-serviceId="@availability.ServiceId" asp-fragment="availability" aria-current="@(day == availability.Date ? "date" : null)"><span>@(offset == 0 ? "Денес" : day.ToString("ddd", culture))</span><strong>@day.ToString("dd MMM", culture)</strong></a>
+                        }
+                    </nav>
+                    <div class="availability-day-heading"><h3>@availability.Date.ToString("dddd, d MMMM", culture)</h3><span>@availability.Slots.Count слободни</span></div>
+                    @if (availability.Message != null) { <p class="availability-empty"><span aria-hidden="true">◷</span>@availability.Message</p> }
+                    else {
+                        <ul class="public-free-slots" aria-label="Слободни термини за избраниот датум">@foreach (var slot in availability.Slots) { <li><time datetime="@slot.Start.ToString("O")">@slot.Time.ToString("HH:mm")</time></li> }</ul>
+                    }
+                    <p class="availability-disclaimer">Прикажаните термини се информативни и не се резервираат. Достапноста се проверува повторно при закажување.</p>
+                }
+                else { <p class="inline-note" role="status">@(ViewData["AvailabilityError"] as string ?? "Достапноста моментално не може да се прикаже. Обидете се повторно подоцна.") <a asp-action="Doctor" asp-route-id="@Model.Id" asp-route-clinicId="@Model.Clinic.Id" asp-fragment="availability">Обиди се повторно</a></p> }
+            </section>
             <div class="doctor-profile-booking">
             @if (Model.StaffOnly) { <p class="inline-note">За овој лекар закажувањето е преку рецепција.</p> @if (!string.IsNullOrWhiteSpace(Model.Clinic.Phone)) { <p>Телефон: @Model.Clinic.Phone</p> } }
-            else { <a class="btn primary" asp-action="Book" asp-route-clinicId="@Model.Clinic.Id" asp-route-doctorId="@Model.Id">Продолжи кон закажување <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a> }
+            else { <p class="availability-booking-intro">Пронајдовте време што ви одговара? Продолжете за да го закажете вашиот преглед.</p><a class="btn primary" asp-action="Book" asp-route-clinicId="@Model.Clinic.Id" asp-route-doctorId="@Model.Id">Продолжи кон закажување <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a> }
             </div>
         </section>
     }

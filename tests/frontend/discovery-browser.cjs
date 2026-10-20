@@ -108,6 +108,13 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await noJs.close();
   await page.getByRole('link',{name:/Види профил/}).click();
   check(await page.locator('.doctor-profile-specialty').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=16 && parseFloat(getComputedStyle(e).fontSize)<=18),'Doctor specialty uses a compact readable size');
+  check(await page.locator('.public-free-slots time').first().innerText()==='09:00','Anonymous profile renders free times');
+  check(await page.locator('.public-free-slots button, .public-free-slots a, .public-free-slots input').count()===0,'Public times are read-only information');
+  const previewDay=await page.locator('.availability-days a').nth(2).getAttribute('href');
+  await page.locator('.availability-days a').nth(2).click();
+  check(new URL(page.url()).searchParams.get('date')===new URL(previewDay,publicUrl).searchParams.get('date')&&await page.locator('#preview-service').inputValue()==='s01','Date navigation retains the selected doctor and service');
+  await page.locator('.public-availability-form button').click();
+  check(new URL(page.url()).searchParams.get('clinicId')==='main'&&await page.locator('.public-free-slots time').count()>0,'Availability filter works as a normal read-only form');
   check(!(await page.locator('body').innerText()).includes('Слободните термини се проверуваат') && !(await page.locator('body').innerText()).toLowerCase().includes('именик'),'Profile removes redundant copy and directory terminology');
   if(screenshots)await page.screenshot({path:resolve(screenshots,'doctor-profile-desktop.png'),fullPage:true});
   for(const width of [390,320]) {await page.setViewportSize({width,height:900});await noOverflow(page,'Doctor profile at '+width+'px');}
@@ -172,6 +179,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('#demo-form button[type=submit]').click();
   await page.locator('.overview-grid').waitFor();
   check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),'Workspace loads the company symbol');
+  check(await page.locator('.nav-item[data-page=overview]').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=16&&Number(getComputedStyle(e).fontWeight)>=500),'Sidebar text is larger and more legible');
   check(await page.locator('.nav-item[data-page=availability]').count()===0,'Availability is absent from sidebar');
   const people=page.locator('#catalogue-nav');
   await people.locator('summary').focus();await page.keyboard.press('Space');

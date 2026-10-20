@@ -165,9 +165,32 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         mk_service=owner.ok('/api/catalogue/services',{'id':None,'name':'Ќирилична Ѕ Услуга','specialtyId':mk_spec['id'],'durationMinutes':30,'enabled':True,'doctorIds':[mk_doc['id']]})
         for field,term in [('search','ѓинекологија'),('specialty','ЃИНЕКОЛОГИЈА'),('search','љубљана'),('specialty','ЉУБЉАНА'),('search','ќирилична'),('service','ЌИРИЛИЧНА')]:
             check(any(d['id']==mk_doc['id'] for d in search(**{field:term})['items']), 'Macedonian field casing: '+field+'='+term)
+        # Anonymous availability shares booking rules but projects only free times.
+        import datetime as dt
+        preview_path='/api/public/clinics/new-clinic/doctors/'+doctor['id']+'/availability'
+        preview=anon.ok(preview_path)
+        check(not preview['slots'] and 'нема објавено работно време' in preview['message'], 'No-hours public doctor has a useful message')
+        preview_date=(dt.date.fromisoformat(admin.ok('/api/bootstrap')['today'])+dt.timedelta(days=4)).isoformat()
+        admin.ok('/api/schedule/'+doctor['id'],dict(version=1,durationMinutes=30,periods=[dict(day=d,start='09:00',end='11:00') for d in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']]))
+        preview=anon.ok(preview_path+'?date='+preview_date)
+        private=admin.ok('/api/slots?doctorId='+doctor['id']+'&date='+preview_date+'&serviceId='+service['id'])
+        check([s['start'] for s in preview['slots']]==[s['start'] for s in private] and len(preview['slots'])==4, 'Public free times match real booking availability and service duration')
+        check(set(preview)=={'date','today','lastDate','serviceId','message','slots'} and all(set(s)=={'time','start','end'} for s in preview['slots']), 'Anonymous availability exposes no patient, appointment or account metadata')
+        check(anon.request(preview_path+'?date=2000-01-01')[0]==400 and anon.request(preview_path+'?date=bad')[0]==400, 'Public date validation rejects past and malformed dates')
+        check(anon.request(preview_path+'?date=2999-01-01')[0]==400, 'Public preview respects booking horizon')
+        check(anon.request(preview_path+'?serviceId=unknown')[0]==409, 'Public preview rejects unassigned services')
+        preview_patient=admin.ok('/api/patients',dict(name='Availability test',email='',phone=''))
+        visit=admin.ok('/api/appointments',dict(doctorId=doctor['id'],patientId=preview_patient['id'],serviceId=service['id'],date=preview_date,time='09:00',durationMinutes=30,requestId=uuid.uuid4().hex))
+        check(len(anon.ok(preview_path+'?date='+preview_date)['slots'])==3, 'Occupied appointment is absent from public slots')
+        admin.ok('/api/appointments/'+visit['id']+'/status',dict(status='Cancelled',version=visit['version']))
+        check(len(anon.ok(preview_path+'?date='+preview_date)['slots'])==4, 'Cancellation reopens the public free slot')
+        admin.ok('/api/exceptions/'+doctor['id'],dict(date=preview_date,start='09:00',end='11:00',isAvailable=False,reason='Preview absence test'))
+        empty=anon.ok(preview_path+'?date='+preview_date)
+        check(not empty['slots'] and 'Нема слободни термини' in empty['message'], 'Full absence produces an empty date message')
         admin.ok('/api/catalogue/doctors',{'id':other_doc['id'],'name':other_doc['name'],'specialtyId':spec['id'],'subspecialty':'','enabled':False,'version':other_doc['catalogVersion']})
         admin.ok('/api/catalogue/doctors',{'id':doctor['id'],'name':doctor['name'],'specialtyId':spec['id'],'subspecialty':'','enabled':False,'version':doctor['catalogVersion']})
         check(anon.ok('/api/public/doctors?clinicId=new-clinic')['total']==0, 'Disabled doctor disappears from public results')
+        check(anon.request(preview_path)[0]==404, 'Disabled doctor cannot disclose public availability')
         # Agreed time is a reception-only atomic appointment + exact one-off period.
         import datetime as dt
         agreed_spec=owner.ok('/api/catalogue/specialties',{'id':None,'name':'Agreed booking'})
@@ -222,6 +245,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         hidden=dict(env,Tenancy__Discoverable='false')
         start(first,hidden,temporary)
         check(Client(first).request('/api/public/clinics/main')[0]==404,'Hidden configured clinic excluded from public profile')
+        check(Client(first).request('/api/public/clinics/main/doctors/'+agreed_doc['id']+'/availability')[0]==404,'Hidden clinic cannot disclose availability')
         check(Client(first).login('owner@platform.test').clinic=='main','Hidden clinic still supports secure login')
         check(Client(first).login('third-owner@platform.test',secret=password+'-new').clinic=='third-clinic', 'Managed clinic survives API restart in shared database')
         print(f'\n{count}/{count} PostgreSQL platform/discovery checks passed.',flush=True)

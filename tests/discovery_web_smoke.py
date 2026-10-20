@@ -59,6 +59,9 @@ class Stub(BaseHTTPRequestHandler):
         elif path.path=='/api/public/clinics/main/doctors/d01': result=doctor
         elif path.path=='/api/public/clinics/main/doctors/staff': result=dict(doctor,id='staff',staffOnly=True)
         elif path.path=='/api/public/clinics/east/doctors/d01': result=dict(doctor,clinic=dict(clinic,id='east'))
+        elif path.path.endswith('/availability') and path.path.startswith('/api/public/clinics/'):
+            day=urllib.parse.parse_qs(path.query).get('date',[dt.date.today().isoformat()])[0]
+            result=dict(date=day,today=dt.date.today().isoformat(),lastDate=(dt.date.today()+dt.timedelta(days=180)).isoformat(),serviceId='s01',message=None,slots=[dict(time='09:00:00',start=day+'T07:00:00+00:00',end=day+'T07:30:00+00:00')])
         elif path.path=='/api/clinics': result=[clinic]
         elif path.path=='/api/auth/register': result=dict(id='a01',email=body['email'],name=body['name'],role='Patient',patientId='p01',doctorId=None,enabled=True)
         elif path.path=='/api/auth/login':
@@ -142,6 +145,8 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check(status==200 and 'Преглед' in html and '30 минути' in html,'Doctor profile renders active services')
             check('Продолжи кон закажување' in html and 'Слободните термини се проверуваат' not in html and 'doctor-profile-specialty' in html, 'Doctor profile emphasizes specialty and uses concise booking copy')
             check('именик' not in html.lower(), 'Doctor profile uses the new search terminology')
+            check('id="availability"' in html and 'Слободни термини' in html and '09:00' in html, 'Public doctor profile shows anonymous availability')
+            check('public-free-slots' in html and 'name="date"' in html and 'name="serviceId"' in html and 'не се резервираат' in html, 'Availability offers date/service filters and read-only times')
             _,staff_html,_=anon.request('/Discover/Doctor/staff?clinicId=main')
             check('закажувањето е преку рецепција' in staff_html and 'Продолжи кон закажување' not in staff_html, 'Reception-only doctors retain their booking boundary and notice')
             book='/Discover/Book?clinicId=main&doctorId=d01'
