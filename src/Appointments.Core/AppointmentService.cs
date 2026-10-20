@@ -51,6 +51,8 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     public Appointment Book(DemoActor actor, BookingCommand command) => store.Write(s =>
     {
         var doctor = FindDoctor(s, command.DoctorId);
+        if (command.AgreedTime && actor.Role != DemoRole.Administrator)
+            throw new RuleException("Само рецепцијата може да внесе термин договорен со лекар.", 403);
         if (actor.Role == DemoRole.Doctor) Staff(actor, doctor.Id);
         if (actor.Role == DemoRole.Patient && (actor.PatientId != command.PatientId || doctor.StaffOnly)) throw new RuleException("Овој термин се закажува преку рецепција или му припаѓа на друг пациент.", 403);
         if (!s.Patients.Any(p => p.Id == command.PatientId)) throw new RuleException("Изберете важечки пациент.");
@@ -64,11 +66,25 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         }
         doctor = CatalogueService.ForBooking(s, doctor, command.ServiceId);
         if (command.DurationMinutes != doctor.DurationMinutes) throw new RuleException("Времетраењето на прегледот е променето. Освежете ги слободните термини.", 409);
-        var slot = SchedulingRules.Slots(s, doctor, command.Date, clock).FirstOrDefault(x => x.Time == command.Time)
-            ?? throw new RuleException("Тој термин повеќе не е достапен. Изберете друг термин во следните 180 дена.", 409);
+        var appointmentId = Guid.NewGuid().ToString("N");
+        AvailabilityException? agreement = null;
+        if (command.AgreedTime)
+        {
+            var end = command.Date.ToDateTime(command.Time).AddMinutes(doctor.DurationMinutes);
+            if (command.Time.Ticks % TimeSpan.TicksPerMinute != 0 || DateOnly.FromDateTime(end) != command.Date)
+                throw new RuleException("Договорениот термин мора да завршува истиот ден и да започнува во цела минута.");
+            agreement = new AvailabilityException("agreed-" + appointmentId, doctor.Id, command.Date, command.Time,
+                TimeOnly.FromDateTime(end), true, "Термин договорен со лекар преку рецепција");
+        }
+        // This exact one-off period and its booking are saved atomically. It does not
+        // change weekly hours or expose spare bookable slots to other patients.
+        var availability = agreement == null ? s : new DemoState { Appointments = s.Appointments, Exceptions = [..s.Exceptions, agreement] };
+        var slot = SchedulingRules.Slots(availability, doctor, command.Date, clock, applyPreference: !command.AgreedTime).FirstOrDefault(x => x.Time == command.Time)
+            ?? throw new RuleException(command.AgreedTime ? "Тој термин е недостапен. Проверете за преклопување, отсуство или изминат датум (до 180 дена однапред)." : "Тој термин повеќе не е достапен. Изберете друг термин во следните 180 дена.", 409);
         CheckPatientConflict(s, command.PatientId, slot);
-        var appointment = new Appointment { DoctorId = doctor.Id, PatientId = command.PatientId, ServiceId = command.ServiceId, ServiceName = s.Services.Find(x => x.Id == command.ServiceId)?.Name, Start = slot.Start, End = slot.End,
-            Status = doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed,
+        if (agreement != null) s.Exceptions.Add(agreement);
+        var appointment = new Appointment { Id = appointmentId, DoctorId = doctor.Id, PatientId = command.PatientId, ServiceId = command.ServiceId, ServiceName = s.Services.Find(x => x.Id == command.ServiceId)?.Name, Start = slot.Start, End = slot.End,
+            Status = doctor.RequiresConfirmation && !command.AgreedTime ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed,
             CreatedBy = actor.Id, RequestId = command.RequestId, UpdatedAt = clock.UtcNow };
         s.Appointments.Add(appointment);
         s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, appointment, null, AppointmentChangeKind.Created, clock.UtcNow));
@@ -88,6 +104,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
             ?? throw new RuleException("Тој термин е недостапен. Вашиот првичен термин е задржан.", 409);
         CheckPatientConflict(s, a.PatientId, slot, id);
         var before = a with { };
+        if (a.Start != slot.Start) s.Exceptions.RemoveAll(e => e.Id == "agreed-" + a.Id);
         a.Start = slot.Start; a.End = slot.End; a.Status = doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed;
         a.Version++; a.UpdatedAt = clock.UtcNow;
         s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, a, before, AppointmentChangeKind.Rescheduled, clock.UtcNow));
@@ -106,6 +123,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
             if (!valid) throw new RuleException("Невалидна промена на статус. Потврдете претстојно барање; означете завршен преглед или недоаѓање само по крајот на потврдениот термин.");
         }
         var before = a with { };
+        if (status == AppointmentStatus.Cancelled) s.Exceptions.RemoveAll(e => e.Id == "agreed-" + a.Id);
         a.Status = status; a.Version++; a.UpdatedAt = clock.UtcNow;
         s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, a, before, AppointmentChangeKind.StatusChanged, clock.UtcNow));
         return a;

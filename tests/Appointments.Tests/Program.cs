@@ -249,6 +249,44 @@ Test("Concurrent patient edits save exactly once and survive JSON restart", () =
     Reject(()=>service.UpdatePatient(admin,"p1",new("Stale","","",1)),409);
 });
 
+
+Test("Confirmation checkbox saves and preserves older clients", () => {
+    using var f=New();var c=new CatalogueService(f.Store);var sp=f.Store.Read(s=>s.Specialties.First());
+    var d=c.SaveDoctor(admin,new(null,"Confirmation doctor",sp.Id,"",true,RequiresConfirmation:true));True(d.RequiresConfirmation);
+    d=c.SaveDoctor(admin,new(d.Id,d.Name,sp.Id,"",true,d.CatalogVersion));True(d.RequiresConfirmation);
+    d=c.SaveDoctor(admin,new(d.Id,d.Name,sp.Id,"",true,d.CatalogVersion,false));True(!d.RequiresConfirmation);
+});
+Test("Reception books confirmed agreed time without weekly hours", () => {
+    using var f=New();f.Store.Write(s=>{s.Doctors[0].WorkingPeriods.Clear();s.Doctors[0].RequiresConfirmation=true;return true;});
+    Reject(()=>f.Service.Book(admin,Cmd("14:00")),409);
+    var a=f.Service.Book(admin,Cmd("14:00") with {AgreedTime=true});Equal(AppointmentStatus.Confirmed,a.Status);
+    True(f.Store.Read(s=>s.Exceptions.Any(e=>e.Id=="agreed-"+a.Id)));
+    Equal(0,f.Service.Availability(pat,"d1",monday).Count);
+    f.Service.ReplaceSchedule(admin,"d1",[],30);
+    f.Service.ChangeStatus(admin,a.Id,AppointmentStatus.Cancelled,1);
+    Equal(0,f.Store.Read(s=>s.Exceptions.Count));Equal(0,f.Service.Availability(pat,"d1",monday).Count);
+});
+Test("Patients and doctors cannot forge agreed-time bookings", () => {using var f=New();Reject(()=>f.Service.Book(pat,Cmd() with {AgreedTime=true}),403);Reject(()=>f.Service.Book(doc,Cmd() with {AgreedTime=true}),403);});
+Test("Agreed bookings still reject doctor and patient overlaps", () => {
+    using var f=New();f.Service.Book(admin,Cmd("14:00") with {AgreedTime=true});
+    Reject(()=>f.Service.Book(admin,Cmd("14:15",patient:"p2") with {AgreedTime=true}),409);
+    Reject(()=>f.Service.Book(admin,Cmd("14:15",doctor:"d2") with {AgreedTime=true}),409);
+    Equal(1,f.Store.Read(s=>s.Exceptions.Count));
+});
+Test("Agreed bookings cannot override absences or invalid time ranges", () => {
+    using var f=New();f.Service.AddException(admin,"d1",monday,new(13,0),new(15,0),false,"Doctor away");
+    Reject(()=>f.Service.Book(admin,Cmd("14:00") with {AgreedTime=true}),409);
+    Reject(()=>f.Service.Book(admin,Cmd("14:00",date:monday.AddDays(181)) with {AgreedTime=true}),409);
+    Reject(()=>f.Service.Book(admin,Cmd("23:45") with {AgreedTime=true}));
+    Reject(()=>f.Service.Book(admin,Cmd("14:00",date:monday.AddDays(-3)) with {AgreedTime=true}),409);
+    Equal(1,f.Store.Read(s=>s.Exceptions.Count));
+});
+Test("Moving an agreed booking removes only its one-off period", () => {
+    using var f=New();var a=f.Service.Book(admin,Cmd("18:00") with {AgreedTime=true});
+    var moved=f.Service.Move(admin,a.Id,new(monday,new(9,0),1));Equal(9,f.Clock.Local(moved.Start).Hour);
+    Equal(0,f.Store.Read(s=>s.Exceptions.Count));
+});
+Test("Agreed booking replay creates no duplicate one-off periods", () => {using var f=New();var c=Cmd("18:00") with {AgreedTime=true};var a=f.Service.Book(admin,c);Equal(a.Id,f.Service.Book(admin,c).Id);Equal(1,f.Store.Read(s=>s.Exceptions.Count));});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

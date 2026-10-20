@@ -5,7 +5,7 @@
 <a class="skip-link" href="#main-content">Прескокни до содржината</a>
 <div class="app-shell">
     <aside class="sidebar" id="sidebar" tabindex="0" aria-label="Навигација и корисничка сметка">
-        <a class="brand" href="/"><partial name="_BrandMark" /> careline<span class="brand-dot">.</span></a>
+        <a class="brand" href="/"><partial name="_BrandMark" /> Термино<span class="brand-dot">.</span></a>
         @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">КЛИНИКА</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? "РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА" : Model.Role == DemoRole.Doctor ? "РАБОТЕН ПРОСТОР ЗА ЛЕКАР" : "РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ")</div>
         <nav aria-label="Главна навигација" id="navigation">
@@ -46,10 +46,10 @@
     <div class="main-shell">
         <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Отвори или затвори навигација" aria-expanded="false">☰</button><span class="breadcrumb">Работен простор <span>/</span> <strong id="page-label">Преглед</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? "Рецепционер" : Model.Role.RoleLabel())@(isDemo ? " · Демо" : "")</small></div></div></header>
         <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> Се подготвува вашиот работен простор…</div></div></main>
-        <footer class="app-footer"><span>Careline <span class="muted">/</span> Повеќе спокој во секојдневието.</span><span>@(isDemo ? "Измислени пациенти · Заеднички демо-податоци" : "Вашите термини, на едно место.")</span></footer>
+        <footer class="app-footer"><span>Термино <span class="muted">/</span> Повеќе спокој во секојдневието.</span><span>@(isDemo ? "Измислени пациенти · Заеднички демо-податоци" : "Вашите термини, на едно место.")</span></footer>
     </div>
 </div>
-<dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">CARELINE</span><h2 id="dialog-title">Термин</h2></div><button class="icon-button" id="close-dialog" aria-label="Затвори прозорец">×</button></div><div id="dialog-content"></div></dialog>
+<dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">ТЕРМИНО</span><h2 id="dialog-title">Термин</h2></div><button class="icon-button" id="close-dialog" aria-label="Затвори прозорец">×</button></div><div id="dialog-content"></div></dialog>
 <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-header"><h2 id="confirm-title">Потврдете ја постапката</h2></div><p id="confirm-message"></p><div class="dialog-actions"><button class="btn secondary" id="confirm-no">Задржи ја тековната состојба</button><button class="btn primary" id="confirm-yes">Потврди</button></div></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div hidden id="csrf">@Html.AntiForgeryToken()</div>

@@ -85,9 +85,10 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             var state = await LoadAsync(command.DoctorId, command.PatientId, ct);
             var result = Rules(state).Book(actor, command);
             db.Appointments.Add(result);
+            db.Exceptions.AddRange(state.Exceptions.Where(e => e.Id == "agreed-" + result.Id));
             db.AppointmentHistory.AddRange(state.AppointmentHistory);
             db.IdempotencyRequests.Add(new() { AccountId = actor.Id, RequestId = command.RequestId, Fingerprint = fingerprint, ResponseJson = JsonSerializer.Serialize(result, JsonDemoStore.JsonOptions), CreatedAt = clock.UtcNow });
-            Audit(actor, "appointment.created", result.Id);
+            Audit(actor, command.AgreedTime ? "appointment.created.agreed" : "appointment.created", result.Id);
             await db.SaveChangesAsync(ct); return result;
         }, ct);
     }
@@ -103,7 +104,10 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             await LockAsync("doctor:" + reference.DoctorId, ct);
             var state = await LoadAsync(reference.DoctorId, reference.PatientId, ct);
             if (state.Appointments.All(a => a.Id != id)) state.Appointments.Add(await db.Appointments.SingleAsync(a => a.Id == id, ct));
-            var result = change(Rules(state)); db.AppointmentHistory.AddRange(state.AppointmentHistory); Audit(actor, action, id); await db.SaveChangesAsync(ct); return result;
+            var agreement = state.Exceptions.SingleOrDefault(e => e.Id == "agreed-" + id);
+            var result = change(Rules(state));
+            if (agreement != null && state.Exceptions.All(e => e.Id != agreement.Id)) db.Exceptions.Remove(agreement);
+            db.AppointmentHistory.AddRange(state.AppointmentHistory); Audit(actor, action, id); await db.SaveChangesAsync(ct); return result;
         }, ct);
     }
     public async Task<PatientDetailsResult> PatientDetailsAsync(DemoActor actor, string id, CancellationToken ct)

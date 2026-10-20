@@ -2493,3 +2493,10 @@ img.brand-mark { display: block; width: 36px; height: 36px; flex-shrink: 0; obje
 .account-create-footer p { max-width: 560px; font-size: 11px; line-height: 1.8; color: var(--muted); margin: 0; }
 .account-create-footer .btn { gap: 16px; flex-shrink: 0; border-radius: 10px; min-height: 46px; }
 @media (max-width: 650px) { .account-role-panel { grid-template-columns: minmax(0, 1fr); padding: 17px; } .account-create-footer { flex-direction: column; align-items: stretch; gap: 18px; } }
+
+.agreed-booking { padding: 16px 18px; margin: 20px 0; border: 1px solid #d8e7dc; border-radius: 13px; background: #f1f7f2; }
+.agreed-booking .catalogue-toggle { margin: 0; }
+.agreed-booking [hidden] { display: none; }
+#agreed-time-field { margin-top: 18px; }
+#booking-agreed-time { max-width: 180px; background: white; }
+.agreed-booking p { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 12px 0 0; }

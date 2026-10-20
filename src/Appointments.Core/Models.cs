@@ -17,7 +17,7 @@ public record Doctor
     public string BookingMethod { get; init; } = "";
     public string Funding { get; init; } = "Не е наведено";
     public bool IsService { get; init; }
-    public bool RequiresConfirmation { get; init; }
+    public bool RequiresConfirmation { get; set; }
     public bool StaffOnly { get; init; }
     public bool TuesdayFirst { get; init; }
     public int DurationMinutes { get; set; } = 30;
@@ -49,7 +49,7 @@ public record Appointment
     public string RequestId { get; init; } = Guid.NewGuid().ToString("N");
 }
 public record Slot(DateOnly Date, TimeOnly Time, DateTimeOffset Start, DateTimeOffset End);
-public record BookingCommand(string DoctorId, string PatientId, DateOnly Date, TimeOnly Time, int DurationMinutes, string RequestId, string? ServiceId = null);
+public record BookingCommand(string DoctorId, string PatientId, DateOnly Date, TimeOnly Time, int DurationMinutes, string RequestId, string? ServiceId = null, [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)] bool AgreedTime = false);
 public record MoveCommand(DateOnly Date, TimeOnly Time, int Version);
 public sealed class DemoState
 {

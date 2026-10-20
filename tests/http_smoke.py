@@ -89,7 +89,7 @@ with tempfile.TemporaryDirectory(prefix='careline-http-') as temp:
             check(anon.request('/Demo/Enter',{'userId':'admin'},form=True)[0]==400,'Role switch requires antiforgery token')
             reception, pat, other, doctor = Client(), Client(), Client(), Client()
             html=reception.login('admin')
-            check('Календар' in html and 'Список на лекари' in html and 'data-page="availability"' not in html,'Reception navigation exposes doctors without standalone availability')
+            check('Календар' in html and 'id="people-nav"' in html and 'data-page="doctors"' in html and '>Лекари</button>' in html and 'data-page="availability"' not in html,'Reception navigation exposes doctors without standalone availability')
             html=pat.login('p01')
             check('Пронајди лекар' in html and 'data-page="patients"' not in html,'Patient navigation is role-specific')
             other.login('p02');doctor.login('user-d01')
