@@ -198,6 +198,8 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         return store.Write(s =>
         {
             var doctor = FindDoctor(s, doctorId);
+            if (s.Exceptions.Any(e => e.DoctorId == doctorId && e.Date == date && e.Start == start && e.End == end && e.IsAvailable == isAvailable))
+                throw new RuleException("Веќе постои исклучок за овој лекар, датум, временски период и вид. Уредете го или отстранете го постоечкиот запис.", 409);
             var exception = new AvailabilityException(Guid.NewGuid().ToString("N"), doctorId, date, start, end, isAvailable, reason);
             s.Exceptions.Add(exception); ProtectBookings(s, doctor); return exception;
         });

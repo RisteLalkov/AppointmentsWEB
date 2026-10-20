@@ -18,12 +18,14 @@
             <button class="nav-item" data-page="appointments"><span aria-hidden="true">◷</span> Термини</button>
             @if (Model.Role == DemoRole.Patient) { <button class="nav-item" data-page="profile"><span aria-hidden="true">♧</span> Мој профил</button> }
             @if (Model.Role != DemoRole.Patient) {
-                <details class="nav-group" id="people-nav">
-                    <summary class="nav-item"><svg class="nav-group-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="7" r="3" /><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6m3 11v-3a6 6 0 0 0-2-4" /></svg> Пациенти и лекари<svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg></summary>
-                    <div class="nav-submenu"><button class="nav-item nav-child" data-page="patients">Пациенти</button><button class="nav-item nav-child" data-page="doctors">Лекари</button></div>
+                <details class="nav-group" id="catalogue-nav">
+                    <summary class="nav-item"><span aria-hidden="true">☷</span> Управување<svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg></summary>
+                    <div class="nav-submenu"><button class="nav-item nav-child" data-page="doctors">Лекари</button><button class="nav-item nav-child" data-page="patients">Пациенти</button>
+                        @if (Model.Role == DemoRole.Administrator) { <button class="nav-item nav-child" data-page="catalogue/specialties">Специјалности</button><button class="nav-item nav-child" data-page="catalogue/services">Услуги</button> }
+                    </div>
                 </details>
             }
-        @if (Model.Role == DemoRole.Administrator) { <details class="nav-group" id="catalogue-nav"><summary class="nav-item"><span aria-hidden="true">☷</span> Шифрарници<svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg></summary><div class="nav-submenu"><button class="nav-item nav-child" data-page="catalogue/doctors">Лекари</button><button class="nav-item nav-child" data-page="catalogue/specialties">Специјалности</button><button class="nav-item nav-child" data-page="catalogue/services">Услуги</button></div></details><button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
+            @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
             @if (Backend.UseApi && Model.Role == DemoRole.Administrator) {
                 <a class="nav-item" href="/Accounts"><span aria-hidden="true">♧</span> Сметки и пристап</a>
             }

@@ -287,6 +287,14 @@ Test("Moving an agreed booking removes only its one-off period", () => {
     Equal(0,f.Store.Read(s=>s.Exceptions.Count));
 });
 Test("Agreed booking replay creates no duplicate one-off periods", () => {using var f=New();var c=Cmd("18:00") with {AgreedTime=true};var a=f.Service.Book(admin,c);Equal(a.Id,f.Service.Book(admin,c).Id);Equal(1,f.Store.Read(s=>s.Exceptions.Count));});
+Test("Duplicate availability periods are rejected regardless of reason", () => {
+ using var f=New();f.Service.AddException(admin,"d1",monday,new(18,0),new(19,0),false,"Pause");
+ Reject(()=>f.Service.AddException(admin,"d1",monday,new(18,0),new(19,0),false,"Another reason"),409);
+ Equal(1,f.Store.Read(s=>s.Exceptions.Count));
+ f.Service.AddException(admin,"d2",monday,new(18,0),new(19,0),false,"Different doctor");
+ f.Service.AddException(admin,"d1",monday,new(18,0),new(19,0),true,"Different kind");
+ Equal(3,f.Store.Read(s=>s.Exceptions.Count));
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

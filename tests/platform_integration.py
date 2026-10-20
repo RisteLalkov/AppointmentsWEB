@@ -186,6 +186,12 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         other_instance.ok('/api/appointments/'+agreed_visit['id']+'/status',dict(status='Cancelled',version=agreed_visit['version']))
         check(not any(e['id']=='agreed-'+agreed_visit['id'] for e in owner.ok('/api/exceptions?doctorId='+agreed_doc['id'])), 'Cancellation atomically removes agreed availability')
         check(owner.request('/api/appointments',dict(agreed_command,requestId=uuid.uuid4().hex,agreedTime=False))[0]==409, 'Cancelled agreement does not leave public bookable hours')
+        duplicate_exception=dict(date=agreed_date,start='18:00',end='19:00',isAvailable=False,reason='Repeated pause')
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+            results=list(pool.map(lambda n: Client(first if n%2 else second,owner.token,'main').request('/api/exceptions/'+agreed_doc['id'],dict(duplicate_exception,reason='Pause '+str(n))),range(3)))
+        check(sorted(status for status,_ in results)==[200,409,409],'Concurrent duplicate exception submissions create only one record')
+        saved_exceptions=owner.ok('/api/exceptions?doctorId='+agreed_doc['id'])
+        check(sum(e['date']==agreed_date and e['start'].startswith('18:00') for e in saved_exceptions)==1,'Only one repeated exception is persisted across API instances')
         agreed_doc=owner.ok('/api/catalogue/doctors',dict(id=agreed_doc['id'],name=agreed_doc['name'],specialtyId=agreed_spec['id'],subspecialty='',enabled=True,version=agreed_doc['catalogVersion'],requiresConfirmation=False))
         check(not agreed_doc['requiresConfirmation'], 'Confirmation flag can be disabled on an existing doctor')
         registration={'name':'Test Patient','email':'patient@platform.test','password':password}
