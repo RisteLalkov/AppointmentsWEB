@@ -210,7 +210,7 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(results==['Cancelled' if i%2==0 else 'Confirmed' for i in range(24)],'Concurrent mixed-clinic requests do not leak scoped DbContext state')
         browser=Client(web_url)
         page=browser.ok('/Account/Login')
-        check('<select' not in page and 'Клиниката се препознава автоматски.' in page, 'Login asks for credentials without a clinic selector')
+        check('<select' not in page and 'Внесете ги вашите податоци.' in page and 'Клиниката се препознава автоматски.' not in page, 'Login asks for credentials without a clinic selector')
         browser.web_login('main')
         old_csrf=browser.csrf
         check(any(x['id']==aa['id'] for x in browser.ok('/data/bootstrap')['appointments']), 'MVC uses clinic from protected session')

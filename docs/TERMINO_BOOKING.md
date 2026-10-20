@@ -55,3 +55,21 @@ rejects the same doctor/date/start/end/type with HTTP 409, regardless of reason 
 The existing transaction and doctor lock prevent duplicates across API instances.
 Existing saved duplicates can still be removed with the normal remove action; this
 change does not rewrite availability records already stored.
+
+## Overdue confirmation requests and safe schedule edits
+
+Reception and the appointment's own doctor can resolve an overdue **Чека потврда**
+request in its details. Once its start has passed they can cancel it; once its end
+has passed they can record **Завршен** or **Не се појавил** directly. This is an
+explicit reconciliation, not automatic confirmation or expiry. Each resolution
+records the previous pending status, new outcome and staff identity in history.
+Patients cannot resolve overdue requests, other doctors cannot access them, and
+terminal appointments cannot be reopened. Late confirmation remains unavailable.
+
+The weekly hours form submits the revision of the hours originally displayed.
+Background refresh cannot update that revision. A conflicting save preserves the
+entered values and offers an explicit action to discard them and load the latest
+hours. Successful saves advance the form revision so repeated saves remain valid.
+Rescheduling opens on the original appointment date in the clinic's time zone.
+
+Publish both API and Web for these changes. No database migration is required.

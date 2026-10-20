@@ -232,7 +232,7 @@ try {
   assert(pat.$("[data-move]"), "Saved appointment offers rescheduling");
   pat.click("[data-move]");
   await until(() => pat.$("#booking-date"));
-  pat.change("#booking-date", iso);
+  assert(pat.$("#booking-date").value === iso && iso !== now.today, "Rescheduling starts on the original future appointment date");
   await until(() => pat.$(".slot"));
   const slots = pat.w.document.querySelectorAll(".slot");
   slots[slots.length - 1].click();
@@ -405,6 +405,37 @@ try {
   await until(() => admin.$("#toast").textContent === "Неделното работно време е зачувано.");
   const saved = await (await admin.request("/data/bootstrap")).json();
   assert(JSON.stringify(saved.doctors.find(d => d.id === "d01").workingPeriods.map(p => p.day).sort()) === JSON.stringify(expectedDays), "Localized schedule saves and round-trips through server");
+  // Another staff request saves while this editor remains open. Background
+  // bootstrap refresh must not lend its newer revision to the older form.
+  const originalSchedule = saved.doctors.find(d => d.id === "d01");
+  const oldEnd = admin.$(".period-end").value;
+  const remotePeriods = originalSchedule.workingPeriods.map((p,i) => i ? p : {...p, end: "18:00:00"});
+  const remoteSave = await admin.request('/data/schedule/d01', {
+    method:'POST', headers:{'Content-Type':'application/json','X-CSRF-TOKEN':admin.$('[name=__RequestVerificationToken]').value},
+    body:JSON.stringify({periods:remotePeriods,durationMinutes:originalSchedule.durationMinutes,version:originalSchedule.scheduleVersion})
+  });
+  assert(remoteSave.status === 200, "Second staff member saves newer working hours");
+  const nativeFetch = admin.w.fetch;
+  let refreshed = false;
+  admin.w.fetch = async (...args) => { const response = await nativeFetch(...args); if (String(args[0]).includes('/data/bootstrap')) refreshed = true; return response; };
+  admin.w.document.activeElement.blur();
+  admin.w.dispatchEvent(new admin.w.Event('focus'));
+  await until(() => refreshed);
+  // Wait for the response body and app state update to finish.
+  await wait(30);
+  admin.w.fetch = nativeFetch;
+  assert(admin.$(".period-end").value === oldEnd, "Background refresh preserves the displayed schedule form");
+  admin.$("#schedule-form").dispatchEvent(new admin.w.Event("submit", {bubbles:true,cancelable:true}));
+  await until(() => admin.$("#reload-schedule"));
+  const protectedSchedule = (await (await admin.request('/data/bootstrap')).json()).doctors.find(d => d.id === "d01");
+  assert(protectedSchedule.scheduleVersion === originalSchedule.scheduleVersion + 1 && protectedSchedule.workingPeriods.some(p => p.end === '18:00:00'), "Stale schedule submission cannot overwrite the other staff change");
+  assert(admin.$(".period-end").value === oldEnd && admin.$('#schedule-error [role=alert]'), "Conflict warning preserves unsaved form values");
+  admin.click('#reload-schedule');
+  await until(() => [...admin.w.document.querySelectorAll('.period-end')].some(input => input.value === '18:00'));
+  assert(admin.$('#schedule-error').textContent === '', "Explicit conflict recovery loads current hours");
+  admin.$("#schedule-form").dispatchEvent(new admin.w.Event("submit", {bubbles:true,cancelable:true}));
+  await until(() => admin.$('#schedule-form button[type=submit]').disabled === false);
+  assert(admin.$('#schedule-error').textContent === '', "Reloaded schedule can save with its current revision");
   admin.$("#exception-date").value = iso;
   admin.$("#exception-start").value = "12:00";
   admin.$("#exception-end").value = "13:00";

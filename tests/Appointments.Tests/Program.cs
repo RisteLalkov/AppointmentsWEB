@@ -68,6 +68,35 @@ Test("Patient cannot confirm or complete a visit", () => {using var f=New();var 
 Test("Cannot complete or mark no-show before visit ends", () => {using var f=New();var a=f.Service.Book(pat,Cmd());Reject(()=>f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.Completed,1));Reject(()=>f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.NoShow,1));});
 Test("Can complete a confirmed past visit; terminal status stays closed", () => {using var f=New();var a=f.Service.Book(pat,Cmd());f.Time.Now=new DateTimeOffset(2026,9,21,12,0,0,TimeSpan.Zero);Equal(AppointmentStatus.Completed,f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.Completed,1).Status);Reject(()=>f.Service.ChangeStatus(admin,a.Id,AppointmentStatus.Confirmed,2));});
 Test("Can mark a confirmed past visit no-show", () => {using var f=New();var a=f.Service.Book(pat,Cmd());f.Time.Now=new DateTimeOffset(2026,9,21,12,0,0,TimeSpan.Zero);Equal(AppointmentStatus.NoShow,f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.NoShow,1).Status);});
+Test("Staff resolve overdue pending requests with audited terminal outcomes", () => {
+    foreach (var actor in new[] { admin, doc }) foreach (var outcome in new[] { AppointmentStatus.Cancelled, AppointmentStatus.Completed, AppointmentStatus.NoShow }) {
+        using var f=New(); f.Store.Write(s=>{s.Doctors[0].RequiresConfirmation=true;return true;});
+        var a=f.Service.Book(pat,Cmd()); f.Time.Now=a.End;
+        var resolved=f.Service.ChangeStatus(actor,a.Id,outcome,1);
+        Equal(outcome,resolved.Status); Equal(2,resolved.Version);
+        var entry=f.Service.History(actor,a.Id).Entries.First();
+        Equal(AppointmentStatus.Scheduled,entry.BeforeStatus); Equal(outcome,entry.AfterStatus);
+        Reject(()=>f.Service.ChangeStatus(actor,a.Id,AppointmentStatus.Cancelled,2));
+    }
+});
+Test("Overdue pending resolution retains role, version and time boundaries", () => {
+    using var f=New(); f.Store.Write(s=>{s.Doctors[0].RequiresConfirmation=true;return true;});
+    var a=f.Service.Book(pat,Cmd()); f.Time.Now=a.Start;
+    Reject(()=>f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.Confirmed,1));
+    Reject(()=>f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.Completed,1));
+    Reject(()=>f.Service.ChangeStatus(admin,a.Id,AppointmentStatus.NoShow,1));
+    Reject(()=>f.Service.ChangeStatus(pat,a.Id,AppointmentStatus.Cancelled,1));
+    Reject(()=>f.Service.ChangeStatus(otherDoc,a.Id,AppointmentStatus.Cancelled,1),403);
+    Reject(()=>f.Service.ChangeStatus(admin,a.Id,AppointmentStatus.Cancelled,0),409);
+    Equal(AppointmentStatus.Cancelled,f.Service.ChangeStatus(doc,a.Id,AppointmentStatus.Cancelled,1).Status);
+});
+Test("Schedule snapshot rejects stale staff edits without overwriting hours", () => {
+    using var f=New(); var version=f.Service.Doctors()[0].ScheduleVersion;
+    f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new(10,0),new(17,0))],30,version);
+    Reject(()=>f.Service.ReplaceSchedule(doc,"d1",[new(DayOfWeek.Monday,new(9,0),new(17,0))],30,version),409);
+    Equal(new TimeOnly(10,0),f.Service.Doctors()[0].WorkingPeriods.Single().Start);
+    f.Service.ReplaceSchedule(doc,"d1",[new(DayOfWeek.Monday,new(11,0),new(17,0))],30,version+1);
+});
 Test("Cannot resurrect a cancelled appointment", () => {using var f=New();var a=f.Service.Book(pat,Cmd());f.Service.ChangeStatus(pat,a.Id,AppointmentStatus.Cancelled,1);Reject(()=>f.Service.Move(admin,a.Id,new(monday,new(10,0),2)));});
 Test("Idempotency prevents duplicate submissions", () => {using var f=New();var command=Cmd();Equal(f.Service.Book(pat,command).Id,f.Service.Book(pat,command).Id);Equal(1,f.Service.Appointments(admin).Count);});
 Test("Reusing request identifier with different data rejected", () => {using var f=New();var command=Cmd();f.Service.Book(pat,command);Reject(()=>f.Service.Book(pat,command with{Time=new(10,0)}),409);});

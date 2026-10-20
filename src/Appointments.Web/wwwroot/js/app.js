@@ -548,11 +548,13 @@
     const d = doctor(a.doctorId),
       p = patient(a.patientId);
     const future = upcoming(a);
+    const overduePending = a.status === "Scheduled" && new Date(a.start) <= new Date();
+    const resolvePending = !isPatient() && overduePending;
     const complete =
-      !isPatient() && a.status === "Confirmed" && new Date(a.end) <= new Date();
+      !isPatient() && ["Confirmed", "Scheduled"].includes(a.status) && new Date(a.end) <= new Date();
     openDialog(
       "Детали за терминот",
-      `<div class="booking-context">${avatar(d.name, Number(d.id.slice(1)))}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div>${badge(a.status)}<dl class="detail-list"><div><dt>Пациент</dt><dd>${escape(p?.name || "Пациент")}</dd></div><div><dt>Датум</dt><dd>${formatDate(dayOf(a.start), { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</dd></div><div><dt>Време</dt><dd>${timeOf(a.start)} – ${timeOf(a.end)}</dd></div><div><dt>Услуга</dt><dd>${escape(a.serviceName || "Без заведена услуга")}</dd></div><div><dt>Број на резервација</dt><dd>CL-${a.id.slice(0, 8).toUpperCase()}</dd></div><div><dt>Времетраење</dt><dd>${Math.round((new Date(a.end) - new Date(a.start)) / 60000)} минути</dd></div></dl>${a.status === "Scheduled" ? `<div class="inline-note warning">Терминот е резервиран и чека потврда од персоналот. Не е испратено известување.</div>` : ""}<section class="appointment-history"><div class="history-heading"><h3>Историја на терминот</h3></div><div id="appointment-history" aria-live="polite"></div></section><div id="detail-error"></div><div class="dialog-actions">${future ? `<button class="btn danger" data-status="Cancelled" data-id="${id}">Откажи преглед</button>${!isPatient() || !d.staffOnly ? `<button class="btn secondary" data-move="${id}">Презакажи</button>` : ""}` : ""}${!isPatient() && future && a.status === "Scheduled" ? `<button class="btn primary" data-status="Confirmed" data-id="${id}">Потврди преглед</button>` : ""}${complete ? `<button class="btn secondary" data-status="NoShow" data-id="${id}">Означи недоаѓање</button><button class="btn primary" data-status="Completed" data-id="${id}">Заврши преглед</button>` : ""}${!future && !complete ? '<button class="btn secondary" data-action="close">Затвори</button>' : ""}</div>`,
+      `<div class="booking-context">${avatar(d.name, Number(d.id.slice(1)))}<div><strong>${escape(d.name)}</strong><small>${escape(d.specialty)}</small></div></div>${badge(a.status)}<dl class="detail-list"><div><dt>Пациент</dt><dd>${escape(p?.name || "Пациент")}</dd></div><div><dt>Датум</dt><dd>${formatDate(dayOf(a.start), { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</dd></div><div><dt>Време</dt><dd>${timeOf(a.start)} – ${timeOf(a.end)}</dd></div><div><dt>Услуга</dt><dd>${escape(a.serviceName || "Без заведена услуга")}</dd></div><div><dt>Број на резервација</dt><dd>CL-${a.id.slice(0, 8).toUpperCase()}</dd></div><div><dt>Времетраење</dt><dd>${Math.round((new Date(a.end) - new Date(a.start)) / 60000)} минути</dd></div></dl>${a.status === "Scheduled" ? `<div class="inline-note warning">${overduePending ? (isPatient() ? "Времето за потврда е изминато. Контактирајте ја рецепцијата за исходот на терминот." : "Времето за потврда е изминато. Евидентирајте откажување, или по крајот на терминот означете завршен преглед / недоаѓање. Исходот се запишува во историјата.") : "Терминот е резервиран и чека потврда од персоналот. Не е испратено известување."}</div>` : ""}<section class="appointment-history"><div class="history-heading"><h3>Историја на терминот</h3></div><div id="appointment-history" aria-live="polite"></div></section><div id="detail-error"></div><div class="dialog-actions">${future || resolvePending ? `<button class="btn danger" data-status="Cancelled" data-id="${id}">Откажи преглед</button>${future && (!isPatient() || !d.staffOnly) ? `<button class="btn secondary" data-move="${id}">Презакажи</button>` : ""}` : ""}${!isPatient() && future && a.status === "Scheduled" ? `<button class="btn primary" data-status="Confirmed" data-id="${id}">Потврди преглед</button>` : ""}${complete ? `<button class="btn secondary" data-status="NoShow" data-id="${id}">Означи недоаѓање</button><button class="btn primary" data-status="Completed" data-id="${id}">Заврши преглед</button>` : ""}${!future && !complete && !resolvePending ? '<button class="btn secondary" data-action="close">Затвори</button>' : ""}</div>`,
       "ТЕРМИН · CL-" + a.id.slice(0, 8).toUpperCase(),
     );
     loadAppointmentHistory(id);
@@ -651,7 +653,7 @@
     booking = {
       doctorId: selected,
       serviceId: a?.serviceId || (!moveId && (servicesFor(selected).find(s => s.id === calendarService)?.id || servicesFor(selected)[0]?.id)) || "",
-      date: date || state.today,
+      date: date || (a ? dayOf(a.start) : state.today),
       time: time || "",
       moveId,
       patientId:
@@ -1504,6 +1506,9 @@
     }
     if (!doctorFilter) doctorFilter = ownDoctors()[0]?.id;
     const d = doctor(doctorFilter);
+    // Keep the version of the displayed hours, independent of background bootstrap refreshes.
+    const scheduleDoctorId = d.id;
+    let scheduleVersion = d.scheduleVersion;
     app.innerHTML =
       heading(
         "Простор за грижа. Време за вас.",
@@ -1527,25 +1532,40 @@
     };
     $("#schedule-form").onsubmit = async (e) => {
       e.preventDefault();
-      const button = $("button[type=submit]", e.target);
+      const form = e.target, button = $("button[type=submit]", form);
+      if (button.disabled) return;
       button.disabled = true;
       try {
-        const periods = $$(".period-row").map((row) => ({
+        const periods = $$(".period-row", form).map((row) => ({
           day: $(".period-day", row).value,
           start: $(".period-start", row).value,
           end: $(".period-end", row).value,
         }));
-        await api("schedule/" + doctorFilter, {
+        await api("schedule/" + scheduleDoctorId, {
           periods,
-          durationMinutes: Number($("#duration").value),
-          version: doctor(doctorFilter).scheduleVersion,
+          durationMinutes: Number($("#duration", form).value),
+          version: scheduleVersion,
         });
+        // Advance only after our own successful save, never from a background refresh.
+        scheduleVersion++;
         await load(false);
-        $("#schedule-error").innerHTML = "";
+        if (form !== $("#schedule-form")) return;
+        $("#schedule-error", form).innerHTML = "";
         toast("Неделното работно време е зачувано.");
       } catch (err) {
-        $("#schedule-error").innerHTML =
-          `<div class="inline-error" role="alert">${escape(err.message)}</div>`;
+        if (form !== $("#schedule-form")) return;
+        const errorBox = $("#schedule-error", form);
+        errorBox.innerHTML =
+          `<div class="inline-error" role="alert">${escape(err.message)}${err.status === 409 ? " Вашите внесени промени се задржани. Вчитајте го тековното работно време пред повторно уредување." : ""}</div>${err.status === 409 ? '<button type="button" class="btn secondary small" id="reload-schedule">Отфрли ги внесените промени и вчитај го тековното работно време</button>' : ""}`;
+        $("#reload-schedule", form)?.addEventListener("click", async (event) => {
+          event.target.disabled = true;
+          try {
+            await load(false);
+            if (form === $("#schedule-form")) renderAvailability();
+          } catch (error) {
+            if (form === $("#schedule-form")) toast(error.message, true);
+          } finally { event.target.disabled = false; }
+        });
       } finally {
         button.disabled = false;
       }

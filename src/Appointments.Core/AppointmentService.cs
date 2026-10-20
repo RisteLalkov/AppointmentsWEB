@@ -114,13 +114,20 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
     {
         var a = FindAppointment(s, id); CheckAccess(actor, a); Version(a, version);
         if (actor.Role == DemoRole.Patient && status != AppointmentStatus.Cancelled) throw new RuleException("Пациентите може да ги откажат само сопствените претстојни термини.", 403);
-        if (status == AppointmentStatus.Cancelled) Editable(a);
+        // Staff may reconcile an overdue, unconfirmed request explicitly. Patients
+        // retain the upcoming-only cancellation rule; terminal visits stay closed.
+        var overduePending = a.Status == AppointmentStatus.Scheduled && a.Start <= clock.UtcNow;
+        if (status == AppointmentStatus.Cancelled)
+        {
+            if (overduePending && actor.Role != DemoRole.Patient) Staff(actor, a.DoctorId);
+            else Editable(a);
+        }
         else
         {
             Staff(actor, a.DoctorId);
             var valid = (a.Status == AppointmentStatus.Scheduled && status == AppointmentStatus.Confirmed && a.Start > clock.UtcNow)
-                || (a.Status == AppointmentStatus.Confirmed && status is AppointmentStatus.Completed or AppointmentStatus.NoShow && a.End <= clock.UtcNow);
-            if (!valid) throw new RuleException("Невалидна промена на статус. Потврдете претстојно барање; означете завршен преглед или недоаѓање само по крајот на потврдениот термин.");
+                || (a.Status is AppointmentStatus.Confirmed or AppointmentStatus.Scheduled && status is AppointmentStatus.Completed or AppointmentStatus.NoShow && a.End <= clock.UtcNow);
+            if (!valid) throw new RuleException("Невалидна промена на статус. Потврдете претстојно барање; означете завршен преглед или недоаѓање само по крајот на терминот.");
         }
         var before = a with { };
         if (status == AppointmentStatus.Cancelled) s.Exceptions.RemoveAll(e => e.Id == "agreed-" + a.Id);
@@ -173,7 +180,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         if (phone.Length > 30 || phone.Any(c => !char.IsAsciiDigit(c) && !"+ -()".Contains(c))) throw new RuleException("Внесете важечки телефонски број или оставете го полето празно.");
         return (name, email, phone);
     }
-    public void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes)
+    public void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes, int? version = null)
     {
         Staff(actor, doctorId);
         if (durationMinutes is < 10 or > 120 || durationMinutes % 5 != 0) throw new RuleException("Изберете времетраење од 10 до 120 минути, во чекори од 5 минути.");
@@ -181,7 +188,9 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         if (periods.Any(p => periods.Any(q => !ReferenceEquals(p, q) && p.Day == q.Day && p.Start < q.End && q.Start < p.End))) throw new RuleException("Работните периоди не смеат да се преклопуваат.");
         store.Write(s =>
         {
-            var doctor = FindDoctor(s, doctorId); doctor.WorkingPeriods = periods; doctor.DurationMinutes = durationMinutes;
+            var doctor = FindDoctor(s, doctorId);
+            if (version.HasValue && version != doctor.ScheduleVersion) throw new RuleException("Распоредот е променет. Вчитајте го тековното работно време пред зачувување.", 409);
+            doctor.WorkingPeriods = periods; doctor.DurationMinutes = durationMinutes;
             ProtectBookings(s, doctor); doctor.DemoScheduleEdited = true; doctor.ScheduleVersion++; return true;
         });
     }

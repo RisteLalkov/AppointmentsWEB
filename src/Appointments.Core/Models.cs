@@ -88,7 +88,7 @@ public interface IAppointmentService
     PatientDetailsResult PatientDetails(DemoActor actor, string id);
     Patient UpdatePatient(DemoActor actor, string id, PatientUpdateCommand command);
     Patient AddPatient(DemoActor actor, string name, string email, string phone);
-    void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes);
+    void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes, int? version = null);
     AvailabilityException AddException(DemoActor actor, string doctorId, DateOnly date, TimeOnly start, TimeOnly end, bool isAvailable, string reason);
     void RemoveException(DemoActor actor, string id);
     void Reset(DemoActor actor);
