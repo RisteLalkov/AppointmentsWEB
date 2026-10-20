@@ -20,7 +20,7 @@ The application targets the .NET 10 shared framework and uses the packages liste
 
 App CSS, favicon and interface illustrations are authored in source. Typography uses system fonts. Unicode interface symbols are text, not an external icon/font package. There are no paid components, remote images, external account requirements or API keys.
 
-Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettier (MIT); neither is required to run the site or bundled in its browser assets. No telemetry or external integrations have been added by the application.
+Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettier (MIT); neither is required to run the site or bundled in its browser assets. No telemetry has been added by the application. Public clinic profiles now embed Google Maps when a public clinic address is configured; see the Google Maps section below.
 
 ## PostgreSQL backend packages
 
@@ -36,3 +36,16 @@ Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettie
 NuGet restores package licenses and notices with the packages. None of these application dependencies requires a paid license. Microsoft ASP.NET Core PasswordHasher is part of the shared framework; no proprietary identity service is required. The optional local Compose recipe uses the official PostgreSQL image. The container engine is separately installed software; Docker Desktop has separate terms and is not required because native PostgreSQL is supported.
 
 Optional real-browser UI checks in `tests/frontend/discovery-browser.cjs` use Playwright (Apache-2.0; https://github.com/microsoft/playwright/blob/main/LICENSE). It is not an application dependency or browser asset. The separately downloaded test browser has its own notices.
+
+## Google Maps on public clinic profiles
+
+Public clinic pages use a lazy-loaded Google Maps iframe for the saved public address
+and an external Google Maps search link. Google supplies the map, controls and native
+attribution; those remain inside its iframe. No Google script library or map assets
+are redistributed with this application, and no application API key is required by
+this address-based embed. Google Maps is an external runtime dependency for this
+optional feature, governed by Google's terms and privacy policy. The rest of the
+clinic profile and doctor directory remains usable when it is unavailable.
+
+- https://www.google.com/help/terms_maps/
+- https://policies.google.com/privacy

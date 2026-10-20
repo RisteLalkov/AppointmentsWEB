@@ -22,7 +22,7 @@ import urllib.request
 root = Path(__file__).resolve().parents[1]
 dotnet = os.environ.get('TEST_DOTNET', 'dotnet')
 count, calls = 0, []
-clinic = dict(id='main',name='Тест клиника',timeZone='Europe/Skopje',allowRegistration=True,description='Јавен опис',address=None,phone=None)
+clinic = dict(id='main',name='Тест клиника',timeZone='Europe/Skopje',allowRegistration=True,description='Јавен опис',address='Плоштад Македонија, Скопје',phone='+389 2 000 0000')
 doctor = dict(id='d01',name='Тест лекар',specialty='Кардиологија',subspecialty='',clinic=clinic,services=[dict(id='s01',name='Преглед',durationMinutes=30)],staffOnly=False)
 expires=(dt.datetime.now(dt.timezone.utc)+dt.timedelta(hours=1)).isoformat()
 
@@ -56,6 +56,7 @@ class Stub(BaseHTTPRequestHandler):
             if term=='unavailable-test': code,result=503,dict(error='Пребарувањето е привремено недостапно.')
         elif path.path=='/api/public/clinics': result=dict(items=[clinic],total=1,page=1,pageSize=12)
         elif path.path=='/api/public/clinics/main': result=clinic
+        elif path.path=='/api/public/clinics/no-address': result=dict(clinic,id='no-address',name='Клиника без адреса',address=None,phone=None)
         elif path.path=='/api/public/clinics/main/doctors/d01': result=doctor
         elif path.path=='/api/public/clinics/main/doctors/staff': result=dict(doctor,id='staff',staffOnly=True)
         elif path.path=='/api/public/clinics/east/doctors/d01': result=dict(doctor,clinic=dict(clinic,id='east'))
@@ -141,6 +142,11 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check(anon.request('/Discover/Clinic/main?page=0')[0]==400,'Clinic route validates internally constructed query')
             status,html,_=anon.request('/Discover/Clinic/main')
             check(status==200 and 'Јавен опис' in html and 'Тест лекар' in html,'Clinic profile renders real public description and doctors')
+            check('clinic-contact-card' in html and 'Информации за клиниката' in html and 'tel:+38920000000' in html, 'Clinic profile has address and callable phone in an info card')
+            check('maps.google.com/maps?q=' in html and 'output=embed' in html and 'loading="lazy"' in html and 'Отвори во Maps' in html, 'Clinic profile lazily embeds an address map and supplies external Maps link')
+            check('data-discovery-art' not in html, 'Clinic map replaces generic landing illustration on clinic profiles')
+            no_address_status,no_address_html,_=anon.request('/Discover/Clinic/no-address')
+            check(no_address_status==200 and 'Локацијата сè уште не е додадена' in no_address_html and '<iframe' not in no_address_html and 'maps.google.com' not in no_address_html, 'Clinic without address does not invent a map location')
             status,html,_=anon.request('/Discover/Doctor/d01?clinicId=main')
             check(status==200 and 'Преглед' in html and '30 минути' in html,'Doctor profile renders active services')
             check('Продолжи кон закажување' in html and 'Слободните термини се проверуваат' not in html and 'doctor-profile-specialty' in html, 'Doctor profile emphasizes specialty and uses concise booking copy')

@@ -1,0 +1,20 @@
+@using Appointments.Contracts
+@model PublicClinic
+@{
+    var address = Model.Address?.Trim();
+    var query = Uri.EscapeDataString(address ?? "");
+    var mapUrl = "https://maps.google.com/maps?q=" + query + "&z=16&output=embed";
+    var directionsUrl = "https://www.google.com/maps/search/?api=1&query=" + query;
+}
+<section class="clinic-map-card" aria-labelledby="clinic-map-title">
+    <div class="clinic-map-heading"><div><span class="eyebrow">КАКО ДО НАС</span><h2 id="clinic-map-title">@Model.Name</h2></div>
+        @if (!string.IsNullOrWhiteSpace(address)) { <a class="btn secondary small clinic-maps-link" href="@directionsUrl" target="_blank" rel="noopener noreferrer">Отвори во Maps <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg><span class="visually-hidden">(се отвора во нов прозорец)</span></a> }
+    </div>
+    @if (!string.IsNullOrWhiteSpace(address)) {
+        <iframe class="clinic-map-frame" src="@mapUrl" title="Мапа: @Model.Name — @address" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div class="clinic-map-caption"><span class="clinic-location-dot" aria-hidden="true"></span><p>@address<small>Локација според адресата на клиниката. Ако мапата не се вчитува, отворете ја во Maps.</small></p></div>
+    }
+    else {
+        <div class="clinic-map-empty"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><h3>Локацијата сè уште не е додадена</h3><p>Контактирајте ја клиниката за повеќе информации за адресата.</p></div>
+    }
+</section>

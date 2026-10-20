@@ -31,6 +31,24 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('.discovery-art').evaluate(e=>getComputedStyle(e).animationName)==='discovery-open','Hero illustration joins the opening entrance');
   await noOverflow(page,'Desktop public directory');
   if(screenshots) await page.screenshot({path:resolve(screenshots,'public-desktop.png'),fullPage:true});
+  const clinicPage=await context.newPage();
+  // Verify our map integration and layout independently of external tile/network availability.
+  await clinicPage.route('https://maps.google.com/**',route=>route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="en"><body style="margin:0;background:#edf2ee;font-family:sans-serif;padding:24px;color:#52675f">External map provider — test stub</body></html>'}));
+  await clinicPage.goto(publicUrl+'/Discover/Clinic/main');
+  check(await clinicPage.getByRole('heading',{name:'Информации за клиниката'}).isVisible(),'Clinic profile shows its contact information card');
+  check(await clinicPage.locator('.clinic-contact-card a[href="tel:+38920000000"]').count()===1,'Clinic phone is callable');
+  const mapSrc=new URL(await clinicPage.locator('.clinic-map-frame').getAttribute('src'));
+  check(mapSrc.hostname==='maps.google.com'&&mapSrc.searchParams.get('q')==='Плоштад Македонија, Скопје'&&mapSrc.searchParams.get('output')==='embed','Map uses the saved address with correct Cyrillic encoding');
+  const mapLink=clinicPage.locator('.clinic-maps-link');
+  check(new URL(await mapLink.getAttribute('href')).searchParams.get('query')==='Плоштад Македонија, Скопје'&&await mapLink.getAttribute('target')==='_blank'&&(await mapLink.getAttribute('rel')).includes('noopener'),'External Maps link uses the saved location and safe new-window attributes');
+  check(await clinicPage.locator('.clinic-map-frame').getAttribute('loading')==='lazy'&&!!(await clinicPage.locator('.clinic-map-frame').getAttribute('title')),'Map has lazy loading and an accessible title');
+  if(screenshots)await clinicPage.screenshot({path:resolve(screenshots,'clinic-map-desktop.png'),fullPage:true});
+  for(const width of [768,390,320]){await clinicPage.setViewportSize({width,height:900});await noOverflow(clinicPage,'Clinic profile with map at '+width+'px');}
+  if(screenshots)await clinicPage.screenshot({path:resolve(screenshots,'clinic-map-mobile.png'),fullPage:true});
+  await clinicPage.goto(publicUrl+'/Discover/Clinic/no-address');
+  check(await clinicPage.locator('.clinic-map-frame').count()===0&&await clinicPage.getByRole('heading',{name:'Локацијата сè уште не е додадена'}).isVisible(),'Missing-address clinic shows a useful empty state without an iframe');
+  await noOverflow(clinicPage,'Clinic without address at 320px');
+  await clinicPage.close();
   for(const path of ['/Account/Login','/Account/Register','/Platform/Login']) {
    const formPage=await context.newPage();await formPage.goto(publicUrl+path);
    check(await formPage.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),path+' loads the company symbol');

@@ -6,6 +6,7 @@
     var doctors = ViewData["Doctors"] as PublicPage<PublicDoctor>;
     var clinics = ViewData["Clinics"] as PublicPage<PublicClinic>;
     var clinic = ViewData["Clinic"] as PublicClinic;
+    if (clinic != null) ViewData["Title"] = clinic.Name;
     var total = doctors?.Total ?? clinics?.Total ?? 0;
     var filters = new List<(string Key, string Label, string Value)>();
     if (!string.IsNullOrWhiteSpace(q.Search)) filters.Add(("Search", "Пребарување", q.Search));
@@ -31,18 +32,19 @@
             <path class="ribbon-ink" pathLength="1000" d="M880 -80 C1450 240 240 200 800 540 S1340 920 600 1080 S-180 1420 460 1680"/>
         </svg>
     </div>
-    <section class="discovery-hero" aria-labelledby="discovery-heading">
+    <section class="discovery-hero @(clinic != null ? "clinic-profile-hero" : "")" aria-labelledby="discovery-heading">
         <div class="discovery-copy">
-            <span class="eyebrow discovery-eyebrow"><span aria-hidden="true"></span> ГРИЖА ШТО НÈ ПОВРЗУВА</span>
+            <span class="eyebrow discovery-eyebrow"><span aria-hidden="true"></span> @(clinic != null ? "ЗАПОЗНАЈТЕ ЈА КЛИНИКАТА" : "ГРИЖА ШТО НÈ ПОВРЗУВА")</span>
             <h1 id="discovery-heading">@if (clinic != null) { @clinic.Name } else { <text>Вистинскиот лекар.<br /><span>Поблиску до вас.</span></text> }</h1>
             <p>@(clinic?.Description ?? "Пронајдете лекар или клиника, запознајте ги услугите и направете го следниот чекор кон вашата грижа.")</p>
-            @if (!string.IsNullOrWhiteSpace(clinic?.Address)) { <p class="discovery-contact">Адреса: @clinic.Address</p> }
-            @if (!string.IsNullOrWhiteSpace(clinic?.Phone)) { <p class="discovery-contact">Телефон: @clinic.Phone</p> }
+            @if (clinic != null) { <partial name="_ClinicContact" model="clinic" /> }
             <div class="discovery-hero-actions"><a class="btn primary" href="#directory">@(clinic != null ? "Разгледајте ги лекарите" : "Започнете со пребарување") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v16m-6-6 6 6 6-6" /></svg></a>
             @if (clinic != null) { <a href="/Discover?view=clinics#directory">← Сите клиники</a> }
             </div>
             <p class="discovery-reassurance"><span aria-hidden="true">✓</span> Разгледувајте слободно. Најавете се кога ќе сакате да закажете.</p>
         </div>
+        @if (clinic != null) { <partial name="_ClinicMap" model="clinic" /> }
+        else {
         <div class="discovery-art" data-discovery-art>
             <div class="care-glow care-glow-mint" aria-hidden="true"></div>
             <div class="care-glow care-glow-lilac" aria-hidden="true"></div>
@@ -65,6 +67,7 @@
             </ol>
             <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false" hidden>Паузирај анимација</button>
         </div>
+        }
     </section>
     <section id="directory" class="discovery-directory" aria-labelledby="directory-title">
         <div class="public-section-heading"><div><span class="eyebrow">ПРЕБАРУВАЊЕ</span><h2 id="directory-title">@(clinic != null ? "Лекари во клиниката" : view == "clinics" ? "Пронајдете клиника" : "Пронајдете лекар")</h2></div>

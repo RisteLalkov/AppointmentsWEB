@@ -87,3 +87,26 @@ The public endpoint returns only the selected date/service and free start/end ti
 It excludes patient identities, appointment identifiers, reasons for absences and
 account data. Hidden clinics, inactive doctors and service-only profiles are excluded.
 Both API and Web must be published. No database changes are needed.
+
+## Public clinic location and contact card
+
+Selecting a clinic shows its public description, an address/phone information card,
+a callable phone link when configured, and an address-based Google Maps embed.
+The map replaces the generic landing illustration only on clinic profiles; the
+public landing page retains its existing artwork. The external **Отвори во Maps**
+link searches the same saved address. A missing address shows a clear empty state
+without loading a map. No coordinates or fictional contact details are generated.
+
+The iframe is lazy-loaded, requires no application API key, and depends on the
+visitor's access to Google Maps. The provider resolves the saved address, so use a
+complete street/city address for accuracy; the interface retains an external-link
+fallback if the embedded map cannot load. Map requests disclose the public address
+and normal browser/network metadata to Google. No patient/account data is included.
+
+Publish Web including its views and wwwroot. No API or database update is required.
+
+For the original main clinic using the legacy single-clinic configuration, public
+contact fields are API settings `Tenancy:Address`, `Tenancy:Phone` and
+`Tenancy:Description`. Explicit configured clinics use the corresponding fields
+under `Tenancy:Clinics`. Managed clinics use the details supplied during platform
+registration. The map itself does not change or generate those saved details.
