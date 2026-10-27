@@ -2384,7 +2384,6 @@ dialog::backdrop {
 .nav-item.active { box-shadow: inset 3px 0 var(--green); }
 summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 8px; }
 .doctor-card-actions { flex-wrap: wrap; }
-.doctor-card-actions [data-availability] { flex-basis: 100%; color: var(--accent); border-color: #d7cee9; background: var(--accent-soft); }
 .availability-back { display: inline-block; margin-bottom: 20px; font-weight: 600; }
 .public-header { max-width: 1280px; margin: auto; padding: 25px 36px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .public-header .brand { margin: 0; }
@@ -2529,3 +2528,33 @@ img.brand-mark { display: block; width: 36px; height: 36px; flex-shrink: 0; obje
 label, .field > label, th { font-weight: 600; }
 .field-help, .filter-hint, .muted { line-height: 1.65; }
 .nav-group > summary { padding-right: 40px; }
+
+/* Consistent, compact actions for management cards and lists. */
+.nav-calendar-icon { width: 21px; height: 21px; flex: 0 0 21px; color: #8e9b8e; }
+.nav-item.active .nav-calendar-icon { color: var(--green-dark); }
+.doctor-actions, .patient-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.records-table .doctor-actions { min-width: 0; max-width: 360px; }
+.records-table .patient-actions { min-width: 0; max-width: 300px; }
+.record-action { display: inline-flex; align-items: center; justify-content: flex-start; gap: 8px; min-width: 0; min-height: 42px; padding: 10px 12px; border: 1px solid #dce7df; border-radius: 10px; color: #39564a; background: white; font-size: .875rem; font-weight: 600; line-height: 1.45; text-align: left; transition: background .16s, border-color .16s, box-shadow .16s; }
+.record-action svg { width: 17px; height: 17px; flex: 0 0 17px; }
+.record-action span { min-width: 0; }
+.record-action:hover { background: #f1f6f2; border-color: #b1cabc; box-shadow: 0 2px 7px #19382f08; }
+.record-action-primary { color: white; background: var(--green); border-color: var(--green); }
+.record-action-primary:hover { color: white; background: var(--green-dark); border-color: var(--green-dark); }
+.record-action-accent { color: #68548e; background: #f3eff9; border-color: #e3dbef; }
+.record-action-accent:hover { background: #eae3f4; border-color: #cbbce0; }
+.patient-card-actions { padding-top: 18px; margin-top: 18px; border-top: 1px solid var(--line); }
+@media (prefers-reduced-motion: reduce) { .record-action { transition: none; } }
+
+#doctor-results .records-table table, #patient-results .records-table table { table-layout: fixed; min-width: 840px; white-space: normal; }
+#doctor-results .records-table td, #patient-results .records-table td { overflow-wrap: anywhere; }
+#doctor-results .records-table th:nth-child(1) { width: 25%; }
+#doctor-results .records-table th:nth-child(2) { width: 21%; }
+#doctor-results .records-table th:nth-child(3) { width: 20%; }
+#doctor-results .records-table th:nth-child(4) { width: 34%; }
+#patient-results .records-table th:nth-child(1) { width: 24%; }
+#patient-results .records-table th:nth-child(2) { width: 26%; }
+#patient-results .records-table th:nth-child(3) { width: 18%; }
+#patient-results .records-table th:nth-child(4) { width: 32%; }
+.records-table .badge { white-space: normal; }
+.record-action span { overflow-wrap: normal; }

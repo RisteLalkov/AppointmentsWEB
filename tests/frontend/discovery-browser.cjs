@@ -212,6 +212,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('[data-records-kind=patients][data-records-view=list]').getAttribute('aria-pressed')==='true','List preference survives reload');
   await page.locator('[data-records-kind=patients][data-records-view=cards]').click();
   check(await page.locator('.patient-card').count()>0,'Patients switch back to cards');
+  if(screenshots)await page.locator('.patient-card').first().screenshot({path:resolve(screenshots,'patient-card-actions.png')});
   await page.locator('[data-page="catalogue/specialties"]').click();
   await page.locator('[data-records-kind=catalogue-specialties][data-records-view=cards]').click();
   check(await page.locator('.catalogue-card-grid').isVisible(),'Specialties also support card view');
@@ -228,12 +229,16 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.keyboard.press('Space');
   check(await page.locator('#catalogue-nav').evaluate(e=>e.open),'Catalogue submenu opens with keyboard');
   await page.locator('[data-page="catalogue/services"]').click();
-  await page.locator('[data-catalogue-tab=services][aria-pressed=true]').waitFor();
+  await page.locator('[data-records-kind=catalogue-services]').first().waitFor();
   check(await page.locator('[data-page="catalogue/services"]').getAttribute('aria-current')==='page','Deep section marks active navigation');
+  check(await page.locator('[data-catalogue-tab]').count()===0,'Management uses sidebar navigation without duplicate section tabs');
+  check((await page.locator('[data-records-view=list]').innerText()).trim()==='Листа','Management list view uses the requested label');
+  check(await page.locator('[data-page=calendar] svg rect').count()===1,'Sidebar calendar uses a calendar SVG icon');
   await page.locator('[data-page=doctors]').click();
   await page.locator('[data-records-kind=doctors][data-records-view=list]').click();
   check(await page.locator('#doctor-results table').isVisible() && await page.locator('[data-doctor-edit=d01]').isVisible(),'Doctor list exposes editing and all existing actions');
-  if(screenshots)await page.screenshot({path:resolve(screenshots,'doctors-list-desktop.png'),fullPage:true});
+  check(await page.locator('#doctor-results .records-table').evaluate(e=>e.scrollWidth<=e.clientWidth+1),'Doctor actions fit the desktop list without horizontal clipping');
+  if(screenshots){await page.screenshot({path:resolve(screenshots,'doctors-list-desktop.png'),fullPage:true});await page.locator('#doctor-results tbody tr').first().screenshot({path:resolve(screenshots,'doctor-actions.png')});}
   await page.locator('[data-availability=d01]').click();
   await page.locator('#schedule-form').waitFor();
   check(await page.locator('#availability-doctor').inputValue()==='d01','Doctor card opens selected availability');
@@ -354,7 +359,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await m.waitForTimeout(300);
   if(screenshots)await m.screenshot({path:resolve(screenshots,'patients-list-mobile.png'),fullPage:true});
   await m.locator('#menu-toggle').tap();
-  await m.locator('[data-page="catalogue/specialties"]').tap();await m.locator('[data-catalogue-tab=specialties][aria-pressed=true]').waitFor();
+  await m.locator('[data-page="catalogue/specialties"]').tap();await m.locator('[data-records-kind=catalogue-specialties]').first().waitFor();
   check(true,'Touch submenu opens and selects specialties');
   await noOverflow(m,'Mobile catalogue');
   await m.locator('#menu-toggle').tap();

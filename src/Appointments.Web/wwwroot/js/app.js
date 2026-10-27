@@ -397,15 +397,28 @@
   }
   function viewSwitch(kind, fallback = "cards") {
     const selected = recordView(kind, fallback);
-    return `<div class="view-switch" role="group" aria-label="Приказ">${[["list","Список",'<path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/>'],["cards","Картички",'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>']].map(([value,label,icon]) => `<button type="button" data-records-view="${value}" data-records-kind="${kind}" aria-pressed="${selected === value}" class="${selected === value ? "active" : ""}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${icon}</svg>${label}</button>`).join("")}</div>`;
+    return `<div class="view-switch" role="group" aria-label="Приказ">${[["list","Листа",'<path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/>'],["cards","Картички",'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>']].map(([value,label,icon]) => `<button type="button" data-records-view="${value}" data-records-kind="${kind}" aria-pressed="${selected === value}" class="${selected === value ? "active" : ""}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${icon}</svg>${label}</button>`).join("")}</div>`;
+  }
+  const recordActionIcons = {
+    profile: '<circle cx="12" cy="8" r="3"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',
+    book: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-9 3v4m-2-2h4"/>',
+    hours: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    edit: '<path d="m16 3 5 5-12 12-6 1 1-6L16 3Zm-2 2 5 5"/>',
+  };
+  function recordAction(action, id, label, icon, variant = "secondary", description = label) {
+    return `<button type="button" class="record-action record-action-${variant}" data-${action}="${escape(id)}" title="${escape(description)}" aria-label="${escape(description)}"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${recordActionIcons[icon]}</svg><span>${escape(label)}</span></button>`;
   }
   function doctorActions(d) {
-    return `<button class="btn secondary small" data-profile="${d.id}">Види профил</button><button class="btn primary small" data-book="${d.id}">${d.staffOnly && isPatient() ? "Информации за закажување" : "Пронајди термин"}</button>${!isPatient() ? `<button class="btn secondary small" data-availability="${d.id}">Достапност и работно време</button>` : ""}${isAdmin() ? `<button class="btn secondary small" data-doctor-edit="${d.id}">Измени лекар</button>` : ""}`;
+    const informationOnly = d.staffOnly && isPatient();
+    return recordAction("profile", d.id, "Види профил", "profile") +
+      recordAction("book", d.id, informationOnly ? "Информации" : "Пронајди термин", "book", "primary", informationOnly ? "Информации за закажување" : "Пронајди термин") +
+      (!isPatient() ? recordAction("availability", d.id, "Достапност", "hours", "accent", "Достапност и работно време") : "") +
+      (isAdmin() ? recordAction("doctor-edit", d.id, "Измени лекар", "edit") : "");
   }
   function renderDoctors() {
     app.innerHTML =
       heading(
-        isPatient() ? "Соодветна грижа за вас." : "Вашиот список на лекари.",
+        isPatient() ? "Соодветна грижа за вас." : "Вашата листа на лекари.",
         "Разгледајте ги специјалистите и нивните работни распореди.",
         isAdmin() ? '<button class="btn primary" id="catalogue-add" data-action="add-doctor">＋ Додај лекар</button>' : "",
         isPatient() ? "ПРОНАЈДЕТЕ ГО ВАШИОТ ЛЕКАР" : "ЛУЃЕТО ШТО СЕ ГРИЖАТ ЗА ВАС",
@@ -432,8 +445,8 @@
   function doctorResults() {
     const list = filteredDoctors();
     const status = d => d.enabled === false ? "Неактивен" : d.staffOnly ? "Закажување преку рецепција" : d.workingPeriods.length ? "Утврдено работно време" : "По договор";
-    const cards = `<div class="doctor-grid">${list.map((d, i) => `<article class="card doctor-card"><div class="doctor-card-top">${avatar(d.name, i)}<span class="badge">${status(d)}</span></div><h3>${escape(d.name)}</h3><div class="specialty">${escape(d.specialty)}</div><div class="doctor-card-meta"><span>◷ ${d.durationMinutes} мин.</span><span>${d.funding === "Не е наведено" ? "Не е наведен начин на финансирање" : escape(d.funding)}</span></div><div class="doctor-card-actions">${doctorActions(d)}</div></article>`).join("")}</div>`;
-    const table = `<section class="card table-wrap records-table" tabindex="0" aria-label="Список со постапки"><table><thead><tr><th>Лекар / профил</th><th>Специјалност</th><th>Достапност</th><th>Постапки</th></tr></thead><tbody>${list.map(d => `<tr><td><strong>${escape(d.name)}</strong><small>${d.durationMinutes} мин. · ${escape(d.funding)}</small></td><td>${escape(d.specialty)}${d.subspecialty ? `<small>${escape(d.subspecialty)}</small>` : ""}</td><td><span class="badge">${status(d)}</span></td><td><div class="record-actions">${doctorActions(d)}</div></td></tr>`).join("")}</tbody></table></section>`;
+    const cards = `<div class="doctor-grid">${list.map((d, i) => `<article class="card doctor-card"><div class="doctor-card-top">${avatar(d.name, i)}<span class="badge">${status(d)}</span></div><h3>${escape(d.name)}</h3><div class="specialty">${escape(d.specialty)}</div><div class="doctor-card-meta"><span>◷ ${d.durationMinutes} мин.</span><span>${d.funding === "Не е наведено" ? "Не е наведен начин на финансирање" : escape(d.funding)}</span></div><div class="doctor-card-actions doctor-actions">${doctorActions(d)}</div></article>`).join("")}</div>`;
+    const table = `<section class="card table-wrap records-table" tabindex="0" aria-label="Листа со постапки"><table><thead><tr><th>Лекар / профил</th><th>Специјалност</th><th>Достапност</th><th>Постапки</th></tr></thead><tbody>${list.map(d => `<tr><td><strong>${escape(d.name)}</strong><small>${d.durationMinutes} мин. · ${escape(d.funding)}</small></td><td>${escape(d.specialty)}${d.subspecialty ? `<small>${escape(d.subspecialty)}</small>` : ""}</td><td><span class="badge">${status(d)}</span></td><td><div class="record-actions doctor-actions">${doctorActions(d)}</div></td></tr>`).join("")}</tbody></table></section>`;
     $("#doctor-results").innerHTML = `<div class="records-heading"><p class="results-count">${list.length} лекари и услуги</p>${viewSwitch("doctors")}</div>` + (list.length ? recordView("doctors") === "list" ? table : cards : empty("Не се пронајдени лекари", "Обидете се со друго име или специјалност."));
   }
   function scheduleList(d) {
@@ -1265,8 +1278,7 @@
     const kinds = { doctors: "Лекари", patients: "Пациенти", specialties: "Специјалности", services: "Услуги" };
     const items = state[catalogueTab].filter(x => `${x.name} ${x.specialty || ""}`.toLocaleLowerCase().includes(catalogueSearch.toLocaleLowerCase()));
     app.innerHTML = heading("Управување со клиниката.", "Лекари, пациенти, специјалности и услуги на едно место.", '<button class="btn primary" id="catalogue-add">＋ Додај запис</button>', "ОРГАНИЗАЦИЈА НА КЛИНИКАТА") +
-      `<div class="chip-tabs" role="group" aria-label="Управување">${Object.entries(kinds).map(([key,label]) => `<button data-catalogue-tab="${key}" class="${key === catalogueTab ? "active" : ""}" aria-pressed="${key === catalogueTab}">${label}</button>`).join("")}</div>
-      <section class="card workspace-filters"><div class="card-head"><h3>${kinds[catalogueTab]}</h3><div class="records-heading"><span class="muted">${items.length} записи</span>${viewSwitch("catalogue-" + catalogueTab, "list")}</div></div><div class="card-body"><label for="catalogue-search">Пребарај по име</label><input id="catalogue-search" value="${escape(catalogueSearch)}" placeholder="Пребарај по назив…"></div></section>
+      `<section class="card workspace-filters"><div class="card-head"><h3>${kinds[catalogueTab]}</h3><div class="records-heading"><span class="muted">${items.length} записи</span>${viewSwitch("catalogue-" + catalogueTab, "list")}</div></div><div class="card-body"><label for="catalogue-search">Пребарај по име</label><input id="catalogue-search" value="${escape(catalogueSearch)}" placeholder="Пребарај по назив…"></div></section>
       <p class="inline-note">Деактивирањето спречува нови закажувања. Постоечките термини и историјата се задржуваат. Работното време се уредува преку Лекари → Достапност; сметките за најава во Сметки и пристап.</p>
       <section class="card table-wrap"><table><thead><tr><th>Назив</th><th>Информации</th><th>Статус</th><th>Постапки</th></tr></thead><tbody>${items.map(x => `<tr><td><strong>${escape(x.name)}</strong>${x.isService ? '<small class="catalogue-subtext">Увезен услужен профил</small>' : ""}</td><td>${escape(catalogueTab === "doctors" ? x.specialty + (x.subspecialty ? " · " + x.subspecialty : "") : catalogueTab === "services" ? `${state.specialties.find(s => s.id === x.specialtyId)?.name || ""} · ${x.durationMinutes} минути · ${state.doctorServices.filter(a => a.serviceId === x.id).length} профили` : `${state.doctors.filter(d => d.specialtyId === x.id).length} лекари / профили`)}</td><td><span class="badge ${x.enabled === false ? "Cancelled" : "Confirmed"}">${x.enabled === false ? "Неактивен" : "Активен"}</span></td><td><button class="table-action" data-catalogue-edit="${x.id}">Измени ↗</button>${catalogueTab === "doctors" ? `<button class="table-action" data-catalogue-schedule="${x.id}">Работно време ↗</button>` : ""}</td></tr>`).join("") || '<tr><td colspan="4">Нема соодветни записи.</td></tr>'}</tbody></table></section>`;
     if (recordView("catalogue-" + catalogueTab, "list") === "cards") {
@@ -1279,7 +1291,6 @@
     }
     $("#catalogue-add").onclick = () => editCatalogue();
     $("#catalogue-search").onchange = e => { catalogueSearch = e.target.value; renderCatalogue(); };
-    $$("[data-catalogue-tab]").forEach(b => b.onclick = () => { catalogueTab = b.dataset.catalogueTab; catalogueSearch = ""; navigate(["doctors", "patients"].includes(catalogueTab) ? catalogueTab : "catalogue/" + catalogueTab); });
     $$("[data-catalogue-edit]").forEach(b => b.onclick = () => editCatalogue(b.dataset.catalogueEdit));
     $$("[data-catalogue-schedule]").forEach(b => b.onclick = () => { doctorFilter = b.dataset.catalogueSchedule; navigate("availability"); });
   }
@@ -1380,9 +1391,9 @@
   }
   function patientResults() {
     const list = state.patients.filter(p => `${p.name} ${p.email} ${p.phone}`.toLowerCase().includes(search.toLowerCase()));
-    const actions = p => `<button class="btn secondary small" data-patient-profile="${escape(p.id)}">Види профил</button><button class="btn primary small" data-patient-book="${escape(p.id)}">Закажи</button>`;
-    const cards = `<div class="patient-card-list">${list.map((p,i) => `<article class="card patient-card">${avatar(p.name,i)}<h3>${escape(p.name)}</h3><p>${escape(p.email || "Не е наведена е-пошта")}</p><p>${escape(p.phone || "Не е наведен телефон")}</p><span class="badge">${p.isDemonstration ? "Измислен пациент" : "Пациент"}</span><div class="patient-card-actions">${actions(p)}</div></article>`).join("")}</div>`;
-    const table = `<section class="card table-wrap records-table" tabindex="0" aria-label="Список со постапки"><table><thead><tr><th>Пациент</th><th>Е-пошта</th><th>Телефон</th><th>Постапки</th></tr></thead><tbody>${list.map(p => `<tr><td><strong>${escape(p.name)}</strong>${p.isDemonstration ? "<small>Измислен пациент</small>" : ""}</td><td>${escape(p.email || "Не е наведена")}</td><td>${escape(p.phone || "Не е наведен")}</td><td><div class="record-actions">${actions(p)}</div></td></tr>`).join("")}</tbody></table></section>`;
+    const actions = p => recordAction("patient-profile", p.id, "Види профил", "profile") + recordAction("patient-book", p.id, "Закажи", "book", "primary");
+    const cards = `<div class="patient-card-list">${list.map((p,i) => `<article class="card patient-card">${avatar(p.name,i)}<h3>${escape(p.name)}</h3><p>${escape(p.email || "Не е наведена е-пошта")}</p><p>${escape(p.phone || "Не е наведен телефон")}</p><span class="badge">${p.isDemonstration ? "Измислен пациент" : "Пациент"}</span><div class="patient-card-actions patient-actions">${actions(p)}</div></article>`).join("")}</div>`;
+    const table = `<section class="card table-wrap records-table" tabindex="0" aria-label="Листа со постапки"><table><thead><tr><th>Пациент</th><th>Е-пошта</th><th>Телефон</th><th>Постапки</th></tr></thead><tbody>${list.map(p => `<tr><td><strong>${escape(p.name)}</strong>${p.isDemonstration ? "<small>Измислен пациент</small>" : ""}</td><td>${escape(p.email || "Не е наведена")}</td><td>${escape(p.phone || "Не е наведен")}</td><td><div class="record-actions patient-actions">${actions(p)}</div></td></tr>`).join("")}</tbody></table></section>`;
     $("#patient-results").innerHTML = `<div class="records-heading"><p class="results-count">${list.length} пациенти</p>${viewSwitch("patients")}</div>` + (list.length ? recordView("patients") === "list" ? table : cards : empty("Нема соодветни пациенти", "Обидете се со друго пребарување или додајте пациент."));
   }
   const defaultPatientFilters = () => ({ period: "all", status: "", doctor: "", service: "", from: "", to: "" });

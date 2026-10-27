@@ -467,12 +467,12 @@ try {
   );
   await admin.page("catalogue/specialties");
   assert(admin.$("#catalogue-nav").open && admin.$('[data-page="catalogue/specialties"]').getAttribute("aria-current") === "page", "Catalogue submenu expands and identifies the deep-linked section");
-  admin.click('[data-catalogue-tab="specialties"]'); admin.click("#catalogue-add");
+  admin.click("#catalogue-add");
   admin.$("#catalogue-name").value = "DOM specialty";
   admin.$("#catalogue-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));
   await until(() => !admin.$("#main-dialog").open);
   assert(admin.$("#app").textContent.includes("DOM specialty"), "Administrator creates specialty through catalogue UI");
-  admin.click('[data-catalogue-tab="services"]'); admin.click("#catalogue-add");
+  await admin.page("catalogue/services"); admin.click("#catalogue-add");
   admin.$("#catalogue-name").value = "DOM examination";
   admin.$("#catalogue-specialty").value = [...admin.$("#catalogue-specialty").options].find(o => o.textContent === "DOM specialty").value;
   admin.$("#catalogue-duration").value = "45";
