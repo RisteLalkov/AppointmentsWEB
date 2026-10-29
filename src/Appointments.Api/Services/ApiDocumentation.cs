@@ -11,7 +11,7 @@ public static class ApiDocumentation
         {
             options.AddDocumentTransformer((document, context, ct) =>
             {
-                document.Info.Title = "Термино API";
+                document.Info.Title = "МедТермин API";
                 document.Info.Version = "v1";
                 document.Info.Description = "Appointment scheduling and clinic platform API. Sign in through /api/auth/login " +
                     "(or /api/platform/login for company operations), copy accessToken, then use Authorize. " +

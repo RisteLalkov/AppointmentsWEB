@@ -459,7 +459,7 @@
           .join("")}</ul>`
       : `<div class="inline-note warning">Не е наведено точно работно време. Рецепцијата или лекарот треба да договорат термин и да додадат период на достапност.</div>`;
   }
-  function openDialog(title, content, eyebrow = "ТЕРМИНО") {
+  function openDialog(title, content, eyebrow = "МЕДТЕРМИН") {
     lastFocus = document.activeElement;
     $("#dialog-title").textContent = title;
     $("#dialog-eyebrow").textContent = eyebrow;
@@ -1368,7 +1368,7 @@
         const safe = value => { let text = String(value); if (/^[=+@\-\t\r]/.test(text)) text = "'" + text; return '"' + text.replaceAll('"', '""') + '"'; };
         const rows = [["Од",data.query.from,"До",data.query.to], ["Лекар", data.query.doctorId || "Сите", "Специјалност", data.query.specialty || "Сите", "Услуга", data.query.serviceId || "Сите"], ["Капацитетот е проценка според сегашниот распоред. Капацитетот по услуга е споделен; историските услуги не се претпоставуваат."], labels, ...data[active].map(rowValues)];
         const url = URL.createObjectURL(new Blob(["\ufeff" + rows.map(r => r.map(safe).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" }));
-        const link = document.createElement("a"); link.href = url; link.download = `Термино-${active}-${data.query.from}-${data.query.to}.csv`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+        const link = document.createElement("a"); link.href = url; link.download = `МедТермин-${active}-${data.query.from}-${data.query.to}.csv`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
       };
     } catch (error) {
       if (request === reportRequest && page === "reports") target.innerHTML = `<div class="inline-error" role="alert">${escape(error.message)}</div><p>Проверете ги филтрите и кликнете „Прикажи извештај“ за повторен обид.</p>`;

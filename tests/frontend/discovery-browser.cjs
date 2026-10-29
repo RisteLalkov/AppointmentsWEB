@@ -24,7 +24,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.goto(publicUrl+'/Discover');
   await page.getByRole('heading',{name:'Тест лекар'}).waitFor();
   check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0 && e.src.includes('/images/company-mark.svg')),'Public header loads the supplied company symbol');
-  check((await page.locator('.brand').first().innerText()).includes('Термино'),'Термино wordmark is displayed');
+  check((await page.locator('.brand').first().innerText()).includes('МедТермин'),'МедТермин wordmark is displayed');
   check(await page.locator('.discovery-footer .footer-company').getAttribute('href')==='https://www.codex.mk/en/home/','Footer credits the supplied CODEX company website');
   check(await page.locator('.discovery-footer a[href="/Platform/Login"]').count()===0,'Public footer keeps company administration private');
   check(await page.locator('.discovery-copy h1').evaluate(e=>getComputedStyle(e).animationName)==='discovery-open','Hero heading has a gentle entrance');

@@ -2558,3 +2558,12 @@ label, .field > label, th { font-weight: 600; }
 #patient-results .records-table th:nth-child(4) { width: 32%; }
 .records-table .badge { white-space: normal; }
 .record-action span { overflow-wrap: normal; }
+
+/* Keep the longer МедТермин wordmark readable within navigation widths. */
+.sidebar .brand { font-size: 24px; gap: 8px; padding-inline: 0; }
+@media (max-width: 1200px) { .sidebar .brand { font-size: 22px; } }
+@media (max-width: 480px) {
+ .public-header { flex-wrap: wrap; align-items: center; }
+ .public-header nav { width: 100%; justify-content: space-between; gap: 12px; }
+ .public-header .brand { font-size: 26px; }
+}

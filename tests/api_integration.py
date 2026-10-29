@@ -123,7 +123,7 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         check(len(state['doctors']) == 40 and sum(len(d['workingPeriods']) for d in state['doctors']) == 87, 'Database imports source doctors and 87 schedule periods')
         check(state['backend'] == 'Api' and not state['canReset'] and not state['demoMode'], 'API mode advertises real persistence and disables browser reset')
         schema=anon.ok('/openapi/v1.json')
-        check(schema['info']['title']=='Термино API', 'Development OpenAPI document generated')
+        check(schema['info']['title']=='МедТермин API', 'Development OpenAPI document generated')
         check(schema['components']['securitySchemes']['Bearer']['scheme']=='bearer', 'Swagger documents opaque bearer-token authorization')
         check(schema['paths']['/api/bootstrap']['get']['security']==[{'Bearer':[]}], 'Protected operations declare session authorization')
         check(any(p['name']=='X-Clinic' and p['in']=='header' for p in schema['paths']['/api/bootstrap']['get']['parameters']), 'Swagger exposes required clinic header for scoped operations')

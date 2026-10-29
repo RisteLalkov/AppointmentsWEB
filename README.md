@@ -1,4 +1,4 @@
-# Careline · AppointmentsWEB
+# МедТермин · AppointmentsWEB
 
 **Current storage:** all clinics share one PostgreSQL database with separate clinic schemas; the optional platform database stays separate. See [setup and deployment](docs/SHARED_DATABASE.md).
 
@@ -212,3 +212,9 @@ Open **Пациенти → Види профил** for contacts and filtered ap
 ## Public directory and company onboarding
 
 See [PLATFORM_AND_DISCOVERY.md](docs/PLATFORM_AND_DISCOVERY.md) for the six product improvements, credentials-only login migration, the separate platform database, shared-database schema provisioning, setup and test commands. **Do not run script 005 in a clinic database.** The platform database is optional for existing-clinic login/discovery, but required for `/Platform` onboarding. Existing duplicate login emails require operator resolution before credentials-only login can work for those accounts.
+
+## Current name and domains
+
+The visible app name is **МедТермин**. Domain deployment and host entry points are
+documented in [MEDTERMIN_DOMAINS.md](docs/MEDTERMIN_DOMAINS.md). Internal project,
+cookie, database and tenant identifiers remain compatible with earlier releases.

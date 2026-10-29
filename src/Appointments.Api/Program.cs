@@ -83,8 +83,8 @@ if (!app.Environment.IsDevelopment()
 app.UseSwaggerUI(options =>
 {
     options.RoutePrefix = "swagger";
-    options.SwaggerEndpoint("../openapi/v1.json", "Термино API v1");
-    options.DocumentTitle = "Термино API — Swagger";
+    options.SwaggerEndpoint("../openapi/v1.json", "МедТермин API v1");
+    options.DocumentTitle = "МедТермин API — Swagger";
     options.DisplayRequestDuration();
 });
 app.UseRouting();

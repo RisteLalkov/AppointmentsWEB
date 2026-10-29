@@ -94,8 +94,8 @@ class Client:
     def __init__(self,base):
         self.base=base
         self.opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),NoRedirect(),urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
-    def request(self,path,data=None):
-        h={}
+    def request(self,path,data=None,headers=None):
+        h=dict(headers or {})
         if data is not None: data=urllib.parse.urlencode(data).encode();h['Content-Type']='application/x-www-form-urlencoded'
         try:r=self.opener.open(urllib.request.Request(self.base+path,data,h),timeout=15)
         except urllib.error.HTTPError as e:r=e
@@ -123,6 +123,10 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
                 time.sleep(.1)
             else:raise AssertionError('Web startup failed')
             check(anon.request('/')[2].get('Location')=='/Discover','Anonymous root opens public discovery')
+            for host,target in [('medtermin.mk','/Discover'),('app.medtermin.mk','/Workspace'),('admin.medtermin.mk','/Platform')]:
+                status,_,response_headers=anon.request('/',headers={'Host':host})
+                check(status==302 and response_headers.get('Location')==target,'Domain entry point: '+host)
+            check(anon.request('/',headers={'Host':'unexpected.example'})[0]==400,'Host filtering rejects unrelated domains')
             status,html,_=anon.request('/Discover')
             check(status==200 and 'Тест лекар' in html and 'Јавен' not in html and 'ПРЕБАРУВАЊЕ' in html,'Anonymous doctor directory renders public DTOs')
             check('Следна' in html and 'name="Clinic"' in html,'Directory exposes pagination and clinic filter')

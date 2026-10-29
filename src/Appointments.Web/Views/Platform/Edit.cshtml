@@ -1,7 +1,7 @@
 @using Appointments.Contracts
 @model UpdateClinicInput
 @{ ViewData["Title"] = "Податоци за клиниката"; var id = ViewData["ClinicId"] as string; }
-<header class="public-header"><a class="brand" href="/Discover"><partial name="_BrandMark" /> Термино.</a><nav><a class="btn secondary small" asp-action="Index">← Назад кон клиниките</a></nav></header>
+<header class="public-header"><a class="brand" href="/Discover"><partial name="_BrandMark" /> МедТермин.</a><nav><a class="btn secondary small" asp-action="Index">← Назад кон клиниките</a></nav></header>
 <main class="public-main public-profile">
     <div class="page-heading"><div><span class="eyebrow">КОМПАНИСКИ РАБОТЕН ПРОСТОР</span><h1>Податоци за клиниката</h1><p>Уредете ги јавните информации и пристапот за нови пациенти.</p></div></div>
     @if (TempData["Notice"] is string notice) { <div class="inline-note" role="status">@notice</div> }
