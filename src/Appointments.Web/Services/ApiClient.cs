@@ -33,6 +33,13 @@ public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor)
             using var response = await client.SendAsync(request, ct);
             if (!response.IsSuccessStatusCode)
             {
+                // A revoked/expired API session must not leave a seemingly signed-in web cookie.
+                // Only clear the scheme used by this request; company and clinic sessions are independent.
+                if (authenticated && response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await accessor.HttpContext!.SignOutAsync(platform ? "PlatformCookie" : Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+                    if (!platform) accessor.HttpContext!.User = new System.Security.Claims.ClaimsPrincipal(new System.Security.Claims.ClaimsIdentity());
+                }
                 var message = response.StatusCode == HttpStatusCode.Unauthorized ? "Вашата сесија истече. Најавете се повторно." : "Серверот не можеше да го изврши барањето.";
                 try { var error = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: ct); if (error.TryGetProperty("error", out var value)) message = value.GetString() ?? message; } catch (JsonException) { }
                 throw new RuleException(message, (int)response.StatusCode);

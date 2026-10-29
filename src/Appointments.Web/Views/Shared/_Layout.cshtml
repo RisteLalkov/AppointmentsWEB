@@ -12,6 +12,7 @@
 </head>
 <body>
     @RenderBody()
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
     <script src="~/js/validation-mk.js" asp-append-version="true"></script>
     <script src="~/js/password-visibility.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

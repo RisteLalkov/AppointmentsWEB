@@ -28,7 +28,7 @@ builder.Services.AddAntiforgery(o => o.HeaderName = "X-CSRF-TOKEN");
 builder.Services.AddSingleton<Microsoft.AspNetCore.Antiforgery.IAntiforgeryAdditionalDataProvider, ClinicAntiforgery>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
 {
-    o.LoginPath = settings.UseApi ? "/Account/Login" : "/Demo"; o.AccessDeniedPath = "/Account/Login"; o.Cookie.Name = "Careline.Session"; o.SlidingExpiration = false;
+    o.LoginPath = settings.UseApi ? "/Account/Login" : "/Demo"; o.AccessDeniedPath = "/Account/AccessDenied"; o.Cookie.Name = "Careline.Session"; o.SlidingExpiration = false;
     o.Cookie.SecurePolicy = allowHttp
         ? CookieSecurePolicy.SameAsRequest
         : CookieSecurePolicy.Always;
@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Events.OnRedirectToLogin = c => { if (c.Request.Path.StartsWithSegments("/data")) c.Response.StatusCode = 401; else c.Response.Redirect(c.RedirectUri); return Task.CompletedTask; };
     o.Events.OnRedirectToAccessDenied = c => { if (c.Request.Path.StartsWithSegments("/data")) c.Response.StatusCode = 403; else c.Response.Redirect(c.RedirectUri); return Task.CompletedTask; };
 }).AddCookie("PlatformCookie", o => {
-    o.Cookie.Name = "Careline.Platform"; o.LoginPath = "/Platform/Login"; o.AccessDeniedPath = "/Platform/Login";
+    o.Cookie.Name = "Careline.Platform"; o.LoginPath = "/Platform/Login"; o.AccessDeniedPath = "/Account/AccessDenied";
     o.Cookie.HttpOnly = true; o.Cookie.SameSite = SameSiteMode.Strict;
     o.Cookie.SecurePolicy = allowHttp ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
     o.SlidingExpiration = false; o.ExpireTimeSpan = TimeSpan.FromHours(2);

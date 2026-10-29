@@ -74,6 +74,7 @@ class Client:
         self.token = self.ok('/api/auth/login', {'email': email, 'password': secret})['accessToken']
         return self
     def web_login(self, email, secret=password):
+        self.csrf = ''
         _, html = self.request('/Account/Login')
         check('lang="mk"' in html and 'Најави се' in unescape(html), 'Password login page defaults to Macedonian')
         token = re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"', html)[1]
@@ -235,6 +236,9 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         start('Appointments.Web', web_url, web_env, temporary)
         web = Client(web_url)
         html = web.web_login('patient@integration.test')
+        check('main-content' in web.ok('/Account/Login?ReturnUrl=%2F'), 'Authenticated clinic login returns to the overview')
+        check('main-content' in web.ok('/Account/Register'), 'Authenticated patient registration returns to the workspace')
+        check(web.request('/Accounts')[0] == 403, 'Wrong-role MVC navigation ends at access denied without redirecting to login')
         check(web.ok('/data/patients/' + registration['patientId'])['patient']['id'] == registration['patientId'], 'MVC proxies own patient profile')
         check(web.request('/data/patients/' + new_patient['id'])[0] == 404, 'MVC proxy does not disclose another patient profile')
         check('ПОВРЗАНО' in unescape(html) and 'ДЕМО-РЕЖИМ' not in unescape(html), 'Password workspace clearly identifies connected mode')
@@ -263,8 +267,13 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         check(linked_client.request('/api/bootstrap')[0] == 401, 'Disabling account revokes sessions across API instances')
         # Changing a password invalidates even sessions created on the other instance.
         patient_other = Client(api2).login('patient@integration.test')
+        revoked_web = Client(web_url)
+        revoked_web.web_login('patient@integration.test')
         patient.ok('/api/auth/password', {'currentPassword': password, 'newPassword': password+'-changed'})
         check(patient_other.request('/api/bootstrap')[0] == 401 and patient.request('/api/bootstrap')[0] == 401, 'Password change revokes every session')
+        check(web.request('/data/bootstrap')[0] == 401 and web.request('/Workspace')[0] == 200 and 'id="password"' in web.ok('/Account/Login'), 'Revoked API session removes clinic web authentication and allows login')
+        check('id="password"' in revoked_web.ok('/Account/Login'), 'Login detects database session revocation even before a workspace API request')
+        check('main-content' in revoked_web.web_login('patient@integration.test', password+'-changed'), 'User can sign in again after revocation with valid antiforgery')
         patient.login('patient@integration.test', password+'-changed')
         patient.ok('/api/auth/logout', {})
         check(patient.request('/api/auth/me')[0] == 401, 'Logout revokes the database session')

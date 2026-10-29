@@ -25,6 +25,8 @@ count, calls = 0, []
 clinic = dict(id='main',name='Тест клиника',timeZone='Europe/Skopje',allowRegistration=True,description='Јавен опис',address='Плоштад Македонија, Скопје',phone='+389 2 000 0000')
 doctor = dict(id='d01',name='Тест лекар',specialty='Кардиологија',subspecialty='',clinic=clinic,services=[dict(id='s01',name='Преглед',durationMinutes=30)],staffOnly=False)
 platform_clinic=dict(id='main',name=clinic['name'],state='Ready',discoverable=True,address=clinic['address'],phone=clinic['phone'],description=clinic['description'],managed=False,version=1,allowRegistration=True)
+revoked_clinical = False
+revoked_platform = False
 expires=(dt.datetime.now(dt.timezone.utc)+dt.timedelta(hours=1)).isoformat()
 
 def check(ok, label):
@@ -70,8 +72,9 @@ class Stub(BaseHTTPRequestHandler):
         elif path.path=='/api/auth/login':
             is_admin=body.get('email')=='accounts-admin@test.test'
             result=dict(accessToken='c1.main.'+'a'*64,expiresAt=expires,actor=dict(id='a01',name='Тест администратор' if is_admin else 'Тест пациент',role='Administrator' if is_admin else 'Patient',patientId=None if is_admin else 'p01',doctorId=None),demoMode=False,clinic=clinic)
-        elif path.path=='/api/bootstrap': result=dict(actor=dict(id='a01',name='Тест администратор',role='Administrator'),doctors=[dict(id='d01',name='Тест лекар',specialty='Кардиологија')],patients=[dict(id='p01',name='Тест пациент',email='patient@test.test',phone='')],appointments=[],today='2026-10-19',localNow='2026-10-19T10:00:00',timeZone='Europe/Skopje',utcNow=expires)
-        elif path.path=='/api/accounts': result=[] if self.command=='GET' else dict(id='created',email=body['email'],name=body['name'],role=body['role'],patientId=body.get('patientId'),doctorId=body.get('doctorId'),enabled=True)
+        elif path.path=='/api/auth/me': result=dict(actor=dict(id='a01',name='Тест пациент',role='Patient'),demoMode=False,clinic=clinic)
+        elif path.path=='/api/bootstrap': result=dict(actor=dict(id='a01',name='Тест администратор',role='Administrator'),doctors=[dict(id='d01',name='Тест лекар',specialty='Кардиологија'),dict(id='d-linked',name='Linked doctor',specialty='Кардиологија'),dict(id='service-only',name='Service profile',specialty='Тест',isService=True)],patients=[dict(id='p01',name='Тест пациент',email='patient@test.test',phone=''),dict(id='p-linked',name='Linked patient',email='linked@test.test',phone='')],appointments=[],today='2026-10-19',localNow='2026-10-19T10:00:00',timeZone='Europe/Skopje',utcNow=expires)
+        elif path.path=='/api/accounts': result=[dict(id='linked-patient',name='Linked patient',email='linked@test.test',role='Patient',patientId='p-linked',doctorId=None,enabled=False),dict(id='linked-doctor',name='Linked doctor',email='doctor@test.test',role='Doctor',patientId=None,doctorId='d-linked',enabled=True)] if self.command=='GET' else dict(id='created',email=body['email'],name=body['name'],role=body['role'],patientId=body.get('patientId'),doctorId=body.get('doctorId'),enabled=True)
         elif path.path=='/api/platform/login': result=dict(accessToken='p1.'+'p'*64,expiresAt=expires,id='company',name='Тест компанија')
         elif path.path=='/api/platform/clinics':
             if self.headers.get('Authorization')!='Bearer p1.'+'p'*64: code,result=401,dict(error='Unauthorized')
@@ -85,6 +88,10 @@ class Stub(BaseHTTPRequestHandler):
                 platform_clinic=dict(platform_clinic,**body);platform_clinic['version']+=1;result=platform_clinic
         elif path.path=='/api/platform/logout': result=dict(signedOut=True)
         else: code,result=404,dict(error='Not found')
+        if revoked_clinical and path.path in ['/api/auth/me','/api/bootstrap']:
+            code,result=401,dict(error='Сесијата истече.')
+        if revoked_platform and path.path=='/api/platform/clinics':
+            code,result=401,dict(error='Сесијата истече.')
         payload=json.dumps(result).encode();self.send_response(code)
         self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(payload)));self.end_headers();self.wfile.write(payload)
 
@@ -182,9 +189,34 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check(status==302 and h['Location']=='/Workspace?book=d01#doctors','Matching clinic continues to selected doctor in workspace')
             check(anon.request('/Discover/Book?clinicId=east&doctorId=d01')[0]==403,'Cross-clinic booking does not switch membership')
             check(anon.request('/Platform')[0]==302,'Clinical cookie cannot enter company workspace')
+            for entry in ['/Account/Login','/Account/Register']:
+                status,_,h=anon.request(entry+'?returnUrl='+urllib.parse.quote(book))
+                check(status==302 and h['Location']==book,entry+' redirects signed-in users while preserving selected booking')
+            for target in ['/Account/Login','/Account/Register','/%41ccount/Login?ReturnUrl=%2FAccounts','/unused/../Account/Login','https://evil.example/']:
+                status,_,h=anon.request('/Account/Login?returnUrl='+urllib.parse.quote(target,safe=''))
+                check(status==302 and h['Location']=='/Workspace','Signed-in continuation avoids auth loops/external URLs: '+target)
+            status,_,h=anon.request('/Accounts')
+            check(status==302 and '/Account/AccessDenied' in h['Location'],'Wrong role is sent to access denied instead of login')
+            check(anon.request(h['Location'].removeprefix(base))[0]==403,'Access denied page terminates with HTTP 403')
+            check(anon.request('/Platform/Login')[0]==200,'Clinic session does not bypass company sign-in')
+            revoked_clinical=True
+            status,html,_=anon.request('/Account/Login')
+            check(status==200 and 'id="email"' in html,'Revoked API session renders login instead of redirecting in a loop')
+            revoked_clinical=False
+            csrf=anon.csrf('/Account/Login')
+            check(anon.request('/Account/Login',{'Email':'p@test.test','Password':'Test-password-123','__RequestVerificationToken':csrf})[0]==302,'Login works again after revocation, including antiforgery')
+            revoked_clinical=True
+            status,_,h=anon.request('/data/bootstrap',headers={'X-Workspace-Clinic':'main'})
+            check(status==401 and 'Careline.Session=;' in h.get('Set-Cookie',''),'API 401 removes stale clinic web cookie')
+            revoked_clinical=False
+            check(anon.request('/Account/Login')[0]==200,'Login remains accessible after API session rejection')
             outsider=Client(base);csrf=outsider.csrf('/Account/Login')
             status,_,h=outsider.request('/Account/Login',{'Email':'p@test.test','Password':'Test-password-123','returnUrl':'https://evil.example/','__RequestVerificationToken':csrf})
             check(status==302 and h['Location']=='/Workspace','External login return URL rejected')
+            admin=Client(base);csrf=admin.csrf('/Account/Login')
+            admin.request('/Account/Login',{'Email':'accounts-admin@test.test','Password':'Test-password-123','__RequestVerificationToken':csrf})
+            status,accounts_html,_=admin.request('/Accounts')
+            check(status==200 and 'value="d01"' in accounts_html and 'value="p01"' in accounts_html and not any('value="'+i+'"' in accounts_html for i in ['p-linked','d-linked','service-only']), 'Account creation offers only unlinked patient and real doctor profiles, including disabled-account links')
             reg=Client(base);csrf=reg.csrf('/Account/Register?clinicId=main&returnUrl='+urllib.parse.quote(book))
             status,_,h=reg.request('/Account/Register',{'Name':'Test Patient','Email':'new@test.test','Password':'Test-password-123','clinicId':'main','returnUrl':book,'__RequestVerificationToken':csrf})
             check(status==302 and 'returnUrl=' in h['Location'] and 'doctorId' in urllib.parse.unquote(h['Location']),'Registration retains doctor through subsequent login')
@@ -193,6 +225,8 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             csrf=company.csrf('/Platform/Login')
             status,_,h=company.request('/Platform/Login',{'Email':'company@test.test','Password':'Test-password-123','__RequestVerificationToken':csrf})
             check(status==302 and h['Location']=='/Platform','Company credentials use separate sign-in flow')
+            check(company.request('/Platform/Login')[0]==302,'Signed-in company operator bypasses company login')
+            check(company.request('/Account/Login')[0]==200,'Company session does not bypass clinic sign-in')
             status,html,_=company.request('/Platform')
             check(status==200 and 'Додај нова клиника' in html and 'Тест клиника' in html,'Company onboarding screen renders')
             check('X-Clinic' not in calls[-1][3],'Company API calls do not carry clinical routing headers')
@@ -224,6 +258,9 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check(company.request('/Platform/Edit/main',details)[0]==302,'Platform metadata form saves successfully')
             status,stale_html,_=company.request('/Platform/Edit/main',dict(details,Name='Stale edit'))
             check(status==200 and 'друга сесија' in stale_html and 'Stale edit' in stale_html and 'вчитај ги тековните' in stale_html,'Metadata conflict preserves entered values and offers explicit reload')
+            revoked_platform=True
+            check(company.request('/Platform/Login')[0]==200,'Revoked company session returns to login without a loop')
+            revoked_platform=False
             if os.environ.get('TEST_BROWSER_EXECUTABLE'):
                 subprocess.run(['node',str(root/'tests/frontend/discovery-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
             print(f'\n{count}/{count} MVC discovery/company contract checks passed (stub API).',flush=True)

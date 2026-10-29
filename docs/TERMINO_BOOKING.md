@@ -115,3 +115,28 @@ Configured clinics can now become platform-managed through the one-time transfer
 button; afterward address/phone edits use `/Platform` just like newly registered
 clinics. See [PLATFORM_CLINIC_TRANSFER.md](PLATFORM_CLINIC_TRANSFER.md). The earlier
 configuration-field instructions apply only before that adoption.
+
+
+## Login, session expiry and browser history
+
+Signed-in clinic users opening login or registration are returned to their local
+continuation (or the workspace). Authentication pages are excluded as continuations
+to prevent redirect loops. Users log out before signing into a different clinic
+account. Company login independently checks the platform cookie.
+Both flows verify an existing session against the API before redirecting; revoked
+sessions clear their matching cookie and show login again. An API outage shows an
+error without discarding a valid session. Authenticated API responses with HTTP 401
+also remove the corresponding web cookie; HTTP 403 does not sign out the user.
+
+Wrong-role page requests show an access-denied page, rather than redirecting to
+login. JSON requests retain their HTTP 401/403 responses. Restoring a document from
+the browser's back/forward cache revisits its URL so current authorization applies.
+The browser Back button remains available; it cannot keep an obsolete login form
+or signed-out workspace active after revalidation.
+
+Account creation dropdowns exclude profiles already linked to an account (including
+disabled accounts) and service-only doctor records. Server-side validation remains
+the final authority when another administrator creates an account concurrently.
+
+Publish Web including its views and wwwroot. No API update or database migration
+is required for these navigation and account-form changes.

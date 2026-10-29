@@ -215,6 +215,8 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         old_csrf=browser.csrf
         check(any(x['id']==aa['id'] for x in browser.ok('/data/bootstrap')['appointments']), 'MVC uses clinic from protected session')
         check(browser.request('/data/bootstrap',headers={'X-Clinic':'east'})[0]==200 and any(x['id']==aa['id'] for x in browser.ok('/data/bootstrap')['appointments']), 'Client-supplied API clinic header cannot override MVC session')
+        check('content="main"' in browser.ok('/Account/Login'), 'Signed-in clinic login preserves current membership')
+        check(browser.request('/Account/Logout',{'__RequestVerificationToken':browser.csrf},form=True)[0]==200, 'User logs out before signing into another clinic')
         browser.web_login('east',password+'-east')
         check(browser.request('/data/bootstrap',headers={'X-Workspace-Clinic':'main'})[0]==409,'Stale tab cannot read new clinic data')
         check(browser.request('/data/patients',{'name':'Stale tab'},headers={'X-Workspace-Clinic':'main'})[0]==409,'Stale tab cannot write to new clinic')

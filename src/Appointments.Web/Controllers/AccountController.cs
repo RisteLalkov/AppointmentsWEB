@@ -10,24 +10,57 @@ namespace Appointments.Web.Controllers;
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public sealed class AccountController(ApiClient api, BackendSettings settings) : Controller
 {
-    private string SafeReturn(string? returnUrl) => Url.IsLocalUrl(returnUrl) ? returnUrl! : "/Workspace";
-    [HttpGet] public IActionResult Login(string? clinicId, string? returnUrl)
+    private string SafeReturn(string? returnUrl)
+    {
+        if (!Url.IsLocalUrl(returnUrl)) return "/Workspace";
+        // Authentication pages cannot be their own continuation (including encoded paths).
+        var path = Uri.UnescapeDataString(returnUrl!.Split('?', '#')[0]);
+        if (path.StartsWith("~/")) path = path[1..];
+        path = new Uri("https://local.invalid" + path).AbsolutePath.TrimEnd('/');
+        return new[] { "/Account/Login", "/Account/Register", "/Platform/Login", "/Account/AccessDenied" }
+            .Contains(path, StringComparer.OrdinalIgnoreCase) ? "/Workspace" : returnUrl;
+    }
+    private async Task<IActionResult?> SignedInRedirect(string? returnUrl, CancellationToken ct)
+    {
+        if (User.Identity?.IsAuthenticated != true) return null;
+        try
+        {
+            if (settings.UseApi) await api.SendAsync<System.Text.Json.JsonElement>("api/auth/me", ct: ct);
+            return LocalRedirect(SafeReturn(returnUrl));
+        }
+        catch (RuleException e) when (e.StatusCode == 401)
+        {
+            await HttpContext.SignOutAsync();
+            HttpContext.User = new System.Security.Claims.ClaimsPrincipal(new System.Security.Claims.ClaimsIdentity());
+            return null;
+        }
+        catch (RuleException e) { ViewData["Error"] = e.Message; Response.StatusCode = e.StatusCode; return View("Login"); }
+    }
+    [HttpGet] public async Task<IActionResult> Login(string? clinicId, string? returnUrl, CancellationToken ct)
     {
         if (!settings.UseApi) return RedirectToAction("Index", "Demo");
-        ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl); return View();
+        ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl);
+        return await SignedInRedirect(returnUrl, ct) ?? View();
     }
     [HttpPost] public async Task<IActionResult> Login(LoginInput input, string? clinicId, string? returnUrl, CancellationToken ct)
     {
         ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl);
+        if (await SignedInRedirect(returnUrl, ct) is { } signedIn) return signedIn;
         if (!ModelState.IsValid) { ViewData["Error"] = "Внесете е-пошта и лозинка."; return View(); }
         try { var session = await api.SendAsync<SessionResponse>("api/auth/login", input, false, ct); await WebSession.SignInAsync(HttpContext, session); return LocalRedirect(SafeReturn(returnUrl)); }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
     [HttpGet] public async Task<IActionResult> Register(string? clinicId, string? returnUrl, CancellationToken ct)
-    { ViewData["ReturnUrl"] = SafeReturn(returnUrl); await Clinics(clinicId, ct); return View(); }
+    {
+        ViewData["ReturnUrl"] = SafeReturn(returnUrl);
+        if (await SignedInRedirect(returnUrl, ct) is { } signedIn) return signedIn;
+        await Clinics(clinicId, ct); return View();
+    }
     [HttpPost] public async Task<IActionResult> Register(RegisterInput input, string? clinicId, string? returnUrl, CancellationToken ct)
     {
-        ViewData["ReturnUrl"] = SafeReturn(returnUrl); await Clinics(clinicId, ct);
+        ViewData["ReturnUrl"] = SafeReturn(returnUrl);
+        if (await SignedInRedirect(returnUrl, ct) is { } signedIn) return signedIn;
+        await Clinics(clinicId, ct);
         if (!ModelState.IsValid) { ViewData["Error"] = "Внесете име, важечка е-пошта и лозинка."; return View(); }
         try
         {
@@ -48,6 +81,11 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
         try { if (settings.UseApi) await api.SendAsync<object>("api/auth/logout", new { }, ct: ct); }
         catch (RuleException) { TempData["Notice"] = "Одјавени сте од овој прелистувач. Серверот беше недостапен; серверската сесија автоматски истекува во рок од два часа."; }
         await HttpContext.SignOutAsync(); return RedirectToAction(nameof(Login));
+    }
+    [HttpGet] public IActionResult AccessDenied()
+    {
+        Response.StatusCode = 403;
+        return View();
     }
     [Authorize, HttpGet] public IActionResult Password() => View();
     [Authorize, HttpPost] public async Task<IActionResult> Password(ChangePasswordInput input, CancellationToken ct)

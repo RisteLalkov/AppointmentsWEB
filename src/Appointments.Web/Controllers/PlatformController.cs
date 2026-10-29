@@ -11,9 +11,22 @@ namespace Appointments.Web.Controllers;
 [Authorize(Policy = "Platform")]
 public sealed class PlatformController(ApiClient api) : Controller
 {
-    [AllowAnonymous, HttpGet] public IActionResult Login() => View();
+    private async Task<IActionResult?> SignedInRedirect(CancellationToken ct)
+    {
+        var session = await HttpContext.AuthenticateAsync("PlatformCookie");
+        if (!session.Succeeded) return null;
+        try
+        {
+            await api.SendAsync<List<PlatformClinicSummary>>("api/platform/clinics", ct: ct, platform: true);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (RuleException e) when (e.StatusCode == 401) { await HttpContext.SignOutAsync("PlatformCookie"); return null; }
+        catch (RuleException e) { ViewData["Error"] = e.Message; Response.StatusCode = e.StatusCode; return View("Login"); }
+    }
+    [AllowAnonymous, HttpGet] public async Task<IActionResult> Login(CancellationToken ct) => await SignedInRedirect(ct) ?? View();
     [AllowAnonymous, HttpPost] public async Task<IActionResult> Login(LoginInput input, CancellationToken ct)
     {
+        if (await SignedInRedirect(ct) is { } signedIn) return signedIn;
         if (!ModelState.IsValid) { ViewData["Error"] = "Внесете важечка е-пошта и лозинка."; return View(); }
         try
         {
