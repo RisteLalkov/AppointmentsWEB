@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup><UserSecretsId>careline-appointments-api</UserSecretsId></PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.3.1" />
     <ProjectReference Include="../Appointments.Data/Appointments.Data.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
     <Content Include="../Appointments.Web/Seed/doctors.json" Link="Seed/doctors.json" CopyToOutputDirectory="PreserveNewest" />

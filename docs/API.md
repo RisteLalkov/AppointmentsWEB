@@ -1,6 +1,6 @@
 # API reference
 
-Base URL in local Development: `http://localhost:5181`. OpenAPI schema: `/openapi/v1.json` (Development only). JSON properties use camelCase; enums are strings. Local booking date/time fields are ISO `yyyy-MM-dd` / `HH:mm:ss` in the configured clinic timezone. Returned start/end instants include UTC offsets. Send `Content-Type: application/json` for POST.
+Base URL in local Development: `http://localhost:5181`. Swagger UI: `/swagger`; OpenAPI schema: `/openapi/v1.json`. Both are available in Development and published environments. JSON properties use camelCase; enums are strings. Local booking date/time fields are ISO `yyyy-MM-dd` / `HH:mm:ss` in the configured clinic timezone. Returned start/end instants include UTC offsets. Send `Content-Type: application/json` for POST.
 
 ## Sessions
 
@@ -69,7 +69,7 @@ Administrator only. Do not create Doctor accounts for unnamed service providers.
 
 Errors normally have `{"error":"Useful explanation"}`. Authentication/authorization middleware can return an empty 401/403; clients must check HTTP status before decoding. 400 = invalid fields/transition; 401 = missing/expired/revoked session or failed login; 403 = role denied; 404 = missing/inaccessible record or disabled demo endpoint; 409 = conflict, stale version or duplicate; 429 = auth rate limit; 503 = unavailable database. A network timeout does not prove a write failed: refresh, or retry the exact booking with its original request ID.
 
-`GET /health` is anonymous process liveness after startup; it does not continuously check PostgreSQL. `GET /health/database` requires authentication and checks connectivity. API request bodies are limited to 64 KiB. No production OpenAPI route, CORS wildcard or public database reset is enabled. Existing clinic migrations remain explicit outside Development; company onboarding explicitly migrates only its reserved empty clinic database.
+`GET /health` is anonymous process liveness after startup; it does not continuously check PostgreSQL. `GET /health/database` requires authentication and checks connectivity. API request bodies are limited to 64 KiB. Swagger/OpenAPI documentation is public; operation authorization remains enforced. No CORS wildcard or public database reset is enabled. Existing clinic migrations remain explicit outside Development; company onboarding explicitly migrates its reserved clinic schema in the shared database.
 
 ## Appointment history and combined filters
 
@@ -103,3 +103,21 @@ Public pages are limited to 24 rows/page and pages 1–100; query text is bounde
 Company tokens use the separate `PlatformSession` authentication policy and do not
 authorize clinical endpoints. Clinic Administrator tokens do not authorize platform
 operations. Full provisioning/configuration and failure recovery: [PLATFORM_AND_DISCOVERY.md](PLATFORM_AND_DISCOVERY.md).
+
+## Swagger UI
+
+Open `/swagger` on the **API** base URL (local default:
+`http://localhost:5181/swagger`). Publish the full API output, including the
+SwaggerUI dependency; no Web or database update is required. The UI serves its
+assets locally, and its relative OpenAPI URL supports an IIS application subpath.
+
+For clinic operations, execute `POST /api/auth/login`, copy the returned
+`accessToken`, click **Authorize**, and paste that token without adding `Bearer`.
+Supply the matching clinic ID (for example `main`) in the documented **X-Clinic**
+header. For company operations obtain a platform token from
+`POST /api/platform/login` and use that token instead. Tokens are opaque sessions,
+not JWTs. Public operations require no token; registration still selects a clinic.
+
+**Try it out** executes the actual API with the supplied account's permissions.
+No extra privileges are granted by Swagger. Authorization is not configured for
+persistent browser storage; sign out of the UI when done with a shared computer.

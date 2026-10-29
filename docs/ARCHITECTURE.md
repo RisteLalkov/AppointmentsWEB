@@ -6,7 +6,7 @@
 | --- | --- |
 | Appointments.Web | Razor views, existing calendar/booking UI, encrypted browser cookie, antiforgery-protected same-origin `/data` actions; calls API via `ApiClient` |
 | Appointments.Contracts | Shared typed request/response contracts and validation attributes |
-| Appointments.Api | HTTP routes, password/session authentication, trusted actor construction, account lifecycle, errors, rate limiting, development OpenAPI and startup migrations/seeding |
+| Appointments.Api | HTTP routes, password/session authentication, trusted actor construction, account lifecycle, errors, rate limiting, Swagger/OpenAPI documentation and startup migrations/seeding |
 | Appointments.Data | EF Core relational mappings/migrations, purpose-built PostgreSQL operations, transactions, locking, idempotency and audit writes |
 | Appointments.Core | Framework-independent domain records, availability and status/ownership rules, testable scheduling clock; legacy JSON implementation remains for isolated demos/tests |
 

@@ -46,7 +46,7 @@ builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOpti
 builder.Services.AddAuthorization(o => o.AddPolicy("Platform", p => p.AddAuthenticationSchemes("PlatformSession").RequireAuthenticatedUser().RequireRole("PlatformAdministrator")));
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(new { error = "Невалидни податоци. Проверете ги задолжителните полиња, е-поштата, датумите, времињата и должината на текстот." }));
-builder.Services.AddOpenApi();
+builder.Services.AddApiDocumentation();
 builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = 429;
@@ -80,6 +80,13 @@ if (!app.Environment.IsDevelopment()
 {
     app.UseHttpsRedirection();
 }
+app.UseSwaggerUI(options =>
+{
+    options.RoutePrefix = "swagger";
+    options.SwaggerEndpoint("../openapi/v1.json", "Термино API v1");
+    options.DocumentTitle = "Термино API — Swagger";
+    options.DisplayRequestDuration();
+});
 app.UseRouting();
 app.UseRateLimiter();
 app.Use(async (context, next) =>
@@ -106,7 +113,7 @@ app.MapControllers();
 app.MapGet("/api/clinics", () => clinics.Clinics.Where(c => c.Enabled && c.Discoverable).Select(c => c.Summary())).AllowAnonymous();
 app.MapGet("/health", () => Results.Ok(new { status = "ready" })).AllowAnonymous();
 app.MapGet("/health/database", async (AppointmentsDbContext db, CancellationToken ct) => await db.Database.CanConnectAsync(ct) ? Results.Ok(new { status = "ready" }) : Results.StatusCode(503)).RequireAuthorization();
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+app.MapOpenApi().AllowAnonymous();
 var explicitMigration = args.Contains("--migrate");
 var selectedIndex = Array.IndexOf(args, "--clinic");
 if (selectedIndex >= 0 && (!explicitMigration || selectedIndex + 1 >= args.Length))

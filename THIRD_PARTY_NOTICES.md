@@ -49,3 +49,13 @@ clinic profile and doctor directory remains usable when it is unavailable.
 
 - https://www.google.com/help/terms_maps/
 - https://policies.google.com/privacy
+
+## Swashbuckle Swagger UI 10.3.1
+
+The API uses `Swashbuckle.AspNetCore.SwaggerUI` 10.3.1 (MIT) to serve its bundled
+Swagger UI at `/swagger`. The UI uses the existing ASP.NET Core OpenAPI generator;
+no external documentation service or CDN is required. Bundled upstream component
+notices remain in the package assets.
+
+- https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+- https://github.com/swagger-api/swagger-ui (Apache-2.0)

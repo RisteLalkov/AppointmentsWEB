@@ -156,7 +156,7 @@ Nonexistent spring-forward times and ambiguous fall-back times are unavailable. 
 - [Manual QA checklist](docs/QA_CHECKLIST.md)
 - [Dependency licenses](THIRD_PARTY_NOTICES.md)
 
-Development API schema: **http://localhost:5181/openapi/v1.json**. Liveness: `/health`; authenticated database readiness: `/health/database`. There is no Swagger UI package or external documentation service.
+Swagger UI: **http://localhost:5181/swagger**. OpenAPI schema: `/openapi/v1.json`. Both are available on the published API as well. Swagger assets are served locally. Liveness: `/health`; authenticated database readiness: `/health/database`. See [API usage and authorization](docs/API.md).
 
 ## Tests
 

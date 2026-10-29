@@ -122,7 +122,16 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
 
         check(len(state['doctors']) == 40 and sum(len(d['workingPeriods']) for d in state['doctors']) == 87, 'Database imports source doctors and 87 schedule periods')
         check(state['backend'] == 'Api' and not state['canReset'] and not state['demoMode'], 'API mode advertises real persistence and disables browser reset')
-        check(anon.request('/openapi/v1.json')[0] == 200, 'Development OpenAPI document generated')
+        schema=anon.ok('/openapi/v1.json')
+        check(schema['info']['title']=='Термино API', 'Development OpenAPI document generated')
+        check(schema['components']['securitySchemes']['Bearer']['scheme']=='bearer', 'Swagger documents opaque bearer-token authorization')
+        check(schema['paths']['/api/bootstrap']['get']['security']==[{'Bearer':[]}], 'Protected operations declare session authorization')
+        check(any(p['name']=='X-Clinic' and p['in']=='header' for p in schema['paths']['/api/bootstrap']['get']['parameters']), 'Swagger exposes required clinic header for scoped operations')
+        check(not schema['paths']['/api/public/doctors']['get'].get('security'), 'Public discovery remains documented without login')
+        check(not any(p['name']=='X-Clinic' for p in schema['paths']['/api/auth/login']['post'].get('parameters',[])), 'Credential login does not require a chosen clinic')
+        ui_status,ui=anon.request('/swagger')
+        check(ui_status==200 and './swagger-ui-bundle.js' in ui and '../openapi/v1.json' in anon.ok('/swagger/index.js'), 'Swagger entry redirects to a working UI with relative schema URL')
+        check(anon.request('/swagger/swagger-ui-bundle.js')[0]==200 and anon.request('/swagger/swagger-ui.css')[0]==200, 'Swagger assets are served locally without a CDN')
         check(anon.request('/api/auth/register', {'name': 'Weak', 'email': 'weak@integration.test', 'password': 'short'})[0] == 400, 'Weak password rejected')
         registration = anon.ok('/api/auth/register', {'name': 'Integration Patient', 'email': 'patient@integration.test', 'password': password, 'role': 'Administrator'})
         patient = Client(api1).login('patient@integration.test')
@@ -309,7 +318,8 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         restricted = Client(restricted_url)
         check(restricted.request('/api/auth/demo-users')[0] == 404 and restricted.request('/api/auth/demo-login', {'userId':'admin'})[0] == 404, 'Production rejects demo endpoints even if Demo enabled in configuration')
         check(Client(restricted_url, doctor.token).request('/api/bootstrap')[0] == 401, 'Production refuses previously issued demo sessions')
-        check(restricted.request('/openapi/v1.json')[0] == 404, 'OpenAPI discovery disabled outside Development')
+        check(restricted.request('/openapi/v1.json')[0] == 200 and restricted.request('/swagger')[0]==200, 'Published Production API exposes Swagger and its schema')
+        check(restricted.request('/api/bootstrap')[0]==401, 'Public Swagger does not grant access to protected clinic operations')
         print(f'\n{count}/{count} PostgreSQL/API/MVC integration checks passed.', flush=True)
     except Exception:
         for log in logs:
