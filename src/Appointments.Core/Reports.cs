@@ -46,9 +46,9 @@ public static class ReportBuilder
         for (var date = q.From; date <= q.To; date = date.AddDays(1))
         {
             var visits = byDay[(doctor.Id, date)].ToList();
-            // Physical capacity, independent of Tuesday-first release preference.
+            // Physical capacity before existing bookings are subtracted.
             var capacityDoctor = doctor with { DurationMinutes = state.Services.Find(x => x.Id == q.ServiceId)?.DurationMinutes ?? doctor.DurationMinutes };
-            var capacity = Merge(SchedulingRules.Slots(baseline, capacityDoctor, date, clock, includePast: true, applyPreference: false).Select(s => (s.Start, s.End)));
+            var capacity = Merge(SchedulingRules.Slots(baseline, capacityDoctor, date, clock, includePast: true).Select(s => (s.Start, s.End)));
             var busy = Merge(visits.Where(a => a.Status != AppointmentStatus.Cancelled).Select(a => (a.Start, a.End)));
             var occupied = capacity.Sum(c => busy.Sum(b => Math.Max(0, (Min(c.End, b.End) - Max(c.Start, b.Start)).TotalMinutes)));
             daily.Add((doctor, date, visits, capacity.Sum(c => (c.End - c.Start).TotalMinutes), occupied,

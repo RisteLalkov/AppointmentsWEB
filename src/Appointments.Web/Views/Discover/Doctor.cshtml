@@ -35,7 +35,7 @@
                     <div class="availability-day-heading"><h3>@availability.Date.ToString("dddd, d MMMM", culture)</h3><span>@availability.Slots.Count слободни</span></div>
                     @if (availability.Message != null) { <p class="availability-empty"><span aria-hidden="true">◷</span>@availability.Message</p> }
                     else {
-                        <ul class="public-free-slots" aria-label="Слободни термини за избраниот датум">@foreach (var slot in availability.Slots) { <li><time datetime="@slot.Start.ToString("O")">@slot.Time.ToString("HH:mm")</time></li> }</ul>
+                        <ul class="public-free-slots" aria-label="Слободни термини за избраниот датум">@foreach (var slot in availability.Slots) { <li><a class="public-slot-link" asp-action="Book" asp-route-clinicId="@Model.Clinic.Id" asp-route-doctorId="@Model.Id" asp-route-date="@availability.Date.ToString("yyyy-MM-dd")" asp-route-time="@slot.Time.ToString("HH:mm")" asp-route-serviceId="@availability.ServiceId" aria-label="Закажи во @slot.Time.ToString("HH:mm")"><time datetime="@slot.Start.ToString("O")">@slot.Time.ToString("HH:mm")</time></a></li> }</ul>
                     }
                     <p class="availability-disclaimer">Прикажаните термини се информативни и не се резервираат. Достапноста се проверува повторно при закажување.</p>
                 }

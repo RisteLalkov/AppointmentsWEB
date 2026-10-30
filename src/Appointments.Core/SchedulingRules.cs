@@ -4,7 +4,7 @@ public static class SchedulingRules
 {
     public static bool Active(Appointment a) => a.Status != AppointmentStatus.Cancelled;
     public static bool Overlaps(DateTimeOffset a, DateTimeOffset b, DateTimeOffset c, DateTimeOffset d) => a < d && c < b;
-    public static List<Slot> Slots(DemoState state, Doctor doctor, DateOnly date, SchedulingClock clock, string? excludeId = null, bool includePast = false, bool applyPreference = true)
+    public static List<Slot> Slots(DemoState state, Doctor doctor, DateOnly date, SchedulingClock clock, string? excludeId = null, bool includePast = false)
     {
         if (!includePast && (date < clock.Today || date > clock.Today.AddDays(180))) return [];
         var periods = doctor.WorkingPeriods.Where(p => p.Day == date.DayOfWeek).Select(p => (p.Start, p.End)).ToList();
@@ -25,9 +25,6 @@ public static class SchedulingRules
                 results.Add(new Slot(date, time, from.Value, to.Value));
             }
         }
-        // Workbook: fill Tuesday before Wednesday (same Monday-based week).
-        if (applyPreference && doctor.TuesdayFirst && date.DayOfWeek == DayOfWeek.Wednesday &&
-            Slots(state, doctor, date.AddDays(-1), clock, excludeId, includePast, false).Count > 0) return [];
         return results.DistinctBy(s => s.Start).OrderBy(s => s.Start).ToList();
     }
     public static bool FitsSchedule(DemoState state, Doctor doctor, Appointment a, SchedulingClock clock)

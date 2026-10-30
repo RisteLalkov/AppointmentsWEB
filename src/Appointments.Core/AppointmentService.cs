@@ -79,7 +79,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         // This exact one-off period and its booking are saved atomically. It does not
         // change weekly hours or expose spare bookable slots to other patients.
         var availability = agreement == null ? s : new DemoState { Appointments = s.Appointments, Exceptions = [..s.Exceptions, agreement] };
-        var slot = SchedulingRules.Slots(availability, doctor, command.Date, clock, applyPreference: !command.AgreedTime).FirstOrDefault(x => x.Time == command.Time)
+        var slot = SchedulingRules.Slots(availability, doctor, command.Date, clock).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException(command.AgreedTime ? "Тој термин е недостапен. Проверете за преклопување, отсуство или изминат датум (до 180 дена однапред)." : "Тој термин повеќе не е достапен. Изберете друг термин во следните 180 дена.", 409);
         CheckPatientConflict(s, command.PatientId, slot);
         if (agreement != null) s.Exceptions.Add(agreement);

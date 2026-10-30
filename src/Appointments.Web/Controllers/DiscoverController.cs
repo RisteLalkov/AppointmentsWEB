@@ -46,19 +46,20 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
         }
         catch (RuleException e) { Response.StatusCode = e.StatusCode; ViewData["Error"] = e.Message; return View("Index"); }
     }
-    public async Task<IActionResult> Book(string clinicId, string doctorId, CancellationToken ct)
+    public async Task<IActionResult> Book(string clinicId, string doctorId, DateOnly? date, TimeOnly? time, string? serviceId, CancellationToken ct)
     {
         try
         {
             var doctor = await api.SendAsync<PublicDoctor>($"api/public/clinics/{E(clinicId)}/doctors/{E(doctorId)}", authenticated: false, ct: ct);
             if (User.Identity?.IsAuthenticated != true)
-                return RedirectToAction("Login", "Account", new { clinicId, returnUrl = Url.Action(nameof(Book), new { clinicId, doctorId }) });
+                return RedirectToAction("Login", "Account", new { clinicId, returnUrl = Url.Action(nameof(Book), new { clinicId, doctorId, date = date?.ToString("yyyy-MM-dd"), time = time?.ToString("HH:mm"), serviceId }) });
             if (User.FindFirst("clinicId")?.Value != clinicId)
             {
                 Response.StatusCode = 403; ViewData["Error"] = "Вашата сметка припаѓа на друга клиника. За пристап до оваа клиника контактирајте ја нејзината рецепција. Не е променет вашиот работен простор.";
                 return View("Doctor", doctor);
             }
-            return LocalRedirect("/Workspace?book=" + E(doctorId) + "#doctors");
+            var selection = date.HasValue && time.HasValue ? "&date=" + date.Value.ToString("yyyy-MM-dd") + "&time=" + time.Value.ToString("HH:mm") + "&serviceId=" + E(serviceId) : "";
+            return LocalRedirect("/Workspace?book=" + E(doctorId) + selection + "#doctors");
         }
         catch (RuleException e) { Response.StatusCode = e.StatusCode; ViewData["Error"] = e.Message; return View("Doctor"); }
     }

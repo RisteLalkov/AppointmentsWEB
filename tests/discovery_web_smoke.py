@@ -187,6 +187,9 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check('X-Clinic' not in calls[-1][3] and set(calls[-1][2])=={'email','password'},'Web sends no chosen tenant to credential resolution')
             status,_,h=anon.request(book)
             check(status==302 and h['Location']=='/Workspace?book=d01#doctors','Matching clinic continues to selected doctor in workspace')
+            selection='/Discover/Book?clinicId=main&doctorId=d01&date=2026-12-01&time=09%3A00&serviceId=s01'
+            status,_,selected=anon.request(selection)
+            check(status==302 and 'date=2026-12-01' in selected['Location'] and 'time=09:00' in selected['Location'] and 'serviceId=s01' in selected['Location'],'Selected public time and service reach workspace continuation')
             check(anon.request('/Discover/Book?clinicId=east&doctorId=d01')[0]==403,'Cross-clinic booking does not switch membership')
             check(anon.request('/Platform')[0]==302,'Clinical cookie cannot enter company workspace')
             for entry in ['/Account/Login','/Account/Register']:

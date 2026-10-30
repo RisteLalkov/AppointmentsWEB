@@ -366,7 +366,7 @@
 .availability-day-heading h3 { font-size: 1.125rem; margin: 0; }
 .availability-day-heading > span { font-size: .9375rem; color: var(--muted); }
 .public-free-slots { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); padding: 0; margin: 0; gap: 10px; }
-.public-free-slots li { padding: 12px 10px; border: 1px solid #cfe3d7; border-radius: 10px; background: #f0f7f2; text-align: center; color: var(--green-dark); font-weight: 600; font-size: 1rem; }
+.public-free-slots li { padding: 0; border: 1px solid #cfe3d7; border-radius: 10px; background: #f0f7f2; text-align: center; color: var(--green-dark); font-weight: 600; font-size: 1rem; }
 .availability-empty { display: flex; gap: 15px; align-items: center; padding: 22px; border: 1px solid var(--line); background: #f6f9f6; border-radius: 14px; line-height: 1.7; }
 .availability-empty > span { font-size: 1.75rem; color: var(--green); }
 .availability-disclaimer { font-size: .875rem; color: var(--muted); line-height: 1.7; margin: 18px 0 0; }
@@ -406,3 +406,8 @@
 .clinic-map-empty p { font-size: .9375rem; color: var(--muted); line-height: 1.7; max-width: 330px; margin: 0; }
 @media (max-width: 900px) { .clinic-profile-hero { grid-template-columns: minmax(0, 1fr); gap: 25px; } .clinic-profile-hero .discovery-copy > p { max-width: none; } }
 @media (max-width: 480px) { .clinic-contact-card, .clinic-map-heading { padding: 20px; } .clinic-map-frame { height: 300px; } .clinic-map-caption { padding: 18px 20px; } .clinic-map-heading .clinic-maps-link { width: 100%; justify-content: center; } }
+
+.public-slot-link { display: block; padding: 14px 10px; border-radius: 10px; color: inherit; text-decoration: none; transition: background .18s, color .18s, transform .18s; }
+.public-slot-link:hover { background: var(--green); color: white; transform: translateY(-2px); }
+.public-slot-link:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+@media(prefers-reduced-motion: reduce) { .public-slot-link { transition: none; } .public-slot-link:hover { transform: none; } }

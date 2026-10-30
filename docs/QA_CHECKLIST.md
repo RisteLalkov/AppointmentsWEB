@@ -9,7 +9,7 @@ The C# rule suite and real HTTP tests have executed successfully. The provided c
 - Find the appointment under Upcoming, open details, reschedule to another slot, and cancel it.
 - Switch to another patient and confirm the first patient's visits do not appear.
 - Try a provider without hours and a secretary-only provider; check the explanatory states rather than fabricated slots.
-- Test Dr. Filip Duma's Tuesday-first behavior within the same week.
+- Verify Dr. Filip Duma's Wednesday slots remain available even when Tuesday has free slots, and the weekly editor displays Tuesday before Wednesday.
 
 ## Reception and doctor
 

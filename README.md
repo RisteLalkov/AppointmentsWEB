@@ -123,7 +123,7 @@ See [docs/WORKBOOK_ANALYSIS.md](docs/WORKBOOK_ANALYSIS.md) for detailed decision
 - Incomplete shift labels, on-call arrangements and once-monthly schedules do not create automatic slots. Add specific available periods through Availability after agreeing the demo time.
 - Working-day ranges are inclusive; weekdays follow the clean sheet exactly. There are no default weekend hours.
 - Confirmation-dependent bookings start **Scheduled / Awaiting confirmation** and reserve the time. Authorized staff explicitly confirm them. Secretary-only entries reject patient self-booking. Operational notification instructions remain visible notes, not fake notification integrations.
-- For **Др. Филип Дума**, Wednesday is available only after the same week's remaining future Tuesday slots are full. This is an explicit interpretation of “Tuesday first.” Past Tuesday slots do not block future Wednesday booking. Existing Wednesday bookings are never invalidated if a Tuesday slot later opens.
+- Imported workbook notes do not define scheduling policy. Every configured weekday is independently bookable; Dr. Filip Duma has no Tuesday-before-Wednesday restriction.
 - `Наведено во изворот` does not establish funding eligibility; it is shown as unspecified. Only explicit `Фонд` and `Само приватно` values are treated as specified.
 - Appointments can be booked at most **180 days ahead**, on the doctor's configured slot grid, and cannot cross a working-period boundary.
 

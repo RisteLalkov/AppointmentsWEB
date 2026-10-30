@@ -25,7 +25,7 @@ Only the Administrator/reception role can use this option. Patients and doctor-r
 accounts cannot bypass schedule availability by submitting the flag directly.
 Existing patient and doctor conflicts, absences, future-date limits (180 days),
 service eligibility, duration and local-time checks still apply. An agreement can
-bypass weekly hours and the Tuesday-first preference, but cannot override an absence.
+bypass weekly hours, but cannot override an absence.
 
 The appointment and an exact-duration one-off availability period are saved in the
 same PostgreSQL transaction, under the existing doctor lock and exclusion constraints.
@@ -78,7 +78,7 @@ Publish both API and Web for these changes. No database migration is required.
 
 Doctor profiles show an anonymous, read-only availability preview with a date picker,
 seven quick day links, and active service selection. Free times use the same schedule,
-service duration, exceptions, booked intervals, Tuesday-first policy, time zone and
+service duration, exceptions, booked intervals, time zone and
 180-day horizon as booking. Staff-only doctors, unpublished schedules, unavailable
 services and fully booked days have distinct messages. No booking or reservation is
 created by viewing times. Availability is checked again during authenticated booking.
@@ -140,3 +140,23 @@ the final authority when another administrator creates an account concurrently.
 
 Publish Web including its views and wwwroot. No API update or database migration
 is required for these navigation and account-form changes.
+
+
+## Public time selection and simpler management views
+
+Public doctor free times link to the existing booking continuation, preserving doctor,
+clinic, date, time and service through login/registration. The workspace selects the
+requested date/service and retains the requested time only if it is still available.
+Following a link never reserves a slot; normal booking validation still applies.
+
+Specialties and services always use a list, including when an older browser preference
+requested cards. Doctor cards and lists retain profile/booking actions, with availability
+and administrator editing in a keyboard-accessible three-dot menu. Imported source notes
+and placeholder doctor locations are omitted. The weekly editor uses Monday–Sunday order.
+
+The workbook-derived Tuesday-first restriction has been removed from all scheduling
+calculations. Each configured weekday is independently bookable. The legacy stored flag
+remains only for schema compatibility and no longer controls behavior. Existing appointments
+and working hours are retained. Confirmation dialog actions wrap without clipping on mobile.
+
+Publish BOTH API and Web, including wwwroot. No database migration or SQL is needed.

@@ -127,7 +127,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.getByRole('link',{name:/Види профил/}).click();
   check(await page.locator('.doctor-profile-specialty').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=16 && parseFloat(getComputedStyle(e).fontSize)<=18),'Doctor specialty uses a compact readable size');
   check(await page.locator('.public-free-slots time').first().innerText()==='09:00','Anonymous profile renders free times');
-  check(await page.locator('.public-free-slots button, .public-free-slots a, .public-free-slots input').count()===0,'Public times are read-only information');
+  check(await page.locator('.public-free-slots a').count()===await page.locator('.public-free-slots time').count(),'Each public free time is a booking link');
   const previewDay=await page.locator('.availability-days a').nth(2).getAttribute('href');
   await page.locator('.availability-days a').nth(2).click();
   check(new URL(page.url()).searchParams.get('date')===new URL(previewDay,publicUrl).searchParams.get('date')&&await page.locator('#preview-service').inputValue()==='s01','Date navigation retains the selected doctor and service');
@@ -137,9 +137,9 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   if(screenshots)await page.screenshot({path:resolve(screenshots,'doctor-profile-desktop.png'),fullPage:true});
   for(const width of [390,320]) {await page.setViewportSize({width,height:900});await noOverflow(page,'Doctor profile at '+width+'px');}
   if(screenshots)await page.screenshot({path:resolve(screenshots,'doctor-profile-mobile.png'),fullPage:true});
-  await page.getByRole('link',{name:/Продолжи кон закажување/}).click();
+  await page.locator('.public-slot-link').first().click();
   await page.locator('#email').waitFor();
-  check(page.url().includes('/Account/Login') && page.url().includes('returnUrl'),'Public booking enters login with continuation');
+  check(page.url().includes('/Account/Login') && ['date=','time=','serviceId='].every(x=>new URL(page.url()).searchParams.get('returnUrl').includes(x)),'Public slot enters login with date, time and service continuation');
   check(await page.locator('select').count()===0,'Login has no clinic selector');
   await noOverflow(page,'Mobile login');
   await page.setViewportSize({width:1440,height:1000});
@@ -225,6 +225,14 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('#demo-user').selectOption('admin');
   await page.locator('#demo-form button[type=submit]').click();
   await page.locator('.overview-grid').waitFor();
+  for(const width of [1440,768,390,320]) {
+   await page.setViewportSize({width,height:900});
+   await page.evaluate(()=>{document.querySelector('#confirm-message').textContent='Дали сакате да ја промените тековната состојба?';document.querySelector('#confirm-dialog').showModal();});
+   check(await page.locator('#confirm-no').evaluate(e=>{const r=e.getBoundingClientRect();return e.scrollWidth<=e.clientWidth+1 && r.left>=0 && r.right<=innerWidth && r.height>=44;}),'Confirmation cancel text fits at '+width+'px');
+   if(screenshots && width===390)await page.locator('#confirm-dialog').screenshot({path:resolve(screenshots,'confirmation-mobile.png')});
+   await page.evaluate(()=>document.querySelector('#confirm-dialog').close());
+  }
+  await page.setViewportSize({width:1440,height:1000});
   check(await page.locator('img.brand-mark').first().evaluate(e=>e.complete && e.naturalWidth>0),'Workspace loads the company symbol');
   check(await page.locator('.nav-item[data-page=overview]').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=16&&Number(getComputedStyle(e).fontWeight)>=500),'Sidebar text is larger and more legible');
   check(await page.locator('.nav-item[data-page=availability]').count()===0,'Availability is absent from sidebar');
@@ -243,12 +251,10 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('.patient-card').count()>0,'Patients switch back to cards');
   if(screenshots)await page.locator('.patient-card').first().screenshot({path:resolve(screenshots,'patient-card-actions.png')});
   await page.locator('[data-page="catalogue/specialties"]').click();
-  await page.locator('[data-records-kind=catalogue-specialties][data-records-view=cards]').click();
-  check(await page.locator('.catalogue-card-grid').isVisible(),'Specialties also support card view');
+  check(await page.locator('.table-wrap').isVisible() && await page.locator('[data-records-kind=catalogue-specialties]').count()===0,'Specialties use only list view');
   await page.locator('[data-catalogue-edit]').first().click();
-  check(await page.locator('#catalogue-form').isVisible(),'Card view preserves specialty editing');
+  check(await page.locator('#catalogue-form').isVisible(),'Specialty list preserves editing');
   await page.locator('#close-dialog').click();
-  await page.locator('[data-records-kind=catalogue-specialties][data-records-view=list]').click();
   await page.locator('[data-page=patients]').click();
 
   if(screenshots) await page.locator('#sidebar').screenshot({path:resolve(screenshots,'navigation-desktop.png')});
@@ -258,18 +264,22 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.keyboard.press('Space');
   check(await page.locator('#catalogue-nav').evaluate(e=>e.open),'Catalogue submenu opens with keyboard');
   await page.locator('[data-page="catalogue/services"]').click();
-  await page.locator('[data-records-kind=catalogue-services]').first().waitFor();
+  await page.locator('.workspace-filters h3').filter({hasText:'Услуги'}).waitFor();
   check(await page.locator('[data-page="catalogue/services"]').getAttribute('aria-current')==='page','Deep section marks active navigation');
   check(await page.locator('[data-catalogue-tab]').count()===0,'Management uses sidebar navigation without duplicate section tabs');
-  check((await page.locator('[data-records-view=list]').innerText()).trim()==='Листа','Management list view uses the requested label');
+  check(await page.locator('[data-records-kind=catalogue-services]').count()===0,'Services have no view selector');
   check(await page.locator('[data-page=calendar] svg rect').count()===1,'Sidebar calendar uses a calendar SVG icon');
   await page.locator('[data-page=doctors]').click();
   await page.locator('[data-records-kind=doctors][data-records-view=list]').click();
-  check(await page.locator('#doctor-results table').isVisible() && await page.locator('[data-doctor-edit=d01]').isVisible(),'Doctor list exposes editing and all existing actions');
+  check(await page.locator('#doctor-results table').isVisible() && !await page.locator('[data-doctor-edit=d01]').isVisible(),'Doctor list keeps management actions in a closed menu');
+  await page.locator('tr').filter({has:page.locator('[data-doctor-edit=d01]')}).locator('.doctor-menu summary').click();
+  check(await page.locator('[data-doctor-edit=d01]').isVisible(),'Doctor list menu reveals editing');
   check(await page.locator('#doctor-results .records-table').evaluate(e=>e.scrollWidth<=e.clientWidth+1),'Doctor actions fit the desktop list without horizontal clipping');
   if(screenshots){await page.screenshot({path:resolve(screenshots,'doctors-list-desktop.png'),fullPage:true});await page.locator('#doctor-results tbody tr').first().screenshot({path:resolve(screenshots,'doctor-actions.png')});}
   await page.locator('[data-availability=d01]').click();
   await page.locator('#schedule-form').waitFor();
+  check(!(await page.locator('#main-content').innerText()).includes('Податоци од изворниот документ'),'Availability does not show spreadsheet source instructions');
+  check(await page.locator('#periods select').evaluateAll(elements=>{const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];const order=elements.map(e=>days.indexOf(e.value));return order.every((x,i)=>i===0||x>=order[i-1]);}),'Schedule editor orders weekdays Monday to Sunday');
   check(await page.locator('#availability-doctor').inputValue()==='d01','Doctor card opens selected availability');
   const exceptionDay=await page.locator('#exception-date').getAttribute('max');
   await page.locator('#exception-date').fill(exceptionDay);
@@ -304,10 +314,22 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
     const spec=await post('catalogue/specialties',{name:'Browser booking specialty'});
     await post('catalogue/services',{name:'Контролен преглед',specialtyId:spec.id,durationMinutes:30,enabled:true,doctorIds:['d01']});
     const service=await post('catalogue/services',{name:'Подолг преглед',specialtyId:spec.id,durationMinutes:45,enabled:true,doctorIds:['d01']});
-    return {initial,service};
+    let selection;
+    for(let offset=7;offset<14 && !selection;offset++) {
+      const date=new Date(initial.today+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+offset);
+      const day=date.toISOString().slice(0,10);
+      const slots=await (await fetch('/data/slots?doctorId=d01&serviceId='+service.id+'&date='+day)).json();
+      if(slots.length)selection={date:day,time:slots[0].time.slice(0,5)};
+    }
+    if(!selection)throw Error('No free fixture slot for continuation');
+    return {initial,service,selection};
   });
-  await page.goto(demoUrl+'/Workspace?book=d01#doctors');
+  const selectedDate=fixture.selection.date;
+  await page.goto(demoUrl+'/Workspace?book=d01&date='+selectedDate+'&time='+fixture.selection.time+'&serviceId='+fixture.service.id+'#doctors');
   await page.locator('#booking-doctor-input').waitFor();
+  check(await page.locator('#booking-date').inputValue()===selectedDate && await page.locator('#booking-service').inputValue()===fixture.service.id,'Booking continuation preselects its date and service');
+  await page.locator('#booking-slots .slot.selected').waitFor();
+  check(await page.locator('#booking-slots .slot.selected').getAttribute('data-time')===fixture.selection.time,'Booking continuation retains the selected available time');
   check(await page.getByRole('combobox',{name:'Лекар',exact:true}).getAttribute('role')==='combobox','Doctor label targets searchable control');
   check(await page.locator('#booking-patient-search').count()===0,'Separate patient search is removed');
   const alternate=fixture.initial.doctors.find(d=>d.name.includes('Ивица'));
@@ -362,10 +384,12 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   if(screenshots)await page.locator('#main-dialog').screenshot({path:resolve(screenshots,'agreed-booking-success.png')});
   await page.locator('#close-dialog').click();
   await page.goto(demoUrl+'/Workspace#doctors');
+  await page.locator('.doctor-menu').filter({has:page.locator('[data-doctor-edit="'+agreedDoctor.id+'"]')}).locator('summary').click();
   await page.locator('[data-doctor-edit="'+agreedDoctor.id+'"]').click();
   check(await page.locator('#catalogue-confirmation').isChecked(),'Doctor edit form loads the confirmation checkbox');
   await page.locator('#catalogue-confirmation').uncheck();
   await page.locator('#catalogue-form button[type=submit]').click();await page.locator('#main-dialog').waitFor({state:'hidden'});
+  await page.locator('.doctor-menu').filter({has:page.locator('[data-doctor-edit="'+agreedDoctor.id+'"]')}).locator('summary').click();
   await page.locator('[data-doctor-edit="'+agreedDoctor.id+'"]').click();
   check(!(await page.locator('#catalogue-confirmation').isChecked()),'Confirmation checkbox saves and reloads');
   await page.locator('#close-dialog').click();
@@ -388,7 +412,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await m.waitForTimeout(300);
   if(screenshots)await m.screenshot({path:resolve(screenshots,'patients-list-mobile.png'),fullPage:true});
   await m.locator('#menu-toggle').tap();
-  await m.locator('[data-page="catalogue/specialties"]').tap();await m.locator('[data-records-kind=catalogue-specialties]').first().waitFor();
+  await m.locator('[data-page="catalogue/specialties"]').tap();await m.locator('[data-catalogue-edit]').first().waitFor();
   check(true,'Touch submenu opens and selects specialties');
   await noOverflow(m,'Mobile catalogue');
   await m.locator('#menu-toggle').tap();

@@ -49,7 +49,7 @@ These remain real source profiles but expose no invented slots. Staff may add an
 - Exact `Директно закажување` is treated as direct/confirmed booking. Other methods conservatively require confirmation after a time is actually made available.
 - Entries mentioning `секретарка` require staff booking. Patients can see them and the booking instruction but cannot book/reschedule them directly.
 - Daily counts/notification notes (08:00 or 08:30) remain operational notes. There is no simulated notification sending or assertion that a doctor has been contacted.
-- Tuesday-first priority is implemented for Dr. Filip Duma within the same week. The source does not specify how far ahead to compare Tuesdays, so cross-week priority is not inferred.
+- Source priority notes are retained as historical import data only. They are not shown as application instructions and do not restrict booking. Each configured weekday is independently available.
 - The original flattened material mentions inconsistent older names/hours (for example, another gastroenterology name and a radiology closing-time variant). The clean sheet wins; no extra doctor or alternate schedule is inferred from flattened column positions.
 - `Наведено во изворот` in the funding column is a provenance placeholder, not an eligibility value. The UI marks it unspecified. Explicit fund/private values are preserved.
 - No standalone duration, break, holiday, location or explicit date exception is supplied. No patient records are supplied.

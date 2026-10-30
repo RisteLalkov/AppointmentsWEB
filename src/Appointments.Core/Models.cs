@@ -19,6 +19,7 @@ public record Doctor
     public bool IsService { get; init; }
     public bool RequiresConfirmation { get; set; }
     public bool StaffOnly { get; init; }
+    // Legacy import metadata only; never controls scheduling. Retained for schema compatibility.
     public bool TuesdayFirst { get; init; }
     public int DurationMinutes { get; set; } = 30;
     public List<WorkingPeriod> WorkingPeriods { get; set; } = [];
