@@ -10,7 +10,7 @@ using Npgsql;
 namespace Appointments.Api.Services;
 
 public sealed class PlatformService(ClinicRegistry registry, ClinicConnections connections, IConfiguration configuration,
-    IPasswordHasher<Account> hasher)
+    IPasswordHasher<Account> hasher, IdentityDirectory directory)
 {
     public async Task InitializeAsync(bool migrate, CancellationToken ct)
     {
@@ -188,6 +188,7 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
                 }
             }
             await clinicDb.Database.MigrateAsync(ct);
+            await directory.AttachAsync(clinic, ct);
             await using var tx = await clinicDb.Database.BeginTransactionAsync(ct);
             await clinicDb.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock(734251894)", ct);
             var binding = await clinicDb.Settings.FindAsync(["ClinicId"], ct);

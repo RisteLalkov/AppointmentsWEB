@@ -18,7 +18,7 @@ public record Doctor
     public string Funding { get; init; } = "Не е наведено";
     public bool IsService { get; init; }
     public bool RequiresConfirmation { get; set; }
-    public bool StaffOnly { get; init; }
+    public bool StaffOnly { get; set; }
     // Legacy import metadata only; never controls scheduling. Retained for schema compatibility.
     public bool TuesdayFirst { get; init; }
     public int DurationMinutes { get; set; } = 30;

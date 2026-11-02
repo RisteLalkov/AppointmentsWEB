@@ -8,6 +8,17 @@ using Microsoft.AspNetCore.Mvc;
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("mk-MK");
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("mk-MK");
 var builder = WebApplication.CreateBuilder(args);
+var proxySecret = builder.Configuration["Hosting:WebProxyKey"] ?? "";
+if (proxySecret.Length is > 0 and < 32) throw new InvalidOperationException("Hosting:WebProxyKey must have at least 32 random characters.");
+builder.Services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(o => {
+    o.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+    // Defaults trust loopback; remove them so only explicitly configured proxy addresses are trusted.
+    o.KnownProxies.Clear(); o.KnownIPNetworks.Clear();
+    foreach (var address in builder.Configuration.GetSection("Hosting:TrustedProxies").Get<string[]>() ?? [])
+        o.KnownProxies.Add(System.Net.IPAddress.Parse(address));
+    if (o.KnownProxies.Count == 0) o.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.None;
+});
+
 var allowHttp = builder.Environment.IsDevelopment()
     || builder.Configuration.GetValue<bool>("Hosting:AllowHttpForTesting");
 var mode = builder.Configuration["Backend:Mode"] ?? "Api";
@@ -15,6 +26,8 @@ if (mode is not ("Api" or "Demo")) throw new InvalidOperationException("Backend:
 var settings = new BackendSettings(mode == "Api", builder.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("Demo:Enabled"));
 if (!settings.UseApi && !settings.DemoEnabled) throw new InvalidOperationException("The JSON demo backend is allowed only in explicitly enabled Development mode.");
 builder.Services.AddSingleton(settings);
+if (settings.UseApi && !builder.Environment.IsDevelopment() && proxySecret.Length < 32)
+    throw new InvalidOperationException("Configure the same random Hosting:WebProxyKey on Web and API before production startup.");
 builder.Services.AddHttpClient<ApiClient>(client =>
 {
     var address = new Uri(builder.Configuration["Backend:ApiBaseUrl"] ?? "http://localhost:5181/");
@@ -67,6 +80,7 @@ builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<DemoIdentity>();
 var app = builder.Build();
+app.UseForwardedHeaders();
 app.UseRequestLocalization(new RequestLocalizationOptions()
     .SetDefaultCulture("mk-MK")
     .AddSupportedCultures("mk-MK")
@@ -76,6 +90,10 @@ if (!allowHttp)
 {
     app.UseHsts();
     app.UseHttpsRedirection();
+    app.Use(async (context, next) => {
+        if (!context.Request.IsHttps) { context.Response.StatusCode = 403; await context.Response.WriteAsync("Потребна е безбедна HTTPS врска."); return; }
+        await next();
+    });
 }
 app.Use(async (context, next) => { context.Response.Headers["X-Content-Type-Options"] = "nosniff"; context.Response.Headers["Referrer-Policy"] = "same-origin"; await next(); });
 app.UseStaticFiles();

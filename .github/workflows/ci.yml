@@ -71,3 +71,21 @@ jobs:
         env:
           CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
         run: python tests/platform_integration.py
+
+      - name: Install Chromium for high-severity regression workflows
+        run: |
+          npm install --prefix "$RUNNER_TEMP/medtermin-browser" playwright@1.64.1 --no-audit --no-fund
+          "$RUNNER_TEMP/medtermin-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Publish complete API and Web outputs for regression testing
+        run: |
+          dotnet publish src/Appointments.Api -c Release --no-build -o "$RUNNER_TEMP/medtermin-api"
+          dotnet publish src/Appointments.Web -c Release --no-build -o "$RUNNER_TEMP/medtermin-web"
+      - name: High-severity concurrency, transport, outage and real-form regressions
+        env:
+          CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
+        run: |
+          export NODE_PATH="$RUNNER_TEMP/medtermin-browser/node_modules"
+          export TEST_BROWSER_EXECUTABLE="$(node -p 'require("playwright").chromium.executablePath()')"
+          export TEST_API_DLL="$RUNNER_TEMP/medtermin-api/Appointments.Api.dll"
+          export TEST_WEB_DLL="$RUNNER_TEMP/medtermin-web/Appointments.Web.dll"
+          python tests/high_severity_integration.py

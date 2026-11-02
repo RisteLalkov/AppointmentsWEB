@@ -21,10 +21,10 @@
             <div class="account-create-footer"><p>Секој профил може да има една сметка. Нов пациентски профил се додава во работниот простор.</p><button class="btn primary" type="submit">Создај сметка <span aria-hidden="true">→</span></button></div>
         </form>
     </section>
-    <section class="card account-section"><h2>Постоечки сметки</h2><p class="muted">Поставете податоци за најава за да овозможите пристап со лозинка за демо-корисник. Тој повеќе нема да се прикажува во изборот на демо-корисници. Споделете ги податоците приватно; не се испраќа е-пошта.</p>
+    <section class="card account-section"><h2>Постоечки сметки</h2><p class="muted">Управувајте со пристапот и податоците за најава. Промената на лозинка ги одјавува сите сесии на сметката. Споделете ги новите податоци приватно; не се испраќа е-пошта.</p>
     <div class="account-list">@foreach(var a in Model) {
         <article class="account-row"><div><strong>@a.Name</strong><p>@a.Email</p><span class="badge">@a.Role.RoleLabel() · @(a.Enabled ? "Овозможена" : "Оневозможена")</span></div>
-        <div class="account-actions"><form asp-action="Access" method="post"><input name="id" type="hidden" value="@a.Id"><input name="enabled" type="hidden" value="@(!a.Enabled)"><button class="btn secondary small" type="submit">@(a.Enabled ? "Оневозможи пристап" : "Овозможи пристап")</button></form>
+        <div class="account-actions"><form asp-action="Access" method="post"><input name="id" type="hidden" value="@a.Id"><input name="enabled" type="hidden" value="@(a.Enabled ? "false" : "true")"><button class="btn secondary small" type="submit">@(a.Enabled ? "Оневозможи пристап" : "Овозможи пристап")</button></form>
         <details><summary>Постави податоци за најава</summary><form asp-action="Credentials" method="post"><input name="id" type="hidden" value="@a.Id"><div class="field"><label for="email-@a.Id">Е-пошта</label><input id="email-@a.Id" name="Email" value="@a.Email" type="email" required maxlength="120" autocomplete="off"></div><div class="field"><label for="password-@a.Id">Нова лозинка</label><input id="password-@a.Id" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div><button class="btn primary small" type="submit">Зачувај и одјави ги сите сесии</button></form></details></div></article>
     }</div></section>
 </main>

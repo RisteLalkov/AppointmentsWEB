@@ -1,5 +1,7 @@
 # Production readiness audit — 2 November 2026
 
+**Follow-up:** see the [High-severity remediation and deployment guide](../../HIGH_SEVERITY_FIXES.md) for changes made after this audit. The report/PDF below intentionally describe the original audited snapshot.
+
 Audited application snapshot: `fcf2a0a`. **Assessment: not ready for an unrestricted public production launch.** There are 22 findings: 7 High, 9 Medium and 6 Low. No Critical issue was demonstrated; inaccessible production infrastructure remains unverified.
 
 - [Read the full report](PRODUCTION_READINESS_AUDIT.md), including reproduction steps, exact source locations, recommended fixes, coverage and deployment verification gaps.

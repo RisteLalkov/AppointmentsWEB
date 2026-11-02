@@ -9,7 +9,7 @@ using Npgsql;
 
 namespace Appointments.Data;
 
-public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClock clock)
+public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClock clock, BookingPolicy? bookingPolicy = null)
 {
     public async Task<BootstrapResponse> BootstrapAsync(DemoActor actor, bool demo, CancellationToken ct)
     {
@@ -80,6 +80,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
                 if (replay.Fingerprint != fingerprint) throw new RuleException("Ова барање веќе е употребено за друг термин. Повторно отворете го формуларот.", 409);
                 return JsonSerializer.Deserialize<Appointment>(replay.ResponseJson, JsonDemoStore.JsonOptions)!;
             }
+            await LockAsync("patient:" + command.PatientId, ct);
             await LockCatalogueSharedAsync(ct);
             await LockAsync("doctor:" + command.DoctorId, ct);
             var state = await LoadAsync(command.DoctorId, command.PatientId, ct);
@@ -100,6 +101,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             ?? throw new RuleException("Терминот не е пронајден или немате пристап до него.", 404);
         return await TransactionAsync(async () =>
         {
+            await LockAsync("patient:" + reference.PatientId, ct);
             await LockCatalogueSharedAsync(ct);
             await LockAsync("doctor:" + reference.DoctorId, ct);
             var state = await LoadAsync(reference.DoctorId, reference.PatientId, ct);
@@ -219,7 +221,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             await db.SaveChangesAsync(ct); return result;
         }, ct);
     }
-    private AppointmentService Rules(DemoState state) => new(new OperationState(state), clock);
+    private AppointmentService Rules(DemoState state) => new(new OperationState(state), clock, bookingPolicy);
     public async Task LockAsync(string resource, CancellationToken ct) =>
         await db.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended(current_schema() || {":careline:" + resource}, 0))", ct);
     public void Audit(DemoActor actor, string action, string target) => db.AuditEvents.Add(new() { ActorId = actor.Id, Action = action, TargetId = target, OccurredAt = clock.UtcNow });

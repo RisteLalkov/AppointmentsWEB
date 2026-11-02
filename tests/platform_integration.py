@@ -86,7 +86,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         sql('--tenant-create')
         conns = json.loads(Path(fixture).read_text())
         env = {k:v for k,v in os.environ.items() if not k.startswith(('Tenancy__','Bootstrap__','Platform__','ConnectionStrings__'))}
-        env.update(ASPNETCORE_ENVIRONMENT='Development', Database__ApplyMigrations='true', Demo__Enabled='false',
+        env.update(ASPNETCORE_ENVIRONMENT='Development', Database__ApplyMigrations='true', Demo__Enabled='false', Demo__ImportSourceDoctors='true',
             Logging__LogLevel__Default='Warning', Logging__LogLevel__Microsoft='Warning',
             ConnectionStrings__Appointments=conns[0], ConnectionStrings__Platform=conns[1],
             Bootstrap__Email='owner@platform.test', Bootstrap__Password=password,
@@ -222,11 +222,8 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(Client(second,clinic='new-clinic').request('/api/auth/register',registration)[0]==409,'Registration enforces global identity uniqueness')
         check(Client(first,clinic='new-clinic').login('patient@platform.test').clinic=='main','Forged clinic hint cannot move a patient identity')
         sql('--tenant-duplicate')
-        missing = anon.request('/api/auth/login',{'email':'missing@platform.test','password':password})
-        for secret in [password,password+'-new']:
-            check(anon.request('/api/auth/login',{'email':'owner@platform.test','password':secret})==missing,'Legacy ambiguous identity rejected with generic login error')
-        sql('--tenant-restore-identity')
-        check(Client(first).login('new-owner@platform.test',secret=password+'-new').clinic=='new-clinic','Explicitly resolving duplicate restores credentials-only login')
+        check(Client(first).login('owner@platform.test').clinic=='main', 'Rejected SQL identity collision preserves original main login')
+        check(Client(first).login('new-owner@platform.test',secret=password+'-new').clinic=='new-clinic','Rejected SQL collision preserves new-clinic login')
         extra=dict(payload,id='third-clinic',name='Third Test Clinic',adminEmail='third-owner@platform.test')
         check(company.ok('/api/platform/clinics',extra)['state']=='Ready', 'Another clinic provisions without a database pool or additional connection string')
         third=Client(second).login('third-owner@platform.test',secret=password+'-new')
@@ -247,7 +244,11 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         details=dict(name='Platform-managed main',description='Edited without API configuration',address='Плоштад Македонија, Скопје',phone='+389 2 000 0000',discoverable=True,allowRegistration=False,version=adopted[0]['version'])
         updated=company.ok('/api/platform/clinics/main/details',details)
         check(updated['version']==details['version']+1 and updated['address']==details['address'], 'Platform operator edits clinic metadata with a revision token')
+        deadline=time.monotonic()+8
         public=Client(second).ok('/api/public/clinics/main')
+        while public['name']!=details['name'] and time.monotonic()<deadline:
+            time.sleep(.1)
+            public=Client(second).ok('/api/public/clinics/main')
         check(public['name']==details['name'] and public['address']==details['address'] and not public['allowRegistration'], 'Another API instance uses platform metadata without configuration edits')
         check(company2.request('/api/platform/clinics/main/details',dict(details,name='Stale overwrite'))[0]==409, 'Stale platform clinic edits cannot overwrite newer values')
         check(owner.request('/api/platform/clinics/main/details',dict(details,version=updated['version']))[0]==401, 'Clinic administrator cannot edit company-managed metadata')
@@ -255,7 +256,9 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(company.request('/api/platform/clinics/main/details',dict(details,name=' ',version=updated['version']))[0]==400, 'Whitespace-only clinic name is rejected')
         hidden_details=dict(details,version=updated['version'],discoverable=False)
         company.ok('/api/platform/clinics/main/details',hidden_details)
-        check(Client(second).request('/api/public/clinics/main')[0]==404, 'Platform visibility edit hides an adopted clinic immediately')
+        deadline=time.monotonic()+8
+        while Client(second).request('/api/public/clinics/main')[0]!=404 and time.monotonic()<deadline:time.sleep(.1)
+        check(Client(second).request('/api/public/clinics/main')[0]==404, 'Platform visibility edit propagates within the routing refresh interval')
         extra_after=dict(payload,id='after-adoption',name='After adoption',adminEmail='after-adoption@platform.test')
         check(company.ok('/api/platform/clinics',extra_after)['state']=='Ready', 'Future clinics still provision entirely through the platform')
         company.ok('/api/platform/password',{'currentPassword':password,'newPassword':password+'-changed'})

@@ -42,6 +42,16 @@ internal static class TenantFixtures
                     await new NpgsqlCommand($"DROP ROLE IF EXISTS {c.Username}", admin).ExecuteNonQueryAsync();
                 }
             }
+            else if (operation == "--tenant-query")
+            {
+                using var request = JsonDocument.Parse(await Console.In.ReadToEndAsync());
+                var index = request.RootElement.GetProperty("database").GetInt32();
+                if (index is < 0 or > 1) throw new Exception("Invalid fixture database index.");
+                await using var target = new NpgsqlConnection(fixtures[index]); await target.OpenAsync();
+                await using var query = new NpgsqlCommand(request.RootElement.GetProperty("sql").GetString(), target);
+                var result = await query.ExecuteScalarAsync();
+                Console.WriteLine(JsonSerializer.Serialize(result is DBNull ? null : result));
+            }
             else if (operation == "--tenant-legacy-extension")
             {
                 // Simulate the old deployment's extension location using the fixture administrator.
@@ -108,7 +118,10 @@ internal static class TenantFixtures
                     "--tenant-duplicate" => "UPDATE clinic_new_clinic.\"Accounts\" SET \"Email\"='owner@platform.test', \"NormalizedEmail\"='owner@platform.test' WHERE \"NormalizedEmail\"='new-owner@platform.test'",
                     _ => "UPDATE clinic_new_clinic.\"Accounts\" SET \"Email\"='new-owner@platform.test', \"NormalizedEmail\"='new-owner@platform.test' WHERE \"NormalizedEmail\"='owner@platform.test'"
                 };
-                await new NpgsqlCommand(sql, shared).ExecuteNonQueryAsync();
+                try { await new NpgsqlCommand(sql, shared).ExecuteNonQueryAsync(); }
+                catch (PostgresException e) when (operation == "--tenant-duplicate" && e.SqlState == "23505")
+                { Console.WriteLine("PASS Shared identity trigger rejects cross-clinic duplicate at the database boundary"); return; }
+                if (operation == "--tenant-duplicate") throw new Exception("Shared directory failed to reject duplicate identity.");
             }
             else throw new Exception("Unknown fixture operation.");
         }

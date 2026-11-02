@@ -324,6 +324,44 @@ Test("Duplicate availability periods are rejected regardless of reason", () => {
  f.Service.AddException(admin,"d1",monday,new(18,0),new(19,0),true,"Different kind");
  Equal(3,f.Store.Read(s=>s.Exceptions.Count));
 });
+Test("Patient future booking cap is enforced; staff and identical replay remain available", () => {
+    using var f=New(); var first=f.Service.Book(pat,Cmd("09:00"));
+    f.Service.Book(pat,Cmd("10:00")); f.Service.Book(pat,Cmd("11:00"));
+    Reject(()=>f.Service.Book(pat,Cmd("12:00")),409);
+    Equal(first.Id,f.Service.Book(pat,Cmd("09:00",key:first.RequestId)).Id);
+    f.Service.Book(admin,Cmd("12:00"));
+    f.Service.ChangeStatus(pat,first.Id,AppointmentStatus.Cancelled,first.Version);
+});
+Test("Pending request cap prevents filling a doctor day and cancellation restores quota", () => {
+    using var f=New(); f.Store.Write(s=>{s.Doctors[0].RequiresConfirmation=true;return true;});
+    var first=f.Service.Book(pat,Cmd()); Reject(()=>f.Service.Book(pat,Cmd("10:00")),409);
+    f.Service.Move(pat,first.Id,new(monday,new(10,0),first.Version));
+    f.Service.ChangeStatus(pat,first.Id,AppointmentStatus.Cancelled,2);
+    f.Service.Book(pat,Cmd("11:00"));
+});
+Test("Signed Web identity rejects spoofing, tampering and expired timestamps", () => {
+    var secret=new string('s',40); var stamp=1234567890L;var address="203.0.113.15";
+    var signature=WebProxyIdentity.Sign(secret,address,stamp);
+    True(WebProxyIdentity.Verify(secret,address,stamp.ToString(),signature,stamp));
+    True(!WebProxyIdentity.Verify(secret,"203.0.113.16",stamp.ToString(),signature,stamp));
+    True(!WebProxyIdentity.Verify(secret,address,stamp.ToString(),signature,stamp+61));
+    True(!WebProxyIdentity.Verify(secret,address,stamp.ToString(),new string('x',64),stamp));
+    True(!WebProxyIdentity.Verify("",address,stamp.ToString(),signature,stamp));
+});
+Test("Preview seed has ordinary names, varied history and room for patient bookings", () => {
+    using var f=New(); var seed=DemoSeed.Create(JsonSerializer.Serialize(f.Seed().Doctors,JsonDemoStore.JsonOptions),f.Clock);
+    True(seed.Patients.Count>=30);True(seed.Patients.All(p=>!p.Name.Contains("демо") && p.Email.EndsWith("@example.test")));
+    True(seed.Appointments.Any(a=>a.Status==AppointmentStatus.Completed));True(seed.Appointments.Any(a=>a.Status==AppointmentStatus.Cancelled));
+    True(seed.Patients.All(p=>seed.Appointments.Count(a=>a.PatientId==p.Id&&a.End>f.Clock.UtcNow)<3));
+});
+Test("Reception controls booking restrictions independently of imported source prose", () => {
+    using var f=New();var catalogue=new CatalogueService(f.Store);
+    var specialty=catalogue.SaveSpecialty(admin,new(null,"Clinic specialty"));
+    var d=catalogue.SaveDoctor(admin,new(null,"Clinic configured doctor",specialty.Id,"",true,RequiresConfirmation:true,StaffOnly:true));
+    True(d.StaffOnly);True(d.RequiresConfirmation);
+    d=catalogue.SaveDoctor(admin,new(d.Id,d.Name,specialty.Id,"",true,d.CatalogVersion,RequiresConfirmation:false,StaffOnly:false));
+    True(!d.StaffOnly);True(!d.RequiresConfirmation);
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

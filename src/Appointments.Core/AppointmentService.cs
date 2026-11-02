@@ -2,7 +2,7 @@ using System.Net.Mail;
 
 namespace Appointments.Core;
 
-public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) : IAppointmentService
+public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, BookingPolicy? bookingPolicy = null) : IAppointmentService
 {
     private static Doctor FindDoctor(DemoState s, string id) => s.Doctors.FirstOrDefault(d => d.Id == id) ?? throw new RuleException("Лекарот не е пронајден.", 404);
     private static Appointment FindAppointment(DemoState s, string id) => s.Appointments.FirstOrDefault(a => a.Id == id) ?? throw new RuleException("Терминот не е пронајден.", 404);
@@ -82,6 +82,8 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         var slot = SchedulingRules.Slots(availability, doctor, command.Date, clock).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException(command.AgreedTime ? "Тој термин е недостапен. Проверете за преклопување, отсуство или изминат датум (до 180 дена однапред)." : "Тој термин повеќе не е достапен. Изберете друг термин во следните 180 дена.", 409);
         CheckPatientConflict(s, command.PatientId, slot);
+        (bookingPolicy ?? new()).Check(actor, s.Appointments, command.PatientId, doctor.Id, slot.Start,
+            doctor.RequiresConfirmation && !command.AgreedTime ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed, clock);
         if (agreement != null) s.Exceptions.Add(agreement);
         var appointment = new Appointment { Id = appointmentId, DoctorId = doctor.Id, PatientId = command.PatientId, ServiceId = command.ServiceId, ServiceName = s.Services.Find(x => x.Id == command.ServiceId)?.Name, Start = slot.Start, End = slot.End,
             Status = doctor.RequiresConfirmation && !command.AgreedTime ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed,
@@ -103,6 +105,8 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock) 
         var slot = SchedulingRules.Slots(s, doctor, command.Date, clock, id).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException("Тој термин е недостапен. Вашиот првичен термин е задржан.", 409);
         CheckPatientConflict(s, a.PatientId, slot, id);
+        (bookingPolicy ?? new()).Check(actor, s.Appointments, a.PatientId, doctor.Id, slot.Start,
+            doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed, clock, id);
         var before = a with { };
         if (a.Start != slot.Start) s.Exceptions.RemoveAll(e => e.Id == "agreed-" + a.Id);
         a.Start = slot.Start; a.End = slot.End; a.Status = doctor.RequiresConfirmation ? AppointmentStatus.Scheduled : AppointmentStatus.Confirmed;

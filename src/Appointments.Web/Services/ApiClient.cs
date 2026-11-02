@@ -6,11 +6,20 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Appointments.Web.Services;
 
-public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor)
+public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor, IConfiguration configuration)
 {
     public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default, string? clinicId = null, bool platform = false)
     {
         using var request = new HttpRequestMessage(body == null ? HttpMethod.Get : HttpMethod.Post, path);
+        var secret = configuration["Hosting:WebProxyKey"] ?? "";
+        var address = accessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+        if (secret.Length >= 32 && address != null)
+        {
+            var stamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            request.Headers.Add("X-Web-Client", address);
+            request.Headers.Add("X-Web-Time", stamp.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            request.Headers.Add("X-Web-Signature", WebProxyIdentity.Sign(secret, address, stamp));
+        }
         if (body != null) request.Content = JsonContent.Create(body, options: JsonDemoStore.JsonOptions);
         if (authenticated && platform)
         {

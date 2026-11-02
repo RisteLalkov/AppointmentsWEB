@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-02",
+  "scope": "H01-H07 remediation and realistic non-destructive preview data",
+  "highRegressionAssertionsPassed": 62,
+  "buildWarnings": 0,
+  "buildErrors": 0,
+  "corePassed": 92,
+  "httpPassed": 38,
+  "mvcContractsPassed": 79,
+  "existingChromiumPassed": 140,
+  "passwordVisibilityPassed": 16,
+  "domPassed": 85,
+  "realApiPassed": 125,
+  "directSqlPassed": 7,
+  "tenancyPassed": 75,
+  "tenantDomPassed": 12,
+  "platformPassed": 103,
+  "publishedWebApiTested": true,
+  "positiveTlsWithCertificateValidation": true,
+  "backupRestore": {
+    "restoredCountsMatch": true,
+    "identityTriggerRestored": true,
+    "newAccountIndexedAtomically": true,
+    "publishedProductionLogin": true,
+    "originalAppointmentsPreserved": true
+  },
+  "windowsSelfContainedCrossPublish": true,
+  "windowsIisExecutionTested": false,
+  "liveDatabaseChanged": false,
+  "publicProductionApproved": false,
+  "deploymentRequirements": [
+    "Matching Hosting:WebProxyKey on API and Web",
+    "All old API/Web hosts stopped for the first full --migrate",
+    "Published database/008-identity-directory.sql included",
+    "Explicit preview opt-in only for test-data clinics"
+  ],
+  "registryPolicy": {
+    "refreshSeconds": 5,
+    "maximumSnapshotAgeSeconds": 30,
+    "failedRefreshReadinessStatus": 503
+  }
+}

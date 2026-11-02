@@ -63,6 +63,8 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
         ValidatePassword(input.Password);
         await using var identityLease = await connections.IdentityLockAsync(ct);
         await registry.RefreshAsync(ct);
+        if (!registry.Resolve(clinicContext.Current.Id).AllowRegistration)
+            throw new RuleException("За создавање сметка контактирајте ја рецепцијата на клиниката.", 403);
         await connections.RequireUniqueAsync(Email(input.Email), clinicContext.Current.Id, null, ct);
         if (input.Name.Trim().Length < 2) throw new RuleException("Внесете име со најмалку два знака.");
         return await operations.TransactionAsync(async () =>
@@ -111,8 +113,15 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
         Admin(actor); if (id == actor.Id) throw new RuleException("Не може да ја оневозможите сопствената сметка.");
         await operations.TransactionAsync(async () =>
         {
+            // All access changes take the clinic membership lock first, across API instances.
+            await operations.LockAsync("administrator-membership", ct);
             await operations.LockAsync("account:" + id, ct);
+            if (!await db.Accounts.AnyAsync(a => a.Id == actor.Id && a.Enabled && a.Role == DemoRole.Administrator, ct))
+                throw new RuleException("Администраторскиот пристап е отповикан. Најавете се повторно.", 403);
             var account = await db.Accounts.SingleOrDefaultAsync(a => a.Id == id, ct) ?? throw new RuleException("Сметката не е пронајдена.", 404);
+            if (!enabled && account.Enabled && account.Role == DemoRole.Administrator &&
+                !await db.Accounts.AnyAsync(a => a.Id != id && a.Enabled && a.Role == DemoRole.Administrator, ct))
+                throw new RuleException("Клиниката мора да има најмалку еден активен администратор.", 409);
             account.Enabled = enabled; await db.Sessions.Where(s => s.AccountId == id).ExecuteDeleteAsync(ct);
             operations.Audit(actor, enabled ? "account.enabled" : "account.disabled", id); await db.SaveChangesAsync(ct); return true;
         }, ct);

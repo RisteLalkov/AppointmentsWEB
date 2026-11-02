@@ -5,7 +5,7 @@ using Npgsql;
 
 namespace Appointments.Api.Services;
 
-public sealed class ClinicConnections(ClinicRegistry clinics, IConfiguration configuration)
+public sealed class ClinicConnections(ClinicRegistry clinics, IConfiguration configuration, IdentityDirectory directory)
 {
     public AppointmentsDbContext Create(ClinicDefinition clinic) => new(new DbContextOptionsBuilder<AppointmentsDbContext>().UseNpgsql(clinic.ConnectionString).Options);
     public async Task<AppointmentsDbContext> OpenAsync(ClinicDefinition clinic, CancellationToken ct)
@@ -27,11 +27,11 @@ public sealed class ClinicConnections(ClinicRegistry clinics, IConfiguration con
         var sql = "SELECT * FROM " + schema + ".\"Settings\"";
         return db.Settings.FromSqlRaw(sql).AsNoTracking().SingleOrDefaultAsync(x => x.Key == "ClinicId", ct);
     }
-    // Distributed lock shared by registration, credentials, provisioning and login.
-    // When the platform DB is added, stop all hosts together before changing this coordinator.
+    // Distributed write coordinator for registration, credentials and provisioning.
+    // Always in the shared clinical DB; indexed login does not need this global lock.
     public async Task<IAsyncDisposable> IdentityLockAsync(CancellationToken ct)
     {
-        var connection = new NpgsqlConnection(configuration.GetConnectionString("Platform") ?? clinics.Configured.OrderBy(c => c.Id, StringComparer.Ordinal).First().ConnectionString);
+        var connection = new NpgsqlConnection(SharedClinicDatabase.Connection(configuration, "main"));
         try
         {
             await connection.OpenAsync(ct);
@@ -47,11 +47,18 @@ public sealed class ClinicConnections(ClinicRegistry clinics, IConfiguration con
     public async Task<List<(ClinicDefinition Clinic, string AccountId)>> FindEmailAsync(string email, CancellationToken ct)
     {
         var result = new List<(ClinicDefinition, string)>();
-        // Include disabled clinics/accounts when reserving an identity. Re-enabling must not make a login ambiguous.
-        foreach (var clinic in clinics.Clinics)
+        // Do not open unrelated clinic databases or bindings to route a login.
+        foreach (var identity in await directory.FindAsync(email, ct))
         {
-            await using var db = await OpenAsync(clinic, ct);
-            foreach (var id in await db.Accounts.AsNoTracking().Where(a => a.NormalizedEmail == email).Select(a => a.Id).ToListAsync(ct)) result.Add((clinic, id));
+            var clinic = clinics.Clinics.SingleOrDefault(c => c.Id == identity.ClinicId);
+            if (clinic == null || !clinic.Enabled)
+            {
+                // A different API instance may have just provisioned this indexed identity.
+                await clinics.RefreshAsync(ct);
+                clinic = clinics.Clinics.SingleOrDefault(c => c.Id == identity.ClinicId);
+            }
+            if (clinic == null) throw new RuleException("Идентитетот е привремено недостапен.", 503);
+            result.Add((clinic, identity.AccountId));
         }
         return result;
     }

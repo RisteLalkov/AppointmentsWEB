@@ -1,5 +1,7 @@
 # МедТермин · AppointmentsWEB
 
+**2 November 2026 update:** before deploying, follow the [High-severity fixes and required upgrade steps](docs/HIGH_SEVERITY_FIXES.md). This release requires a shared Web/API proxy secret and a full `--migrate` run to install the identity directory. The same guide includes the optional realistic test-clinic preview command.
+
 **Current storage:** all clinics share one PostgreSQL database with separate clinic schemas; the optional platform database stays separate. See [setup and deployment](docs/SHARED_DATABASE.md).
 
 The user interface now opens in **Macedonian (`mk-MK`)** by default, including the calendar, booking flow, all three roles, account management and validation messages. Existing database records and API identifiers remain compatible; **localization alone needs no database migration or reset**. Republish **both Web and API** to update all messages. See [localization and update instructions](docs/LOCALIZATION.md).

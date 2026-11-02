@@ -101,7 +101,7 @@ def start(project, url, env, temporary):
 with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
     api1, api2, web_url = free_url(), free_url(), free_url()
     env = dict(os.environ, ASPNETCORE_ENVIRONMENT='Development', ConnectionStrings__Appointments=connection,
-        Database__ApplyMigrations='true', Demo__Enabled='true', Bootstrap__Email='admin@integration.test', Bootstrap__Password=password,
+        Database__ApplyMigrations='true', Demo__Enabled='true', Hosting__AllowHttpForTesting='true', Hosting__WebProxyKey='Integration-proxy-'+uuid.uuid4().hex, Bootstrap__Email='admin@integration.test', Bootstrap__Password=password,
         Logging__LogLevel__Default='Warning', Logging__LogLevel__Microsoft='Warning')
     try:
         server1 = start('Appointments.Api', api1, env, temporary)

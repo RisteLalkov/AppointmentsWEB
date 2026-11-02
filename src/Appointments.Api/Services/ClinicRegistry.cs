@@ -32,6 +32,18 @@ public sealed class ClinicRegistry
     private readonly IConfiguration configuration;
     private ClinicDefinition[] managed = [];
     private readonly SemaphoreSlim refresh = new(1, 1);
+    private long refreshedAt;
+    private int refreshFailed;
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<string, byte> unavailable = new();
+    // A short, explicit routing lease: never serve arbitrarily stale enable/registration policy.
+    public bool IsReady => !HasPlatform || Volatile.Read(ref refreshFailed) == 0 && HasFreshSnapshot;
+    private bool HasFreshSnapshot => Volatile.Read(ref refreshedAt) != 0 &&
+        System.Diagnostics.Stopwatch.GetElapsedTime(Volatile.Read(ref refreshedAt)) < TimeSpan.FromSeconds(30);
+    public void MarkUnavailable(string id) => unavailable.TryAdd(id, 0);
+    public void RequireFresh()
+    {
+        if (HasPlatform && !HasFreshSnapshot) throw new RuleException("Регистарот на клиники е привремено недостапен. Обидете се повторно.", 503);
+    }
     public IReadOnlyList<ClinicDefinition> Configured { get; }
     public IReadOnlyList<ClinicDefinition> Clinics
     {
@@ -73,11 +85,12 @@ public sealed class ClinicRegistry
     public async Task RefreshAsync(CancellationToken ct)
     {
         if (!HasPlatform) return;
-        await refresh.WaitAsync(ct);
+        try { await refresh.WaitAsync(ct); }
+        catch { Volatile.Write(ref refreshFailed, 1); throw; }
         try
         {
             await using var db = PlatformDb();
-            var rows = await db.Clinics.AsNoTracking().Where(c => c.State == "Ready").ToListAsync(ct);
+            var rows = await db.Clinics.AsNoTracking().ToListAsync(ct);
             var all = rows.Select(Definition).ToArray();
             foreach (var row in rows)
             {
@@ -86,11 +99,14 @@ public sealed class ClinicRegistry
                     throw new InvalidOperationException("Configured clinic overlap requires deliberate platform adoption with the original time zone.");
             }
             Volatile.Write(ref managed, all);
+            Volatile.Write(ref refreshedAt, System.Diagnostics.Stopwatch.GetTimestamp());
+            Volatile.Write(ref refreshFailed, 0);
         }
+        catch { Volatile.Write(ref refreshFailed, 1); throw; }
         finally { refresh.Release(); }
     }
     public ClinicDefinition Definition(PlatformClinic c) => new() {
-        Id = c.Id, Name = c.Name, TimeZone = c.TimeZone, Discoverable = c.Discoverable,
+        Id = c.Id, Name = c.Name, TimeZone = c.TimeZone, Enabled = c.State == "Ready", Discoverable = c.Discoverable,
         Description = c.Description, Address = c.Address, Phone = c.Phone, AllowRegistration = c.AllowRegistration,
         ConnectionString = c.ConnectionName == "Appointments" ? SharedClinicDatabase.Connection(configuration, c.Id)
             : throw new InvalidOperationException("A managed clinic still uses a separate database. Consolidate its data and update its platform ConnectionName to Appointments; see docs/SHARED_DATABASE.md.")
@@ -100,11 +116,13 @@ public sealed class ClinicRegistry
         ConnectionString = SharedClinicDatabase.Connection(c, "main"),
         TimeZone = c["Scheduling:TimeZone"] ?? "Europe/Skopje",
         Discoverable = c.GetValue("Tenancy:Discoverable", true), Description = c["Tenancy:Description"], Address = c["Tenancy:Address"], Phone = c["Tenancy:Phone"],
-        ImportSourceDoctors = true, SeedDemoData = true,
+        ImportSourceDoctors = c.GetValue<bool>("Demo:ImportSourceDoctors") || c.GetValue<bool>("Demo:Enabled"), SeedDemoData = true,
         BootstrapEmail = c["Bootstrap:Email"], BootstrapPassword = c["Bootstrap:Password"]
     };
     public ClinicDefinition Resolve(string? id)
     {
+        RequireFresh();
+        if (id != null && unavailable.ContainsKey(id)) throw new RuleException("Клиниката е привремено недостапна.", 503);
         // Compatibility for existing single-clinic clients. Multiple clinics require explicit selection.
         if (string.IsNullOrEmpty(id))
         {

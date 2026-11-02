@@ -19,7 +19,7 @@ public sealed class MedicalService
     public int Version { get; set; } = 1;
 }
 public sealed record DoctorService(string DoctorId, string ServiceId);
-public record DoctorInput(string? Id, string Name, string SpecialtyId, string Subspecialty, bool Enabled, int Version = 0, bool? RequiresConfirmation = null);
+public record DoctorInput(string? Id, string Name, string SpecialtyId, string Subspecialty, bool Enabled, int Version = 0, bool? RequiresConfirmation = null, bool? StaffOnly = null);
 public record SpecialtyInput(string? Id, string Name, int Version = 0);
 public record ServiceInput(string? Id, string Name, string SpecialtyId, int DurationMinutes, bool Enabled, List<string> DoctorIds, int Version = 0);
 
@@ -63,6 +63,7 @@ public sealed class CatalogueService(IDemoStore store)
             if (input.Id != null) { Version(item.CatalogVersion, input.Version); item.CatalogVersion++; }
             item.Name = name; item.SpecialtyId = specialty.Id; item.Specialty = specialty.Name; item.Subspecialty = sub; item.Enabled = input.Enabled;
             if (input.RequiresConfirmation.HasValue) item.RequiresConfirmation = input.RequiresConfirmation.Value;
+            if (input.StaffOnly.HasValue) item.StaffOnly = input.StaffOnly.Value;
             if (input.Id == null) s.Doctors.Add(item);
             return item;
         });
