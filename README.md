@@ -223,6 +223,6 @@ cookie, database and tenant identifiers remain compatible with earlier releases.
 
 ## Appearance preferences
 
-Use **Изглед** below the workspace footer text to choose **Стандарден**, **Темна** (soft slate/teal) or **Живописна** (warm beige with brighter accents). Standard remains the first-visit default. Public, login and company pages also offer the selector at the bottom.
+Use **Изглед** below the workspace footer text to choose **Standard**, **Dark** (lighter slate canvas and high-contrast text) or **Vibrant** (subtle warm ivory with brighter accents). Standard remains the first-visit default. Public, login and company pages also offer the selector at the bottom.
 
 The preference is stored locally for that browser/site, survives navigation/reload and synchronizes between tabs on the same origin. It does not create a database record or API request. Blocked browser storage still allows switching on the current page; printing uses the standard palette. Branding images are preserved. Theme changes need **only a Web republish**, including all wwwroot assets; preserve existing server configuration. No database upgrade or API republish is required for this appearance update.

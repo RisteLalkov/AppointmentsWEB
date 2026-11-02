@@ -9,7 +9,7 @@
     document.documentElement.dataset.theme = theme;
     document.querySelectorAll("[data-theme-select]").forEach(select => { select.value = theme; });
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = { default: "#176c60", dark: "#243638", vibrant: "#f7eedf" }[theme];
+    if (meta) meta.content = { default: "#176c60", dark: "#354b4e", vibrant: "#faf6ef" }[theme];
   }
   let initial = "default";
   try { initial = localStorage.getItem(key); } catch { /* Storage may be disabled. */ }

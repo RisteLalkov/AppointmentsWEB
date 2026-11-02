@@ -22,7 +22,7 @@ const {w,d}=fixture();try{
  d.dispatchEvent(new w.Event('DOMContentLoaded'));
  const select=d.querySelector('select');select.value='dark';select.dispatchEvent(new w.Event('change',{bubbles:true}));
  check(w.localStorage.getItem('medtermin.theme')==='dark'&&d.documentElement.dataset.theme==='dark','Selection persists without a page reload');
- check(d.querySelector('meta').content==='#243638','Browser chrome follows chosen theme');
+ check(d.querySelector('meta').content==='#354b4e','Browser chrome follows chosen theme');
  w.dispatchEvent(new w.StorageEvent('storage',{key:'medtermin.theme',newValue:'vibrant'}));
  check(select.value==='vibrant'&&d.documentElement.dataset.theme==='vibrant','Other-tab changes synchronize');
  w.dispatchEvent(new w.StorageEvent('storage',{key:'medtermin.theme',newValue:'untrusted'}));
