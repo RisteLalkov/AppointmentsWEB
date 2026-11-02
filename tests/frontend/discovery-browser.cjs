@@ -140,7 +140,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await page.locator('.public-slot-link').first().click();
   await page.locator('#email').waitFor();
   check(page.url().includes('/Account/Login') && ['date=','time=','serviceId='].every(x=>new URL(page.url()).searchParams.get('returnUrl').includes(x)),'Public slot enters login with date, time and service continuation');
-  check(await page.locator('select').count()===0,'Login has no clinic selector');
+  check(await page.locator('.welcome-form form select').count()===0,'Login has no clinic selector');
   await noOverflow(page,'Mobile login');
   await page.setViewportSize({width:1440,height:1000});
   const navigationContext=await browser.newContext();
@@ -256,10 +256,12 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('#catalogue-form').isVisible(),'Specialty list preserves editing');
   await page.locator('#close-dialog').click();
   await page.locator('[data-page=patients]').click();
+  await page.waitForFunction(()=>document.querySelector('#page-label').textContent==='Пациенти');
 
   if(screenshots) await page.locator('#sidebar').screenshot({path:resolve(screenshots,'navigation-desktop.png')});
   const summary=page.locator('#catalogue-nav > summary');
   await summary.focus();await page.keyboard.press('Space');
+  await page.waitForFunction(()=>!document.querySelector('#catalogue-nav').open);
   check(!(await page.locator('#catalogue-nav').evaluate(e=>e.open)),'Management submenu collapses with keyboard');
   await page.keyboard.press('Space');
   check(await page.locator('#catalogue-nav').evaluate(e=>e.open),'Catalogue submenu opens with keyboard');

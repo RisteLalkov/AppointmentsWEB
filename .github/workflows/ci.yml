@@ -89,3 +89,4 @@ jobs:
           export TEST_API_DLL="$RUNNER_TEMP/medtermin-api/Appointments.Api.dll"
           export TEST_WEB_DLL="$RUNNER_TEMP/medtermin-web/Appointments.Web.dll"
           python tests/high_severity_integration.py
+          node tests/frontend/themes-browser.cjs

@@ -6,12 +6,15 @@
     <meta name="theme-color" content="#176c60" />
     <meta name="careline-clinic" content="@User.FindFirst("clinicId")?.Value" />
     <title>@ViewData["Title"] · МедТермин</title>
+    <script src="~/js/theme.js" asp-append-version="true"></script>
     <link rel="icon" href="~/favicon.svg" asp-append-version="true" type="image/svg+xml" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="~/css/themes.css" asp-append-version="true" />
 </head>
 <body>
     @RenderBody()
+    @if (ViewData["WorkspaceThemeSelector"] is not true) { <div class="page-theme-control"><partial name="_ThemeSelector" /></div> }
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <script src="~/js/validation-mk.js" asp-append-version="true"></script>
     <script src="~/js/password-visibility.js" asp-append-version="true"></script>

@@ -178,7 +178,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             status,_,h=anon.request(book)
             check(status==302 and '/Account/Login?' in h['Location'] and 'returnUrl=' in h['Location'],'Anonymous booking preserves a protected return action')
             status,html,_=anon.request(h['Location'])
-            check('<select' not in html and 'Внесете ги вашите податоци.' in html and 'Клиниката се препознава автоматски.' not in html,'Normal login has credentials only')
+            check('<select' not in re.search(r'<form[^>]*action="/Account/Login"[^>]*>(.*?)</form>',html,re.S)[1] and 'Внесете ги вашите податоци.' in html and 'Клиниката се препознава автоматски.' not in html,'Normal login has credentials only')
             check('Создајте пациентска сметка' in html and 'doctorId' in html,'Login offers registration while preserving selected doctor')
             check(anon.request('/Account/Login',{'Email':'p@test.test','Password':'Test-password-123'})[0]==400,'Login POST requires CSRF')
             csrf=anon.csrf('/Account/Login?returnUrl='+urllib.parse.quote(book))
@@ -266,6 +266,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             revoked_platform=False
             if os.environ.get('TEST_BROWSER_EXECUTABLE'):
                 subprocess.run(['node',str(root/'tests/frontend/discovery-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
+                subprocess.run(['node',str(root/'tests/frontend/themes-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
             print(f'\n{count}/{count} MVC discovery/company contract checks passed (stub API).',flush=True)
         except Exception:
             log.flush();log.seek(0);print(log.read());raise

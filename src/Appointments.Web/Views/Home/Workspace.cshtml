@@ -1,7 +1,7 @@
 @model DemoActor
 @inject Appointments.Web.Services.BackendSettings Backend
 @{ var isDemo = !Backend.UseApi || User.FindFirst("demo")?.Value == "True"; }
-@{ ViewData["Title"] = "Работен простор"; }
+@{ ViewData["Title"] = "Работен простор"; ViewData["WorkspaceThemeSelector"] = true; }
 <a class="skip-link" href="#main-content">Прескокни до содржината</a>
 <div class="app-shell">
     <aside class="sidebar" id="sidebar" tabindex="0" aria-label="Навигација и корисничка сметка">
@@ -48,7 +48,7 @@
     <div class="main-shell">
         <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Отвори или затвори навигација" aria-expanded="false">☰</button><span class="breadcrumb">Работен простор <span>/</span> <strong id="page-label">Преглед</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? "Рецепционер" : Model.Role.RoleLabel())@(isDemo ? " · Демо" : "")</small></div></div></header>
         <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> Се подготвува вашиот работен простор…</div></div></main>
-        <footer class="app-footer"><span>МедТермин <span class="muted">/</span> Повеќе спокој во секојдневието.</span><span>@(isDemo ? "Измислени пациенти · Заеднички демо-податоци" : "Вашите термини, на едно место.")</span></footer>
+        <footer class="app-footer"><span>МедТермин <span class="muted">/</span> Повеќе спокој во секојдневието.</span><div class="footer-preferences"><span>@(isDemo ? "Измислени пациенти · Заеднички демо-податоци" : "Вашите термини, на едно место.")</span><partial name="_ThemeSelector" /></div></footer>
     </div>
 </div>
 <dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">МЕДТЕРМИН</span><h2 id="dialog-title">Термин</h2></div><button class="icon-button" id="close-dialog" aria-label="Затвори прозорец">×</button></div><div id="dialog-content"></div></dialog>
