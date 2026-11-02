@@ -251,6 +251,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('.patient-card').count()>0,'Patients switch back to cards');
   if(screenshots)await page.locator('.patient-card').first().screenshot({path:resolve(screenshots,'patient-card-actions.png')});
   await page.locator('[data-page="catalogue/specialties"]').click();
+  await page.locator('#catalogue-search').waitFor();
   check(await page.locator('.table-wrap').isVisible() && await page.locator('[data-records-kind=catalogue-specialties]').count()===0,'Specialties use only list view');
   await page.locator('[data-catalogue-edit]').first().click();
   check(await page.locator('#catalogue-form').isVisible(),'Specialty list preserves editing');
@@ -270,7 +271,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('[data-page="catalogue/services"]').getAttribute('aria-current')==='page','Deep section marks active navigation');
   check(await page.locator('[data-catalogue-tab]').count()===0,'Management uses sidebar navigation without duplicate section tabs');
   check(await page.locator('[data-records-kind=catalogue-services]').count()===0,'Services have no view selector');
-  check(await page.locator('[data-page=calendar] svg rect').count()===1,'Sidebar calendar uses a calendar SVG icon');
+  check(await page.locator('[data-page=calendar] use[href$="#calendar-days"]').count()===1,'Sidebar calendar uses a calendar SVG icon');
   await page.locator('[data-page=doctors]').click();
   await page.locator('[data-records-kind=doctors][data-records-view=list]').click();
   check(await page.locator('#doctor-results table').isVisible() && !await page.locator('[data-doctor-edit=d01]').isVisible(),'Doctor list keeps management actions in a closed menu');

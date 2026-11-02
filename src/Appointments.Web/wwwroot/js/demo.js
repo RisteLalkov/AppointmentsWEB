@@ -1,4 +1,7 @@
+(() => {
 "use strict";
+const { t: tr, html, locale } = window.MedTerminI18n;
+const icon = window.MedTerminIcons.icon;
 const users = [...document.querySelectorAll("#demo-user option")].map((o) => ({
   value: o.value,
   text: o.textContent,
@@ -6,11 +9,11 @@ const users = [...document.querySelectorAll("#demo-user option")].map((o) => ({
 }));
 const descriptions = {
   Patient:
-    "Пронајдете лекар, изберете термин и следете ги сите закажувања на едно место.",
+    tr("Пронајдете лекар, изберете термин и следете ги сите закажувања на едно место."),
   Administrator:
-    "Организирајте го целиот ден. Пронајдете пациенти, закажете прегледи и управувајте со распоредите на лекарите.",
+    tr("Организирајте го целиот ден. Пронајдете пациенти, закажете прегледи и управувајте со распоредите на лекарите."),
   Doctor:
-    "Јасен преглед на вашиот ден, со сите термини и достапни периоди на едно место.",
+    tr("Јасен преглед на вашиот ден, со сите термини и достапни периоди на едно место."),
 };
 document
   .querySelectorAll("[data-role].role-tabs button, .role-tabs button")
@@ -31,3 +34,5 @@ function choose(role) {
   document.querySelector("#role-description").textContent = descriptions[role];
 }
 choose("Patient");
+
+})();

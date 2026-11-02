@@ -1,58 +1,58 @@
 @model DemoActor
 @inject Appointments.Web.Services.BackendSettings Backend
 @{ var isDemo = !Backend.UseApi || User.FindFirst("demo")?.Value == "True"; }
-@{ ViewData["Title"] = "Работен простор"; ViewData["WorkspaceThemeSelector"] = true; }
-<a class="skip-link" href="#main-content">Прескокни до содржината</a>
+@{ ViewData["Title"] = T("Работен простор"); ViewData["WorkspaceThemeSelector"] = true; }
+<a class="skip-link" href="#main-content">@T("Прескокни до содржината")</a>
 <div class="app-shell">
-    <aside class="sidebar" id="sidebar" tabindex="0" aria-label="Навигација и корисничка сметка">
+    <aside class="sidebar" id="sidebar" tabindex="0" aria-label="@T("Навигација и корисничка сметка")">
         <a class="brand" href="/"><partial name="_BrandMark" /> МедТермин<span class="brand-dot">.</span></a>
-        @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">КЛИНИКА</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
-        <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? "РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА" : Model.Role == DemoRole.Doctor ? "РАБОТЕН ПРОСТОР ЗА ЛЕКАР" : "РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ")</div>
-        <nav aria-label="Главна навигација" id="navigation">
-            <button class="nav-item active" data-page="overview"><span aria-hidden="true">▦</span> Преглед</button>
+        @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">@T("КЛИНИКА")</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
+        <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? T("РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА") : Model.Role == DemoRole.Doctor ? T("РАБОТЕН ПРОСТОР ЗА ЛЕКАР") : T("РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ"))</div>
+        <nav aria-label="@T("Главна навигација")" id="navigation">
+            <button class="nav-item active" data-page="overview"><span aria-hidden="true">@Icon("layout-dashboard")</span> @T("Преглед")</button>
             @if (Model.Role == DemoRole.Patient) {
-                <button class="nav-item" data-page="doctors"><span aria-hidden="true">✚</span> Пронајди лекар</button>
+                <button class="nav-item" data-page="doctors"><span aria-hidden="true">@Icon("stethoscope")</span> @T("Пронајди лекар")</button>
             } else {
-                <button class="nav-item" data-page="calendar"><svg class="nav-calendar-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M7 15h2m4 0h2M7 18h2m4 0h2"/></svg> Календар</button>
+                <button class="nav-item" data-page="calendar"><span class="nav-calendar-icon">@Icon("calendar-days")</span> @T("Календар")</button>
             }
-            <button class="nav-item" data-page="appointments"><span aria-hidden="true">◷</span> Термини</button>
-            @if (Model.Role == DemoRole.Patient) { <button class="nav-item" data-page="profile"><span aria-hidden="true">♧</span> Мој профил</button> }
+            <button class="nav-item" data-page="appointments"><span aria-hidden="true">@Icon("clock")</span> @T("Термини")</button>
+            @if (Model.Role == DemoRole.Patient) { <button class="nav-item" data-page="profile"><span aria-hidden="true">@Icon("user-round")</span> @T("Мој профил")</button> }
             @if (Model.Role != DemoRole.Patient) {
                 <details class="nav-group" id="catalogue-nav">
-                    <summary class="nav-item"><span aria-hidden="true">☷</span> Управување<svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg></summary>
-                    <div class="nav-submenu"><button class="nav-item nav-child" data-page="doctors">Лекари</button><button class="nav-item nav-child" data-page="patients">Пациенти</button>
-                        @if (Model.Role == DemoRole.Administrator) { <button class="nav-item nav-child" data-page="catalogue/specialties">Специјалности</button><button class="nav-item nav-child" data-page="catalogue/services">Услуги</button> }
+                    <summary class="nav-item"><span aria-hidden="true">@Icon("sliders-horizontal")</span> @T("Управување")<svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg></summary>
+                    <div class="nav-submenu"><button class="nav-item nav-child" data-page="doctors">@T("Лекари")</button><button class="nav-item nav-child" data-page="patients">@T("Пациенти")</button>
+                        @if (Model.Role == DemoRole.Administrator) { <button class="nav-item nav-child" data-page="catalogue/specialties">@T("Специјалности")</button><button class="nav-item nav-child" data-page="catalogue/services">@T("Услуги")</button> }
                     </div>
                 </details>
             }
-            @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="reports"><span aria-hidden="true">▥</span> Извештаи</button> }
+            @if (Model.Role == DemoRole.Administrator) { <button class="nav-item" data-page="reports"><span aria-hidden="true">@Icon("chart-no-axes-column")</span> @T("Извештаи")</button> }
             @if (Backend.UseApi && Model.Role == DemoRole.Administrator) {
-                <a class="nav-item" href="/Accounts"><span aria-hidden="true">♧</span> Сметки и пристап</a>
+                <a class="nav-item" href="/Accounts"><span aria-hidden="true">@Icon("user-round")</span> @T("Сметки и пристап")</a>
             }
         </nav>
         <div class="sidebar-bottom">
-            <div class="sidebar-account-actions"><a class="switch-user" href="/Discover"><span aria-hidden="true">⌕</span> Лекари и клиники</a>
+            <div class="sidebar-account-actions"><a class="switch-user" href="/Discover"><span aria-hidden="true">@Icon("search")</span> @T("Лекари и клиники")</a>
                 @if (Backend.DemoEnabled) {
-                    <a class="switch-user" href="/Demo"><span aria-hidden="true">⇄</span> Промени демо-корисник</a>
+                    <a class="switch-user" href="/Demo"><span aria-hidden="true">@Icon("arrow-left-right")</span> @T("Промени демо-корисник")</a>
                 }
                 @if (Backend.UseApi && !isDemo) {
-                    <a class="switch-user" href="/Account/Password"><span aria-hidden="true">⚿</span> Промени лозинка</a>
+                    <a class="switch-user" href="/Account/Password"><span aria-hidden="true">@Icon("key-round")</span> @T("Промени лозинка")</a>
                 }
                 <form asp-controller="Account" asp-action="Logout" method="post">
-                    <button class="switch-user logout-button" type="submit"><span aria-hidden="true">↪</span> Одјави се</button>
+                    <button class="switch-user logout-button" type="submit"><span aria-hidden="true">@Icon("log-out")</span> @T("Одјави се")</button>
                 </form>
-                <div class="demo-label"><span class="dot" aria-hidden="true"></span> @(isDemo ? "ДЕМО-РЕЖИМ" : "ПОВРЗАНО")</div>
+                <div class="demo-label"><span class="dot" aria-hidden="true"></span> @(isDemo ? T("ДЕМО-РЕЖИМ") : T("ПОВРЗАНО"))</div>
             </div>
         </div>
     </aside>
     <div class="main-shell">
-        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="Отвори или затвори навигација" aria-expanded="false">☰</button><span class="breadcrumb">Работен простор <span>/</span> <strong id="page-label">Преглед</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? "Рецепционер" : Model.Role.RoleLabel())@(isDemo ? " · Демо" : "")</small></div></div></header>
-        <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> Се подготвува вашиот работен простор…</div></div></main>
-        <footer class="app-footer"><span>МедТермин <span class="muted">/</span> Повеќе спокој во секојдневието.</span><div class="footer-preferences"><span>@(isDemo ? "Измислени пациенти · Заеднички демо-податоци" : "Вашите термини, на едно место.")</span><partial name="_ThemeSelector" /></div></footer>
+        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="@T("Отвори или затвори навигација")" aria-expanded="false">@Icon("menu")</button><span class="breadcrumb">@T("Работен простор") <span>/</span> <strong id="page-label">@T("Преглед")</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? T("Рецепционер") : Model.Role.RoleLabel())@(isDemo ? T(" · Демо") : "")</small></div></div></header>
+        <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> @T("Се подготвува вашиот работен простор…")</div></div></main>
+        <footer class="app-footer"><span>МедТермин <span class="muted">/</span> @T("Повеќе спокој во секојдневието.")</span><div class="footer-preferences"><span>@(isDemo ? T("Измислени пациенти · Заеднички демо-податоци") : T("Вашите термини, на едно место."))</span><partial name="_AppearancePreferences" /></div></footer>
     </div>
 </div>
-<dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">МЕДТЕРМИН</span><h2 id="dialog-title">Термин</h2></div><button class="icon-button" id="close-dialog" aria-label="Затвори прозорец">×</button></div><div id="dialog-content"></div></dialog>
-<dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-header"><h2 id="confirm-title">Потврдете ја постапката</h2></div><p id="confirm-message"></p><div class="dialog-actions"><button class="btn secondary" id="confirm-no">Задржи ја тековната состојба</button><button class="btn primary" id="confirm-yes">Потврди</button></div></dialog>
+<dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">@T("МЕДТЕРМИН")</span><h2 id="dialog-title">@T("Термин")</h2></div><button class="icon-button" id="close-dialog" aria-label="@T("Затвори прозорец")">@Icon("x")</button></div><div id="dialog-content"></div></dialog>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-header"><h2 id="confirm-title">@T("Потврдете ја постапката")</h2></div><p id="confirm-message"></p><div class="dialog-actions"><button class="btn secondary" id="confirm-no">@T("Задржи ја тековната состојба")</button><button class="btn primary" id="confirm-yes">@T("Потврди")</button></div></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div hidden id="csrf">@Html.AntiForgeryToken()</div>
 @section Scripts {

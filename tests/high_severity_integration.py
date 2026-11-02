@@ -149,6 +149,16 @@ with tempfile.TemporaryDirectory(prefix='careline-high-') as directory:
             doctors.append(d)
         profile=Client(api,identity='203.0.113.7').ok('/api/auth/register',dict(name='Ана Петрова',email='patient@high.test',password=password))
         patient=Client(api,identity='203.0.113.8').login('patient@high.test')
+        # Request-scoped language changes must not alter authorization, data or protocol values.
+        status,value,_=patient.request('/api/schedule/'+doctors[0]['id'],dict(version=1,durationMinutes=30,periods=[]),headers={'Accept-Language':'en-GB'})
+        check(status==403 and value['error']=='Your account does not have permission for this action.','English API permission error retains its 403 status')
+        def culture_error(language):
+            return admin.request('/api/schedule/'+doctors[0]['id'],dict(version=0,durationMinutes=30,periods=[]),headers={'Accept-Language':language})
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            english,macedonian=list(pool.map(culture_error,['en-GB','mk-MK']))
+        check(english[0]==409 and 'schedule' in english[1]['error'].lower() and macedonian[0]==409 and 'Распоредот' in macedonian[1]['error'],'Concurrent PostgreSQL API requests retain independent language and conflict semantics')
+        english_bootstrap=admin.request('/api/bootstrap',headers={'Accept-Language':'en-GB'})[1]
+        check(next(d for d in english_bootstrap['doctors'] if d['id']==doctors[0]['id'])['specialty']=='Кардиологија' and english_bootstrap['actor']['role']=='Administrator','English API keeps stored Cyrillic records and protocol role values unchanged')
         date=(dt.date.fromisoformat(admin.ok('/api/bootstrap')['today'])+dt.timedelta(days=10)).isoformat()
         def command(d,time_value='09:00'):
             return dict(doctorId=d['id'],patientId=profile['patientId'],date=date,time=time_value,durationMinutes=30,requestId=uuid.uuid4().hex)

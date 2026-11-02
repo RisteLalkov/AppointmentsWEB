@@ -65,7 +65,7 @@ public sealed class DemoState
     public List<Appointment> Appointments { get; set; } = [];
     public List<AppointmentHistoryEntry> AppointmentHistory { get; set; } = [];
 }
-public sealed class RuleException(string message, int statusCode = 400) : Exception(message)
+public sealed class RuleException(string message, int statusCode = 400) : Exception(UiText.T(message))
 {
     public int StatusCode { get; } = statusCode;
 }

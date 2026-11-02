@@ -362,6 +362,34 @@ Test("Reception controls booking restrictions independently of imported source p
     d=catalogue.SaveDoctor(admin,new(d.Id,d.Name,specialty.Id,"",true,d.CatalogVersion,RequiresConfirmation:false,StaffOnly:false));
     True(!d.StaffOnly);True(!d.RequiresConfirmation);
 });
+Test("Interface translations preserve data, whitespace, parameters and error codes", () => {
+    var culture = System.Globalization.CultureInfo.CurrentCulture;
+    var uiCulture = System.Globalization.CultureInfo.CurrentUICulture;
+    try {
+        System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-GB");
+        System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-GB");
+        Equal("Doctor", UiText.T("Лекар"));
+        Equal(" Doctor ", UiText.T(" Лекар "));
+        Equal("Enter between 2 and 80 characters.", UiText.T("Внесете од 2 до {0} знаци.", 80));
+        Equal("Јован Нешковски", UiText.T("Јован Нешковски"));
+        Equal("Clinic Јован is temporarily unavailable", UiText.T("Clinic {0} is temporarily unavailable", "Јован"));
+        var error = new RuleException("Терминот е променет во друга сесија.", 409);
+        Equal(409, error.StatusCode); Equal("The appointment was changed in another session.", error.Message);
+        System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("mk-MK");
+        Equal("Лекар", UiText.T("Лекар"));
+        Equal("Терминот е променет во друга сесија.", new RuleException("Терминот е променет во друга сесија.", 409).Message);
+    } finally {
+        System.Globalization.CultureInfo.CurrentCulture = culture;
+        System.Globalization.CultureInfo.CurrentUICulture = uiCulture;
+    }
+});
+Test("Concurrent requests keep their own interface language", () => {
+    Parallel.For(0, 50, index => {
+        var english = index % 2 == 0;
+        System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(english ? "en-GB" : "mk-MK");
+        Equal(english ? "Doctor" : "Лекар", UiText.T("Лекар"));
+    });
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

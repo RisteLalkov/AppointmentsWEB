@@ -1,6 +1,6 @@
 @using Appointments.Contracts
 @{
-    ViewData["Title"] = "Пронајдете ја вашата грижа";
+    ViewData["Title"] = T("Пронајдете ја вашата грижа");
     var q = ViewData["Query"] as DiscoveryQuery ?? new();
     var view = ViewData["DirectoryView"] as string ?? "doctors";
     var doctors = ViewData["Doctors"] as PublicPage<PublicDoctor>;
@@ -9,11 +9,11 @@
     if (clinic != null) ViewData["Title"] = clinic.Name;
     var total = doctors?.Total ?? clinics?.Total ?? 0;
     var filters = new List<(string Key, string Label, string Value)>();
-    if (!string.IsNullOrWhiteSpace(q.Search)) filters.Add(("Search", "Пребарување", q.Search));
-    if (!string.IsNullOrWhiteSpace(q.ClinicId)) filters.Add(("ClinicId", "Само во", clinic?.Name ?? q.ClinicId));
-    if (!string.IsNullOrWhiteSpace(q.Clinic)) filters.Add(("Clinic", "Клиника", q.Clinic));
-    if (!string.IsNullOrWhiteSpace(q.Specialty)) filters.Add(("Specialty", "Специјалност", q.Specialty));
-    if (!string.IsNullOrWhiteSpace(q.Service)) filters.Add(("Service", "Услуга", q.Service));
+    if (!string.IsNullOrWhiteSpace(q.Search)) filters.Add(("Search", T("Пребарување"), q.Search));
+    if (!string.IsNullOrWhiteSpace(q.ClinicId)) filters.Add(("ClinicId", T("Само во"), clinic?.Name ?? q.ClinicId));
+    if (!string.IsNullOrWhiteSpace(q.Clinic)) filters.Add(("Clinic", T("Клиника"), q.Clinic));
+    if (!string.IsNullOrWhiteSpace(q.Specialty)) filters.Add(("Specialty", T("Специјалност"), q.Specialty));
+    if (!string.IsNullOrWhiteSpace(q.Service)) filters.Add(("Service", T("Услуга"), q.Service));
     var refinements = filters.Count(f => f.Key != "Search");
     string DirectoryUrl(string? remove = null, int page = 1) => Url.Action("Index", "Discover", new {
         view, Search = remove == "Search" ? null : q.Search,
@@ -34,21 +34,21 @@
     </div>
     <section class="discovery-hero @(clinic != null ? "clinic-profile-hero" : "")" aria-labelledby="discovery-heading">
         <div class="discovery-copy">
-            <span class="eyebrow discovery-eyebrow"><span aria-hidden="true"></span> @(clinic != null ? "ЗАПОЗНАЈТЕ ЈА КЛИНИКАТА" : "ГРИЖА ШТО НÈ ПОВРЗУВА")</span>
-            <h1 id="discovery-heading">@if (clinic != null) { @clinic.Name } else { <text>Вистинскиот лекар.<br /><span>Поблиску до вас.</span></text> }</h1>
-            <p>@(clinic?.Description ?? "Пронајдете лекар или клиника, запознајте ги услугите и направете го следниот чекор кон вашата грижа.")</p>
+            <span class="eyebrow discovery-eyebrow"><span aria-hidden="true"></span> @(clinic != null ? T("ЗАПОЗНАЈТЕ ЈА КЛИНИКАТА") : T("ГРИЖА ШТО НÈ ПОВРЗУВА"))</span>
+            <h1 id="discovery-heading">@if (clinic != null) { @clinic.Name } else { <text>@T("Вистинскиот лекар.")<br /><span>@T("Поблиску до вас.")</span></text> }</h1>
+            <p>@(clinic?.Description ?? T("Пронајдете лекар или клиника, запознајте ги услугите и направете го следниот чекор кон вашата грижа."))</p>
             @if (clinic != null) { <partial name="_ClinicContact" model="clinic" /> }
-            <div class="discovery-hero-actions"><a class="btn primary" href="#directory">@(clinic != null ? "Разгледајте ги лекарите" : "Започнете со пребарување") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v16m-6-6 6 6 6-6" /></svg></a>
-            @if (clinic != null) { <a href="/Discover?view=clinics#directory">← Сите клиники</a> }
+            <div class="discovery-hero-actions"><a class="btn primary" href="#directory">@(clinic != null ? T("Разгледајте ги лекарите") : T("Започнете со пребарување")) <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v16m-6-6 6 6 6-6" /></svg></a>
+            @if (clinic != null) { <a href="/Discover?view=clinics#directory">@Icon("arrow-left") @T("Сите клиники")</a> }
             </div>
-            <p class="discovery-reassurance"><span aria-hidden="true">✓</span> Разгледувајте слободно. Најавете се кога ќе сакате да закажете.</p>
+            <p class="discovery-reassurance"><span aria-hidden="true">@Icon("check")</span> @T("Разгледувајте слободно. Најавете се кога ќе сакате да закажете.")</p>
         </div>
         @if (clinic != null) { <partial name="_ClinicMap" model="clinic" /> }
         else {
         <div class="discovery-art" data-discovery-art>
             <div class="care-glow care-glow-mint" aria-hidden="true"></div>
             <div class="care-glow care-glow-lilac" aria-hidden="true"></div>
-            <div class="care-art-heading" aria-hidden="true"><span class="care-art-dot"></span> МАЛ ЧЕКОР. ПОВЕЌЕ СПОКОЈ.</div>
+            <div class="care-art-heading" aria-hidden="true"><span class="care-art-dot"></span> @T("МАЛ ЧЕКОР. ПОВЕЌЕ СПОКОЈ.")</div>
             <svg class="care-flow" viewBox="0 0 520 340" fill="none" aria-hidden="true">
                 <defs>
                     <linearGradient id="care-flow-gradient" x1="30" y1="240" x2="480" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#087969" stop-opacity=".1" /><stop offset=".4" stop-color="#52ad99" /><stop offset=".75" stop-color="#8d80b9" /><stop offset="1" stop-color="#b8abdc" stop-opacity=".15" /></linearGradient>
@@ -60,111 +60,111 @@
                 <circle class="care-flow-node" cx="155" cy="104" r="5" /><circle class="care-flow-node care-flow-node-violet" cx="300" cy="240" r="5" />
             </svg>
             <div class="care-seal" aria-hidden="true"><img class="logo-symbol" src="~/images/company-mark.svg" asp-append-version="true" width="44" height="44" alt="" /></div>
-            <ol class="care-steps" aria-label="Чекори до вашата грижа">
-                <li class="care-step"><span>01</span><div><strong>Пронајдете</strong><small>Лекар</small></div></li>
-                <li class="care-step"><span>02</span><div><strong>Запознајте</strong><small>Клиники и услуги</small></div></li>
-                <li class="care-step"><span>03</span><div><strong>Продолжете</strong><small>Кон вашиот термин</small></div></li>
+            <ol class="care-steps" aria-label="@T("Чекори до вашата грижа")">
+                <li class="care-step"><span>01</span><div><strong>@T("Пронајдете")</strong><small>@T("Лекар")</small></div></li>
+                <li class="care-step"><span>02</span><div><strong>@T("Запознајте")</strong><small>@T("Клиники и услуги")</small></div></li>
+                <li class="care-step"><span>03</span><div><strong>@T("Продолжете")</strong><small>@T("Кон вашиот термин")</small></div></li>
             </ol>
-            <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false" hidden>Паузирај анимација</button>
+            <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false" hidden>@T("Паузирај анимација")</button>
         </div>
         }
     </section>
     <section id="directory" class="discovery-directory" aria-labelledby="directory-title">
-        <div class="public-section-heading"><div><span class="eyebrow">ПРЕБАРУВАЊЕ</span><h2 id="directory-title">@(clinic != null ? "Лекари во клиниката" : view == "clinics" ? "Пронајдете клиника" : "Пронајдете лекар")</h2></div>
-            <nav class="chip-tabs discovery-tabs" aria-label="Вид на пребарување"><a class="@(view == "doctors" ? "active" : "")" href="/Discover?view=doctors#directory" aria-current="@(view == "doctors" ? "page" : "false")">Лекари</a><a class="@(view == "clinics" ? "active" : "")" href="/Discover?view=clinics#directory" aria-current="@(view == "clinics" ? "page" : "false")">Клиники</a></nav>
+        <div class="public-section-heading"><div><span class="eyebrow">@T("ПРЕБАРУВАЊЕ")</span><h2 id="directory-title">@(clinic != null ? T("Лекари во клиниката") : view == "clinics" ? T("Пронајдете клиника") : T("Пронајдете лекар"))</h2></div>
+            <nav class="chip-tabs discovery-tabs" aria-label="@T("Вид на пребарување")"><a class="@(view == "doctors" ? "active" : "")" href="/Discover?view=doctors#directory" aria-current="@(view == "doctors" ? "page" : "false")">@T("Лекари")</a><a class="@(view == "clinics" ? "active" : "")" href="/Discover?view=clinics#directory" aria-current="@(view == "clinics" ? "page" : "false")">@T("Клиники")</a></nav>
         </div>
         <div class="card discovery-search-panel">
             @* A new broad search deliberately omits ALL previous refinements, including ClinicId. *@
             <form method="get" action="/Discover#directory" class="discovery-search" id="discovery-search" role="search">
                 <input type="hidden" name="view" value="@view" />
-                <div class="field"><label for="search">@(view == "clinics" ? "Која клиника ја барате?" : "Кого или што барате?")</label>
-                    <div class="discovery-input"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input type="search" id="search" name="Search" value="@q.Search" maxlength="100" placeholder="@(view == "clinics" ? "Внесете цело име или дел од името…" : "Име на лекар, клиника, специјалност или услуга…")" aria-describedby="@(view == "clinics" ? "search-help" : null)" /></div>
+                <div class="field"><label for="search">@(view == "clinics" ? T("Која клиника ја барате?") : T("Кого или што барате?"))</label>
+                    <div class="discovery-input"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input type="search" id="search" name="Search" value="@q.Search" maxlength="100" placeholder="@(view == "clinics" ? T("Внесете цело име или дел од името…") : T("Име на лекар, клиника, специјалност или услуга…"))" aria-describedby="@(view == "clinics" ? "search-help" : null)" /></div>
                 </div>
-                <button class="btn primary" type="submit">Пребарај <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></button>
+                <button class="btn primary" type="submit">@T("Пребарај") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></button>
             </form>
-            @if (view == "clinics") { <p id="search-help" class="discovery-search-help">Пребарувајте низ сите јавни клиники, со цело име или само дел од него.</p> }
+            @if (view == "clinics") { <p id="search-help" class="discovery-search-help">@T("Пребарувајте низ сите јавни клиники, со цело име или само дел од него.")</p> }
             @if (view == "doctors") {
                 <details class="discovery-refinements" open="@(refinements > 0)">
-                    <summary>Дополнителни филтри <span class="discovery-filter-count">@(refinements > 0 ? refinements + " активни" : "незадолжително")</span></summary>
+                    <summary>@T("Дополнителни филтри") <span class="discovery-filter-count">@(refinements > 0 ? refinements + T(" активни") : T("незадолжително"))</span></summary>
                     <form method="get" action="/Discover#directory" class="discovery-refine-form" id="discovery-refine">
                         <input type="hidden" name="view" value="doctors" /><input type="hidden" name="Search" value="@q.Search" />
-                        @if (!string.IsNullOrWhiteSpace(q.ClinicId)) { <input type="hidden" name="ClinicId" value="@q.ClinicId" /><p class="discovery-scope">Само во: <strong>@(clinic?.Name ?? q.ClinicId)</strong> · <a href="@DirectoryUrl("ClinicId")">Пребарај во сите клиники</a></p> }
-                        <div class="field"><label for="clinic-search">Клиника</label><input id="clinic-search" name="Clinic" value="@q.Clinic" maxlength="100" placeholder="Сите клиники" /></div>
-                        <div class="field"><label for="specialty">Специјалност</label><input id="specialty" name="Specialty" value="@q.Specialty" maxlength="100" placeholder="Сите специјалности" /></div>
-                        <div class="field"><label for="service">Услуга</label><input id="service" name="Service" value="@q.Service" maxlength="100" placeholder="Сите услуги" /></div>
-                        <button class="btn secondary" type="submit">Примени филтри</button>
+                        @if (!string.IsNullOrWhiteSpace(q.ClinicId)) { <input type="hidden" name="ClinicId" value="@q.ClinicId" /><p class="discovery-scope">@T("Само во:") <strong>@(clinic?.Name ?? q.ClinicId)</strong> · <a href="@DirectoryUrl("ClinicId")">@T("Пребарај во сите клиники")</a></p> }
+                        <div class="field"><label for="clinic-search">@T("Клиника")</label><input id="clinic-search" name="Clinic" value="@q.Clinic" maxlength="100" placeholder="@T("Сите клиники")" /></div>
+                        <div class="field"><label for="specialty">@T("Специјалност")</label><input id="specialty" name="Specialty" value="@q.Specialty" maxlength="100" placeholder="@T("Сите специјалности")" /></div>
+                        <div class="field"><label for="service">@T("Услуга")</label><input id="service" name="Service" value="@q.Service" maxlength="100" placeholder="@T("Сите услуги")" /></div>
+                        <button class="btn secondary" type="submit">@T("Примени филтри")</button>
                     </form>
                 </details>
             }
         </div>
         @if (filters.Count > 0) {
-            <nav class="discovery-active-filters" aria-label="Активни филтри">
-                @foreach (var f in filters) { <a class="discovery-filter-chip" data-filter="@f.Key" href="@DirectoryUrl(f.Key)" aria-label="Отстрани филтер: @f.Label — @f.Value"><span>@f.Label: <strong>@f.Value</strong></span><span aria-hidden="true">×</span></a> }
-                <a class="discovery-clear" href="@resetUrl">Исчисти сè</a>
+            <nav class="discovery-active-filters" aria-label="@T("Активни филтри")">
+                @foreach (var f in filters) { <a class="discovery-filter-chip" data-filter="@f.Key" href="@DirectoryUrl(f.Key)" aria-label="@T("Отстрани филтер: {0} — {1}", f.Label, f.Value)"><span>@f.Label: <strong>@f.Value</strong></span><span aria-hidden="true">@Icon("x")</span></a> }
+                <a class="discovery-clear" href="@resetUrl">@T("Исчисти сè")</a>
             </nav>
         }
-        @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error <a href="@DirectoryUrl()">Обидете се повторно</a></div> }
+        @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error <a href="@DirectoryUrl()">@T("Обидете се повторно")</a></div> }
         else if (total == 0) {
-            <div class="card empty-state discovery-empty"><span class="discovery-empty-symbol" aria-hidden="true">⌕</span><h3>Нема резултати за ова пребарување.</h3><p>Обидете се со дел од името или отстранете некој од филтрите.</p><a class="btn secondary" href="@resetUrl">@(view == "clinics" ? "Прикажи ги сите клиники" : "Прикажи ги сите лекари")</a></div>
+            <div class="card empty-state discovery-empty"><span class="discovery-empty-symbol" aria-hidden="true">@Icon("search")</span><h3>@T("Нема резултати за ова пребарување.")</h3><p>@T("Обидете се со дел од името или отстранете некој од филтрите.")</p><a class="btn secondary" href="@resetUrl">@(view == "clinics" ? T("Прикажи ги сите клиники") : T("Прикажи ги сите лекари"))</a></div>
         } else {
-            <div class="discovery-results-heading"><p class="results-count"><strong>@total</strong> @(view == "clinics" ? (total == 1 ? "клиника" : "клиники") : (total == 1 ? "лекар" : "лекари"))</p><span>Страница @q.Page од @((total + q.PageSize - 1) / q.PageSize)</span></div>
+            <div class="discovery-results-heading"><p class="results-count"><strong>@total</strong> @(view == "clinics" ? (total == 1 ? T("клиника") : T("клиники")) : (total == 1 ? T("лекар") : T("лекари")))</p><span>@T("Страница") @q.Page @T("од") @((total + q.PageSize - 1) / q.PageSize)</span></div>
             <div class="doctor-grid public-grid discovery-grid">
                 @if (clinics != null) { foreach (var c in clinics.Items) {
-                    <article class="card public-card discovery-card"><div class="discovery-card-top"><span class="avatar tone-1" aria-hidden="true">✚</span><span class="discovery-card-label">КЛИНИКА</span></div><h3>@c.Name</h3>
+                    <article class="card public-card discovery-card"><div class="discovery-card-top"><span class="avatar tone-1" aria-hidden="true">@Icon("stethoscope")</span><span class="discovery-card-label">@T("КЛИНИКА")</span></div><h3>@c.Name</h3>
                         @if (!string.IsNullOrWhiteSpace(c.Description)) { <p class="discovery-card-description">@c.Description</p> }
                         @if (!string.IsNullOrWhiteSpace(c.Address)) { <p class="muted">@c.Address</p> }
-                        <a class="btn secondary" asp-action="Clinic" asp-route-id="@c.Id" aria-label="Клиника и лекари: @c.Name">Клиника и лекари <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
+                        <a class="btn secondary" asp-action="Clinic" asp-route-id="@c.Id" aria-label="@T("Клиника и лекари: {0}", c.Name)">@T("Клиника и лекари") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
                     </article>
                 } }
                 @if (doctors != null) { foreach (var d in doctors.Items) {
-                    <article class="card public-card discovery-card"><div class="discovery-card-top"><span class="avatar tone-2" aria-hidden="true">✚</span><span class="discovery-card-label">ЛЕКАР</span></div><h3>@d.Name</h3><p class="specialty">@d.Specialty</p>
+                    <article class="card public-card discovery-card"><div class="discovery-card-top"><span class="avatar tone-2" aria-hidden="true">@Icon("stethoscope")</span><span class="discovery-card-label">@T("ЛЕКАР")</span></div><h3>@d.Name</h3><p class="specialty">@d.Specialty</p>
                         <a class="public-clinic-link" asp-action="Clinic" asp-route-id="@d.Clinic.Id">@d.Clinic.Name <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
                         @if (!string.IsNullOrWhiteSpace(d.Subspecialty)) { <p class="discovery-subspecialty">@d.Subspecialty</p> }
-                        @if (d.Services.Count > 0) { <ul class="discovery-service-tags" aria-label="Услуги">@foreach (var s in d.Services.Take(2)) { <li>@s.Name</li> }@if (d.Services.Count > 2) { <li>+@(d.Services.Count - 2) во профилот</li> }</ul> }
-                        <a class="btn secondary" asp-action="Doctor" asp-route-clinicId="@d.Clinic.Id" asp-route-id="@d.Id" aria-label="Види профил: @d.Name">Види профил <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
+                        @if (d.Services.Count > 0) { <ul class="discovery-service-tags" aria-label="@T("Услуги")">@foreach (var s in d.Services.Take(2)) { <li>@s.Name</li> }@if (d.Services.Count > 2) { <li>+@(d.Services.Count - 2) @T("во профилот")</li> }</ul> }
+                        <a class="btn secondary" asp-action="Doctor" asp-route-clinicId="@d.Clinic.Id" asp-route-id="@d.Id" aria-label="@T("Види профил: {0}", d.Name)">@T("Види профил") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
                     </article>
                 } }
             </div>
-            <nav class="public-pagination" aria-label="Страници со резултати">
-                @if (q.Page > 1) { <a class="btn secondary" href="@DirectoryUrl(page: q.Page - 1)">← Претходна</a> }
-                @if (q.Page * q.PageSize < total && q.Page < 100) { <a class="btn secondary" href="@DirectoryUrl(page: q.Page + 1)">Следна →</a> }
+            <nav class="public-pagination" aria-label="@T("Страници со резултати")">
+                @if (q.Page > 1) { <a class="btn secondary" href="@DirectoryUrl(page: q.Page - 1)">@Icon("arrow-left") @T("Претходна")</a> }
+                @if (q.Page * q.PageSize < total && q.Page < 100) { <a class="btn secondary" href="@DirectoryUrl(page: q.Page + 1)">@T("Следна") @Icon("arrow-right")</a> }
             </nav>
         }
     </section>
     <section class="discovery-benefits" aria-labelledby="benefits-title">
-        <div class="benefits-heading"><div><span class="eyebrow">ЗОШТО МЕДТЕРМИН</span><h2 id="benefits-title">Повеќе време за грижата.<br /><span>Помалку за организацијата.</span></h2></div><p>Од првото пребарување до секојдневниот распоред — сè што ви треба за полесно закажување.</p></div>
+        <div class="benefits-heading"><div><span class="eyebrow">@T("ЗОШТО МЕДТЕРМИН")</span><h2 id="benefits-title">@T("Повеќе време за грижата.")<br /><span>@T("Помалку за организацијата.")</span></h2></div><p>@T("Од првото пребарување до секојдневниот распоред — сè што ви треба за полесно закажување.")</p></div>
         <div class="benefits-grid">
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></span><h3>Лесно пронаоѓање</h3><p>Лекари, клиники, специјалности и услуги — пребарувајте од едно место.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4 3 3 5-5"/></svg></span><h3>Онлајн закажување</h3><p>Изберете лекар, услуга и слободен термин што ви одговара.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v17h17M9 15v-4m5 4V7m5 8v-6"/></svg></span><h3>Прегледни извештаи</h3><p>Следете ги термините по лекар, специјалност или услуга за избраниот период.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span><h3>Заеднички календар</h3><p>Докторите и рецепцијата имаат јасен преглед на распоредот и термините.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Слободни термини</h3><p>Достапните термини се пресметуваат според распоредот и времетраењето на услугата.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 10-13h-8l1-7Z"/></svg></span><h3>Распоред по ваша мерка</h3><p>Поставете работно време, паузи и отсуства за секој лекар.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h8m4 0h6M3 12h2m4 0h12M3 18h12m4 0h2"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></span><h3>Контрола врз услугите</h3><p>Уредувајте ги услугите, нивното времетраење и лекарите што ги извршуваат.</p></article>
-            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="4"/><path d="M3 21v-2a6 6 0 0 1 6-6h2m4 5 2 2 4-5"/></svg></span><h3>Грижа со континуитет</h3><p>Пациентите ги гледаат своите термини, а клиниката ги има потребните податоци на едно место.</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></span><h3>@T("Лесно пронаоѓање")</h3><p>@T("Лекари, клиники, специјалности и услуги — пребарувајте од едно место.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4 3 3 5-5"/></svg></span><h3>@T("Онлајн закажување")</h3><p>@T("Изберете лекар, услуга и слободен термин што ви одговара.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v17h17M9 15v-4m5 4V7m5 8v-6"/></svg></span><h3>@T("Прегледни извештаи")</h3><p>@T("Следете ги термините по лекар, специјалност или услуга за избраниот период.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span><h3>@T("Заеднички календар")</h3><p>@T("Докторите и рецепцијата имаат јасен преглед на распоредот и термините.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>@T("Слободни термини")</h3><p>@T("Достапните термини се пресметуваат според распоредот и времетраењето на услугата.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 10-13h-8l1-7Z"/></svg></span><h3>@T("Распоред по ваша мерка")</h3><p>@T("Поставете работно време, паузи и отсуства за секој лекар.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h8m4 0h6M3 12h2m4 0h12M3 18h12m4 0h2"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></span><h3>@T("Контрола врз услугите")</h3><p>@T("Уредувајте ги услугите, нивното времетраење и лекарите што ги извршуваат.")</p></article>
+            <article class="benefit-card"><span class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="4"/><path d="M3 21v-2a6 6 0 0 1 6-6h2m4 5 2 2 4-5"/></svg></span><h3>@T("Грижа со континуитет")</h3><p>@T("Пациентите ги гледаат своите термини, а клиниката ги има потребните податоци на едно место.")</p></article>
         </div>
     </section>
     <section class="discovery-closing" aria-labelledby="closing-title">
         <div class="discovery-closing-orbit" aria-hidden="true"><span><img class="logo-symbol" src="~/images/company-mark.svg" asp-append-version="true" width="48" height="48" alt="" /></span></div>
-        <div><span class="eyebrow">ВАШИОТ СЛЕДЕН ЧЕКОР</span><h2 id="closing-title">Помалку барање.<br /><span>Повеќе спокој.</span></h2><p>Лекари, клиники и услуги — поврзани на едно место.</p></div>
-        <a class="btn" href="#directory">Пронајдете го вашиот лекар <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
+        <div><span class="eyebrow">@T("ВАШИОТ СЛЕДЕН ЧЕКОР")</span><h2 id="closing-title">@T("Помалку барање.")<br /><span>@T("Повеќе спокој.")</span></h2><p>@T("Лекари, клиники и услуги — поврзани на едно место.")</p></div>
+        <a class="btn" href="#directory">@T("Пронајдете го вашиот лекар") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a>
     </section>
-    <footer class="discovery-footer" aria-label="Информации и навигација">
+    <footer class="discovery-footer" aria-label="@T("Информации и навигација")">
         <div class="discovery-footer-main">
             <div class="footer-intro">
                 <a class="brand" href="/Discover"><partial name="_BrandMark" /> МедТермин<span class="brand-dot">.</span></a>
-                <p>Повеќе спокој во секојдневието.<br />Вашата грижа, на едно место.</p>
-                <a class="footer-company" href="https://www.codex.mk/en/home/" target="_blank" rel="noopener noreferrer"><span>Развиено од</span><img class="footer-codex-logo" src="~/images/codex-computers.png" asp-append-version="true" width="180" height="70" alt="CODEX Computers" /></a>
+                <p>@T("Повеќе спокој во секојдневието.")<br />@T("Вашата грижа, на едно место.")</p>
+                <a class="footer-company" href="https://www.codex.mk/en/home/" target="_blank" rel="noopener noreferrer"><span>@T("Развиено од")</span><img class="footer-codex-logo" src="~/images/codex-computers.png" asp-append-version="true" width="180" height="70" alt="CODEX Computers" /></a>
             </div>
-            <nav class="footer-links" aria-label="Разгледајте"><h2>Разгледајте</h2><a href="/Discover?view=doctors#directory">Пронајдете лекар</a><a href="/Discover?view=clinics#directory">Клиники</a><a href="#benefits-title">Зошто МедТермин</a></nav>
-            <nav class="footer-links" aria-label="Вашата сметка"><h2>Вашата сметка</h2><a href="/Account/Login">Најавете се</a><a href="/Account/Register">Создајте сметка</a><a href="https://www.codex.mk/en/home/" target="_blank" rel="noopener noreferrer">За компанијата</a></nav>
-            <div class="footer-connect"><h2>Останете поврзани</h2><p>Следете ги новостите од CODEX.</p><div class="footer-socials" aria-label="Социјални мрежи на CODEX">
-                <a class="footer-social" href="https://www.facebook.com/codex.mk/" target="_blank" rel="noopener noreferrer" aria-label="CODEX на Facebook" title="Facebook"><svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M14 22v-9h3l.5-4H14V7c0-1.2.4-2 2-2h2V1.4A24 24 0 0 0 15 1c-3 0-5 1.9-5 5.3V9H7v4h3v9h4Z"/></svg></a>
-                <a class="footer-social" href="https://www.instagram.com/codexcomputers/" target="_blank" rel="noopener noreferrer" aria-label="CODEX на Instagram" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".7" fill="currentColor"/></svg></a>
-                <a class="footer-social" href="https://www.linkedin.com/company/codex-computers/posts/" target="_blank" rel="noopener noreferrer" aria-label="CODEX на LinkedIn" title="LinkedIn"><svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><path d="M3 9h4v12H3zm7 0h4v1.7c.7-1.2 1.8-2 3.4-2 3 0 3.6 2 3.6 4.6V21h-4v-6c0-1.4-.1-2.5-1.5-2.5S14 13.6 14 15v6h-4Z"/></svg></a>
+            <nav class="footer-links" aria-label="@T("Разгледајте")"><h2>@T("Разгледајте")</h2><a href="/Discover?view=doctors#directory">@T("Пронајдете лекар")</a><a href="/Discover?view=clinics#directory">@T("Клиники")</a><a href="#benefits-title">@T("Зошто МедТермин")</a></nav>
+            <nav class="footer-links" aria-label="@T("Вашата сметка")"><h2>@T("Вашата сметка")</h2><a href="/Account/Login">@T("Најавете се")</a><a href="/Account/Register">@T("Создајте сметка")</a><a href="https://www.codex.mk/en/home/" target="_blank" rel="noopener noreferrer">@T("За компанијата")</a></nav>
+            <div class="footer-connect"><h2>@T("Останете поврзани")</h2><p>@T("Следете ги новостите од CODEX.")</p><div class="footer-socials" aria-label="@T("Социјални мрежи на CODEX")">
+                <a class="footer-social" href="https://www.facebook.com/codex.mk/" target="_blank" rel="noopener noreferrer" aria-label="@T("CODEX на Facebook")" title="Facebook"><svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M14 22v-9h3l.5-4H14V7c0-1.2.4-2 2-2h2V1.4A24 24 0 0 0 15 1c-3 0-5 1.9-5 5.3V9H7v4h3v9h4Z"/></svg></a>
+                <a class="footer-social" href="https://www.instagram.com/codexcomputers/" target="_blank" rel="noopener noreferrer" aria-label="@T("CODEX на Instagram")" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".7" fill="currentColor"/></svg></a>
+                <a class="footer-social" href="https://www.linkedin.com/company/codex-computers/posts/" target="_blank" rel="noopener noreferrer" aria-label="@T("CODEX на LinkedIn")" title="LinkedIn"><svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><path d="M3 9h4v12H3zm7 0h4v1.7c.7-1.2 1.8-2 3.4-2 3 0 3.6 2 3.6 4.6V21h-4v-6c0-1.4-.1-2.5-1.5-2.5S14 13.6 14 15v6h-4Z"/></svg></a>
             </div></div>
         </div>
-        <div class="discovery-footer-bottom"><span>© @DateTime.UtcNow.Year МедТермин · CODEX</span><div class="footer-legal"><span aria-disabled="true">Приватност <small>Наскоро</small></span><span aria-disabled="true">Услови за користење <small>Наскоро</small></span></div><a href="#main-content" class="footer-back-top">На почеток <span aria-hidden="true">↑</span></a></div>
+        <div class="discovery-footer-bottom"><span>© @DateTime.UtcNow.Year @T("МедТермин · CODEX")</span><div class="footer-legal"><span aria-disabled="true">@T("Приватност") <small>@T("Наскоро")</small></span><span aria-disabled="true">@T("Услови за користење") <small>@T("Наскоро")</small></span></div><a href="#main-content" class="footer-back-top">@T("На почеток") <span aria-hidden="true">@Icon("arrow-up")</span></a></div>
     </footer>
 </main>
 @section Scripts { <script src="~/js/discover.js" asp-append-version="true"></script> }

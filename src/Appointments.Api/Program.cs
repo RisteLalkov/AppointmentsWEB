@@ -65,7 +65,7 @@ builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOpti
     .AddScheme<AuthenticationSchemeOptions, PlatformAuthentication>("PlatformSession", _ => { });
 builder.Services.AddAuthorization(o => o.AddPolicy("Platform", p => p.AddAuthenticationSchemes("PlatformSession").RequireAuthenticatedUser().RequireRole("PlatformAdministrator")));
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(new { error = "Невалидни податоци. Проверете ги задолжителните полиња, е-поштата, датумите, времињата и должината на текстот." }));
+builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(new { error = UiText.T("Невалидни податоци. Проверете ги задолжителните полиња, е-поштата, датумите, времињата и должината на текстот.") }));
 builder.Services.AddApiDocumentation();
 string RateKey(HttpContext context)
 {
@@ -73,7 +73,7 @@ string RateKey(HttpContext context)
     if (WebProxyIdentity.Verify(proxySecret, address, context.Request.Headers["X-Web-Time"].ToString(),
         context.Request.Headers["X-Web-Signature"].ToString(), DateTimeOffset.UtcNow.ToUnixTimeSeconds())) return "web:" + address;
     if (context.Request.Headers.ContainsKey("X-Web-Client") || context.Request.Headers.ContainsKey("X-Web-Time") || context.Request.Headers.ContainsKey("X-Web-Signature"))
-        throw new RuleException("Барањето не можеше да се потврди.", 403);
+        throw new RuleException(UiText.T("Барањето не можеше да се потврди."), 403);
     return "direct:" + (context.Connection.RemoteIpAddress?.ToString() ?? "unknown");
 }
 builder.Services.AddRateLimiter(o =>
@@ -81,7 +81,7 @@ builder.Services.AddRateLimiter(o =>
     o.RejectionStatusCode = 429;
     o.OnRejected = async (context, ct) => {
         context.HttpContext.Response.Headers.RetryAfter = "60";
-        await context.HttpContext.Response.WriteAsJsonAsync(new { error = "Премногу барања. Почекајте една минута и обидете се повторно." }, ct);
+        await context.HttpContext.Response.WriteAsJsonAsync(new { error = UiText.T("Премногу барања. Почекајте една минута и обидете се повторно.") }, ct);
     };
     o.AddPolicy("discovery", context => RateLimitPartition.GetFixedWindowLimiter(RateKey(context), _ => new FixedWindowRateLimiterOptions { PermitLimit = 90, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
     o.AddPolicy("auth", context => RateLimitPartition.GetFixedWindowLimiter(RateKey(context), _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1), QueueLimit = 0 }));
@@ -90,8 +90,8 @@ var app = builder.Build();
 app.UseForwardedHeaders();
 app.UseRequestLocalization(new RequestLocalizationOptions()
     .SetDefaultCulture("mk-MK")
-    .AddSupportedCultures("mk-MK")
-    .AddSupportedUICultures("mk-MK"));
+    .AddSupportedCultures("mk-MK", "en-GB")
+    .AddSupportedUICultures("mk-MK", "en-GB"));
 app.Use(async (context, next) =>
 {
     context.Response.Headers.CacheControl = "no-store";
@@ -101,12 +101,12 @@ app.Use(async (context, next) =>
     catch (Exception e) when (e is NpgsqlException or DbUpdateException)
     {
         app.Logger.LogError(e, "Database request failed."); context.Response.StatusCode = 503;
-        await context.Response.WriteAsJsonAsync(new { error = "Базата на податоци е привремено недостапна. Обидете се повторно." });
+        await context.Response.WriteAsJsonAsync(new { error = UiText.T("Базата на податоци е привремено недостапна. Обидете се повторно.") });
     }
     catch (Exception e)
     {
         app.Logger.LogError(e, "Request failed."); context.Response.StatusCode = 500;
-        await context.Response.WriteAsJsonAsync(new { error = "Барањето не можеше да се изврши. Обидете се повторно." });
+        await context.Response.WriteAsJsonAsync(new { error = UiText.T("Барањето не можеше да се изврши. Обидете се повторно.") });
     }
 });
 if (!app.Environment.IsDevelopment()
@@ -116,7 +116,7 @@ if (!app.Environment.IsDevelopment()
     app.Use(async (context, next) => {
         if (!context.Request.IsHttps) {
             context.Response.StatusCode = 403;
-            await context.Response.WriteAsJsonAsync(new { error = "Потребна е безбедна HTTPS врска." });
+            await context.Response.WriteAsJsonAsync(new { error = UiText.T("Потребна е безбедна HTTPS врска.") });
             return;
         }
         await next();
@@ -140,13 +140,13 @@ app.Use(async (context, next) =>
     if (!directory && (context.Request.Path.StartsWithSegments("/api") || path.Equals("/health/database", StringComparison.OrdinalIgnoreCase)))
     {
         var values = context.Request.Headers["X-Clinic"];
-        if (values.Count > 1) throw new RuleException("Изберете една клиника.");
+        if (values.Count > 1) throw new RuleException(UiText.T("Изберете една клиника."));
         var clinic = clinics.Resolve(values.ToString());
         context.RequestServices.GetRequiredService<ClinicContext>().Select(clinic);
         // Also fail closed if a database is restored/repointed while the API is running.
         var db = context.RequestServices.GetRequiredService<AppointmentsDbContext>();
         var binding = await ClinicConnections.BindingAsync(db, clinic, context.RequestAborted);
-        if (binding?.Value != clinic.Id) throw new RuleException("Клиниката е привремено недостапна. Контактирајте го администраторот.", 503);
+        if (binding?.Value != clinic.Id) throw new RuleException(UiText.T("Клиниката е привремено недостапна. Контактирајте го администраторот."), 503);
     }
     await next();
 });

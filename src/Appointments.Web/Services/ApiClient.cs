@@ -20,20 +20,21 @@ public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor, 
             request.Headers.Add("X-Web-Time", stamp.ToString(System.Globalization.CultureInfo.InvariantCulture));
             request.Headers.Add("X-Web-Signature", WebProxyIdentity.Sign(secret, address, stamp));
         }
+        request.Headers.AcceptLanguage.ParseAdd(System.Globalization.CultureInfo.CurrentUICulture.Name);
         if (body != null) request.Content = JsonContent.Create(body, options: JsonDemoStore.JsonOptions);
         if (authenticated && platform)
         {
             clinicId = null;
             var platformToken = await accessor.HttpContext!.GetTokenAsync("PlatformCookie", "api_token");
-            if (string.IsNullOrEmpty(platformToken)) throw new RuleException("Најавете се повторно.", 401);
+            if (string.IsNullOrEmpty(platformToken)) throw new RuleException(UiText.T("Најавете се повторно."), 401);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", platformToken);
         }
         else if (authenticated)
         {
             clinicId = accessor.HttpContext!.User.FindFirst("clinicId")?.Value;
-            if (string.IsNullOrEmpty(clinicId)) throw new RuleException("Најавете се повторно.", 401);
+            if (string.IsNullOrEmpty(clinicId)) throw new RuleException(UiText.T("Најавете се повторно."), 401);
             var token = await accessor.HttpContext.GetTokenAsync("api_token");
-            if (string.IsNullOrEmpty(token)) throw new RuleException("Најавете се повторно.", 401);
+            if (string.IsNullOrEmpty(token)) throw new RuleException(UiText.T("Најавете се повторно."), 401);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
         if (!string.IsNullOrEmpty(clinicId)) request.Headers.Add("X-Clinic", clinicId);
@@ -49,13 +50,13 @@ public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor, 
                     await accessor.HttpContext!.SignOutAsync(platform ? "PlatformCookie" : Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
                     if (!platform) accessor.HttpContext!.User = new System.Security.Claims.ClaimsPrincipal(new System.Security.Claims.ClaimsIdentity());
                 }
-                var message = response.StatusCode == HttpStatusCode.Unauthorized ? "Вашата сесија истече. Најавете се повторно." : "Серверот не можеше да го изврши барањето.";
+                var message = response.StatusCode == HttpStatusCode.Unauthorized ? UiText.T("Вашата сесија истече. Најавете се повторно.") : UiText.T("Серверот не можеше да го изврши барањето.");
                 try { var error = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: ct); if (error.TryGetProperty("error", out var value)) message = value.GetString() ?? message; } catch (JsonException) { }
                 throw new RuleException(message, (int)response.StatusCode);
             }
             return (await response.Content.ReadFromJsonAsync<T>(JsonDemoStore.JsonOptions, ct))!;
         }
-        catch (HttpRequestException) { throw new RuleException("Сервисот за термини е недостапен. Обидете се повторно подоцна или контактирајте ја рецепцијата.", 503); }
-        catch (TaskCanceledException) when (!ct.IsCancellationRequested) { throw new RuleException("Истече времето за одговор од серверот. Освежете пред да се обидете повторно; последната промена можеби е зачувана.", 504); }
+        catch (HttpRequestException) { throw new RuleException(UiText.T("Сервисот за термини е недостапен. Обидете се повторно подоцна или контактирајте ја рецепцијата."), 503); }
+        catch (TaskCanceledException) when (!ct.IsCancellationRequested) { throw new RuleException(UiText.T("Истече времето за одговор од серверот. Освежете пред да се обидете повторно; последната промена можеби е зачувана."), 504); }
     }
 }

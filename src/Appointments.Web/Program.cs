@@ -81,17 +81,19 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<DemoIdentity>();
 var app = builder.Build();
 app.UseForwardedHeaders();
-app.UseRequestLocalization(new RequestLocalizationOptions()
+var localization = new RequestLocalizationOptions()
     .SetDefaultCulture("mk-MK")
-    .AddSupportedCultures("mk-MK")
-    .AddSupportedUICultures("mk-MK"));
+    .AddSupportedCultures("mk-MK", "en-GB")
+    .AddSupportedUICultures("mk-MK", "en-GB");
+localization.RequestCultureProviders = [new Microsoft.AspNetCore.Localization.CookieRequestCultureProvider { CookieName = "MedTermin.Language" }];
+app.UseRequestLocalization(localization);
 app.UseExceptionHandler("/Home/Error");
 if (!allowHttp)
 {
     app.UseHsts();
     app.UseHttpsRedirection();
     app.Use(async (context, next) => {
-        if (!context.Request.IsHttps) { context.Response.StatusCode = 403; await context.Response.WriteAsync("Потребна е безбедна HTTPS врска."); return; }
+        if (!context.Request.IsHttps) { context.Response.StatusCode = 403; await context.Response.WriteAsync(UiText.T("Потребна е безбедна HTTPS врска.")); return; }
         await next();
     });
 }
@@ -99,6 +101,15 @@ app.Use(async (context, next) => { context.Response.Headers["X-Content-Type-Opti
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
+// Company and clinical cookies are independent. Match the principal that issued the preference form's CSRF token.
+app.Use(async (context, next) => {
+    if (context.Request.Path.Equals("/Preferences/Language") && context.Request.Query["scope"] == "platform")
+    {
+        var session = await Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions.AuthenticateAsync(context, "PlatformCookie");
+        context.User = session.Principal ?? new System.Security.Claims.ClaimsPrincipal(new System.Security.Claims.ClaimsIdentity());
+    }
+    await next();
+});
 app.Use(async (context, next) =>
 {
     context.Response.Headers.CacheControl = "no-store";
@@ -109,7 +120,7 @@ app.Use(async (context, next) =>
         if (expected.Count != 1 || expected.ToString() != context.User.FindFirst("clinicId")?.Value)
         {
             context.Response.StatusCode = 409;
-            await context.Response.WriteAsJsonAsync(new { error = "Клиниката е променета во друг прозорец. Освежете ја страницата пред да продолжите." });
+            await context.Response.WriteAsJsonAsync(new { error = UiText.T("Клиниката е променета во друг прозорец. Освежете ја страницата пред да продолжите.") });
             return;
         }
     }

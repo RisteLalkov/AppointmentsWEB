@@ -1,4 +1,7 @@
-'use strict';
+(() => {
+"use strict";
+const { t: tr, html, locale } = window.MedTerminI18n;
+const icon = window.MedTerminIcons.icon;
 // Search remains plain GET navigation and works without JavaScript.
 (() => {
     const art = document.querySelector('[data-discovery-art]');
@@ -28,7 +31,7 @@
         art.classList.toggle('motion-paused', paused);
         toggle.hidden = preference.matches;
         toggle.setAttribute('aria-pressed', String(paused));
-        toggle.textContent = paused ? 'Продолжи анимација' : 'Паузирај анимација';
+        toggle.textContent = paused ? tr("Продолжи анимација") : tr("Паузирај анимација");
         queueScroll();
     }
     toggle.addEventListener('click', () => {
@@ -62,4 +65,6 @@
             });
         });
     }
+})();
+
 })();

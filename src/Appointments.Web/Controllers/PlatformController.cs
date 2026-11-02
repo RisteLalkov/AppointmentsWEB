@@ -27,7 +27,7 @@ public sealed class PlatformController(ApiClient api) : Controller
     [AllowAnonymous, HttpPost] public async Task<IActionResult> Login(LoginInput input, CancellationToken ct)
     {
         if (await SignedInRedirect(ct) is { } signedIn) return signedIn;
-        if (!ModelState.IsValid) { ViewData["Error"] = "Внесете важечка е-пошта и лозинка."; return View(); }
+        if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Внесете важечка е-пошта и лозинка."); return View(); }
         try
         {
             var s = await api.SendAsync<PlatformSession>("api/platform/login", input, false, ct);
@@ -50,7 +50,7 @@ public sealed class PlatformController(ApiClient api) : Controller
         try
         {
             var clinic = await api.SendAsync<PlatformClinicSummary>($"api/platform/clinics/{Uri.EscapeDataString(id)}/adopt", new { }, ct: ct, platform: true);
-            TempData["Notice"] = "Клиниката сега се управува преку платформата. Сметките, лозинките и термините се зачувани.";
+            TempData["Notice"] = UiText.T("Клиниката сега се управува преку платформата. Сметките, лозинките и термините се зачувани.");
             return RedirectToAction(nameof(Edit), new { id = clinic.Id });
         }
         catch (RuleException e) { TempData["Error"] = e.Message; return RedirectToAction(nameof(Index)); }
@@ -70,11 +70,11 @@ public sealed class PlatformController(ApiClient api) : Controller
     [HttpPost] public async Task<IActionResult> Edit(string id, UpdateClinicInput input, CancellationToken ct)
     {
         ViewData["ClinicId"] = id;
-        if (!ModelState.IsValid) { ViewData["Error"] = "Проверете го името, должината на полињата и верзијата на податоците."; return View(input); }
+        if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Проверете го името, должината на полињата и верзијата на податоците."); return View(input); }
         try
         {
             await api.SendAsync<PlatformClinicSummary>($"api/platform/clinics/{Uri.EscapeDataString(id)}/details", input, ct: ct, platform: true);
-            TempData["Notice"] = "Податоците за клиниката се зачувани.";
+            TempData["Notice"] = UiText.T("Податоците за клиниката се зачувани.");
             return RedirectToAction(nameof(Index));
         }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(input); }
@@ -87,26 +87,26 @@ public sealed class PlatformController(ApiClient api) : Controller
             ViewData["Error"] = string.Join(" ", ModelState.Where(x => x.Value?.Errors.Count > 0)
                 .Select(x => x.Key.Split('.').Last().ToLowerInvariant() switch
                 {
-                    "id" => "Единствен идентификатор: внесете 1–40 мали латинични букви, броеви или цртички; првиот знак мора да биде буква или број (пример: moja-klinika-2).",
-                    "name" => "Име на клиниката: внесете од 2 до 100 знаци.",
-                    "timezone" => "Неважечки поставки за датум и време на клиниката.",
-                    "description" => "Јавен опис: дозволени се најмногу 1000 знаци.",
-                    "address" => "Јавна адреса: дозволени се најмногу 200 знаци.",
-                    "phone" => "Јавен телефон: дозволени се најмногу 30 знаци.",
-                    "adminname" => "Име и презиме на администраторот: внесете од 2 до 80 знаци.",
-                    "adminemail" => "Е-пошта на администраторот: внесете важечка адреса до 120 знаци.",
-                    "adminpassword" => "Почетна лозинка на администраторот: внесете од 12 до 128 знаци.",
-                    "discoverable" or "allowregistration" => "Повторно изберете ги опциите за јавно прикажување и пациентска регистрација.",
-                    _ => "Проверете ги задолжителните полиња и обидете се повторно."
+                    "id" => UiText.T("Единствен идентификатор: внесете 1–40 мали латинични букви, броеви или цртички; првиот знак мора да биде буква или број (пример: moja-klinika-2)."),
+                    "name" => UiText.T("Име на клиниката: внесете од 2 до 100 знаци."),
+                    "timezone" => UiText.T("Неважечки поставки за датум и време на клиниката."),
+                    "description" => UiText.T("Јавен опис: дозволени се најмногу 1000 знаци."),
+                    "address" => UiText.T("Јавна адреса: дозволени се најмногу 200 знаци."),
+                    "phone" => UiText.T("Јавен телефон: дозволени се најмногу 30 знаци."),
+                    "adminname" => UiText.T("Име и презиме на администраторот: внесете од 2 до 80 знаци."),
+                    "adminemail" => UiText.T("Е-пошта на администраторот: внесете важечка адреса до 120 знаци."),
+                    "adminpassword" => UiText.T("Почетна лозинка на администраторот: внесете од 12 до 128 знаци."),
+                    "discoverable" or "allowregistration" => UiText.T("Повторно изберете ги опциите за јавно прикажување и пациентска регистрација."),
+                    _ => UiText.T("Проверете ги задолжителните полиња и обидете се повторно.")
                 }).Distinct());
         }
         else try
         {
             var c = await api.SendAsync<PlatformClinicSummary>("api/platform/clinics", input, ct: ct, platform: true);
-            TempData["Notice"] = $"Клиниката {c.Name} е подготвена. Предадете ја почетната лозинка преку безбеден канал и побарајте промена при првата најава.";
+            TempData["Notice"] = UiText.T("Клиниката {0} е подготвена. Предадете ја почетната лозинка преку безбеден канал и побарајте промена при првата најава.", c.Name);
             return RedirectToAction(nameof(Index));
         }
-        catch (RuleException e) { ViewData["Error"] = e.Message + " При повторување користете го истиот идентификатор и податоци. Не е потребно бришење на база."; }
+        catch (RuleException e) { ViewData["Error"] = e.Message + UiText.T(" При повторување користете го истиот идентификатор и податоци. Не е потребно бришење на база."); }
         // Never place a password in rendered HTML, TempData, query strings or logs.
         ViewData["Input"] = input with { AdminPassword = "" };
         ModelState.Remove(nameof(input.AdminPassword));
@@ -115,7 +115,7 @@ public sealed class PlatformController(ApiClient api) : Controller
     }
     [HttpPost] public async Task<IActionResult> Password(ChangePasswordInput input, CancellationToken ct)
     {
-        if (!ModelState.IsValid) { TempData["Error"] = "Внесете ги двете лозинки."; return RedirectToAction(nameof(Index)); }
+        if (!ModelState.IsValid) { TempData["Error"] = UiText.T("Внесете ги двете лозинки."); return RedirectToAction(nameof(Index)); }
         try { await api.SendAsync<object>("api/platform/password", input, ct: ct, platform: true); await HttpContext.SignOutAsync("PlatformCookie"); return RedirectToAction(nameof(Login)); }
         catch (RuleException e) { TempData["Error"] = e.Message; return RedirectToAction(nameof(Index)); }
     }

@@ -16,8 +16,8 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
         // Do not carry invisible doctor refinements into the clinic directory.
         if (view == "clinics") query = query with { ClinicId = null, Clinic = null, Specialty = null, Service = null };
         ViewData["Query"] = query; ViewData["DirectoryView"] = view == "clinics" ? "clinics" : "doctors";
-        if (!TryValidateModel(query) || !ModelState.IsValid) { Response.StatusCode = 400; ViewData["Error"] = "Проверете ги филтрите и бројот на страницата."; return View("Index"); }
-        if (!backend.UseApi) { ViewData["Error"] = "Пребарувањето лекари и клиники е достапно со API. За локалното демо отворете Демо-режим."; return View("Index"); }
+        if (!TryValidateModel(query) || !ModelState.IsValid) { Response.StatusCode = 400; ViewData["Error"] = UiText.T("Проверете ги филтрите и бројот на страницата."); return View("Index"); }
+        if (!backend.UseApi) { ViewData["Error"] = UiText.T("Пребарувањето лекари и клиники е достапно со API. За локалното демо отворете Демо-режим."); return View("Index"); }
         try
         {
             var path = $"api/public/{(view == "clinics" ? "clinics" : "doctors")}?page={query.Page}&pageSize={query.PageSize}&search={E(query.Search)}&clinic={E(query.Clinic)}&clinicId={E(query.ClinicId)}&specialty={E(query.Specialty)}&service={E(query.Service)}";
@@ -38,7 +38,7 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
             var doctor = await api.SendAsync<PublicDoctor>($"api/public/clinics/{E(clinicId)}/doctors/{E(id)}", authenticated: false, ct: ct);
             try
             {
-                if (!ModelState.IsValid) throw new RuleException("Проверете го избраниот датум.");
+                if (!ModelState.IsValid) throw new RuleException(UiText.T("Проверете го избраниот датум."));
                 ViewData["Availability"] = await api.SendAsync<PublicAvailability>($"api/public/clinics/{E(clinicId)}/doctors/{E(id)}/availability?date={date?.ToString("yyyy-MM-dd")}&serviceId={E(serviceId)}", authenticated: false, ct: ct);
             }
             catch (RuleException e) { ViewData["AvailabilityError"] = e.Message; }
@@ -55,7 +55,7 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
                 return RedirectToAction("Login", "Account", new { clinicId, returnUrl = Url.Action(nameof(Book), new { clinicId, doctorId, date = date?.ToString("yyyy-MM-dd"), time = time?.ToString("HH:mm"), serviceId }) });
             if (User.FindFirst("clinicId")?.Value != clinicId)
             {
-                Response.StatusCode = 403; ViewData["Error"] = "Вашата сметка припаѓа на друга клиника. За пристап до оваа клиника контактирајте ја нејзината рецепција. Не е променет вашиот работен простор.";
+                Response.StatusCode = 403; ViewData["Error"] = UiText.T("Вашата сметка припаѓа на друга клиника. За пристап до оваа клиника контактирајте ја нејзината рецепција. Не е променет вашиот работен простор.");
                 return View("Doctor", doctor);
             }
             var selection = date.HasValue && time.HasValue ? "&date=" + date.Value.ToString("yyyy-MM-dd") + "&time=" + time.Value.ToString("HH:mm") + "&serviceId=" + E(serviceId) : "";

@@ -76,3 +76,24 @@
   :root:is([data-theme="dark"], [data-theme="vibrant"]) .fc .fc-event.Cancelled { opacity: 1; }
 }
 @media print { .theme-picker, .page-theme-control { display: none; } }
+
+/* Preferences wrap as two compact groups rather than overflowing narrow phone screens. */
+.appearance-preferences { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 14px 22px; max-width: 100%; }
+.language-picker { display: inline-flex; align-items: center; gap: 10px; margin: 0; }
+.language-label { color: var(--muted); font-size: .875rem; font-weight: 600; }
+.language-options { display: inline-flex; padding: 3px; gap: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--theme-surface, #fff); }
+.language-options button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px; min-width: 59px; padding: 6px 8px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--text); font-size: .8125rem; font-weight: 650; }
+.language-options button[aria-pressed="true"] { background: var(--mint); color: var(--green-dark); border-color: var(--line); }
+.language-options button:hover { background: var(--paper); }
+.language-flag { display: block; width: 24px; height: 17px; border-radius: 2px; overflow: hidden; flex: 0 0 24px; }
+.ui-icon { display: inline-block; width: 1.15em; height: 1.15em; flex-shrink: 0; vertical-align: -.18em; overflow: visible; }
+button .ui-icon, a .ui-icon { pointer-events: none; }
+.nav-item > .ui-icon, .nav-item > span > .ui-icon { width: 21px; height: 21px; vertical-align: middle; }
+.nav-item > span:has(> .ui-icon), .switch-user > span:has(> .ui-icon) { display: inline-flex; justify-content: center; align-items: center; }
+.icon-button > .ui-icon { width: 19px; height: 19px; }
+.empty-icon > .ui-icon { width: 34px; height: 34px; }
+.success-mark > .ui-icon { width: 30px; height: 30px; }
+@media (max-width: 650px) { .appearance-preferences { justify-content: flex-start; } }
+@media print { .language-picker { display: none; } }
+/* Translated action labels can be longer; keep company/profile forms usable on phones. */
+.public-profile-card .btn { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: center; }

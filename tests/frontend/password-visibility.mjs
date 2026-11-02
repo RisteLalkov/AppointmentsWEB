@@ -5,6 +5,7 @@ const w=dom.window, d=w.document;
 let count=0;
 const check=(ok,label)=>{if(!ok)throw Error(label);count++;console.log('PASS password '+label);};
 try {
+  for (const file of ['localization.js','icons.js']) w.eval(await readFile(new URL('../../src/Appointments.Web/wwwroot/js/'+file,import.meta.url),'utf8'));
   w.eval(await readFile(new URL('../../src/Appointments.Web/wwwroot/js/password-visibility.js',import.meta.url),'utf8'));
   const current=d.querySelector('#current'), next=d.querySelector('#new');
   const toggle=input=>input.parentElement.querySelector('button');

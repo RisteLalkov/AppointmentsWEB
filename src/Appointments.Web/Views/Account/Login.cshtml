@@ -1,13 +1,13 @@
 @inject BackendSettings Backend
-@{ ViewData["Title"] = "Добредојдовте повторно"; }
+@{ ViewData["Title"] = T("Добредојдовте повторно"); }
 <main class="welcome">
-    <div class="welcome-story"><a class="brand" href="/"><partial name="_BrandMark" /> МедТермин.</a><div class="welcome-copy"><span class="eyebrow light">ГРИЖА ШТО НÈ ПОВРЗУВА</span><h1>Познато место.<br /><em>Нов почеток.</em></h1><p>Вашите термини и медицинскиот тим, на едно место.</p></div></div>
-    <section class="welcome-form"><span class="eyebrow">ДОБРЕДОЈДОВТЕ ПОВТОРНО</span><h2>Драго ни е што сте тука.</h2><p class="muted">Внесете ги вашите податоци.</p>
+    <div class="welcome-story"><a class="brand" href="/"><partial name="_BrandMark" /> МедТермин.</a><div class="welcome-copy"><span class="eyebrow light">@T("ГРИЖА ШТО НÈ ПОВРЗУВА")</span><h1>@T("Познато место.")<br /><em>@T("Нов почеток.")</em></h1><p>@T("Вашите термини и медицинскиот тим, на едно место.")</p></div></div>
+    <section class="welcome-form"><span class="eyebrow">@T("ДОБРЕДОЈДОВТЕ ПОВТОРНО")</span><h2>@T("Драго ни е што сте тука.")</h2><p class="muted">@T("Внесете ги вашите податоци.")</p>
         @if (ViewData["Error"] is string error) { <div class="inline-error" role="alert">@error</div> }
         @if (TempData["Notice"] is string notice) { <div class="inline-note">@notice</div> }
-        <form asp-action="Login" method="post"><input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" /><input type="hidden" name="clinicId" value="@ViewData["SelectedClinic"]" /><div class="field"><label for="email">Е-пошта</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">Лозинка</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">Најави се ↗</button></form>
-        <div class="divider"></div><p>Првпат сте тука? <a asp-action="Register" asp-route-clinicId="@ViewData["SelectedClinic"]" asp-route-returnUrl="@ViewData["ReturnUrl"]">Создајте пациентска сметка</a></p>
-        @if (Backend.DemoEnabled) { <a class="btn secondary wide" href="/Demo">Разгледајте ја демо-верзијата</a> }
-        <p class="field-help" style="margin-top:20px">Ви треба помош за пристап до постоечки профил? Контактирајте ја рецепцијата. Обновувањето лозинка преку е-пошта не е овозможено.</p>
+        <form asp-action="Login" method="post"><input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" /><input type="hidden" name="clinicId" value="@ViewData["SelectedClinic"]" /><div class="field"><label for="email">@T("Е-пошта")</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">@T("Лозинка")</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">@T("Најави се") @Icon("arrow-up-right")</button></form>
+        <div class="divider"></div><p>@T("Првпат сте тука?") <a asp-action="Register" asp-route-clinicId="@ViewData["SelectedClinic"]" asp-route-returnUrl="@ViewData["ReturnUrl"]">@T("Создајте пациентска сметка")</a></p>
+        @if (Backend.DemoEnabled) { <a class="btn secondary wide" href="/Demo">@T("Разгледајте ја демо-верзијата")</a> }
+        <p class="field-help" style="margin-top:20px">@T("Ви треба помош за пристап до постоечки профил? Контактирајте ја рецепцијата. Обновувањето лозинка преку е-пошта не е овозможено.")</p>
     </section>
 </main>

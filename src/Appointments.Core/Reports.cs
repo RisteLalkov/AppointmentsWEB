@@ -72,7 +72,7 @@ public static class ReportBuilder
             daily.GroupBy(r => r.Doctor.Id).Select(g => new ReportRow(g.Key, g.First().Doctor.Name, Metrics(g))).OrderBy(r => r.Label).ToList(),
             daily.GroupBy(r => r.Doctor.Specialty).Select(g => new ReportRow(g.Key, g.Key, Metrics(g))).OrderBy(r => r.Label).ToList(),
             serviceRows ? state.Services.Select(x => (x.Id, x.Name)).Concat(state.Doctors.Where(d => d.IsService).Select(d => (d.Id, d.Name)))
-                .Append(("unassigned", "Без заведена услуга (лекарски прегледи)"))
+                .Append(("unassigned", UiText.T("Без заведена услуга (лекарски прегледи)")))
                 .Where(x => (string.IsNullOrEmpty(q.ServiceId) || x.Item1 == q.ServiceId) && (x.Item1 == "unassigned" ? doctors.Any(d => !d.IsService) : ids.Contains(x.Item1) || state.DoctorServices.Any(a => ids.Contains(a.DoctorId) && a.ServiceId == x.Item1) || appointments.Any(a => a.ServiceId == x.Item1)))
                 .Select(x => new ReportRow(x.Item1, x.Item2, BuildInternal(actor, q with { ServiceId = x.Item1 }, state, clock, false).Summary))
                 .OrderBy(r => r.Label).ToList() : []);

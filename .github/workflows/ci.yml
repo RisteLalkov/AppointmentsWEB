@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
+      - name: Check shared English catalogue
+        run: python scripts/build-localization.py --check
       - name: Build solution
         run: dotnet build Appointments.sln -c Release
       - name: Scheduling and persistence tests
@@ -90,3 +92,4 @@ jobs:
           export TEST_WEB_DLL="$RUNNER_TEMP/medtermin-web/Appointments.Web.dll"
           python tests/high_severity_integration.py
           node tests/frontend/themes-browser.cjs
+          node tests/frontend/localization-browser.cjs

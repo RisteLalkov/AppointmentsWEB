@@ -1,13 +1,16 @@
-'use strict';
+(() => {
+"use strict";
+const { t: tr, html, locale } = window.MedTerminI18n;
+const icon = window.MedTerminIcons.icon;
 (() => {
     const form = document.querySelector('#account-create-form');
     if (!form) return;
     const role = form.querySelector('#role');
     const help = form.querySelector('#account-role-help');
     const messages = {
-        Patient: 'Поврзете ја сметката со постоечки пациентски профил.',
-        Doctor: 'Поврзете ја сметката со постоечки лекарски профил.',
-        Administrator: 'Администраторот управува со рецепцијата. Не е потребен пациентски или лекарски профил.'
+        Patient: tr("Поврзете ја сметката со постоечки пациентски профил."),
+        Doctor: tr("Поврзете ја сметката со постоечки лекарски профил."),
+        Administrator: tr("Администраторот управува со рецепцијата. Не е потребен пациентски или лекарски профил.")
     };
     function update() {
         form.querySelectorAll('[data-account-profile]').forEach(field => {
@@ -25,4 +28,6 @@
     window.addEventListener('pageshow', update);
     form.addEventListener('reset', () => queueMicrotask(update));
     update();
+})();
+
 })();

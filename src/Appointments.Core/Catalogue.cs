@@ -37,7 +37,7 @@ public sealed class CatalogueService(IDemoStore store)
     private static void Admin(DemoActor actor)
     { if (actor.Role != DemoRole.Administrator) throw new RuleException("Само администратор може да го менува каталогот.", 403); }
     private static string Name(string? value, int max = 200)
-    { var name = value?.Trim() ?? ""; if (name.Length < 2 || name.Length > max) throw new RuleException($"Внесете од 2 до {max} знаци."); return name; }
+    { var name = value?.Trim() ?? ""; if (name.Length < 2 || name.Length > max) throw new RuleException(UiText.T("Внесете од 2 до {0} знаци.", max)); return name; }
     private static void Version(int current, int supplied)
     { if (current != supplied) throw new RuleException("Записот е променет. Освежете и обидете се повторно.", 409); }
     private static Specialty FindSpecialty(DemoState state, string id) => state.Specialties.Find(s => s.Id == id) ?? throw new RuleException("Изберете важечка специјалност.");

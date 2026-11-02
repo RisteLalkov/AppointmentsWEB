@@ -1,43 +1,41 @@
-# Македонски интерфејс / Macedonian interface
+# Interface languages and icons
 
-Macedonian (`mk-MK`) is the default and only interface language in this version. No language selector or external translation service is required.
+Macedonian (`mk-MK`) is the default on every first visit, including browsers configured in English. The **Јазик / Language** control sits next to **Изглед / Appearance** at the bottom of the workspace and public, account and company pages. The flag buttons select Macedonian or English (`en-GB`).
 
-## Coverage
+## Behaviour
 
-- Patient, receptionist and doctor navigation, dashboards and directories.
-- Doctor profiles, appointment booking/review/confirmation, details, cancellation and rescheduling.
-- Day/week/month calendars, month and weekday names, availability, status legends and accessibility labels.
-- Working schedules, exceptions, patient creation, search, filters, empty/loading/error states and dialogs.
-- Login, registration, password changes, account provisioning/access, demo selection and sign-out feedback.
-- Scheduling, conflict, permission and account validation messages returned by Core/API/MVC.
-- Browser form constraint-validation messages (including dynamically inserted forms).
+- The choice is saved for a year in the host-only, HttpOnly `MedTermin.Language` preference cookie. It follows navigation, sign-in and new tabs on the same hostname. It does not change account permissions, clinic selection or database records.
+- Switching reloads the page in the selected language and preserves its path, query and fragment. Unsaved form input prompts before reloading. Theme selection is independent.
+- Navigation, forms, dialogs, calendars, status labels, reports/CSV headings, validation and service errors support both languages. English uses Monday-first weeks and 24-hour times, preserving clinic time-zone scheduling rules.
+- Clinic-entered names, specialties, services, addresses, descriptions and notes retain their original spelling. The МедТермин brand remains unchanged. The legacy empty-funding sentinel has a translated display label.
+- Browser/OS date and time popup widgets can use the browser's own language. Configuration, logs, API property names, enum values, routes and database identifiers remain invariant.
 
-Razor text is in `Views`, dynamic workspace text in `wwwroot/js/app.js`, and native form validation in `wwwroot/js/validation-mk.js`. Role presentation is in `Services/DisplayExtensions.cs`. Both hosts establish `mk-MK` request culture. FullCalendar is configured with a local Macedonian locale object; dates use explicit Macedonian month/day labels (including browsers without Macedonian Intl data), Monday-first weeks and 24-hour times.
+## Implementation and maintenance
 
-## Compatibility
+`Appointments.Core/Localization/en.json` is the canonical English catalogue, embedded in Core and shared by Web/API. Explicit C# literals use `UiText.T`; domain `RuleException` messages use the current request language. Web uses only the language cookie to select request culture, while its API client forwards `Accept-Language`. API requests support `mk-MK` and `en-GB`, defaulting to Macedonian.
 
-Only presentation labels and user-facing messages change. JSON property names, route names, CSS status classes, role/status/weekday enum values, ISO date/time payloads and the Europe/Skopje scheduling rules stay unchanged. Translated select options submit explicit invariant values, e.g. `Monday` and `Patient`.
+Razor uses `T(...)`. Browser text uses `MedTerminI18n.t(...)` and the `html` template helper for static markup fragments. Dynamic interpolated record values retain their caller-provided escaping and are never scanned or translated. Do not pass database names or enum/protocol values through translation helpers. Use `{0}` parameters for variable messages and preserve placeholders in both languages.
 
-No database migration, reset, doctor re-import, or modification of existing patient/account names is performed. Doctor information from the supplied workbook stays intact. New fictional demo seeds use Macedonian names; existing persisted names, entered notes and email addresses retain their original spelling. Brand names, technical time-zone identifiers and reference numbers are retained.
+After adding/editing English entries, run:
 
-Native date/time popup controls are supplied by the browser/operating system and may follow its language settings even though the page and validation messages are Macedonian. Developer logs, configuration keys and technical documentation remain English where useful.
+```sh
+python scripts/build-localization.py
+```
 
-## Update your PC
+This generates `wwwroot/i18n/en.js`; CI verifies the browser copy matches Core. Only English pages load that catalogue. Translation and icons require no external runtime requests or libraries.
 
-1. Stop debugging and save your work. In Visual Studio's **Git Changes**, commit your own source changes or stash them before pulling. Do not commit database passwords or publishing credentials.
-2. Confirm that the repository is `RisteLalkov/AppointmentsWEB` and the branch is `main`.
-3. Choose **Git → Pull**. Alternatively run `git pull --ff-only origin main` in the repository folder. If Git reports diverging/uncommitted changes, resolve them rather than overwriting your work.
-4. Open `Appointments.sln`, restore packages, and build the solution. Run the API and Web startup projects as before.
-5. Refresh the browser with **Ctrl+F5** if it still shows cached assets.
+Navigation, actions, menu controls and status graphics use the bundled Lucide sprite at `wwwroot/icons/interface.svg`, with consistent sizing and `currentColor`. Decorative icons are hidden from assistive technology; buttons keep textual accessible labels. Flags are SVG artwork, avoiding emoji/font differences on phones. Lucide's ISC/Feather MIT notices are included in `wwwroot/icons/Lucide.LICENSE.txt`. Existing brand artwork is preserved.
 
-If working from a ZIP, download `main` into a new folder and keep the old solution as a backup. Transfer only your local configuration/publish settings as necessary; do not overwrite the newly translated source with old source files. Existing PostgreSQL data is reused with the same connection string.
+## Deployment
 
-## Update IIS
-
-Publish **Appointments.Api** and **Appointments.Web** separately, using the existing profiles. Class-library changes are bundled automatically. Preserve the server-only connection string/password and the internal test `Hosting:AllowHttpForTesting` settings. The server Web API address remains `http://localhost:5543/` for the existing HTTP test bindings; development may still use port 5181. This update does not change either configuration or the user's publishing profiles.
-
-Recycle the two application pools, check the API `/health` endpoint, and refresh the website. No PostgreSQL transfer or schema update is required for this translation.
+Pull `main`, build, then publish **both API and Web**, including every Web `wwwroot` asset and complete publish output. Preserve server appsettings, database credentials, the matching Web/API proxy key and existing hosting settings. Recycle both IIS application pools. This update requires **no database migration, reset or import**. Refresh with Ctrl+F5 if assets are stale.
 
 ## Verification
 
-The existing workflow suites exercise booking, cancellation, rescheduling, permissions, scheduling conflicts and persistence. Localization assertions additionally check the document language, Macedonian navigation/months/weekdays/statuses, required-field feedback, translated server errors, and saving schedules while preserving API weekday values. The PostgreSQL integration suite exercises the actual API and MVC database path.
+- Core checks translated validation/errors, placeholders, unchanged record values and concurrent culture isolation.
+- MVC contract checks cover the default language, preference cookie, request forwarding, Cyrillic search/return URLs, CSRF and off-site redirect rejection.
+- DOM checks cover literal-only translation, original data escaping, password controls, validation and unsaved-input protection.
+- Chromium exercises both languages, doctor/patient/reception workspaces, booking, cancellation, public discovery/availability, company forms and independent authentication cookies. Layout checks cover 320/390px screens and all three themes.
+- Disposable PostgreSQL/API checks verify translated permission/conflict responses, concurrent request cultures, unchanged stored records and stable protocol roles.
+
+Run the usual solution/Core, MVC, frontend and PostgreSQL suites. `tests/frontend/localization-browser.cjs` needs Playwright and Chromium; `tests/discovery_web_smoke.py` adds public/company browser coverage when `TEST_BROWSER_EXECUTABLE` is set. No production database is used by these checks.

@@ -30,7 +30,7 @@ public sealed class DemoController(DemoIdentity identity, ApiClient api, Backend
             if (settings.UseApi) session = await api.SendAsync<SessionResponse>("api/auth/demo-login", new { userId }, false, ct, clinicId);
             else
             {
-                var actor = identity.Users.FirstOrDefault(a => a.Id == userId) ?? throw new RuleException("Изберете постоечки демо-корисник.");
+                var actor = identity.Users.FirstOrDefault(a => a.Id == userId) ?? throw new RuleException(UiText.T("Изберете постоечки демо-корисник."));
                 session = new("", DateTimeOffset.UtcNow.AddHours(2), actor, true);
             }
             await WebSession.SignInAsync(HttpContext, session); return RedirectToAction("Index", "Home");

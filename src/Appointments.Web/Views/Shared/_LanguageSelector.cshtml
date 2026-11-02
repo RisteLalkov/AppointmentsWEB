@@ -1,0 +1,8 @@
+<form asp-controller="Preferences" asp-action="Language" asp-route-scope="@(User.IsInRole("PlatformAdministrator") ? "platform" : null)" method="post" class="language-picker" data-language-form aria-label="@T("Јазик на интерфејсот")">
+    <input type="hidden" name="returnUrl" value="@(Context.Request.PathBase + Context.Request.Path + Context.Request.QueryString)" />
+    <span class="language-label">@T("Јазик")</span>
+    <div class="language-options">
+        <button type="submit" name="culture" value="mk-MK" aria-pressed="@(!IsEnglish ? "true" : "false")" title="Македонски" aria-label="Македонски"><svg class="language-flag" aria-hidden="true" viewBox="0 0 32 22"><use href="/icons/interface.svg#flag-mk" /></svg><span>MK</span></button>
+        <button type="submit" name="culture" value="en-GB" aria-pressed="@(IsEnglish ? "true" : "false")" title="English" aria-label="English"><svg class="language-flag" aria-hidden="true" viewBox="0 0 32 22"><use href="/icons/interface.svg#flag-en" /></svg><span>EN</span></button>
+    </div>
+</form>

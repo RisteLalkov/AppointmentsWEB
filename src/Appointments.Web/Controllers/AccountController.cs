@@ -46,7 +46,7 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
     {
         ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl);
         if (await SignedInRedirect(returnUrl, ct) is { } signedIn) return signedIn;
-        if (!ModelState.IsValid) { ViewData["Error"] = "Внесете е-пошта и лозинка."; return View(); }
+        if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Внесете е-пошта и лозинка."); return View(); }
         try { var session = await api.SendAsync<SessionResponse>("api/auth/login", input, false, ct); await WebSession.SignInAsync(HttpContext, session); return LocalRedirect(SafeReturn(returnUrl)); }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
@@ -61,11 +61,11 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
         ViewData["ReturnUrl"] = SafeReturn(returnUrl);
         if (await SignedInRedirect(returnUrl, ct) is { } signedIn) return signedIn;
         await Clinics(clinicId, ct);
-        if (!ModelState.IsValid) { ViewData["Error"] = "Внесете име, важечка е-пошта и лозинка."; return View(); }
+        if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Внесете име, важечка е-пошта и лозинка."); return View(); }
         try
         {
             await api.SendAsync<AccountSummary>("api/auth/register", input, false, ct, clinicId);
-            TempData["Notice"] = "Вашата пациентска сметка е подготвена. Најавете се за да продолжите.";
+            TempData["Notice"] = UiText.T("Вашата пациентска сметка е подготвена. Најавете се за да продолжите.");
             return RedirectToAction(nameof(Login), new { clinicId, returnUrl = SafeReturn(returnUrl) });
         }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
@@ -79,7 +79,7 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
     [Authorize, HttpPost] public async Task<IActionResult> Logout(CancellationToken ct)
     {
         try { if (settings.UseApi) await api.SendAsync<object>("api/auth/logout", new { }, ct: ct); }
-        catch (RuleException) { TempData["Notice"] = "Одјавени сте од овој прелистувач. Серверот беше недостапен; серверската сесија автоматски истекува во рок од два часа."; }
+        catch (RuleException) { TempData["Notice"] = UiText.T("Одјавени сте од овој прелистувач. Серверот беше недостапен; серверската сесија автоматски истекува во рок од два часа."); }
         await HttpContext.SignOutAsync(); return RedirectToAction(nameof(Login));
     }
     [HttpGet] public IActionResult AccessDenied()
@@ -90,8 +90,8 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
     [Authorize, HttpGet] public IActionResult Password() => View();
     [Authorize, HttpPost] public async Task<IActionResult> Password(ChangePasswordInput input, CancellationToken ct)
     {
-        if (!ModelState.IsValid) { ViewData["Error"] = "Внесете ги двете лозинки."; return View(); }
-        try { await api.SendAsync<object>("api/auth/password", input, ct: ct); await HttpContext.SignOutAsync(); TempData["Notice"] = "Лозинката е променета. Сите претходни сесии се одјавени."; return RedirectToAction(nameof(Login)); }
+        if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Внесете ги двете лозинки."); return View(); }
+        try { await api.SendAsync<object>("api/auth/password", input, ct: ct); await HttpContext.SignOutAsync(); TempData["Notice"] = UiText.T("Лозинката е променета. Сите претходни сесии се одјавени."); return RedirectToAction(nameof(Login)); }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
 }

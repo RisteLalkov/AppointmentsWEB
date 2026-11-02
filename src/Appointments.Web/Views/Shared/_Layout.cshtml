@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="mk">
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#176c60" />
     <meta name="careline-clinic" content="@User.FindFirst("clinicId")?.Value" />
     <title>@ViewData["Title"] · МедТермин</title>
+    @if (IsEnglish) { <script src="~/i18n/en.js" asp-append-version="true"></script> }
+    <script src="~/js/localization.js" asp-append-version="true"></script>
+    <script src="~/js/icons.js" asp-append-version="true"></script>
     <script src="~/js/theme.js" asp-append-version="true"></script>
     <link rel="icon" href="~/favicon.svg" asp-append-version="true" type="image/svg+xml" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -14,7 +17,8 @@
 </head>
 <body>
     @RenderBody()
-    @if (ViewData["WorkspaceThemeSelector"] is not true) { <div class="page-theme-control"><partial name="_ThemeSelector" /></div> }
+    @if (ViewData["WorkspaceThemeSelector"] is not true) { <div class="page-theme-control"><partial name="_AppearancePreferences" /></div> }
+    <script src="~/js/language.js" asp-append-version="true"></script>
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <script src="~/js/validation-mk.js" asp-append-version="true"></script>
     <script src="~/js/password-visibility.js" asp-append-version="true"></script>

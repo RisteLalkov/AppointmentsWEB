@@ -37,7 +37,7 @@ try {
   w.matchMedia = () => ({matches:false,addListener(){},removeListener(){}});
   w.HTMLDialogElement.prototype.showModal = function(){this.setAttribute("open","");};
   w.HTMLDialogElement.prototype.close = function(){this.removeAttribute("open");};
-  for (const file of ["vendor/fullcalendar.min.js","js/app.js","js/validation-mk.js"])
+  for (const file of ["js/localization.js","js/icons.js","vendor/fullcalendar.min.js","js/app.js","js/validation-mk.js"])
     w.eval(await readFile(resolve(root,"src/Appointments.Web/wwwroot",file),"utf8"));
   await until(() => $(".page-heading"));
   check($(".clinic-badge").textContent.includes("Нова клиника"),"Workspace displays active clinic name");

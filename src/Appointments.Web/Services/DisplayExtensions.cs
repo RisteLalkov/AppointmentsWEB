@@ -4,9 +4,9 @@ public static class DisplayExtensions
 {
     public static string RoleLabel(this DemoRole role) => role switch
     {
-        DemoRole.Patient => "Пациент",
-        DemoRole.Doctor => "Лекар",
-        DemoRole.Administrator => "Администратор",
-        _ => "Корисник"
+        DemoRole.Patient => UiText.T("Пациент"),
+        DemoRole.Doctor => UiText.T("Лекар"),
+        DemoRole.Administrator => UiText.T("Администратор"),
+        _ => UiText.T("Корисник")
     };
 }

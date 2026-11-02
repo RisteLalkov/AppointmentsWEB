@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
     await page.goto(process.env.TEST_WEB_URL + '/Account/Login');
     await page.locator('[name=Email]').fill('main@high.test');
     await page.locator('[name=Password]').fill(process.env.TEST_PASSWORD);
-    await Promise.all([page.waitForURL(url => !url.pathname.includes('/Account/Login')), page.locator('button[type=submit]').click()]);
+    await Promise.all([page.waitForURL(url => !url.pathname.includes('/Account/Login')), page.locator('form[action="/Account/Login"] button[type=submit]').click()]);
     await page.goto(process.env.TEST_WEB_URL + '/Accounts');
     const row = page.locator('.account-row').filter({ hasText: 'target@high.test' });
     for (const [button, posted, badge] of [['Оневозможи пристап', 'false', 'Оневозможена'], ['Овозможи пристап', 'true', 'Овозможена']]) {
@@ -23,7 +23,7 @@ const { chromium } = require('playwright');
     const noisyContext = await browser.newContext({ extraHTTPHeaders: { 'X-Forwarded-For': '203.0.113.30' } });
     const noisyPage = await noisyContext.newPage();
     await noisyPage.goto(process.env.TEST_WEB_URL + '/Account/Login');
-    const csrf = await noisyPage.locator('[name=__RequestVerificationToken]').inputValue();
+    const csrf = await noisyPage.locator('form[action="/Account/Login"] [name=__RequestVerificationToken]').inputValue();
     let response;
     for (let i = 0; i < 31; i++) response = await noisyContext.request.post(process.env.TEST_WEB_URL + '/Account/Login', {
       form: { Email: 'absent@high.test', Password: process.env.TEST_PASSWORD, __RequestVerificationToken: csrf }
@@ -35,7 +35,7 @@ const { chromium } = require('playwright');
     await otherPage.goto(process.env.TEST_WEB_URL + '/Account/Login');
     await otherPage.locator('[name=Email]').fill('main@high.test');
     await otherPage.locator('[name=Password]').fill(process.env.TEST_PASSWORD);
-    await Promise.all([otherPage.waitForURL(url => !url.pathname.includes('/Account/Login')), otherPage.locator('button[type=submit]').click()]);
+    await Promise.all([otherPage.waitForURL(url => !url.pathname.includes('/Account/Login')), otherPage.locator('form[action="/Account/Login"] button[type=submit]').click()]);
     console.log('PASS Independent original Web visitors retain separate API rate-limit budgets');
     await noisyContext.close(); await otherContext.close();
     await page.goto(process.env.TEST_WEB_URL + '/Workspace#doctors');

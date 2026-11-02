@@ -115,6 +115,7 @@ async function workspace(user) {
   w.HTMLDialogElement.prototype.close = function () {
     this.removeAttribute("open");
   };
+  for (const file of ["localization.js", "icons.js"]) w.eval(await readFile(resolve(root, "src/Appointments.Web/wwwroot/js", file), "utf8"));
   w.eval(
     await readFile(
       resolve(root, "src/Appointments.Web/wwwroot/vendor/fullcalendar.min.js"),
