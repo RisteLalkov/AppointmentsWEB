@@ -1,0 +1,17 @@
+{
+  "auditDate": "2026-11-02",
+  "applicationCommit": "fcf2a0a",
+  "assessment": "Not approved for unrestricted public production",
+  "findings": {
+    "Critical": 0,
+    "High": 7,
+    "Medium": 9,
+    "Low": 6
+  },
+  "originalTrackedFiles": 173,
+  "operations": 45,
+  "roleObservations": 180,
+  "unsupportedMethods": 242,
+  "liveDatabaseInspected": false,
+  "applicationSourceChanged": false
+}

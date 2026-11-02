@@ -1,0 +1,29 @@
+table_schema,table_name,column_name,data_type,is_nullable,column_default,character_maximum_length
+public,PlatformClinics,Id,character varying,NO,,40
+public,PlatformClinics,Name,character varying,NO,,100
+public,PlatformClinics,ConnectionName,text,NO,,
+public,PlatformClinics,TimeZone,character varying,NO,,100
+public,PlatformClinics,State,text,NO,,
+public,PlatformClinics,AdminEmail,character varying,NO,,120
+public,PlatformClinics,AdminName,character varying,NO,,80
+public,PlatformClinics,Description,character varying,YES,,1000
+public,PlatformClinics,Address,character varying,YES,,200
+public,PlatformClinics,Phone,character varying,YES,,30
+public,PlatformClinics,Discoverable,boolean,NO,,
+public,PlatformClinics,AllowRegistration,boolean,NO,,
+public,PlatformClinics,CreatedBy,text,NO,,
+public,PlatformClinics,CreatedAt,timestamp with time zone,NO,,
+public,PlatformClinics,Adopted,boolean,NO,false,
+public,PlatformClinics,Version,integer,NO,1,
+public,PlatformOperators,Id,text,NO,,
+public,PlatformOperators,Email,character varying,NO,,120
+public,PlatformOperators,Name,character varying,NO,,80
+public,PlatformOperators,PasswordHash,text,NO,,
+public,PlatformOperators,Enabled,boolean,NO,,
+public,PlatformOperators,FailedAttempts,integer,NO,,
+public,PlatformOperators,LockedUntil,timestamp with time zone,YES,,
+public,PlatformSchemaVersions,Version,integer,NO,,
+public,PlatformSchemaVersions,AppliedAt,timestamp with time zone,NO,now(),
+public,PlatformSessions,TokenHash,character varying,NO,,64
+public,PlatformSessions,OperatorId,text,NO,,
+public,PlatformSessions,ExpiresAt,timestamp with time zone,NO,,

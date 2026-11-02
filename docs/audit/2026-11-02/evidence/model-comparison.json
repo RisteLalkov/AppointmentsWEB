@@ -1,0 +1,107 @@
+[
+  {
+    "table": "Accounts",
+    "columns": 13,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "AppointmentHistory",
+    "columns": 14,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Appointments",
+    "columns": 12,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "AuditEvents",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "AvailabilityExceptions",
+    "columns": 7,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Doctors",
+    "columns": 16,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "DoctorServices",
+    "columns": 2,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "IdempotencyRequests",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Patients",
+    "columns": 6,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Services",
+    "columns": 6,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Sessions",
+    "columns": 4,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Settings",
+    "columns": 2,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "SourceSchedules",
+    "columns": 8,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "Specialties",
+    "columns": 3,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "table": "WorkingPeriods",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  }
+]

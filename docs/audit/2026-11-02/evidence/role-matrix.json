@@ -1,0 +1,1082 @@
+[
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 200
+  },
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 200
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "role": "doctor",
+    "status": 403
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "role": "patient",
+    "status": 403
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "role": "patient",
+    "status": 400
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "role": "doctor",
+    "status": 400
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "role": "reception",
+    "status": 400
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "role": "patient",
+    "status": 404
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "role": "doctor",
+    "status": 404
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "role": "reception",
+    "status": 404
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "role": "company",
+    "status": 401
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 404
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "role": "patient",
+    "status": 404
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "role": "doctor",
+    "status": 404
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "role": "reception",
+    "status": 404
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "role": "company",
+    "status": 404
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 200
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "role": "patient",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "role": "doctor",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "role": "reception",
+    "status": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "role": "patient",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "role": "doctor",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "role": "reception",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "role": "company",
+    "status": 200
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "role": "patient",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "role": "doctor",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "role": "reception",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "role": "company",
+    "status": 400
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "role": "patient",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "role": "doctor",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "role": "reception",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "role": "company",
+    "status": 404
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "role": "patient",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "role": "doctor",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "role": "reception",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "role": "company",
+    "status": 400
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "role": "anonymous",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "role": "patient",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "role": "doctor",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "role": "reception",
+    "status": 401
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "role": "company",
+    "status": 400
+  }
+]

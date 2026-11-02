@@ -1,0 +1,2915 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>МедТермин — Production Readiness Audit — 2026-11-02</title><style>@page{size:A4;margin:17mm 14mm 18mm}*{box-sizing:border-box}body{font-family:Arial,"DejaVu Sans",sans-serif;font-size:10pt;line-height:1.48;color:#243f43;margin:0;background:#fff}h1,h2,h3,h4{color:#153e36;line-height:1.2;break-after:avoid}h1{font-size:27pt;letter-spacing:-.8px;margin:15px 0 18px}h2{font-size:17pt;margin:26px 0 12px;border-bottom:1px solid #cbded9;padding-bottom:8px}h3{font-size:12.5pt;margin:20px 0 10px}h4{font-size:11pt;margin:18px 0 8px}p{margin:0 0 11px}strong{color:#193d36}a{color:#086b5d;text-decoration:none;overflow-wrap:anywhere}li{margin-bottom:5px}ul,ol{padding-left:21px}table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:8.1pt;line-height:1.4;table-layout:auto}th{background:#edf5f3;color:#163e36;text-align:left;border:1px solid #cbded9;padding:7px 8px;font-weight:bold}td{border:1px solid #dae5e3;padding:6px 8px;vertical-align:top;overflow-wrap:anywhere}thead{display:table-header-group}tr{break-inside:avoid}code{font-family:"DejaVu Sans Mono",monospace;font-size:.88em;overflow-wrap:anywhere;white-space:pre-wrap}pre{font-family:"DejaVu Sans Mono",monospace;padding:13px;background:#f2f6f7;border:1px solid #dbe7e6;border-radius:7px;font-size:8pt;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;break-inside:avoid}.masthead{display:flex;align-items:center;gap:12px;border-bottom:3px solid #087969;padding-bottom:13px;color:#40645b;font-size:9pt;font-weight:bold;letter-spacing:1.5px}.masthead svg{width:35px;height:35px}.finding{border-left:3px solid #698586;padding-left:10px}.high{border-left-color:#b7473b}.medium{border-left-color:#b87925}.appendix{break-before:page}.smallnote{font-size:9pt;color:#586e70}@media screen{body{max-width:1000px;margin:30px auto;padding:36px;box-shadow:0 8px 40px #183f4b12}}</style></head><body><div class="masthead">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="1247.6506"
+   height="1247.6493"
+   viewBox="0 0 1247.6506 1247.6493"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="g1"
+     transform="translate(-437.3328,-437.33706)">
+    <path
+       id="path1"
+       d="m 0,0 h 748.59 c 51.68,0 93.574,-41.894 93.574,-93.574 v -748.59 c 0,-51.679 -41.894,-93.573 -93.574,-93.573 H 0 c -51.679,0 -93.574,41.894 -93.574,93.573 v 748.59 C -93.574,-41.894 -51.679,0 0,0"
+       style="fill:#087969;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,562.09813,437.33707)" />
+    <path
+       id="path2"
+       d="m 0,0 -129.583,-129.582 c -11.187,-11.187 -17.712,-26.103 -17.712,-41.951 0,-15.848 6.525,-30.764 17.712,-41.951 L 0,-343.999 c 2.796,-2.796 6.525,-3.729 10.254,-3.729 3.729,0 7.458,1.865 10.255,3.729 l 129.582,129.583 c 23.306,23.306 23.306,61.528 0,84.834 L 20.509,0 C 14.916,4.661 5.593,4.661 0,0 Z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1047.3476,522.82933)" />
+    <path
+       id="path3"
+       d="m 0,0 c 0,3.729 -1.865,7.458 -3.729,10.254 l -130.515,129.583 c -23.306,23.306 -61.528,23.306 -84.834,0 L -348.66,10.254 c -2.797,-2.796 -3.729,-6.525 -3.729,-10.254 0,-3.729 1.864,-7.458 3.729,-10.255 l 129.582,-129.582 c 11.187,-11.187 26.103,-17.713 41.951,-17.713 15.848,0 30.764,6.526 41.951,17.713 L -4.662,-10.255 C -1.865,-7.458 0,-3.729 0,0"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,980.22587,1068.5037)" />
+    <path
+       id="path4"
+       d="m 0,0 c -5.593,5.593 -13.983,5.593 -19.577,0 l -130.515,-129.583 c -23.306,-23.306 -23.306,-61.527 0,-84.834 l 129.583,-129.582 c 2.797,-2.797 6.526,-3.729 10.255,-3.729 3.728,0 7.457,0.932 10.254,3.729 l 129.583,129.582 c 23.306,23.307 23.306,61.528 0,84.834 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1074.5377,1155.5135)" />
+    <path
+       id="path8"
+       d="m 0,0 c -8.778,-8.778 -20.161,-13.612 -32.052,-13.612 -11.89,0 -23.273,4.834 -32.051,13.612 L -192.56,128.456 c 0,0.002 -0.001,0.003 -0.002,0.005 l -1.477,1.476 0.77,0.77 v 0.002 l 129.166,129.166 c 8.627,8.627 20.176,13.379 32.518,13.379 12.324,0 23.857,-4.738 32.481,-13.343 L 129.472,129.472 Z M 139.481,139.26 10.832,269.774 c -11.653,11.654 -27.036,17.48 -42.417,17.48 -15.383,0 -30.765,-5.826 -42.418,-17.48 L -203.585,140.192 c -6.483,-6.483 -6.793,-13.715 0.483,-20.992 L -74.003,-9.899 c 11.187,-11.187 26.103,-17.713 41.951,-17.713 15.848,0 30.764,6.526 41.951,17.713 l 129.582,129.582 c 5.594,5.593 5.594,13.984 0,19.577"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,1419.4764,1241.7543)" />
+  </g>
+</svg>
+<span>МЕДТЕРМИН · TECHNICAL QUALITY ASSURANCE</span></div><h1 id="production-readiness-audit">МедТермин — Production Readiness Audit</h1>
+<p><strong>Audit date:</strong> 2 November 2026 · Europe/Skopje<br>
+<strong>Application snapshot:</strong> <code>fcf2a0a</code> — Brighten application palette and strengthen card and navigation contrast<br>
+<strong>Repository:</strong> RisteLalkov/AppointmentsWEB<br>
+<strong>Assessment:</strong> <strong>NOT READY for an unrestricted public production launch.</strong></p>
+<h2 id="1-executive-assessment">1. Executive assessment</h2>
+<p>The implemented scheduling core has substantial working protections and passed the existing test suites. The audit nevertheless found <strong>22 findings: 7 High, 9 Medium and 6 Low</strong>. No Critical vulnerability was demonstrated. That does <strong>not</strong> establish that untested production infrastructure is free of critical risk.</p>
+<p>The highest-priority problems are secure-transport enforcement under a misconfigured listener, Web-to-API rate-limit attribution, concurrent loss of all administrators, cross-clinic/control-plane failure coupling, reservation abuse, and broken account access buttons. The last issue was found only by submitting the real Razor form: direct API tests had passed.</p>
+<p><strong>No application fix, refactor, deployment or live database change was made.</strong> Temporary tests, fault injection, synthetic rows and backup/restore operations used newly created, isolated test databases. The deliverables are this report and sanitized evidence.</p>
+<p>All seven High findings should be fixed or mitigated with documented acceptance before public launch. Medium findings need explicit release decisions; identity, privacy and incident-response policies must be approved by the responsible owners. A controlled internal pilot has a different exposure profile, but it does not remove these defects.</p>
+<h3 id="findings-at-a-glance">Findings at a glance</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Severity</th>
+<th>Finding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H01</td>
+<td>High</td>
+<td>HTTPS redirection can fail open on a misconfigured production listener</td>
+</tr>
+<tr>
+<td>H02</td>
+<td>High</td>
+<td>API IP limits collapse all Web visitors into the Web server’s quota</td>
+</tr>
+<tr>
+<td>H03</td>
+<td>High</td>
+<td>Concurrent administrators can remove the last active administrators</td>
+</tr>
+<tr>
+<td>H04</td>
+<td>High</td>
+<td>A broken unrelated clinic can prevent healthy-clinic login</td>
+</tr>
+<tr>
+<td>H05</td>
+<td>High</td>
+<td>Control-plane failure interrupts clinical traffic while health still says ready</td>
+</tr>
+<tr>
+<td>H06</td>
+<td>High</td>
+<td>A regular patient can reserve an entire doctor day without abuse controls</td>
+</tr>
+<tr>
+<td>H07</td>
+<td>High</td>
+<td>Account enable/disable buttons submit invalid boolean values</td>
+</tr>
+<tr>
+<td>M01</td>
+<td>Medium</td>
+<td>Workspace bootstrap and polling grow without a data window</td>
+</tr>
+<tr>
+<td>M02</td>
+<td>Medium</td>
+<td>A delayed booking failure can throw an uncaught dialog exception</td>
+</tr>
+<tr>
+<td>M03</td>
+<td>Medium</td>
+<td>Stale rescheduling has no recovery action inside the booking form</td>
+</tr>
+<tr>
+<td>M04</td>
+<td>Medium</td>
+<td>Automated accessibility checks still find contrast and keyboard-scroll failures</td>
+</tr>
+<tr>
+<td>M05</td>
+<td>Medium</td>
+<td>Public availability assumes every valid timezone has a valid midnight</td>
+</tr>
+<tr>
+<td>M06</td>
+<td>Medium</td>
+<td>Sub-minute availability is accepted but slot generation rounds it down</td>
+</tr>
+<tr>
+<td>M07</td>
+<td>Medium</td>
+<td>Public identity assurance and privileged-account protection need a launch policy</td>
+</tr>
+<tr>
+<td>M08</td>
+<td>Medium</td>
+<td>Application audit and incident visibility do not cover important security events</td>
+</tr>
+<tr>
+<td>M09</td>
+<td>Medium</td>
+<td>Privacy and terms are still placeholders for a real-data launch</td>
+</tr>
+<tr>
+<td>L01</td>
+<td>Low</td>
+<td>Some malformed requests are classified as server/database outages</td>
+</tr>
+<tr>
+<td>L02</td>
+<td>Low</td>
+<td>Explicit browser security policies are incomplete</td>
+</tr>
+<tr>
+<td>L03</td>
+<td>Low</td>
+<td>Operational documentation contains contradictory legacy instructions</td>
+</tr>
+<tr>
+<td>L04</td>
+<td>Low</td>
+<td>CI does not currently gate the full browser, accessibility or dependency-audit checks</td>
+</tr>
+<tr>
+<td>L05</td>
+<td>Low</td>
+<td>Demo and PostgreSQL booking idempotency differ on the agreement flag</td>
+</tr>
+<tr>
+<td>L06</td>
+<td>Low</td>
+<td>Account-creation errors discard nonsecret form input</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-scope-access-and-evidence-boundaries">2. Scope, access and evidence boundaries</h2>
+<p>The audit inventoried <strong>173 tracked repository files</strong>. Application source, views, configurations, SQL, migration/model definitions, test implementations, tooling and deployment guidance were reviewed systematically. Generated snapshots were checked through model/schema comparison and executed migrations; static media and vendored assets were inventoried and checked as assets/dependencies, not represented as manually line-reviewed third-party implementations. JSON, XML/SVG/project manifests and Python files received parse checks; all application/test JavaScript files passed syntax checks.</p>
+<p>This is a technical review plus executed scenario audit. It is <strong>not a claim of 100% statement/branch coverage, every possible input combination, a penetration-test certification, legal compliance certification, or production load certification</strong>. Exact coverage and remaining gaps are listed below rather than inferred from green tests.</p>
+<h3 id="access-actually-available">Access actually available</h3>
+<ul>
+<li>Full repository and local build tools.</li>
+<li>A running <strong>real PostgreSQL 17.11</strong> instance in an isolated loopback Docker environment.</li>
+<li>Disposable clinical/platform databases, including actual migrated/provisioned schemas and restored copies.</li>
+<li>Local Web/API processes in both Development and Production modes; Chromium and Playwright.</li>
+<li>Published API/Web output, plus Windows x64 self-contained cross-publish output.</li>
+</ul>
+<h3 id="access-not-available">Access not available</h3>
+<p>The cloud environment could not connect to the supplied private server ports (<code>10.20.1.102:5432</code>, <code>10.20.1.100:5543/5544</code>). DNS resolution of the four medtermin.mk hosts also failed <strong>from this environment</strong>. This is <strong>not evidence that those servers or domains are down or misconfigured</strong>. No live database credentials, IIS configuration, deployed binaries, certificates, network ACLs, actual production roles/grants, monitoring or production backup archive were inspected.</p>
+<p>Consequently, the actual live <code>appointments</code> and <code>appointments_platform</code> schema/data cannot be certified as matching GitHub. The detailed database inspection in this report refers to the actual local PostgreSQL schemas created/restored for this audit, not an assumption about the live server. See <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/main/docs/audit/2026-11-02/evidence/network-check.json">network evidence</a>.</p>
+<h3 id="environment-and-dependency-observations">Environment and dependency observations</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Inspected/tested version or state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET SDK / runtime in audit environment</td>
+<td>10.0.100 / 10.0.0</td>
+</tr>
+<tr>
+<td>API/Web target</td>
+<td>net10.0; nullable enabled; warnings treated as errors</td>
+</tr>
+<tr>
+<td>EF Core / ASP.NET OpenAPI packages</td>
+<td>10.0.12</td>
+</tr>
+<tr>
+<td>Npgsql / Npgsql EF provider</td>
+<td>10.0.3</td>
+</tr>
+<tr>
+<td>Swagger UI</td>
+<td>Swashbuckle.AspNetCore.SwaggerUI 10.3.1</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>17.11; real constraints and transactions exercised</td>
+</tr>
+<tr>
+<td>Browser</td>
+<td>Real Chromium on Linux, controlled desktop/mobile viewports</td>
+</tr>
+<tr>
+<td>Node / Python</td>
+<td>24.19.0 / 3.12.14</td>
+</tr>
+<tr>
+<td>Package advisory checks</td>
+<td>38 unique NuGet package IDs inventoried; NuGet scan and npm audit reported zero known advisories</td>
+</tr>
+<tr>
+<td>Dependency limitation</td>
+<td>Those scans do not certify the operating system, .NET runtime, IIS module or every vendored asset</td>
+</tr>
+</tbody>
+</table>
+<p>The Windows self-contained outputs produced by this audit bundle <strong>Microsoft.NETCore.App and Microsoft.AspNetCore.App 10.0.0</strong>, reflecting the installed SDK. They were generated only to check packaging and were <strong>not deployed</strong>. Before release, rebuild with a current serviced SDK/runtime and verify the bundled versions; a clean NuGet report does not validate those runtime binaries. The actual production runtime version remains unknown.</p>
+<h2 id="3-architecture-and-code-quality-assessment">3. Architecture and code-quality assessment</h2>
+<h3 id="system-responsibilities">System responsibilities</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Responsibility and integration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Appointments.Web</td>
+<td>MVC/Razor entry pages, protected cookies, anti-forgery forms, same-origin <code>/data</code> proxy, JavaScript workspace and public discovery</td>
+</tr>
+<tr>
+<td>Appointments.Api</td>
+<td>Session authentication, clinic selection, authorization, validated operations, public projections, platform lifecycle and OpenAPI/Swagger</td>
+</tr>
+<tr>
+<td>Appointments.Core</td>
+<td>Scheduling, status transitions, catalogue/contact rules, reports, time conversion and appointment history snapshots</td>
+</tr>
+<tr>
+<td>Appointments.Data</td>
+<td>EF mappings/migrations, PostgreSQL transactions, advisory locks, optimistic concurrency, idempotency, audit rows and query scopes</td>
+</tr>
+<tr>
+<td>Appointments.Contracts</td>
+<td>Request/response records and public DTO projections</td>
+</tr>
+<tr>
+<td>Shared appointments database</td>
+<td>One schema per clinic, including original <code>main</code> → <code>public</code>; separate <code>clinic_*</code> schemas for future clinics</td>
+</tr>
+<tr>
+<td>Platform database</td>
+<td>Company operators/sessions and clinic registry/lifecycle metadata; no clinical visit tables</td>
+</tr>
+</tbody>
+</table>
+<p>The browser normally calls Web <code>/data</code>; Web forwards a protected session token to the API; the API selects a server-owned schema and applies role/domain rules before touching PostgreSQL. A company token is separate from a clinic token. Hostnames are entry points, not authorization boundaries.</p>
+<h3 id="verified-architectural-strengths">Verified architectural strengths</h3>
+<ul>
+<li>Booking/move/status rules are centralized and reused by the production adapter and demo, with the limited parity issue L05 noted separately.</li>
+<li>Server-generated schema names, explicit search paths and fully qualified binding checks prevent public-schema fallback or client-supplied connection routing.</li>
+<li>Clinical and platform tokens are separate, opaque and stored as hashes in their respective databases. The normal Web flow protects tokens in HttpOnly cookies rather than JavaScript/local storage.</li>
+<li>The production adapter uses database transactions, clinic-scoped resource locks, optimistic versions and SQL constraints together; it does not rely on client-side slot previews.</li>
+<li>Public endpoints use dedicated DTOs and did not expose patient/account identities in tested public responses.</li>
+<li>Failed mutations and stale versions did not create partial appointment/history rows in the executed tests.</li>
+<li>Demo access is restricted by environment/configuration; Production rejects demo endpoints and previously issued demo sessions.</li>
+<li>HTML escaping and Razor encoding worked for the tested hostile stored patient name. No successful SQL injection, cross-clinic record access or privilege escalation was demonstrated in the tested cases.</li>
+</ul>
+<h3 id="maintainability-and-capacity-concerns">Maintainability and capacity concerns</h3>
+<p>The main workspace remains a roughly 1,800-line JavaScript module with repeated HTML rendering and asynchronous form lifecycles. The confirmed stale-dialog defect shows why request ownership/connected-element handling should become a shared convention. The current static/domain/adapter split is useful; a framework rewrite is not a prerequisite to fix these findings.</p>
+<p>The identity lookup, registry refresh and discovery fan-out grow with clinic count. Schema-specific connection strings also mean distinct Npgsql pools; budget total PostgreSQL connections across clinics and API instances. The existing multi-tenant permission fixtures deliberately use non-superuser roles, but their connections disable pooling; large-scale pool exhaustion was not benchmarked here. No claim of a safe maximum tenant count is made.</p>
+<h2 id="4-executed-testing-and-coverage">4. Executed testing and coverage</h2>
+<h3 id="existing-suites-rerun-at-the-audited-snapshot">Existing suites rerun at the audited snapshot</h3>
+<table>
+<thead>
+<tr>
+<th>Suite</th>
+<th>Result</th>
+<th>What the result establishes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Release solution build</td>
+<td>Passed; zero warnings/errors</td>
+<td>All projects compile on the local Linux SDK</td>
+</tr>
+<tr>
+<td>Core/domain/persistence checks</td>
+<td>87/87</td>
+<td>Scheduling/status/contact/catalogue/report rules and JSON persistence cases covered by that suite</td>
+</tr>
+<tr>
+<td>MVC HTTP smoke</td>
+<td>38/38</td>
+<td>Real HTTP cookies, anti-forgery, roles, routes and local assets in demo mode</td>
+</tr>
+<tr>
+<td>MVC discovery/company contracts</td>
+<td>79/79</td>
+<td>Real MVC/Razor against deterministic API stubs; not a real platform DB by itself</td>
+</tr>
+<tr>
+<td>Chromium UI suite</td>
+<td>140/140</td>
+<td>Real browser layout/interactions; public API stub plus JSON workspace</td>
+</tr>
+<tr>
+<td>Password visibility / DOM workflows</td>
+<td>16/16 + 85/85</td>
+<td>DOM behavior; no independent visual proof from jsdom</td>
+</tr>
+<tr>
+<td>PostgreSQL/API/MVC integration</td>
+<td>125/125</td>
+<td>Two API instances, real PostgreSQL and MVC adapter, auth/revocation, conflicts, CRUD and production behavior</td>
+</tr>
+<tr>
+<td>DOM workflows against real API</td>
+<td>16/16 + 85/85</td>
+<td>Web JavaScript/DOM workflows backed by the real API and PostgreSQL</td>
+</tr>
+<tr>
+<td>Existing direct PostgreSQL constraint checks</td>
+<td>7/7</td>
+<td>Doctor/patient exclusion, invalid range/status, FK and role-link rejection</td>
+</tr>
+<tr>
+<td>Legacy upgrade/repeated profile SQL</td>
+<td>Passed</td>
+<td>Existing records preserved through the tested migration sequence</td>
+</tr>
+<tr>
+<td>Tenant isolation</td>
+<td>75/75 + 12/12 DOM</td>
+<td>Clinic binding, cross-clinic rejection, identity/persistence and old-tab protections</td>
+</tr>
+<tr>
+<td>Platform/discovery</td>
+<td>104/104</td>
+<td>Real provision/resume/adopt/metadata/versioning, search, public exposure, hidden clinics and company authentication</td>
+</tr>
+</tbody>
+</table>
+<p>These are assertion counts, not distinct endpoint totals or statement coverage. Some protections are intentionally exercised by more than one suite; counts should not be added into a percentage.</p>
+<h3 id="new-audit-specific-execution">New audit-specific execution</h3>
+<table>
+<thead>
+<tr>
+<th>Test group</th>
+<th>Executed result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Documented API operation inventory</td>
+<td>45 operations probed anonymously; expected public successes and protected denials recorded</td>
+</tr>
+<tr>
+<td>Role/route matrix</td>
+<td>180 request observations across anonymous, patient, doctor, reception and company identities</td>
+</tr>
+<tr>
+<td>Unsupported method matrix</td>
+<td>242/242 unsupported method requests returned 405</td>
+</tr>
+<tr>
+<td>Entire clinical FK/CHECK inventory</td>
+<td>15 FK + 12 CHECK rejection probes passed, with all mutations rolled back</td>
+</tr>
+<tr>
+<td>Additional key/uniqueness and platform checks</td>
+<td>16 clinical PK + 8 clinical unique-index probes, plus all 7 platform PK/FK/CHECK/unique cases passed and rolled back</td>
+</tr>
+<tr>
+<td>EF model comparison</td>
+<td>No pending model changes; all 15 EF runtime table column names/nullability match local PostgreSQL</td>
+</tr>
+<tr>
+<td>Complete real Chromium journeys</td>
+<td>19/19 successful checkpoints through Web → API → PostgreSQL, followed by separately recorded fault injection</td>
+</tr>
+<tr>
+<td>Extended real forms</td>
+<td>13 successful checkpoints before the broken access-control form; 7 independent continuation checks passed after recording that defect and using API recovery in the fixture</td>
+</tr>
+<tr>
+<td>Account access buttons</td>
+<td><strong>Failed in both directions</strong>, H07; explicitly not counted as working because API toggles work</td>
+</tr>
+<tr>
+<td>Accessibility</td>
+<td>13 pages scanned; six pages had the violations detailed in M04</td>
+</tr>
+<tr>
+<td>Paired backup/restore</td>
+<td>Two isolated database archives restored; login, clinic binding and appointment counts verified</td>
+</tr>
+<tr>
+<td>Published output boot</td>
+<td>Actual published API/Web booted and served Swagger, login and CSS; assets/SQL/dependency DLLs verified</td>
+</tr>
+<tr>
+<td>Windows x64 publish profiles</td>
+<td>API and Web self-contained cross-publish succeeded; Windows/IIS execution remains untested</td>
+</tr>
+<tr>
+<td>Fault/adversarial probes</td>
+<td>Confirmed findings are reported individually; failed probes are not hidden by the baseline passes</td>
+</tr>
+</tbody>
+</table>
+<p>Initial exploratory browser selectors assumed that status dialogs close automatically and ignored hidden duplicate buttons/password toggle buttons. Those <strong>test-harness assumptions were corrected</strong>; they are not application findings. The reschedule conflict, dialog race, boolean form failure and other listed defects were independently observed after that distinction.</p>
+<h3 id="complete-functional-coverage-checklist">Complete functional coverage checklist</h3>
+<p>Legend: <strong>PASS</strong> = executed successfully for the stated cases; <strong>ISSUE</strong> = executed with a finding; <strong>CODE</strong> = inspected but not fully executed in the target environment; <strong>UNTESTED</strong> = not accessible or not performed.</p>
+<table>
+<thead>
+<tr>
+<th>Area/workflow</th>
+<th>Status</th>
+<th>Coverage and limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public landing, cards, navigation, motion/pause/reduced-motion</td>
+<td>PASS</td>
+<td>Chromium desktop/mobile, no-JS search, branding/assets; not every browser engine</td>
+</tr>
+<tr>
+<td>Doctor/clinic discovery and Macedonian search</td>
+<td>PASS</td>
+<td>Broad/refined search, pagination, empty/error states, Cyrillic matches on PostgreSQL</td>
+</tr>
+<tr>
+<td>Clinic contact card/map URLs</td>
+<td>PASS / UNTESTED</td>
+<td>Saved address/phone and encoded map/link construction tested; current live third-party tile service not certified</td>
+</tr>
+<tr>
+<td>Public doctor availability</td>
+<td>PASS / ISSUE</td>
+<td>Day/service filters, free/empty/no-hours/staff-only cases; M05 timezone boundary</td>
+</tr>
+<tr>
+<td>Clicked public time → login/register → selected booking</td>
+<td>PASS</td>
+<td>Doctor, clinic, date, time and service continuation; not a reservation until commit</td>
+</tr>
+<tr>
+<td>Normal registration/login, lockout, password hashing</td>
+<td>PASS / ISSUE</td>
+<td>Actual new account, role restriction and password flow; H01/H02/M07</td>
+</tr>
+<tr>
+<td>Login/register guards, browser Back, logout, expired/revoked cookies</td>
+<td>PASS</td>
+<td>Browser/history checks plus real API session expiry/revocation</td>
+</tr>
+<tr>
+<td>Company sign-in/password change/logout</td>
+<td>PASS</td>
+<td>Separate policy/token and real password-change forms; privileged assurance limitations remain</td>
+</tr>
+<tr>
+<td>Reception, doctor and patient navigation/permissions</td>
+<td>PASS</td>
+<td>Positive and negative server/DOM/browser paths; not authorization by hostname</td>
+</tr>
+<tr>
+<td>Doctor/specialty/service creation/edit/assignment</td>
+<td>PASS</td>
+<td>Actual forms and adapter tests, version checks, inactive catalogue behavior</td>
+</tr>
+<tr>
+<td>Doctor menu, list/card preferences, simple list-only catalogues</td>
+<td>PASS</td>
+<td>Desktop/touch/keyboard and narrow-layout checks</td>
+</tr>
+<tr>
+<td>Patient directory/contact/profile/history</td>
+<td>PASS</td>
+<td>Staff edits/version conflict, patient self-only access, scoped visit history, hostile-name encoding</td>
+</tr>
+<tr>
+<td>Patient/doctor/reception linked-account creation</td>
+<td>PASS</td>
+<td>Three actual role/form paths and profile filtering</td>
+</tr>
+<tr>
+<td>Account credential reset/session revocation</td>
+<td>PASS</td>
+<td>Actual receptionist form and another browser session</td>
+</tr>
+<tr>
+<td>Account enable/disable UI</td>
+<td>ISSUE</td>
+<td>H07 invalid Razor boolean payload; API behavior works separately</td>
+</tr>
+<tr>
+<td>Last administrator / simultaneous staff administration</td>
+<td>ISSUE</td>
+<td>H03 deterministic race</td>
+</tr>
+<tr>
+<td>Weekly hours, split periods, exceptions, duplicate prevention/removal</td>
+<td>PASS / ISSUE</td>
+<td>Real forms/API/SQL; M06 precision mismatch</td>
+</tr>
+<tr>
+<td>Original worksheet notes and weekday ordering</td>
+<td>PASS</td>
+<td>UI hides source instructions; weekday sorting and independent Wednesday availability tested</td>
+</tr>
+<tr>
+<td>Booking, agreed time, service duration and idempotency</td>
+<td>PASS / ISSUE</td>
+<td>Ordinary/staff-agreed paths and concurrency; H06 abuse policy and L05 demo parity</td>
+</tr>
+<tr>
+<td>Doctor/patient double booking and adjacent intervals</td>
+<td>PASS</td>
+<td>Two-instance races, SQL GiST exclusions, patient conflict across doctors</td>
+</tr>
+<tr>
+<td>Reschedule and drag/drop behavior</td>
+<td>PASS / ISSUE</td>
+<td>DOM/HTTP/actual patient rescheduling; stale recovery M03; physical pointer drag across every browser not performed</td>
+</tr>
+<tr>
+<td>Confirm/cancel/complete/no-show and overdue pending resolution</td>
+<td>PASS</td>
+<td>Core/API status cases; real confirm/cancel, atomic history and stale versions</td>
+</tr>
+<tr>
+<td>Confirmation dialogs, password toggles and booking searches</td>
+<td>PASS / ISSUE</td>
+<td>Narrow viewport and keyboard/touch checks; M02 delayed dialog replacement</td>
+</tr>
+<tr>
+<td>Calendar views, filters, ranges and availability overlays</td>
+<td>PASS / ISSUE</td>
+<td>Browser/DOM integration and real page; M04 keyboard/contrast and growth concerns</td>
+</tr>
+<tr>
+<td>Reports/filtering/metrics/export</td>
+<td>PASS / CODE</td>
+<td>Domain/API and DOM CSV escaping checks; current-capacity estimates documented; every spreadsheet application not executed</td>
+</tr>
+<tr>
+<td>Clinic provisioning/retry/adoption/metadata/public flags</td>
+<td>PASS</td>
+<td>Real PostgreSQL/platform suites; actual company create and first new-clinic login</td>
+</tr>
+<tr>
+<td>Platform/clinical outage handling and readiness</td>
+<td>ISSUE</td>
+<td>H04/H05 reproduced; broader infrastructure chaos testing not performed</td>
+</tr>
+<tr>
+<td>JSON body/method/enum/length/version/ownership rejection</td>
+<td>PASS / ISSUE</td>
+<td>Matrix and targeted negatives; L01 status codes, M06 precision</td>
+</tr>
+<tr>
+<td>CSRF, cookie flags, open return URLs, public data projection</td>
+<td>PASS / CODE</td>
+<td>Tested protections; actual ingress cookies/TLS/proxy policy still need verification</td>
+</tr>
+<tr>
+<td>Database installation/upgrade/constraints/schema binding</td>
+<td>PASS</td>
+<td>Actual local schema and data inspected, not just migrations</td>
+</tr>
+<tr>
+<td>Backup and paired restore</td>
+<td>PASS / UNTESTED</td>
+<td>Isolated restore rehearsal; actual production archives/owners/grants/PITR untested</td>
+</tr>
+<tr>
+<td>Larger datasets/performance</td>
+<td>ISSUE / UNTESTED</td>
+<td>M01 single-client synthetic sample; full representative multi-user soak/stress untested</td>
+</tr>
+<tr>
+<td>Dependency advisory and asset/manifests checks</td>
+<td>PASS / CODE</td>
+<td>No reported advisories; not a substitute for runtime/OS/vendor servicing</td>
+</tr>
+<tr>
+<td>Windows/IIS/DNS/certificates/production database</td>
+<td>UNTESTED</td>
+<td>Cross-publish only; live endpoints inaccessible from audit environment</td>
+</tr>
+<tr>
+<td>Accessibility</td>
+<td>ISSUE / UNTESTED</td>
+<td>Axe + browser keyboard cases; no complete assistive-technology/user study</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-findings-and-recommended-fixes">5. Findings and recommended fixes</h2>
+<p>Severity reflects potential impact and release priority. Some findings are demonstrated defects; others are explicitly labeled architectural, assurance or launch-content gaps. A missing optional feature is not automatically treated as an exploitable vulnerability.</p>
+<h3 class="finding high" id="h01-high-https-redirection-can-fail-open-on-a-misconfigured-production-listener">H01 · High — HTTPS redirection can fail open on a misconfigured production listener</h3>
+<p><strong>Evidence:</strong> Reproduced using the actual published API output in Production with Hosting:AllowHttpForTesting=false. An HTTP-only listener with no discoverable HTTPS port returned HTTP 200 and an access token for POST /api/auth/login. The log says “Failed to determine the https port for redirect.” This is conditional on ingress/listener configuration; the live IIS exposure could not be inspected.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L78">src/Appointments.Api/Program.cs:78</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Program.cs#L75">src/Appointments.Web/Program.cs:75</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Boot the published API with a valid isolated database, Production, HTTP testing disabled, and only <code>--urls http://127.0.0.1:&lt;port&gt;</code>; do not configure an HTTPS port.</li>
+<li>POST valid test credentials to /api/auth/login over HTTP.</li>
+<li>Observe HTTP 200 rather than a redirect or rejection; inspect Appointments.Api-published-boot.log.</li>
+</ol>
+<p><strong>Impact:</strong> The flag alone does not establish a secure transport boundary. If an equivalent listener is reachable through production ingress, credentials and bearer tokens can travel without TLS. An IIS rule can prevent this, but that rule is not established by the repository or this test.</p>
+<p><strong>Recommended fix:</strong> Enforce HTTPS at public ingress, configure the real redirect target and trusted proxy scheme handling, and fail startup or reject non-HTTPS authentication requests when the intended transport guarantee cannot be established. Do not blindly trust forwarded headers. Keep loopback health exceptions explicit and narrow.</p>
+<p><strong>Retest / release evidence:</strong> From an external client, both Web and API HTTP entry points must redirect before login pages/credential submission or reject access. Test direct backend access, proxy forwarding, certificate trust and renewal. Do not consider a false HTTP-testing flag alone sufficient.</p>
+<h3 class="finding high" id="h02-high-api-ip-limits-collapse-all-web-visitors-into-the-web-servers-quota">H02 · High — API IP limits collapse all Web visitors into the Web server’s quota</h3>
+<p><strong>Evidence:</strong> Reproduced: 30 independent Web sign-in clients exhausted the API auth bucket; a subsequent valid login received 429. Code confirms the API keys by its TCP peer address, while the Web HttpClient supplies no original-client identity. The test clients themselves shared a loopback address; distinct public source IPs were not simulated. The 90/min discovery policy uses the same architecture (code observation).</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L54">src/Appointments.Api/Program.cs:54</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L53">src/Appointments.Api/Program.cs:53</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Services/ApiClient.cs#L13">src/Appointments.Web/Services/ApiClient.cs:13</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Use the normal Web login form from 30 separate test cookie jars within one minute. Unknown test emails suffice.</li>
+<li>Immediately attempt a legitimate sign-in through the same backend.</li>
+<li>Observe 429 from the API; no account lockout is necessary to trigger this.</li>
+</ol>
+<p><strong>Impact:</strong> One visitor or a normal burst of visitors can block unrelated clinic/company sign-ins. Public search has the analogous shared-IP limit. Limits are also per API process, so scaling/recycling changes their effective budget.</p>
+<p><strong>Recommended fix:</strong> Apply appropriate visitor/account limits at the Web boundary and separate service-to-service budgets from public API budgets. If original-client identity is forwarded, authenticate the forwarding hop and configure explicit trusted proxies; never accept arbitrary Internet-supplied IP headers. Consider shared limiter state where multiple instances must enforce one policy. Return structured 429 responses and Retry-After.</p>
+<p><strong>Retest / release evidence:</strong> Load-test several genuinely distinct client addresses through the deployed topology. One client’s auth/search abuse must not exhaust every visitor’s quota, while same-account and same-client abuse still receive controlled rejection.</p>
+<h3 class="finding high" id="h03-high-concurrent-administrators-can-remove-the-last-active-administrators">H03 · High — Concurrent administrators can remove the last active administrators</h3>
+<p><strong>Evidence:</strong> Reproduced deterministically: two authenticated administrators attempted to disable each other. Target-account advisory locks held both requests after authentication, then were released together. Those locks were test coordination; the underlying race is between two otherwise valid overlapping API requests. Both operations returned 200 and the active-administrator count became zero.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L109">src/Appointments.Api/Services/AccountService.cs:109</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Create an isolated clinic with exactly two enabled administrators, A and B.</li>
+<li>Authenticate both. Hold the two target account locks, issue A→disable B and B→disable A, then release the locks after both requests have authenticated.</li>
+<li>Query Accounts: both are disabled; both requests succeeded.</li>
+</ol>
+<p><strong>Impact:</strong> The self-disable check does not enforce a clinic-wide last-administrator invariant. A clinic can lose its administrative recovery path. The UI defect H07 currently obscures this race, but direct API access already permits it.</p>
+<p><strong>Recommended fix:</strong> Serialize administrator membership changes using a clinic-scoped lock, revalidate the actor where required, and refuse any change that would leave no enabled administrator. Provide an audited recovery procedure. Preserve the existing per-account locks/session revocation.</p>
+<p><strong>Retest / release evidence:</strong> Repeat the race across two API instances: at most one disable succeeds and at least one administrator remains enabled. Also test self-disable, repeated requests, and disabled actors awaiting locks.</p>
+<h3 class="finding high" id="h04-high-a-broken-unrelated-clinic-can-prevent-healthy-clinic-login">H04 · High — A broken unrelated clinic can prevent healthy-clinic login</h3>
+<p><strong>Evidence:</strong> Reproduced: change only east.Settings.ClinicId to a wrong binding in an isolated database. A valid main-clinic login then returns 503. Restore east’s binding and login works again. Runtime scoped requests correctly fail closed for a misbound clinic.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AutomaticLogin.cs#L12">src/Appointments.Api/Services/AutomaticLogin.cs:12</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/ClinicConnections.cs#L47">src/Appointments.Api/Services/ClinicConnections.cs:47</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Configure two working clinics and confirm a main-clinic login.</li>
+<li>Temporarily misbind the other clinic’s Settings.ClinicId, or make that schema unavailable.</li>
+<li>Log into main with unchanged valid credentials. Observe 503 despite the main data remaining healthy.</li>
+</ol>
+<p><strong>Impact:</strong> Automatic login scans every clinic and opens every binding under the global identity lock. A bad schema can therefore prevent new sessions across healthy clinics. Startup also validates all enabled clinics, increasing the failure blast radius.</p>
+<p><strong>Recommended fix:</strong> Design an authoritative global identity-to-clinic routing index or another validated lookup that avoids synchronous full-clinic scans for every login. Preserve global uniqueness and fail-closed binding checks. Do not “fix” this by swallowing exceptions and silently ignoring identities in inaccessible clinics; define quarantine/recovery behavior explicitly.</p>
+<p><strong>Retest / release evidence:</strong> Fault one tenant’s schema while healthy tenants continue their permitted login/clinical workflows, with no duplicate-identity ambiguity or schema fallback. Measure login cost as clinic count increases.</p>
+<h3 class="finding high" id="h05-high-control-plane-failure-interrupts-clinical-traffic-while-health-still-says-ready">H05 · High — Control-plane failure interrupts clinical traffic while health still says ready</h3>
+<p><strong>Evidence:</strong> Reproduced: make PlatformClinics unavailable while the clinical database and an existing clinic token remain healthy. /api/bootstrap returns 503, but /health still returns 200 with status ready. Restoring the registry table restores access.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L95">src/Appointments.Api/Program.cs:95</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/ClinicRegistry.cs#L73">src/Appointments.Api/Services/ClinicRegistry.cs:73</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L114">src/Appointments.Api/Program.cs:114</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Keep a valid clinical session and a working appointments database.</li>
+<li>In an isolated test, rename the platform registry table or deny its availability.</li>
+<li>Call authenticated clinical bootstrap and then /health. Observe 503 versus ready/200.</li>
+</ol>
+<p><strong>Impact:</strong> Every API request synchronously refreshes the control-plane registry under a semaphore. A platform database/schema/pool fault can affect all clinics; the current health result will not identify that inability to serve traffic. This is an architectural availability risk, not a demonstrated live outage.</p>
+<p><strong>Recommended fix:</strong> Explicitly decide and implement the control-plane availability policy. Consider validated immutable routing snapshots/background refresh with carefully bounded stale-state behavior, or ensure a highly available control plane if fail-closed dependence is intentional. Never let caching re-enable a disabled clinic. Add readiness checks that cover required dependencies and distinguish liveness from readiness.</p>
+<p><strong>Retest / release evidence:</strong> Exercise platform outage, recovery, migration and pool exhaustion. The documented availability policy must hold, unknown/disabled clinics must remain blocked, and the deployment’s readiness probe must reflect actual service ability.</p>
+<h3 class="finding high" id="h06-high-a-regular-patient-can-reserve-an-entire-doctor-day-without-abuse-controls">H06 · High — A regular patient can reserve an entire doctor day without abuse controls</h3>
+<p><strong>Evidence:</strong> Reproduced on the published API: one ordinary self-registered patient submitted 16 non-overlapping bookings for a confirmation-required doctor. All 16 returned 200/Scheduled in 1.16 seconds and no free slots remained. No privileged role, overlap bypass, or duplicated request ID was used.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Controllers/AppointmentsController.cs#L35">src/Appointments.Api/Controllers/AppointmentsController.cs:35</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L60">src/Appointments.Api/Services/AccountService.cs:60</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/SchedulingRules.cs#L5">src/Appointments.Core/SchedulingRules.cs:5</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Register a normal patient in a clinic permitting self-registration.</li>
+<li>Give a doctor a free 09:00–17:00 day with 30-minute visits and confirmation required.</li>
+<li>Submit each available time with a fresh request ID for that same patient.</li>
+<li>All 16 pending requests reserve capacity. Existing overlap protection correctly allows these adjacent appointments.</li>
+</ol>
+<p><strong>Impact:</strong> The system lacks a configurable active/future booking cap, a pending-request abuse policy, or verification barrier for public sign-ups. Valid requests can monopolize availability, including pending requests that staff have not approved.</p>
+<p><strong>Recommended fix:</strong> Agree a clinic-configurable patient booking policy: active/future and per-doctor/day limits, abuse-aware rate controls, verified onboarding, and an explicit pending-request expiry/review policy. Allow audited staff exceptions. Do not automatically expire confirmed appointments without an approved business policy. Disabling public registration is a possible temporary mitigation if staff verify new users.</p>
+<p><strong>Retest / release evidence:</strong> Repeat the full-day reservation attempt: a documented limit must stop abuse without breaking legitimate multiple visits or authorized staff bookings. Test expiry, cancellation, staff overrides and concurrent quota checks.</p>
+<h3 class="finding high" id="h07-high-account-enabledisable-buttons-submit-invalid-boolean-values">H07 · High — Account enable/disable buttons submit invalid boolean values</h3>
+<p><strong>Evidence:</strong> Reproduced in real Chromium against Web → API → PostgreSQL. For an enabled account the hidden value attribute is omitted and the form posts enabled=. For a disabled account Razor renders value="value" and the form posts enabled=value. Both requests show the generic validation error and leave access unchanged. Explicit JSON API toggles succeed.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Accounts/Index.cshtml#L27">src/Appointments.Web/Views/Accounts/Index.cshtml:27</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Controllers/AccountsController.cs#L23">src/Appointments.Web/Controllers/AccountsController.cs:23</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>As reception, open Accounts &amp; access and click disable on another enabled account.</li>
+<li>Inspect the POST payload: enabled is empty; the account remains enabled.</li>
+<li>Disable that account using an authorized explicit API request, then click enable in the Web UI.</li>
+<li>The Web form now posts enabled=value and still fails.</li>
+</ol>
+<p><strong>Impact:</strong> Normal staff cannot revoke or restore account access from the intended screen, including during a compromised-account response. Password reset revocation and direct API access are separate working paths, not a replacement for a functioning access control.</p>
+<p><strong>Recommended fix:</strong> Render an explicit string value, for example value="@(a.Enabled ? "false" : "true")", or use a correctly bound view model/tag helper. Add real-form round-trip tests for both directions, session revocation and the last-administrator invariant H03. Improve the access-form error message so it does not incorrectly mention passwords.</p>
+<p><strong>Retest / release evidence:</strong> Both Web buttons must post literal true/false, update the database, show the correct notice, and immediately revoke affected sessions when required. No API-only shortcut should be used for the UI acceptance test.</p>
+<h3 class="finding medium" id="m01-medium-workspace-bootstrap-and-polling-grow-without-a-data-window">M01 · Medium — Workspace bootstrap and polling grow without a data window</h3>
+<p><strong>Evidence:</strong> Reproduced with 5,003 synthetic patients and 30,002 appointments: bootstrap returned every visible row; the re-serialized JSON representation was about 11.99 MB. That local request took about 559 ms versus a small-clinic median around 16 ms. This was a synthetic single-client sample, not a production load/SLA certification.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/PostgresAppointments.cs#L14">src/Appointments.Data/PostgresAppointments.cs:14</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L1768">src/Appointments.Web/wwwroot/js/app.js:1768</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Populate only a disposable clinic with a long historical appointment dataset and thousands of contacts.</li>
+<li>Request /api/bootstrap as reception.</li>
+<li>Leave an idle workspace open and observe full-bootstrap polling every 20 seconds where polling is not paused.</li>
+</ol>
+<p><strong>Impact:</strong> History and contacts are repeatedly transferred and parsed even for a small current view. The API already has a paginated appointment list, but the UI does not use it for this refresh path. Large clinics and several simultaneous staff users amplify network, database and browser costs.</p>
+<p><strong>Recommended fix:</strong> Separate reference data from windowed appointment/contact queries; use the existing paginated/date-filtered API where appropriate, add version/delta refresh semantics, and page account/patient directories. Add an index/query plan and browser memory/load budget based on expected clinic scale.</p>
+<p><strong>Retest / release evidence:</strong> Run concurrent staff scenarios with representative multi-year data, defined latency/payload limits, measured browser responsiveness, and bounded refresh traffic. Verify role scoping on every new query.</p>
+<h3 class="finding medium" id="m02-medium-a-delayed-booking-failure-can-throw-an-uncaught-dialog-exception">M02 · Medium — A delayed booking failure can throw an uncaught dialog exception</h3>
+<p><strong>Evidence:</strong> Reproduced by holding a booking response, closing the booking dialog, opening a doctor profile, and returning a controlled 503. The browser throws “Cannot set properties of null (setting innerHTML)”. The normal journeys had zero uncaught errors before this deliberate fault injection.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L955">src/Appointments.Web/wwwroot/js/app.js:955</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L878">src/Appointments.Web/wwwroot/js/app.js:878</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Open and review a valid booking. Delay the /data/appointments response.</li>
+<li>While it is pending, close that dialog and open a doctor profile, replacing dialog-content.</li>
+<li>Return a 503 to the original request. Its catch handler looks up the now-absent booking-error element.</li>
+</ol>
+<p><strong>Impact:</strong> Asynchronous callbacks can write to a different or missing dialog and leave the user without a clear failure/reconciliation message. Similar unguarded catch patterns exist in other forms (code observation), but this booking case is the reproduced one.</p>
+<p><strong>Recommended fix:</strong> Capture a dialog/request generation and relevant element references; update only if they still belong to the same active flow and are connected. Otherwise surface a safe global notice. Preserve booking idempotency and reconcile ambiguous writes; canceling a browser request is not proof that the server did not commit.</p>
+<p><strong>Retest / release evidence:</strong> Delay/fail each mutable form while closing, navigating or opening another dialog. No uncaught exception or cross-dialog error should occur; ambiguous successful writes must remain discoverable without duplicate creation.</p>
+<h3 class="finding medium" id="m03-medium-stale-rescheduling-has-no-recovery-action-inside-the-booking-form">M03 · Medium — Stale rescheduling has no recovery action inside the booking form</h3>
+<p><strong>Evidence:</strong> Reproduced when a patient tab retained an older pending version while the doctor confirmed it in another session. Rescheduling returned the correct HTTP 409, preserving data, but the reschedule dialog offered no reload control. Leaving the form and refreshing/reopening details or reloading the page resolved it. Appointment details already have a history refresh control; this is not an absence of all recovery in the application.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L587">src/Appointments.Web/wwwroot/js/app.js:587</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L955">src/Appointments.Web/wwwroot/js/app.js:955</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Keep a patient tab on a pending appointment, then confirm it in a separate doctor session.</li>
+<li>Before the patient tab refreshes, open reschedule and submit another free time.</li>
+<li>Observe 409 and no inline refresh/discard-and-reload action in the reschedule dialog.</li>
+</ol>
+<p><strong>Impact:</strong> Concurrency protection works, but the user can repeatedly retry stale form state without an obvious recovery path. Background polling deliberately pauses while a dialog is open.</p>
+<p><strong>Recommended fix:</strong> Add a clear 409 recovery action that reloads the appointment and availability, explicitly explaining whether typed choices will be retained or discarded. Reuse the existing detail refresh pattern. Never silently replace the version on a form that still shows old data.</p>
+<p><strong>Retest / release evidence:</strong> Run two-tab confirm/move/cancel races. A stale form must retain useful input, show a conflict, offer deliberate recovery, and never overwrite another staff/user change.</p>
+<h3 class="finding medium" id="m04-medium-automated-accessibility-checks-still-find-contrast-and-keyboard-scroll-failures">M04 · Medium — Automated accessibility checks still find contrast and keyboard-scroll failures</h3>
+<p><strong>Evidence:</strong> Executed axe WCAG 2 A/AA and 2.1 AA scans on 13 real pages. Six pages had violations: seven page/rule instances, including 31 reported contrast nodes and one unfocusable calendar scroll region. Repeated nodes and redundant avatar initials are not 31 independent product defects; decorative initials may warrant exemption.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/css/site.css#L335">src/Appointments.Web/wwwroot/css/site.css:335</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/css/site.css#L803">src/Appointments.Web/wwwroot/css/site.css:803</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/css/discover.css#L69">src/Appointments.Web/wwwroot/css/discover.css:69</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L1067">src/Appointments.Web/wwwroot/js/app.js:1067</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Scan the public directory and authenticated overview, doctors, patients, calendar and reports pages.</li>
+<li>Examples: inactive calendar view buttons measured 3.02:1, Scheduled status 4.15:1, directory filter chip 4.07:1, and footer text 2.62:1.</li>
+<li>Tab through the calendar scrollable region; axe identifies fc-scroller-liquid-absolute as lacking keyboard focus access.</li>
+</ol>
+<p><strong>Impact:</strong> Some meaningful small text remains below 4.5:1 despite the recent theme improvement. Keyboard users may not be able to reach/scroll all calendar content reliably. Automated scans are not a full WCAG certification or screen-reader review.</p>
+<p><strong>Recommended fix:</strong> Adjust the actual computed foreground/background pairs, prioritizing functional controls and status labels. Make the calendar scrolling region keyboard accessible with an appropriate label/focus strategy. Review redundant decorative initials separately instead of darkening everything indiscriminately.</p>
+<p><strong>Retest / release evidence:</strong> Re-run automated scans and manual keyboard/zoom/screen-reader checks in target browsers. Validate focus visibility, dialogs and calendar interaction at 200% zoom and mobile sizes.</p>
+<h3 class="finding medium" id="m05-medium-public-availability-assumes-every-valid-timezone-has-a-valid-midnight">M05 · Medium — Public availability assumes every valid timezone has a valid midnight</h3>
+<p><strong>Evidence:</strong> Reproduced for an allowed America/Havana clinic on 2027-03-14, within the tested booking horizon: public availability returned 500. That day has a nonexistent local midnight, and ToInstant returns null. Europe/Skopje scenarios did not exhibit this issue.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/PublicDiscovery.cs#L46">src/Appointments.Api/Services/PublicDiscovery.cs:46</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/SchedulingClock.cs#L14">src/Appointments.Core/SchedulingClock.cs:14</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Provision an isolated clinic with TimeZone America/Havana and a doctor available Sunday 09:00–10:00.</li>
+<li>GET its public availability for 2027-03-14.</li>
+<li>The forced nullable Value access for the local day boundary throws.</li>
+</ol>
+<p><strong>Impact:</strong> The API accepts timezone configurations that its day-window construction cannot safely handle. This is a conditional bug for supported zones, not evidence of incorrect Skopje booking times.</p>
+<p><strong>Recommended fix:</strong> Build valid local-day query bounds without assuming midnight exists, or explicitly restrict supported zones/configurations with validation. Keep the existing policy of rejecting ambiguous/nonexistent actual appointment times; do not silently shift a chosen appointment.</p>
+<p><strong>Retest / release evidence:</strong> Test midnight DST gaps/repeats, ordinary Skopje DST, supported international zones and boundary dates. The endpoint must return valid information or a documented validation response, never 500.</p>
+<h3 class="finding medium" id="m06-medium-sub-minute-availability-is-accepted-but-slot-generation-rounds-it-down">M06 · Medium — Sub-minute availability is accepted but slot generation rounds it down</h3>
+<p><strong>Evidence:</strong> Reproduced: a weekly start of 09:00:00.5000000 was accepted with HTTP 200, but the first returned slot was 09:00:00, before the configured start. The schedule validator checks Second, not fractional ticks. Additional availability periods have the analogous precision inconsistency (code observation).</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/AppointmentService.cs#L187">src/Appointments.Core/AppointmentService.cs:187</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/SchedulingRules.cs#L16">src/Appointments.Core/SchedulingRules.cs:16</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Save a valid doctor schedule whose start/end include a fractional second with Second still equal to zero.</li>
+<li>Request slots for the matching weekday.</li>
+<li>Observe a rounded-down first start outside the saved interval.</li>
+</ol>
+<p><strong>Impact:</strong> The API and scheduling grid disagree about accepted time precision. Normal minute-only browser inputs reduce exposure, but direct/API clients can create inconsistent availability and later schedule-protection conflicts.</p>
+<p><strong>Recommended fix:</strong> Enforce whole-minute ticks consistently for schedules, exceptions and all relevant DTOs, or implement a precisely specified slot quantization rule that never emits a slot outside its source interval. Keep agreed-time validation consistent.</p>
+<p><strong>Retest / release evidence:</strong> Test seconds and fractional seconds around start/end boundaries in weekly and one-off periods, checking that every accepted slot fits its actual saved availability.</p>
+<h3 class="finding medium" id="m07-medium-public-identity-assurance-and-privileged-account-protection-need-a-launch-policy">M07 · Medium — Public identity assurance and privileged-account protection need a launch policy</h3>
+<p><strong>Evidence:</strong> Code-confirmed and documented limitations: registration accepts an email without ownership verification and immediately enables a new patient; MFA, emailed recovery and forced first-use password change are absent. Actual registration without email delivery succeeded. Existing patient records cannot be claimed merely by matching email, which is a working protection.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L60">src/Appointments.Api/Services/AccountService.cs:60</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/Entities.cs#L15">src/Appointments.Data/Entities.cs:15</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/README.md#L95">README.md:95</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Register a fresh test email through the normal public form.</li>
+<li>Sign in immediately; no email ownership proof is requested.</li>
+<li>Inspect clinic/company sign-in and first-use credential flows for MFA or forced rotation; neither is implemented.</li>
+</ol>
+<p><strong>Impact:</strong> An unverified identity can reserve a globally unique email and obtain booking access. Privileged accounts rely on passwords and lockout alone. This is an assurance/policy gap, not a demonstrated takeover of an existing clinical profile.</p>
+<p><strong>Recommended fix:</strong> Decide verified public onboarding, account recovery, privileged MFA or restricted administrative ingress, and staff identity checks before launch. If integrations are not ready, disable public registration where appropriate and use verified staff-created accounts. Do not imply email/phone verification or notifications in product claims.</p>
+<p><strong>Retest / release evidence:</strong> Approve and test the chosen ownership/recovery policy, failed-verification paths, MFA or compensating controls, secure initial credential delivery and session revocation.</p>
+<h3 class="finding medium" id="m08-medium-application-audit-and-incident-visibility-do-not-cover-important-security-events">M08 · Medium — Application audit and incident visibility do not cover important security events</h3>
+<p><strong>Evidence:</strong> Code observation supported by the exported audit schema: the application records selected mutations but not an authentication-failure event history, access-denied/read-access trail, or a full company metadata/password-change audit. Failed-attempt counters are reset and do not form a historical trail. The test did not inspect actual IIS, SIEM or database-provider logs.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L33">src/Appointments.Api/Services/AccountService.cs:33</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/PlatformService.cs#L118">src/Appointments.Api/Services/PlatformService.cs:118</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/PostgresAppointments.cs#L225">src/Appointments.Data/PostgresAppointments.cs:225</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Cause failed logins, change platform metadata and change the company password in an isolated fixture.</li>
+<li>Compare the application audit model/write paths with the existing appointment/account mutation audit.</li>
+<li>Identify missing event types and confirm any external logging separately.</li>
+</ol>
+<p><strong>Impact:</strong> Incident reconstruction and detection depend on infrastructure that is not established here. The in-database audit also shares the application’s broad write authority and is not tamper-evident.</p>
+<p><strong>Recommended fix:</strong> Define a privacy-conscious event catalogue, correlation IDs, trusted client attribution and external protected log storage. Add the missing security/company events, alerts and retention/access rules without logging passwords, tokens or unnecessary patient details. Define how sensitive reads are audited if required by policy.</p>
+<p><strong>Retest / release evidence:</strong> Demonstrate a test incident from sign-in failure through account disable and investigation, including cross-instance correlation, alert delivery, retention and protection against accidental audit deletion.</p>
+<h3 class="finding medium" id="m09-medium-privacy-and-terms-are-still-placeholders-for-a-real-data-launch">M09 · Medium — Privacy and terms are still placeholders for a real-data launch</h3>
+<p><strong>Evidence:</strong> Code-only launch-content gap: the public footer marks Privacy and Terms as “Наскоро” and has no working policy links. No actual legal/compliance documentation or organizational agreement was supplied to this audit.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Discover/Index.cshtml#L167">src/Appointments.Web/Views/Discover/Index.cshtml:167</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Open the landing-page footer.</li>
+<li>Observe the disabled privacy/terms text instead of a published notice.</li>
+</ol>
+<p><strong>Impact:</strong> Visitors are about to supply personal contact and appointment data without the intended public policy pages being available. The appropriate legal obligations depend on the deployment and organization; this audit is not a legal compliance certification.</p>
+<p><strong>Recommended fix:</strong> Have the responsible company/clinic owners approve and publish accurate privacy, terms, retention/deletion, identity-verification and support policies. Address external map requests and relevant processing/vendor responsibilities. Link them from registration and the footer as required by the approved policy.</p>
+<p><strong>Retest / release evidence:</strong> Confirm the final documents and operational procedures with the responsible owners, verify working accessible links, and ensure the product’s actual behavior matches its claims.</p>
+<h3 class="finding low" id="l01-low-some-malformed-requests-are-classified-as-serverdatabase-outages">L01 · Low — Some malformed requests are classified as server/database outages</h3>
+<p><strong>Evidence:</strong> Reproduced: a body over the 64 KiB API limit returned 500 rather than 413. A booking with empty serviceId on a legacy/no-service doctor reached a foreign-key failure and returned 503; the rules had treated empty as absent. Neither probe created an invalid appointment.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L67">src/Appointments.Api/Program.cs:67</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/Catalogue.cs#L91">src/Appointments.Core/Catalogue.cs:91</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/AppointmentService.cs#L86">src/Appointments.Core/AppointmentService.cs:86</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>POST a roughly 70 KiB JSON body to an API endpoint.</li>
+<li>POST a valid legacy-doctor booking with serviceId="" rather than null.</li>
+<li>Observe 500 and 503 respectively instead of precise input/size handling.</li>
+</ol>
+<p><strong>Impact:</strong> These responses mislead users, monitoring and retry logic into diagnosing application/database failure for invalid input. Database integrity remains protected.</p>
+<p><strong>Recommended fix:</strong> Preserve BadHttpRequestException status codes such as 413, normalize optional service IDs consistently or reject empty IDs, and return structured validation errors. Include structured rate-limit responses as part of H02.</p>
+<p><strong>Retest / release evidence:</strong> Assert exact 400/409/413/429/503 semantics for malformed, stale, oversized, limited and unavailable cases, with no partial persistence.</p>
+<h3 class="finding low" id="l02-low-explicit-browser-security-policies-are-incomplete">L02 · Low — Explicit browser security policies are incomplete</h3>
+<p><strong>Evidence:</strong> Observed on the real workspace response: no Content-Security-Policy or X-Frame-Options header. X-Content-Type-Options and Referrer-Policy were present. No successful clickjacking or XSS exploit was demonstrated; HttpOnly/SameSite cookies, CSRF validation and HTML escaping remain important working protections.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Program.cs#L80">src/Appointments.Web/Program.cs:80</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Shared/_Layout.cshtml#L15">src/Appointments.Web/Views/Shared/_Layout.cshtml:15</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Inspect security headers on authenticated Web pages and their actual deployed ingress.</li>
+<li>Compare script, frame, image and map dependencies before choosing policies.</li>
+</ol>
+<p><strong>Impact:</strong> The browser has less defense in depth against unintended framing and future injection than it could. Infrastructure may add headers, but that was not verifiable here.</p>
+<p><strong>Recommended fix:</strong> Introduce a tested CSP, beginning in report-only mode if appropriate, including frame-ancestors and suitable script/connect/frame sources. Consider a Permissions-Policy and consistent frame protection. Preserve approved Google Maps embedding and existing local assets.</p>
+<p><strong>Retest / release evidence:</strong> Check real ingress headers and normal workflows with enforcement enabled; verify that unauthorized framing is blocked without breaking intended embedded content.</p>
+<h3 class="finding low" id="l03-low-operational-documentation-contains-contradictory-legacy-instructions">L03 · Low — Operational documentation contains contradictory legacy instructions</h3>
+<p><strong>Evidence:</strong> Code/document review: README still states that staff cannot complete an unconfirmed past request, although the implemented/tested overdue-resolution path permits completion/no-show after its end. Some older feature documents still instruct migration per separate clinic database. The printed system guide is explicitly a historical snapshot and should not be mistaken for current instructions.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/README.md#L140">README.md:140</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/docs/PATIENT_PROFILES.md#L31">docs/PATIENT_PROFILES.md:31</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/docs/SHARED_DATABASE.md#L1">docs/SHARED_DATABASE.md:1</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Compare README appointment-status guidance with ChangeStatus and the overdue tests.</li>
+<li>Compare older per-clinic database migration notes with current shared-database/schema instructions.</li>
+</ol>
+<p><strong>Impact:</strong> An operator can follow an obsolete mental model during deployment or support, particularly when managing the original public clinic and newer schemas.</p>
+<p><strong>Recommended fix:</strong> Consolidate a versioned current deployment/runbook index, mark superseded documents clearly, and update current status/migration guidance. Preserve historical artifacts as labeled snapshots rather than silently treating them as current.</p>
+<p><strong>Retest / release evidence:</strong> Have a second operator follow only the current runbook through a disposable deployment, upgrade, clinic registration, backup and recovery.</p>
+<h3 class="finding low" id="l04-low-ci-does-not-currently-gate-the-full-browser-accessibility-or-dependency-audit-checks">L04 · Low — CI does not currently gate the full browser, accessibility or dependency-audit checks</h3>
+<p><strong>Evidence:</strong> Workflow code observation: discovery_web_smoke runs Chromium only when TEST_BROWSER_EXECUTABLE is set; the checked-in CI job does not install/configure that browser path. DOM checks are present. Axe and package vulnerability audits are not configured as release gates. Remote GitHub job status was not queried.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/.github/workflows/ci.yml#L1">.github/workflows/ci.yml:1</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Inspect the checked-in workflow’s test environment and browser installation steps.</li>
+<li>Compare it with the environment used for the 140 Chromium checks and 13 axe scans in this audit.</li>
+</ol>
+<p><strong>Impact:</strong> Passing CI does not currently imply that the browser-only failures found here would be caught before release. A green badge must not be interpreted as end-to-end production approval.</p>
+<p><strong>Recommended fix:</strong> Add a controlled real-browser job, accessibility regression checks, dependency-advisory checks and targeted regressions for the high-severity findings. Add Windows publish packaging verification and an actual staging smoke test where available.</p>
+<p><strong>Retest / release evidence:</strong> Intentionally break a representative form/keyboard workflow in a disposable branch and prove the relevant CI gate fails, then verify artifacts and redacted failure traces are retained.</p>
+<h3 class="finding low" id="l05-low-demo-and-postgresql-booking-idempotency-differ-on-the-agreement-flag">L05 · Low — Demo and PostgreSQL booking idempotency differ on the agreement flag</h3>
+<p><strong>Evidence:</strong> Reproduced with the real domain service and JSON demo store: submit a normal request, then reuse its ID with AgreedTime=true. The demo returns the original pending appointment rather than rejecting the changed request. PostgreSQL fingerprints the full canonical command and rejects changed reuse. This is a demo/testing parity defect, not a demonstrated production duplicate-booking defect.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/AppointmentService.cs#L60">src/Appointments.Core/AppointmentService.cs:60</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/PostgresAppointments.cs#L73">src/Appointments.Data/PostgresAppointments.cs:73</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>In a disposable JSON demo, book a confirmation-required doctor using a fresh request ID.</li>
+<li>Reuse that ID with only AgreedTime changed.</li>
+<li>Observe successful replay in demo; compare with the production adapter’s fingerprint handling.</li>
+</ol>
+<p><strong>Impact:</strong> Demo tests and demonstrations can accept behavior the production backend correctly rejects, reducing confidence when relying only on demo/DOM paths.</p>
+<p><strong>Recommended fix:</strong> Share canonical request normalization/fingerprint semantics or explicitly align the demo duplicate comparison with all relevant booking fields and request-ID normalization. Keep the stable original-response replay behavior.</p>
+<p><strong>Retest / release evidence:</strong> Run the same idempotency matrix against both stores: identical retry, changed time/patient/service/agreement/duration, GUID format variants, and retries after later appointment changes.</p>
+<h3 class="finding low" id="l06-low-account-creation-errors-discard-nonsecret-form-input">L06 · Low — Account-creation errors discard nonsecret form input</h3>
+<p><strong>Evidence:</strong> Reproduced through the real Web form: submit a new administrator account using an email already reserved by another account. After the validation/error redirect, name and email are both empty. Password clearing is correct and should remain.</p>
+<p><strong>Exact locations:</strong> <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Controllers/AccountsController.cs#L25">src/Appointments.Web/Controllers/AccountsController.cs:25</a>; <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Accounts/Index.cshtml#L11">src/Appointments.Web/Views/Accounts/Index.cshtml:11</a></p>
+<p><strong>Reproduction / inspection steps:</strong></p>
+<ol>
+<li>Enter a valid display name, role and password, but choose an already-used email in Accounts &amp; access.</li>
+<li>Submit and observe the server rejection.</li>
+<li>The name/email/selection context is lost instead of retaining safe input for correction.</li>
+</ol>
+<p><strong>Impact:</strong> Users must re-enter data after a routine correctable error, making account provisioning more error-prone. No password exposure was observed.</p>
+<p><strong>Recommended fix:</strong> Use a view model or a whitelisted safe PRG state to retain name, email, role and applicable profile selection. Never retain the password in HTML, query strings, TempData or logs.</p>
+<p><strong>Retest / release evidence:</strong> Cause each account validation/uniqueness error and verify safe values remain, secrets are cleared, and linked-profile selections are revalidated before a successful retry.</p>
+<h2 id="6-database-assessment">6. Database assessment</h2>
+<h3 id="actual-local-structure-inspected">Actual local structure inspected</h3>
+<p>The canonical original-clinic <code>public</code> schema contains <strong>16 tables, 110 columns, 16 primary keys, 15 foreign keys, 12 CHECK constraints, two GiST exclusion constraints and 37 indexes</strong>. This includes the EF migration-history table. The platform schema contains <strong>4 tables, 28 columns, 4 primary keys, one explicit unique constraint, one foreign key, one CHECK constraint and 6 indexes</strong>.</p>
+<p>The final fixture also contained <code>clinic_east</code>, a newly provisioned <code>clinic_audit_new</code>, and <code>clinic_havana</code> in the <strong>same clinical database</strong>. Managed schemas add the single-column <code>CarelineProvisioning</code> marker to the same clinical layout. The extension objects are in <code>careline_extensions</code>. Every table/column, nullable/default/length declaration, FK/CHECK/exclusion definition and index from these fixture schemas was exported to the evidence CSVs; canonical definitions appear in the schema appendix.</p>
+<p>All four EF migrations were applied and recorded; platform schema versions 1/2/3 were present. The model reports no pending changes. Model column names/nullability agree with the real local public schema. This is not an assertion that manual changes on the inaccessible production server are absent.</p>
+<h3 id="table-responsibilities">Table responsibilities</h3>
+<table>
+<thead>
+<tr>
+<th>Clinical table</th>
+<th>Purpose/integrity assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accounts</td>
+<td>Role/profile-link CHECK, unique normalized email/profile links, patient/doctor FKs; disabling and credential reset revoke sessions; H03/H07 remain</td>
+</tr>
+<tr>
+<td>Sessions</td>
+<td>Hashed token PK, account FK/cascade, expiry index; expired sessions rejected in execution</td>
+</tr>
+<tr>
+<td>Patients</td>
+<td>Name/contact lengths, unique nonempty contact email, positive optimistic version; staff contact editing is intentional</td>
+</tr>
+<tr>
+<td>Doctors</td>
+<td>Duration CHECK, specialty FK, separate catalogue/schedule concurrency tokens</td>
+</tr>
+<tr>
+<td>WorkingPeriods</td>
+<td>Owned doctor FK, day/range CHECK and doctor/day index; application additionally rejects overlaps; M06 precision</td>
+</tr>
+<tr>
+<td>SourceSchedules</td>
+<td>Historical import metadata, owned doctor FK; not instructions for scheduling</td>
+</tr>
+<tr>
+<td>Specialties</td>
+<td>Unique name and optimistic version; safe catalogue identity mapping</td>
+</tr>
+<tr>
+<td>Services</td>
+<td>Specialty FK, duration CHECK, unique name within specialty, version</td>
+</tr>
+<tr>
+<td>DoctorServices</td>
+<td>Composite PK plus doctor/service FKs; assignments are validated and serialized with catalogue writes</td>
+</tr>
+<tr>
+<td>Appointments</td>
+<td>Doctor/patient/service FKs, valid range/status/version checks, request uniqueness, scoped read indexes and two exclusion constraints</td>
+</tr>
+<tr>
+<td>AppointmentHistory</td>
+<td>Appointment FK, version uniqueness and before/after snapshot checks; existing legacy visits are not given invented history</td>
+</tr>
+<tr>
+<td>AvailabilityExceptions</td>
+<td>Doctor FK/date index/range CHECK; API duplicate protection relies on the doctor lock and domain rule</td>
+</tr>
+<tr>
+<td>IdempotencyRequests</td>
+<td>Account/request composite PK, account FK, fingerprint and stable JSON response; replay survives later appointment changes</td>
+</tr>
+<tr>
+<td>AuditEvents</td>
+<td>Actor/action/target/time records; limited coverage and protection discussed in M08</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td>Clinic/timezone binding markers; fail-closed schema validation</td>
+</tr>
+<tr>
+<td>__EFMigrationsHistory</td>
+<td>Executed clinical migration identities</td>
+</tr>
+<tr>
+<td>CarelineProvisioning (managed schemas)</td>
+<td>One clinic marker used for safe resumable registration; not a clinical data table</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Platform table</th>
+<th>Purpose/integrity assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PlatformOperators</td>
+<td>Company identity, unique email, password hash and lockout state</td>
+</tr>
+<tr>
+<td>PlatformSessions</td>
+<td>Hashed token PK, operator FK/cascade and expiry index</td>
+</tr>
+<tr>
+<td>PlatformClinics</td>
+<td>Routing/lifecycle/public metadata, state CHECK, adoption marker and optimistic version</td>
+</tr>
+<tr>
+<td>PlatformSchemaVersions</td>
+<td>Applied raw-SQL upgrade markers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="integrity-rules-actually-exercised">Integrity rules actually exercised</h3>
+<p>The audit executed all 15 clinical FK rejection cases and all 12 CHECK rejection cases inside a transaction that was rolled back. The existing suite separately verified both exclusion constraints, cancelled-slot release and additional constraint cases. Runtime multi-tenant tests proved that a foreign-clinic profile cannot be linked by FK and a missing tenant table cannot fall back to public. A legacy upgrade preserved existing contacts, appointments, specialty identities and durations without inventing services/history.</p>
+<p>All 16 canonical clinical primary keys, all eight clinical unique indexes and all seven platform primary-key/foreign-key/CHECK/unique cases also rejected targeted invalid writes. Together with the 27 clinical FK/CHECK cases, this is 58 additional constraint probes, all rolled back. Index definitions were inspected from PostgreSQL and compared with the application model/rules. Not every possible collation, manually corrupted row or concurrent direct-SQL writer permutation was generated. Application normalization and locking remain important: some invariants, such as exact exception duplicate detection, case folding and schedule overlap checks, are enforced by the service rather than by a separate SQL constraint.</p>
+<p>Possible hardening work includes explicitly documenting which invariants direct SQL writers must preserve, adding selected duplicate/enum constraints where they serve a real operational need, separating migration/runtime privileges where feasible, and formalizing retention/archive/deletion procedures. An application database owner can modify its schemas; this design does not claim database-role isolation between all clinics or tamper-proof audit storage.</p>
+<h3 id="restore-rehearsal">Restore rehearsal</h3>
+<p>All fixture writers were stopped before taking paired custom-format backups. Both databases restored into new isolated databases without SQL errors. A restarted API accepted the original test administrator credentials and returned the same <strong>30,002</strong> appointment count and original clinic binding. This proves the tested local restore path, not that the user’s actual backup files, target owners/roles/grants, encrypted secrets, production key ring or recovery-time objectives have been validated.</p>
+<h2 id="7-security-and-business-policy-decisions-still-required">7. Security and business-policy decisions still required</h2>
+<p>These are explicit existing limits or release decisions, not all additional defects:</p>
+<ul>
+<li>Patient accounts belong to one clinic; email uniqueness is global. A patient from clinic A cannot simply book clinic B with that account. That behavior is enforced, but the product owner must approve it for a multi-clinic public directory.</li>
+<li>Doctors intentionally share the clinic contact directory and may update contacts, while seeing only their own appointment history for a selected patient. This is documented behavior, not an unauthorized cross-doctor appointment leak found by the audit.</li>
+<li>No email/SMS reminders, email ownership verification, self-service emailed password recovery, external calendar synchronization or medical-record functionality is implemented. The UI generally states that messages were not sent. Approve the associated manual communication/support process.</li>
+<li>Managed-clinic metadata supports visibility/registration flags, not a complete company-facing suspend/archive/delete lifecycle. Hiding a clinic is not the same as revoking existing clinical access. Decide whether suspension is needed before launch.</li>
+<li>Capacity reporting deliberately reconstructs <strong>current</strong> weekly hours/exceptions; historical capacity is an estimate. It should not be sold as a historical staffing audit or a billing system.</li>
+<li>Sessions expire after two hours; five failed password attempts temporarily lock an account for 15 minutes. Existing counters are not a full incident history. Approve operational recovery and support procedures.</li>
+<li>Overnight periods and ambiguous/nonexistent appointment times are intentionally constrained; do not infer support for every hospital/24-hour scheduling model.</li>
+<li>Original imported doctor names/flags and every clinic’s actual hours/services/public contact data need owner validation before they represent a real clinic. Demo=false does not by itself disable the legacy main clinic’s source-doctor import into an empty schema.</li>
+</ul>
+<h2 id="8-production-verification-still-outstanding">8. Production verification still outstanding</h2>
+<table>
+<thead>
+<tr>
+<th>Release gate</th>
+<th>Required evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Live schema and data</td>
+<td>Read-only catalogue export and migration/version verification from the actual two databases; check ownership, all schemas, constraints/indexes, extension location, account states and legitimate clinic records</td>
+</tr>
+<tr>
+<td>Actual database role privileges</td>
+<td>Verify clinical/platform roles, no runtime superuser, intended schema-creation/provisioning privileges, correct restored ownership/grants and no accidental public exposure</td>
+</tr>
+<tr>
+<td>TLS and ingress</td>
+<td>Real DNS A/AAAA, externally trusted certificates for exact hostnames, HTTPS redirects/rejection, renewal, IIS bindings, proxy scheme/client attribution and direct-backend reachability</td>
+</tr>
+<tr>
+<td>Runtime servicing</td>
+<td>Current supported SDK/Hosting Bundle or self-contained runtime; inspect deployed versions, not only project package versions</td>
+</tr>
+<tr>
+<td>Secret management</td>
+<td>Strong rotated production/test/bootstrap credentials, safe configuration overrides/ACLs, removed unnecessary bootstrap values, no secrets in source or ordinary logs</td>
+</tr>
+<tr>
+<td>Cookie/Data Protection durability</td>
+<td>Persistent protected keys, correct application identity, intended multi-instance key sharing, restart/recycle behavior and cookie flags on the real HTTPS response</td>
+</tr>
+<tr>
+<td>Deployment/rollback</td>
+<td>Full publish output copied atomically with server settings preserved; maintenance/migration order, SQL assets, configuration validation, rollback and post-deploy smoke procedure</td>
+</tr>
+<tr>
+<td>Backup/DR</td>
+<td>Actual paired production archives restored with real roles/grants; coordinated consistency, off-server storage, encryption, retention, recovery-time/data-loss objectives and recovery rehearsal</td>
+</tr>
+<tr>
+<td>Monitoring/readiness</td>
+<td>Defined liveness/readiness, dependency alarms, authentication/abuse alerts, logs/correlation, retention, disk/pool/resource alerts and on-call response</td>
+</tr>
+<tr>
+<td>Representative load</td>
+<td>Expected clinic count, histories, services, concurrent receptionists, browsing load, abusive traffic, connection-pool limits, CPU/memory and latency targets</td>
+</tr>
+<tr>
+<td>Target platforms</td>
+<td>Actual Windows/IIS execution; Edge/Chrome on Windows, Safari/iOS, Firefox as supported; device/native-control behavior and assistive-technology checks</td>
+</tr>
+<tr>
+<td>Legal/support/business acceptance</td>
+<td>Published policies, clinic/company responsibilities, identity proof, cancellation/confirmation/expiry rules, support/recovery and manual notification procedures</td>
+</tr>
+</tbody>
+</table>
+<p>The cloud DNS/TCP failures do not resolve these gates either way. A server operator must verify them in the real environment. Do not infer live readiness from the local restore, Linux test run or Windows cross-publish alone.</p>
+<h2 id="9-recommended-remediation-and-release-sequence">9. Recommended remediation and release sequence</h2>
+<ol>
+<li><strong>Resolve the seven High findings first.</strong> Start with literal boolean form values plus the backend last-administrator invariant, secure transport/ingress, trustworthy rate-limit attribution and booking-abuse policy. Treat control-plane and tenant-failure coupling as explicit availability decisions with tested mitigation.</li>
+<li>Add targeted regression tests using <strong>real forms and more than one session/API instance</strong>, not only direct JSON requests. Preserve the successful SQL overlap, version and idempotency protections.</li>
+<li>Address the remaining asynchronous UI, precision/timezone, accessibility and growth issues; approve identity, privacy and incident policies. Record any deferred Medium risk with an owner and reason.</li>
+<li>Publish a staging candidate with serviced runtimes and preserved settings. Inspect the actual schemas/configuration and perform the production verification gates above, including a restore rehearsal and representative concurrent-user load.</li>
+<li>Have reception, a doctor, a patient and the company operator perform documented acceptance journeys. Re-run the high-finding reproducers against the candidate; only then make a public launch decision.</li>
+</ol>
+<p><strong>Final assessment:</strong> the system is functionally substantial and its central scheduling/concurrency defenses work in the tested cases. It is <strong>not yet approved for public production</strong> because the reproduced defects and unverified operational controls can affect access, availability and support. This report is a concrete repair/verification plan, not a request for an application rewrite.</p>
+<h2 class="appendix" id="appendix-a-api-operation-coverage">Appendix A. API operation coverage</h2>
+<p>Every operation in the generated OpenAPI inventory received an anonymous boundary probe. The role matrix and method matrix provide raw observations. A boundary 400/404 can be the expected result for deliberately invalid input or a disabled Production demo route; it is not proof of a complete successful business operation by itself. Positive behavior is supported by the functional suites/checklist above.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>Anonymous probe</th>
+<th>Additional role observations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/clinics</code></td>
+<td>200</td>
+<td>anonymous: 200, patient: 200, doctor: 200, reception: 200, company: 200</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/health</code></td>
+<td>200</td>
+<td>anonymous: 200, patient: 200, doctor: 200, reception: 200, company: 200</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/health/database</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 200, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/accounts</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/accounts</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/accounts/{id}/credentials</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/accounts/{id}/access</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/accounts/audit</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/reports</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/catalogue/doctors</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/catalogue/specialties</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/catalogue/services</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 403, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/bootstrap</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 200, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/appointments</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 200, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/appointments</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/appointments/{id}/history</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 200, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/slots</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 200, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/exceptions</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 403, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/appointments/{id}/move</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/appointments/{id}/status</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/patients/{id}</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 200, doctor: 200, reception: 200, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/patients/{id}</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/patients</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/schedule/{doctorId}</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/exceptions/{doctorId}</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 400, doctor: 400, reception: 400, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/exceptions/{id}/remove</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 404, doctor: 404, reception: 404, company: 401</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/auth/register</code></td>
+<td>400</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/auth/me</code></td>
+<td>401</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/auth/logout</code></td>
+<td>401</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/auth/password</code></td>
+<td>401</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/auth/demo-users</code></td>
+<td>404</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/auth/demo-login</code></td>
+<td>400</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/public/clinics</code></td>
+<td>200</td>
+<td>anonymous: 200, patient: 200, doctor: 200, reception: 200, company: 200</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/public/clinics/{id}</code></td>
+<td>404</td>
+<td>anonymous: 404, patient: 404, doctor: 404, reception: 404, company: 404</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/public/doctors</code></td>
+<td>200</td>
+<td>anonymous: 200, patient: 200, doctor: 200, reception: 200, company: 200</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/public/clinics/{clinicId}/doctors/{doctorId}/availability</code></td>
+<td>200</td>
+<td>anonymous: 200, patient: 200, doctor: 200, reception: 200, company: 200</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/public/clinics/{clinicId}/doctors/{doctorId}</code></td>
+<td>200</td>
+<td>anonymous: 200, patient: 200, doctor: 200, reception: 200, company: 200</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/auth/login</code></td>
+<td>400</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/platform/login</code></td>
+<td>400</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/platform/clinics</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 401, doctor: 401, reception: 401, company: 200</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/platform/clinics</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 401, doctor: 401, reception: 401, company: 400</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/platform/clinics/{id}/adopt</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 401, doctor: 401, reception: 401, company: 404</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/platform/clinics/{id}/details</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 401, doctor: 401, reception: 401, company: 400</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/platform/password</code></td>
+<td>401</td>
+<td>anonymous: 401, patient: 401, doctor: 401, reception: 401, company: 400</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/platform/logout</code></td>
+<td>401</td>
+<td>Dedicated auth/demo/functional suites; see checklist</td>
+</tr>
+</tbody>
+</table>
+<h2 class="appendix" id="appendix-b-canonical-actual-schema-catalogue">Appendix B. Canonical actual schema catalogue</h2>
+<p>The following is generated from local PostgreSQL catalogue queries, not reconstructed only from C# migrations. CSV exports additionally contain every equivalent fixture tenant schema. <code>NULL</code> below describes column nullability; a dash means no SQL default/length declaration in the catalogue, not an application default.</p>
+<h3 id="clinical-database-canonical-public-clinic">Clinical database / canonical public clinic</h3>
+<h4 id="accounts">Accounts</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>character varying</td>
+<td>NO</td>
+<td>120</td>
+<td>—</td>
+</tr>
+<tr>
+<td>NormalizedEmail</td>
+<td>character varying</td>
+<td>NO</td>
+<td>120</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>80</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PasswordHash</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>character varying</td>
+<td>NO</td>
+<td>20</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DoctorId</td>
+<td>character varying</td>
+<td>YES</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PatientId</td>
+<td>character varying</td>
+<td>YES</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Enabled</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>IsDemo</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>FailedAttempts</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>LockedUntil</td>
+<td>timestamp with time zone</td>
+<td>YES</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CreatedAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_Account_RoleLink</code>: <code>CHECK ((((("Role")::text = 'Patient'::text) AND ("PatientId" IS NOT NULL) AND ("DoctorId" IS NULL)) OR ((("Role")::text = 'Doctor'::text) AND ("DoctorId" IS NOT NULL) AND ("PatientId" IS NULL)) OR ((("Role")::text = 'Administrator'::text) AND ("DoctorId" IS NULL) AND ("PatientId" IS NULL))))</code></li>
+<li><code>FK_Accounts_Doctors_DoctorId</code>: <code>FOREIGN KEY ("DoctorId") REFERENCES "Doctors"("Id") ON DELETE RESTRICT</code></li>
+<li><code>FK_Accounts_Patients_PatientId</code>: <code>FOREIGN KEY ("PatientId") REFERENCES "Patients"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_Accounts</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_Accounts_DoctorId</code>: <code>CREATE UNIQUE INDEX "IX_Accounts_DoctorId" ON public."Accounts" USING btree ("DoctorId")</code></li>
+<li><code>IX_Accounts_NormalizedEmail</code>: <code>CREATE UNIQUE INDEX "IX_Accounts_NormalizedEmail" ON public."Accounts" USING btree ("NormalizedEmail")</code></li>
+<li><code>IX_Accounts_PatientId</code>: <code>CREATE UNIQUE INDEX "IX_Accounts_PatientId" ON public."Accounts" USING btree ("PatientId")</code></li>
+<li><code>PK_Accounts</code>: <code>CREATE UNIQUE INDEX "PK_Accounts" ON public."Accounts" USING btree ("Id")</code></li>
+</ul>
+<h4 id="appointmenthistory">AppointmentHistory</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AppointmentId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AppointmentVersion</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Kind</td>
+<td>character varying</td>
+<td>NO</td>
+<td>20</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ActorId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ActorName</td>
+<td>character varying</td>
+<td>NO</td>
+<td>200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ActorRole</td>
+<td>character varying</td>
+<td>NO</td>
+<td>20</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>BeforeStart</td>
+<td>timestamp with time zone</td>
+<td>YES</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>BeforeEnd</td>
+<td>timestamp with time zone</td>
+<td>YES</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>BeforeStatus</td>
+<td>character varying</td>
+<td>YES</td>
+<td>20</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AfterStart</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AfterEnd</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AfterStatus</td>
+<td>character varying</td>
+<td>NO</td>
+<td>20</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_History_AfterRange</code>: <code>CHECK (("AfterStart" &lt; "AfterEnd"))</code></li>
+<li><code>CK_History_Before</code>: <code>CHECK ((((("Kind")::text = 'Created'::text) AND ("BeforeStart" IS NULL) AND ("BeforeEnd" IS NULL) AND ("BeforeStatus" IS NULL)) OR ((("Kind")::text &lt;&gt; 'Created'::text) AND ("BeforeStart" IS NOT NULL) AND ("BeforeEnd" IS NOT NULL) AND ("BeforeStart" &lt; "BeforeEnd") AND ("BeforeStatus" IS NOT NULL))))</code></li>
+<li><code>CK_History_Version</code>: <code>CHECK (("AppointmentVersion" &gt; 0))</code></li>
+<li><code>FK_AppointmentHistory_Appointments_AppointmentId</code>: <code>FOREIGN KEY ("AppointmentId") REFERENCES "Appointments"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_AppointmentHistory</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_AppointmentHistory_AppointmentId_AppointmentVersion</code>: <code>CREATE UNIQUE INDEX "IX_AppointmentHistory_AppointmentId_AppointmentVersion" ON public."AppointmentHistory" USING btree ("AppointmentId", "AppointmentVersion")</code></li>
+<li><code>PK_AppointmentHistory</code>: <code>CREATE UNIQUE INDEX "PK_AppointmentHistory" ON public."AppointmentHistory" USING btree ("Id")</code></li>
+</ul>
+<h4 id="appointments">Appointments</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DoctorId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PatientId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>End</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>character varying</td>
+<td>NO</td>
+<td>20</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CreatedBy</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>UpdatedAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>RequestId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ServiceId</td>
+<td>text</td>
+<td>YES</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ServiceName</td>
+<td>character varying</td>
+<td>YES</td>
+<td>200</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_Appointment_Range</code>: <code>CHECK (("Start" &lt; "End"))</code></li>
+<li><code>CK_Appointment_Status</code>: <code>CHECK ((("Status")::text = ANY ((ARRAY['Scheduled'::character varying, 'Confirmed'::character varying, 'Completed'::character varying, 'Cancelled'::character varying, 'NoShow'::character varying])::text[])))</code></li>
+<li><code>CK_Appointment_Version</code>: <code>CHECK (("Version" &gt; 0))</code></li>
+<li><code>EX_Appointments_Doctor</code>: <code>EXCLUDE USING gist ("DoctorId" WITH =, tstzrange("Start", "End", '[)'::text) WITH &amp;&amp;) WHERE ((("Status")::text &lt;&gt; 'Cancelled'::text))</code></li>
+<li><code>EX_Appointments_Patient</code>: <code>EXCLUDE USING gist ("PatientId" WITH =, tstzrange("Start", "End", '[)'::text) WITH &amp;&amp;) WHERE ((("Status")::text &lt;&gt; 'Cancelled'::text))</code></li>
+<li><code>FK_Appointments_Doctors_DoctorId</code>: <code>FOREIGN KEY ("DoctorId") REFERENCES "Doctors"("Id") ON DELETE RESTRICT</code></li>
+<li><code>FK_Appointments_Patients_PatientId</code>: <code>FOREIGN KEY ("PatientId") REFERENCES "Patients"("Id") ON DELETE RESTRICT</code></li>
+<li><code>FK_Appointments_Services_ServiceId</code>: <code>FOREIGN KEY ("ServiceId") REFERENCES "Services"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_Appointments</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>EX_Appointments_Doctor</code>: <code>CREATE INDEX "EX_Appointments_Doctor" ON public."Appointments" USING gist ("DoctorId", tstzrange("Start", "End", '[)'::text)) WHERE (("Status")::text &lt;&gt; 'Cancelled'::text)</code></li>
+<li><code>EX_Appointments_Patient</code>: <code>CREATE INDEX "EX_Appointments_Patient" ON public."Appointments" USING gist ("PatientId", tstzrange("Start", "End", '[)'::text)) WHERE (("Status")::text &lt;&gt; 'Cancelled'::text)</code></li>
+<li><code>IX_Appointments_CreatedBy_RequestId</code>: <code>CREATE UNIQUE INDEX "IX_Appointments_CreatedBy_RequestId" ON public."Appointments" USING btree ("CreatedBy", "RequestId")</code></li>
+<li><code>IX_Appointments_DoctorId_Start</code>: <code>CREATE INDEX "IX_Appointments_DoctorId_Start" ON public."Appointments" USING btree ("DoctorId", "Start")</code></li>
+<li><code>IX_Appointments_PatientId_Start</code>: <code>CREATE INDEX "IX_Appointments_PatientId_Start" ON public."Appointments" USING btree ("PatientId", "Start")</code></li>
+<li><code>IX_Appointments_ServiceId</code>: <code>CREATE INDEX "IX_Appointments_ServiceId" ON public."Appointments" USING btree ("ServiceId")</code></li>
+<li><code>PK_Appointments</code>: <code>CREATE UNIQUE INDEX "PK_Appointments" ON public."Appointments" USING btree ("Id")</code></li>
+</ul>
+<h4 id="auditevents">AuditEvents</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>bigint</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ActorId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>character varying</td>
+<td>NO</td>
+<td>80</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TargetId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OccurredAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PK_AuditEvents</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_AuditEvents_OccurredAt</code>: <code>CREATE INDEX "IX_AuditEvents_OccurredAt" ON public."AuditEvents" USING btree ("OccurredAt")</code></li>
+<li><code>PK_AuditEvents</code>: <code>CREATE UNIQUE INDEX "PK_AuditEvents" ON public."AuditEvents" USING btree ("Id")</code></li>
+</ul>
+<h4 id="availabilityexceptions">AvailabilityExceptions</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DoctorId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>date</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>time without time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>End</td>
+<td>time without time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>IsAvailable</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Reason</td>
+<td>character varying</td>
+<td>NO</td>
+<td>120</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_Exception_Range</code>: <code>CHECK (("Start" &lt; "End"))</code></li>
+<li><code>FK_AvailabilityExceptions_Doctors_DoctorId</code>: <code>FOREIGN KEY ("DoctorId") REFERENCES "Doctors"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_AvailabilityExceptions</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_AvailabilityExceptions_DoctorId_Date</code>: <code>CREATE INDEX "IX_AvailabilityExceptions_DoctorId_Date" ON public."AvailabilityExceptions" USING btree ("DoctorId", "Date")</code></li>
+<li><code>PK_AvailabilityExceptions</code>: <code>CREATE UNIQUE INDEX "PK_AvailabilityExceptions" ON public."AvailabilityExceptions" USING btree ("Id")</code></li>
+</ul>
+<h4 id="doctorservices">DoctorServices</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DoctorId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ServiceId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>FK_DoctorServices_Doctors_DoctorId</code>: <code>FOREIGN KEY ("DoctorId") REFERENCES "Doctors"("Id") ON DELETE RESTRICT</code></li>
+<li><code>FK_DoctorServices_Services_ServiceId</code>: <code>FOREIGN KEY ("ServiceId") REFERENCES "Services"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_DoctorServices</code>: <code>PRIMARY KEY ("DoctorId", "ServiceId")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_DoctorServices_ServiceId</code>: <code>CREATE INDEX "IX_DoctorServices_ServiceId" ON public."DoctorServices" USING btree ("ServiceId")</code></li>
+<li><code>PK_DoctorServices</code>: <code>CREATE UNIQUE INDEX "PK_DoctorServices" ON public."DoctorServices" USING btree ("DoctorId", "ServiceId")</code></li>
+</ul>
+<h4 id="doctors">Doctors</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Specialty</td>
+<td>character varying</td>
+<td>NO</td>
+<td>200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>BookingMethod</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Funding</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>IsService</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>RequiresConfirmation</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>StaffOnly</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TuesdayFirst</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DurationMinutes</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DemoScheduleEdited</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ScheduleVersion</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>1</td>
+</tr>
+<tr>
+<td>CatalogVersion</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Enabled</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>true</td>
+</tr>
+<tr>
+<td>SpecialtyId</td>
+<td>text</td>
+<td>YES</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Subspecialty</td>
+<td>character varying</td>
+<td>NO</td>
+<td>200</td>
+<td>''::character varying</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_Doctor_Duration</code>: <code>CHECK (((("DurationMinutes" &gt;= 10) AND ("DurationMinutes" &lt;= 120)) AND (("DurationMinutes" % 5) = 0)))</code></li>
+<li><code>FK_Doctors_Specialties_SpecialtyId</code>: <code>FOREIGN KEY ("SpecialtyId") REFERENCES "Specialties"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_Doctors</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_Doctors_SpecialtyId</code>: <code>CREATE INDEX "IX_Doctors_SpecialtyId" ON public."Doctors" USING btree ("SpecialtyId")</code></li>
+<li><code>PK_Doctors</code>: <code>CREATE UNIQUE INDEX "PK_Doctors" ON public."Doctors" USING btree ("Id")</code></li>
+</ul>
+<h4 id="idempotencyrequests">IdempotencyRequests</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AccountId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>RequestId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Fingerprint</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ResponseJson</td>
+<td>jsonb</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CreatedAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>FK_IdempotencyRequests_Accounts_AccountId</code>: <code>FOREIGN KEY ("AccountId") REFERENCES "Accounts"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_IdempotencyRequests</code>: <code>PRIMARY KEY ("AccountId", "RequestId")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>PK_IdempotencyRequests</code>: <code>CREATE UNIQUE INDEX "PK_IdempotencyRequests" ON public."IdempotencyRequests" USING btree ("AccountId", "RequestId")</code></li>
+</ul>
+<h4 id="patients">Patients</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>80</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>character varying</td>
+<td>NO</td>
+<td>120</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Phone</td>
+<td>character varying</td>
+<td>NO</td>
+<td>30</td>
+<td>—</td>
+</tr>
+<tr>
+<td>IsDemonstration</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_Patient_Version</code>: <code>CHECK (("Version" &gt; 0))</code></li>
+<li><code>PK_Patients</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_Patients_Email</code>: <code>CREATE UNIQUE INDEX "IX_Patients_Email" ON public."Patients" USING btree ("Email") WHERE (("Email")::text &lt;&gt; ''::text)</code></li>
+<li><code>PK_Patients</code>: <code>CREATE UNIQUE INDEX "PK_Patients" ON public."Patients" USING btree ("Id")</code></li>
+</ul>
+<h4 id="services">Services</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SpecialtyId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DurationMinutes</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Enabled</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_Service_Duration</code>: <code>CHECK (((("DurationMinutes" &gt;= 10) AND ("DurationMinutes" &lt;= 120)) AND (("DurationMinutes" % 5) = 0)))</code></li>
+<li><code>FK_Services_Specialties_SpecialtyId</code>: <code>FOREIGN KEY ("SpecialtyId") REFERENCES "Specialties"("Id") ON DELETE RESTRICT</code></li>
+<li><code>PK_Services</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_Services_SpecialtyId_Name</code>: <code>CREATE UNIQUE INDEX "IX_Services_SpecialtyId_Name" ON public."Services" USING btree ("SpecialtyId", "Name")</code></li>
+<li><code>PK_Services</code>: <code>CREATE UNIQUE INDEX "PK_Services" ON public."Services" USING btree ("Id")</code></li>
+</ul>
+<h4 id="sessions">Sessions</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TokenHash</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AccountId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ExpiresAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>IsDemo</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>FK_Sessions_Accounts_AccountId</code>: <code>FOREIGN KEY ("AccountId") REFERENCES "Accounts"("Id") ON DELETE CASCADE</code></li>
+<li><code>PK_Sessions</code>: <code>PRIMARY KEY ("TokenHash")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_Sessions_AccountId</code>: <code>CREATE INDEX "IX_Sessions_AccountId" ON public."Sessions" USING btree ("AccountId")</code></li>
+<li><code>IX_Sessions_ExpiresAt</code>: <code>CREATE INDEX "IX_Sessions_ExpiresAt" ON public."Sessions" USING btree ("ExpiresAt")</code></li>
+<li><code>PK_Sessions</code>: <code>CREATE UNIQUE INDEX "PK_Sessions" ON public."Sessions" USING btree ("TokenHash")</code></li>
+</ul>
+<h4 id="settings">Settings</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Value</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PK_Settings</code>: <code>PRIMARY KEY ("Key")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>PK_Settings</code>: <code>CREATE UNIQUE INDEX "PK_Settings" ON public."Settings" USING btree ("Key")</code></li>
+</ul>
+<h4 id="sourceschedules">SourceSchedules</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>bigint</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Row</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Days</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>End</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DoctorId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>FK_SourceSchedules_Doctors_DoctorId</code>: <code>FOREIGN KEY ("DoctorId") REFERENCES "Doctors"("Id") ON DELETE CASCADE</code></li>
+<li><code>PK_SourceSchedules</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_SourceSchedules_DoctorId</code>: <code>CREATE INDEX "IX_SourceSchedules_DoctorId" ON public."SourceSchedules" USING btree ("DoctorId")</code></li>
+<li><code>PK_SourceSchedules</code>: <code>CREATE UNIQUE INDEX "PK_SourceSchedules" ON public."SourceSchedules" USING btree ("Id")</code></li>
+</ul>
+<h4 id="specialties">Specialties</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PK_Specialties</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_Specialties_Name</code>: <code>CREATE UNIQUE INDEX "IX_Specialties_Name" ON public."Specialties" USING btree ("Name")</code></li>
+<li><code>PK_Specialties</code>: <code>CREATE UNIQUE INDEX "PK_Specialties" ON public."Specialties" USING btree ("Id")</code></li>
+</ul>
+<h4 id="workingperiods">WorkingPeriods</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>bigint</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Day</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Start</td>
+<td>time without time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>End</td>
+<td>time without time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>DoctorId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>CK_WorkingPeriod_Range</code>: <code>CHECK ((("Start" &lt; "End") AND (("Day" &gt;= 0) AND ("Day" &lt;= 6))))</code></li>
+<li><code>FK_WorkingPeriods_Doctors_DoctorId</code>: <code>FOREIGN KEY ("DoctorId") REFERENCES "Doctors"("Id") ON DELETE CASCADE</code></li>
+<li><code>PK_WorkingPeriods</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_WorkingPeriods_DoctorId_Day</code>: <code>CREATE INDEX "IX_WorkingPeriods_DoctorId_Day" ON public."WorkingPeriods" USING btree ("DoctorId", "Day")</code></li>
+<li><code>PK_WorkingPeriods</code>: <code>CREATE UNIQUE INDEX "PK_WorkingPeriods" ON public."WorkingPeriods" USING btree ("Id")</code></li>
+</ul>
+<h4 id="__efmigrationshistory">__EFMigrationsHistory</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MigrationId</td>
+<td>character varying</td>
+<td>NO</td>
+<td>150</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ProductVersion</td>
+<td>character varying</td>
+<td>NO</td>
+<td>32</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PK___EFMigrationsHistory</code>: <code>PRIMARY KEY ("MigrationId")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>PK___EFMigrationsHistory</code>: <code>CREATE UNIQUE INDEX "PK___EFMigrationsHistory" ON public."__EFMigrationsHistory" USING btree ("MigrationId")</code></li>
+</ul>
+<h3 id="platform-database-public">Platform database / public</h3>
+<h4 id="platformclinics">PlatformClinics</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>character varying</td>
+<td>NO</td>
+<td>40</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>100</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ConnectionName</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TimeZone</td>
+<td>character varying</td>
+<td>NO</td>
+<td>100</td>
+<td>—</td>
+</tr>
+<tr>
+<td>State</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AdminEmail</td>
+<td>character varying</td>
+<td>NO</td>
+<td>120</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AdminName</td>
+<td>character varying</td>
+<td>NO</td>
+<td>80</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>character varying</td>
+<td>YES</td>
+<td>1000</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Address</td>
+<td>character varying</td>
+<td>YES</td>
+<td>200</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Phone</td>
+<td>character varying</td>
+<td>YES</td>
+<td>30</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Discoverable</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AllowRegistration</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CreatedBy</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CreatedAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Adopted</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>false</td>
+</tr>
+<tr>
+<td>Version</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PlatformClinics_State_check</code>: <code>CHECK (("State" = ANY (ARRAY['Provisioning'::text, 'Ready'::text, 'Failed'::text])))</code></li>
+<li><code>PlatformClinics_pkey</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>PlatformClinics_pkey</code>: <code>CREATE UNIQUE INDEX "PlatformClinics_pkey" ON public."PlatformClinics" USING btree ("Id")</code></li>
+</ul>
+<h4 id="platformoperators">PlatformOperators</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>character varying</td>
+<td>NO</td>
+<td>120</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>character varying</td>
+<td>NO</td>
+<td>80</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PasswordHash</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Enabled</td>
+<td>boolean</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>FailedAttempts</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>LockedUntil</td>
+<td>timestamp with time zone</td>
+<td>YES</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PlatformOperators_Email_key</code>: <code>UNIQUE ("Email")</code></li>
+<li><code>PlatformOperators_pkey</code>: <code>PRIMARY KEY ("Id")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>PlatformOperators_Email_key</code>: <code>CREATE UNIQUE INDEX "PlatformOperators_Email_key" ON public."PlatformOperators" USING btree ("Email")</code></li>
+<li><code>PlatformOperators_pkey</code>: <code>CREATE UNIQUE INDEX "PlatformOperators_pkey" ON public."PlatformOperators" USING btree ("Id")</code></li>
+</ul>
+<h4 id="platformschemaversions">PlatformSchemaVersions</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Version</td>
+<td>integer</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AppliedAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>now()</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PlatformSchemaVersions_pkey</code>: <code>PRIMARY KEY ("Version")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>PlatformSchemaVersions_pkey</code>: <code>CREATE UNIQUE INDEX "PlatformSchemaVersions_pkey" ON public."PlatformSchemaVersions" USING btree ("Version")</code></li>
+</ul>
+<h4 id="platformsessions">PlatformSessions</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>PostgreSQL type</th>
+<th>Nullable</th>
+<th>Max length</th>
+<th>SQL default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TokenHash</td>
+<td>character varying</td>
+<td>NO</td>
+<td>64</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OperatorId</td>
+<td>text</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ExpiresAt</td>
+<td>timestamp with time zone</td>
+<td>NO</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>PlatformSessions_OperatorId_fkey</code>: <code>FOREIGN KEY ("OperatorId") REFERENCES "PlatformOperators"("Id") ON DELETE CASCADE</code></li>
+<li><code>PlatformSessions_pkey</code>: <code>PRIMARY KEY ("TokenHash")</code></li>
+</ul>
+<p><strong>Indexes:</strong></p>
+<ul>
+<li><code>IX_PlatformSessions_ExpiresAt</code>: <code>CREATE INDEX "IX_PlatformSessions_ExpiresAt" ON public."PlatformSessions" USING btree ("ExpiresAt")</code></li>
+<li><code>PlatformSessions_pkey</code>: <code>CREATE UNIQUE INDEX "PlatformSessions_pkey" ON public."PlatformSessions" USING btree ("TokenHash")</code></li>
+</ul>
+<h3 id="managed-schema-provisioning-marker">Managed-schema provisioning marker</h3>
+<p>A newly registered managed schema additionally has <code>CarelineProvisioning(ClinicId text NOT NULL PRIMARY KEY)</code>. It is checked before resuming provisioning so that unrelated populated schemas are not silently adopted. It is not present in the original configured main/east schemas in this fixture. The clinical schema CSV includes the exact observed managed-schema entries.</p>
+<h2 class="appendix" id="appendix-c-repository-and-evidence-inventory">Appendix C. Repository and evidence inventory</h2>
+<p>The <a href="https://github.com/RisteLalkov/AppointmentsWEB/blob/main/docs/audit/2026-11-02/evidence/repository-inventory.json">repository inventory</a> lists all 173 original tracked files, category, size and SHA-256 at the audited snapshot. A file inventory is not a claim of instrumented per-line test coverage. Generated migration designers/model snapshots, JSON seed data, static branding and the vendored library are explicitly distinguished from application source.</p>
+<table>
+<thead>
+<tr>
+<th>File category</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application source/configuration</td>
+<td>97</td>
+</tr>
+<tr>
+<td>Branding/static media</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Build, CI, configuration, tooling or repository metadata</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Database migration/maintenance SQL</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Documentation or historical guide</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Generated migration/model</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Seed/reference data</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Test implementation/dependencies</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Third-party vendored library/license</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sanitized-evidence-files">Sanitized evidence files</h3>
+<ul>
+<li><code>findings.json</code>: structured finding locations, reproduction steps, recommendations and retest criteria.</li>
+<li><code>evidence/probes.json</code>, <code>followup.json</code>: the final targeted request/fault/restore/growth observations, including failed expectations.</li>
+<li><code>endpoint-boundaries.json</code>, <code>role-matrix.json</code>, <code>method-matrix.json</code>: exact API request matrices.</li>
+<li><code>accessibility.json</code>: page/rule/node evidence from the automated scans.</li>
+<li><code>account-access-form.json</code>, <code>account-form-error.json</code>, <code>stale-patient-move.json</code>, <code>dialog-race.json</code>: reproduced UI failures.</li>
+<li><code>demo-parity.json</code>: demo/production idempotency difference.</li>
+<li><code>constraint-audit.json</code>, <code>constraint-extra.json</code>, <code>model-comparison.json</code>: clinical constraint probes and model/actual-column comparison.</li>
+<li><code>clinic-*.csv</code>, <code>platform-*.csv</code>: complete local catalogue columns, constraints and indexes.</li>
+<li><code>dependencies.json</code>, <code>nuget-vulnerabilities.json</code>, <code>npm-audit.json</code>: dependency inventories/advisory results.</li>
+<li><code>network-check.json</code>, <code>syntax-validation.json</code>, <code>repository-inventory.json</code>: access limits and systematic inventory/parse evidence.</li>
+</ul>
+<p>Temporary full logs, synthetic database backups and runnable exploratory scripts remain in the audit workspace. <strong>Private fixtures, cookies, access tokens, passwords and database backups are deliberately excluded from the committed report/evidence.</strong> Requests in the public evidence use fictional audit identities, not live patient records.</p>
+<h3 id="re-running-the-baseline-safely">Re-running the baseline safely</h3>
+<p>Use an isolated PostgreSQL database whose name contains <code>test</code> or <code>integration</code>, never a live clinic database. The API integration suite requires a <strong>new, empty</strong> database; the tenancy/platform suites create their own guarded fixtures and require the appropriate disposable-cluster administration rights. Do not copy the audit’s local trust-authentication setup into production.</p>
+<pre><code class="language-text">dotnet build Appointments.sln -c Release
+dotnet run --project tests/Appointments.Tests -c Release --no-build
+python tests/http_smoke.py
+python tests/discovery_web_smoke.py
+npm ci --prefix tests/frontend --ignore-scripts
+npm test --prefix tests/frontend
+# Set CARELINE_TEST_CONNECTION to a fresh isolated test database first:
+python tests/api_integration.py --dom
+# Use an isolated fixture coordinator for these guarded fixture suites:
+python tests/tenancy_integration.py
+python tests/platform_integration.py
+</code></pre>
+<p>The Chromium suite additionally needs Playwright, a browser and <code>TEST_BROWSER_EXECUTABLE</code>/<code>NODE_PATH</code> configured for that environment. The audit-specific exploit/fault cases require separate controlled fixtures and should be converted into maintained regression tests during remediation; <strong>do not replay the destructive-looking fault injections against live databases</strong>.</p></body></html>

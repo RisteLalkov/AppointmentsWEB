@@ -1,0 +1,32 @@
+[
+  {
+    "desiredEnabled": false,
+    "hidden": {
+      "attribute": null,
+      "value": ""
+    },
+    "submitted": {
+      "id": "ba7b15aa5ad949258d442b1e766beca1",
+      "enabled": ""
+    },
+    "error": [
+      "Проверете ги задолжителните полиња, е-поштата и лозинката."
+    ],
+    "badge": "Администратор · Овозможена"
+  },
+  {
+    "desiredEnabled": true,
+    "hidden": {
+      "attribute": "value",
+      "value": "value"
+    },
+    "submitted": {
+      "id": "ba7b15aa5ad949258d442b1e766beca1",
+      "enabled": "value"
+    },
+    "error": [
+      "Проверете ги задолжителните полиња, е-поштата и лозинката."
+    ],
+    "badge": "Администратор · Оневозможена"
+  }
+]

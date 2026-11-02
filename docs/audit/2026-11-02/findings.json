@@ -1,0 +1,602 @@
+[
+  {
+    "id": "H01",
+    "severity": "High",
+    "title": "HTTPS redirection can fail open on a misconfigured production listener",
+    "evidence": "Reproduced using the actual published API output in Production with Hosting:AllowHttpForTesting=false. An HTTP-only listener with no discoverable HTTPS port returned HTTP 200 and an access token for POST /api/auth/login. The log says “Failed to determine the https port for redirect.” This is conditional on ingress/listener configuration; the live IIS exposure could not be inspected.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Program.cs",
+        "line": 78,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L78"
+      },
+      {
+        "file": "src/Appointments.Web/Program.cs",
+        "line": 75,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Program.cs#L75"
+      }
+    ],
+    "reproduction": [
+      "Boot the published API with a valid isolated database, Production, HTTP testing disabled, and only --urls http://127.0.0.1:<port>; do not configure an HTTPS port.",
+      "POST valid test credentials to /api/auth/login over HTTP.",
+      "Observe HTTP 200 rather than a redirect or rejection; inspect Appointments.Api-published-boot.log."
+    ],
+    "impact": "The flag alone does not establish a secure transport boundary. If an equivalent listener is reachable through production ingress, credentials and bearer tokens can travel without TLS. An IIS rule can prevent this, but that rule is not established by the repository or this test.",
+    "recommendation": "Enforce HTTPS at public ingress, configure the real redirect target and trusted proxy scheme handling, and fail startup or reject non-HTTPS authentication requests when the intended transport guarantee cannot be established. Do not blindly trust forwarded headers. Keep loopback health exceptions explicit and narrow.",
+    "verification": "From an external client, both Web and API HTTP entry points must redirect before login pages/credential submission or reject access. Test direct backend access, proxy forwarding, certificate trust and renewal. Do not consider a false HTTP-testing flag alone sufficient."
+  },
+  {
+    "id": "H02",
+    "severity": "High",
+    "title": "API IP limits collapse all Web visitors into the Web server’s quota",
+    "evidence": "Reproduced: 30 independent Web sign-in clients exhausted the API auth bucket; a subsequent valid login received 429. Code confirms the API keys by its TCP peer address, while the Web HttpClient supplies no original-client identity. The test clients themselves shared a loopback address; distinct public source IPs were not simulated. The 90/min discovery policy uses the same architecture (code observation).",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Program.cs",
+        "line": 54,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L54"
+      },
+      {
+        "file": "src/Appointments.Api/Program.cs",
+        "line": 53,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L53"
+      },
+      {
+        "file": "src/Appointments.Web/Services/ApiClient.cs",
+        "line": 13,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Services/ApiClient.cs#L13"
+      }
+    ],
+    "reproduction": [
+      "Use the normal Web login form from 30 separate test cookie jars within one minute. Unknown test emails suffice.",
+      "Immediately attempt a legitimate sign-in through the same backend.",
+      "Observe 429 from the API; no account lockout is necessary to trigger this."
+    ],
+    "impact": "One visitor or a normal burst of visitors can block unrelated clinic/company sign-ins. Public search has the analogous shared-IP limit. Limits are also per API process, so scaling/recycling changes their effective budget.",
+    "recommendation": "Apply appropriate visitor/account limits at the Web boundary and separate service-to-service budgets from public API budgets. If original-client identity is forwarded, authenticate the forwarding hop and configure explicit trusted proxies; never accept arbitrary Internet-supplied IP headers. Consider shared limiter state where multiple instances must enforce one policy. Return structured 429 responses and Retry-After.",
+    "verification": "Load-test several genuinely distinct client addresses through the deployed topology. One client’s auth/search abuse must not exhaust every visitor’s quota, while same-account and same-client abuse still receive controlled rejection."
+  },
+  {
+    "id": "H03",
+    "severity": "High",
+    "title": "Concurrent administrators can remove the last active administrators",
+    "evidence": "Reproduced deterministically: two authenticated administrators attempted to disable each other. Target-account advisory locks held both requests after authentication, then were released together. Those locks were test coordination; the underlying race is between two otherwise valid overlapping API requests. Both operations returned 200 and the active-administrator count became zero.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Services/AccountService.cs",
+        "line": 109,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L109"
+      }
+    ],
+    "reproduction": [
+      "Create an isolated clinic with exactly two enabled administrators, A and B.",
+      "Authenticate both. Hold the two target account locks, issue A→disable B and B→disable A, then release the locks after both requests have authenticated.",
+      "Query Accounts: both are disabled; both requests succeeded."
+    ],
+    "impact": "The self-disable check does not enforce a clinic-wide last-administrator invariant. A clinic can lose its administrative recovery path. The UI defect H07 currently obscures this race, but direct API access already permits it.",
+    "recommendation": "Serialize administrator membership changes using a clinic-scoped lock, revalidate the actor where required, and refuse any change that would leave no enabled administrator. Provide an audited recovery procedure. Preserve the existing per-account locks/session revocation.",
+    "verification": "Repeat the race across two API instances: at most one disable succeeds and at least one administrator remains enabled. Also test self-disable, repeated requests, and disabled actors awaiting locks."
+  },
+  {
+    "id": "H04",
+    "severity": "High",
+    "title": "A broken unrelated clinic can prevent healthy-clinic login",
+    "evidence": "Reproduced: change only east.Settings.ClinicId to a wrong binding in an isolated database. A valid main-clinic login then returns 503. Restore east’s binding and login works again. Runtime scoped requests correctly fail closed for a misbound clinic.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Services/AutomaticLogin.cs",
+        "line": 12,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AutomaticLogin.cs#L12"
+      },
+      {
+        "file": "src/Appointments.Api/Services/ClinicConnections.cs",
+        "line": 47,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/ClinicConnections.cs#L47"
+      }
+    ],
+    "reproduction": [
+      "Configure two working clinics and confirm a main-clinic login.",
+      "Temporarily misbind the other clinic’s Settings.ClinicId, or make that schema unavailable.",
+      "Log into main with unchanged valid credentials. Observe 503 despite the main data remaining healthy."
+    ],
+    "impact": "Automatic login scans every clinic and opens every binding under the global identity lock. A bad schema can therefore prevent new sessions across healthy clinics. Startup also validates all enabled clinics, increasing the failure blast radius.",
+    "recommendation": "Design an authoritative global identity-to-clinic routing index or another validated lookup that avoids synchronous full-clinic scans for every login. Preserve global uniqueness and fail-closed binding checks. Do not “fix” this by swallowing exceptions and silently ignoring identities in inaccessible clinics; define quarantine/recovery behavior explicitly.",
+    "verification": "Fault one tenant’s schema while healthy tenants continue their permitted login/clinical workflows, with no duplicate-identity ambiguity or schema fallback. Measure login cost as clinic count increases."
+  },
+  {
+    "id": "H05",
+    "severity": "High",
+    "title": "Control-plane failure interrupts clinical traffic while health still says ready",
+    "evidence": "Reproduced: make PlatformClinics unavailable while the clinical database and an existing clinic token remain healthy. /api/bootstrap returns 503, but /health still returns 200 with status ready. Restoring the registry table restores access.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Program.cs",
+        "line": 95,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L95"
+      },
+      {
+        "file": "src/Appointments.Api/Services/ClinicRegistry.cs",
+        "line": 73,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/ClinicRegistry.cs#L73"
+      },
+      {
+        "file": "src/Appointments.Api/Program.cs",
+        "line": 114,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L114"
+      }
+    ],
+    "reproduction": [
+      "Keep a valid clinical session and a working appointments database.",
+      "In an isolated test, rename the platform registry table or deny its availability.",
+      "Call authenticated clinical bootstrap and then /health. Observe 503 versus ready/200."
+    ],
+    "impact": "Every API request synchronously refreshes the control-plane registry under a semaphore. A platform database/schema/pool fault can affect all clinics; the current health result will not identify that inability to serve traffic. This is an architectural availability risk, not a demonstrated live outage.",
+    "recommendation": "Explicitly decide and implement the control-plane availability policy. Consider validated immutable routing snapshots/background refresh with carefully bounded stale-state behavior, or ensure a highly available control plane if fail-closed dependence is intentional. Never let caching re-enable a disabled clinic. Add readiness checks that cover required dependencies and distinguish liveness from readiness.",
+    "verification": "Exercise platform outage, recovery, migration and pool exhaustion. The documented availability policy must hold, unknown/disabled clinics must remain blocked, and the deployment’s readiness probe must reflect actual service ability."
+  },
+  {
+    "id": "H06",
+    "severity": "High",
+    "title": "A regular patient can reserve an entire doctor day without abuse controls",
+    "evidence": "Reproduced on the published API: one ordinary self-registered patient submitted 16 non-overlapping bookings for a confirmation-required doctor. All 16 returned 200/Scheduled in 1.16 seconds and no free slots remained. No privileged role, overlap bypass, or duplicated request ID was used.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+        "line": 35,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Controllers/AppointmentsController.cs#L35"
+      },
+      {
+        "file": "src/Appointments.Api/Services/AccountService.cs",
+        "line": 60,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L60"
+      },
+      {
+        "file": "src/Appointments.Core/SchedulingRules.cs",
+        "line": 5,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/SchedulingRules.cs#L5"
+      }
+    ],
+    "reproduction": [
+      "Register a normal patient in a clinic permitting self-registration.",
+      "Give a doctor a free 09:00–17:00 day with 30-minute visits and confirmation required.",
+      "Submit each available time with a fresh request ID for that same patient.",
+      "All 16 pending requests reserve capacity. Existing overlap protection correctly allows these adjacent appointments."
+    ],
+    "impact": "The system lacks a configurable active/future booking cap, a pending-request abuse policy, or verification barrier for public sign-ups. Valid requests can monopolize availability, including pending requests that staff have not approved.",
+    "recommendation": "Agree a clinic-configurable patient booking policy: active/future and per-doctor/day limits, abuse-aware rate controls, verified onboarding, and an explicit pending-request expiry/review policy. Allow audited staff exceptions. Do not automatically expire confirmed appointments without an approved business policy. Disabling public registration is a possible temporary mitigation if staff verify new users.",
+    "verification": "Repeat the full-day reservation attempt: a documented limit must stop abuse without breaking legitimate multiple visits or authorized staff bookings. Test expiry, cancellation, staff overrides and concurrent quota checks."
+  },
+  {
+    "id": "H07",
+    "severity": "High",
+    "title": "Account enable/disable buttons submit invalid boolean values",
+    "evidence": "Reproduced in real Chromium against Web → API → PostgreSQL. For an enabled account the hidden value attribute is omitted and the form posts enabled=. For a disabled account Razor renders value=\"value\" and the form posts enabled=value. Both requests show the generic validation error and leave access unchanged. Explicit JSON API toggles succeed.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/Views/Accounts/Index.cshtml",
+        "line": 27,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Accounts/Index.cshtml#L27"
+      },
+      {
+        "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+        "line": 23,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Controllers/AccountsController.cs#L23"
+      }
+    ],
+    "reproduction": [
+      "As reception, open Accounts & access and click disable on another enabled account.",
+      "Inspect the POST payload: enabled is empty; the account remains enabled.",
+      "Disable that account using an authorized explicit API request, then click enable in the Web UI.",
+      "The Web form now posts enabled=value and still fails."
+    ],
+    "impact": "Normal staff cannot revoke or restore account access from the intended screen, including during a compromised-account response. Password reset revocation and direct API access are separate working paths, not a replacement for a functioning access control.",
+    "recommendation": "Render an explicit string value, for example value=\"@(a.Enabled ? \"false\" : \"true\")\", or use a correctly bound view model/tag helper. Add real-form round-trip tests for both directions, session revocation and the last-administrator invariant H03. Improve the access-form error message so it does not incorrectly mention passwords.",
+    "verification": "Both Web buttons must post literal true/false, update the database, show the correct notice, and immediately revoke affected sessions when required. No API-only shortcut should be used for the UI acceptance test."
+  },
+  {
+    "id": "M01",
+    "severity": "Medium",
+    "title": "Workspace bootstrap and polling grow without a data window",
+    "evidence": "Reproduced with 5,003 synthetic patients and 30,002 appointments: bootstrap returned every visible row; the re-serialized JSON representation was about 11.99 MB. That local request took about 559 ms versus a small-clinic median around 16 ms. This was a synthetic single-client sample, not a production load/SLA certification.",
+    "locations": [
+      {
+        "file": "src/Appointments.Data/PostgresAppointments.cs",
+        "line": 14,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/PostgresAppointments.cs#L14"
+      },
+      {
+        "file": "src/Appointments.Web/wwwroot/js/app.js",
+        "line": 1768,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L1768"
+      }
+    ],
+    "reproduction": [
+      "Populate only a disposable clinic with a long historical appointment dataset and thousands of contacts.",
+      "Request /api/bootstrap as reception.",
+      "Leave an idle workspace open and observe full-bootstrap polling every 20 seconds where polling is not paused."
+    ],
+    "impact": "History and contacts are repeatedly transferred and parsed even for a small current view. The API already has a paginated appointment list, but the UI does not use it for this refresh path. Large clinics and several simultaneous staff users amplify network, database and browser costs.",
+    "recommendation": "Separate reference data from windowed appointment/contact queries; use the existing paginated/date-filtered API where appropriate, add version/delta refresh semantics, and page account/patient directories. Add an index/query plan and browser memory/load budget based on expected clinic scale.",
+    "verification": "Run concurrent staff scenarios with representative multi-year data, defined latency/payload limits, measured browser responsiveness, and bounded refresh traffic. Verify role scoping on every new query."
+  },
+  {
+    "id": "M02",
+    "severity": "Medium",
+    "title": "A delayed booking failure can throw an uncaught dialog exception",
+    "evidence": "Reproduced by holding a booking response, closing the booking dialog, opening a doctor profile, and returning a controlled 503. The browser throws “Cannot set properties of null (setting innerHTML)”. The normal journeys had zero uncaught errors before this deliberate fault injection.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/wwwroot/js/app.js",
+        "line": 955,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L955"
+      },
+      {
+        "file": "src/Appointments.Web/wwwroot/js/app.js",
+        "line": 878,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L878"
+      }
+    ],
+    "reproduction": [
+      "Open and review a valid booking. Delay the /data/appointments response.",
+      "While it is pending, close that dialog and open a doctor profile, replacing dialog-content.",
+      "Return a 503 to the original request. Its catch handler looks up the now-absent booking-error element."
+    ],
+    "impact": "Asynchronous callbacks can write to a different or missing dialog and leave the user without a clear failure/reconciliation message. Similar unguarded catch patterns exist in other forms (code observation), but this booking case is the reproduced one.",
+    "recommendation": "Capture a dialog/request generation and relevant element references; update only if they still belong to the same active flow and are connected. Otherwise surface a safe global notice. Preserve booking idempotency and reconcile ambiguous writes; canceling a browser request is not proof that the server did not commit.",
+    "verification": "Delay/fail each mutable form while closing, navigating or opening another dialog. No uncaught exception or cross-dialog error should occur; ambiguous successful writes must remain discoverable without duplicate creation."
+  },
+  {
+    "id": "M03",
+    "severity": "Medium",
+    "title": "Stale rescheduling has no recovery action inside the booking form",
+    "evidence": "Reproduced when a patient tab retained an older pending version while the doctor confirmed it in another session. Rescheduling returned the correct HTTP 409, preserving data, but the reschedule dialog offered no reload control. Leaving the form and refreshing/reopening details or reloading the page resolved it. Appointment details already have a history refresh control; this is not an absence of all recovery in the application.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/wwwroot/js/app.js",
+        "line": 587,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L587"
+      },
+      {
+        "file": "src/Appointments.Web/wwwroot/js/app.js",
+        "line": 955,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L955"
+      }
+    ],
+    "reproduction": [
+      "Keep a patient tab on a pending appointment, then confirm it in a separate doctor session.",
+      "Before the patient tab refreshes, open reschedule and submit another free time.",
+      "Observe 409 and no inline refresh/discard-and-reload action in the reschedule dialog."
+    ],
+    "impact": "Concurrency protection works, but the user can repeatedly retry stale form state without an obvious recovery path. Background polling deliberately pauses while a dialog is open.",
+    "recommendation": "Add a clear 409 recovery action that reloads the appointment and availability, explicitly explaining whether typed choices will be retained or discarded. Reuse the existing detail refresh pattern. Never silently replace the version on a form that still shows old data.",
+    "verification": "Run two-tab confirm/move/cancel races. A stale form must retain useful input, show a conflict, offer deliberate recovery, and never overwrite another staff/user change."
+  },
+  {
+    "id": "M04",
+    "severity": "Medium",
+    "title": "Automated accessibility checks still find contrast and keyboard-scroll failures",
+    "evidence": "Executed axe WCAG 2 A/AA and 2.1 AA scans on 13 real pages. Six pages had violations: seven page/rule instances, including 31 reported contrast nodes and one unfocusable calendar scroll region. Repeated nodes and redundant avatar initials are not 31 independent product defects; decorative initials may warrant exemption.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/wwwroot/css/site.css",
+        "line": 335,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/css/site.css#L335"
+      },
+      {
+        "file": "src/Appointments.Web/wwwroot/css/site.css",
+        "line": 803,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/css/site.css#L803"
+      },
+      {
+        "file": "src/Appointments.Web/wwwroot/css/discover.css",
+        "line": 69,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/css/discover.css#L69"
+      },
+      {
+        "file": "src/Appointments.Web/wwwroot/js/app.js",
+        "line": 1067,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/wwwroot/js/app.js#L1067"
+      }
+    ],
+    "reproduction": [
+      "Scan the public directory and authenticated overview, doctors, patients, calendar and reports pages.",
+      "Examples: inactive calendar view buttons measured 3.02:1, Scheduled status 4.15:1, directory filter chip 4.07:1, and footer text 2.62:1.",
+      "Tab through the calendar scrollable region; axe identifies fc-scroller-liquid-absolute as lacking keyboard focus access."
+    ],
+    "impact": "Some meaningful small text remains below 4.5:1 despite the recent theme improvement. Keyboard users may not be able to reach/scroll all calendar content reliably. Automated scans are not a full WCAG certification or screen-reader review.",
+    "recommendation": "Adjust the actual computed foreground/background pairs, prioritizing functional controls and status labels. Make the calendar scrolling region keyboard accessible with an appropriate label/focus strategy. Review redundant decorative initials separately instead of darkening everything indiscriminately.",
+    "verification": "Re-run automated scans and manual keyboard/zoom/screen-reader checks in target browsers. Validate focus visibility, dialogs and calendar interaction at 200% zoom and mobile sizes."
+  },
+  {
+    "id": "M05",
+    "severity": "Medium",
+    "title": "Public availability assumes every valid timezone has a valid midnight",
+    "evidence": "Reproduced for an allowed America/Havana clinic on 2027-03-14, within the tested booking horizon: public availability returned 500. That day has a nonexistent local midnight, and ToInstant returns null. Europe/Skopje scenarios did not exhibit this issue.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Services/PublicDiscovery.cs",
+        "line": 46,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/PublicDiscovery.cs#L46"
+      },
+      {
+        "file": "src/Appointments.Core/SchedulingClock.cs",
+        "line": 14,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/SchedulingClock.cs#L14"
+      }
+    ],
+    "reproduction": [
+      "Provision an isolated clinic with TimeZone America/Havana and a doctor available Sunday 09:00–10:00.",
+      "GET its public availability for 2027-03-14.",
+      "The forced nullable Value access for the local day boundary throws."
+    ],
+    "impact": "The API accepts timezone configurations that its day-window construction cannot safely handle. This is a conditional bug for supported zones, not evidence of incorrect Skopje booking times.",
+    "recommendation": "Build valid local-day query bounds without assuming midnight exists, or explicitly restrict supported zones/configurations with validation. Keep the existing policy of rejecting ambiguous/nonexistent actual appointment times; do not silently shift a chosen appointment.",
+    "verification": "Test midnight DST gaps/repeats, ordinary Skopje DST, supported international zones and boundary dates. The endpoint must return valid information or a documented validation response, never 500."
+  },
+  {
+    "id": "M06",
+    "severity": "Medium",
+    "title": "Sub-minute availability is accepted but slot generation rounds it down",
+    "evidence": "Reproduced: a weekly start of 09:00:00.5000000 was accepted with HTTP 200, but the first returned slot was 09:00:00, before the configured start. The schedule validator checks Second, not fractional ticks. Additional availability periods have the analogous precision inconsistency (code observation).",
+    "locations": [
+      {
+        "file": "src/Appointments.Core/AppointmentService.cs",
+        "line": 187,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/AppointmentService.cs#L187"
+      },
+      {
+        "file": "src/Appointments.Core/SchedulingRules.cs",
+        "line": 16,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/SchedulingRules.cs#L16"
+      }
+    ],
+    "reproduction": [
+      "Save a valid doctor schedule whose start/end include a fractional second with Second still equal to zero.",
+      "Request slots for the matching weekday.",
+      "Observe a rounded-down first start outside the saved interval."
+    ],
+    "impact": "The API and scheduling grid disagree about accepted time precision. Normal minute-only browser inputs reduce exposure, but direct/API clients can create inconsistent availability and later schedule-protection conflicts.",
+    "recommendation": "Enforce whole-minute ticks consistently for schedules, exceptions and all relevant DTOs, or implement a precisely specified slot quantization rule that never emits a slot outside its source interval. Keep agreed-time validation consistent.",
+    "verification": "Test seconds and fractional seconds around start/end boundaries in weekly and one-off periods, checking that every accepted slot fits its actual saved availability."
+  },
+  {
+    "id": "M07",
+    "severity": "Medium",
+    "title": "Public identity assurance and privileged-account protection need a launch policy",
+    "evidence": "Code-confirmed and documented limitations: registration accepts an email without ownership verification and immediately enables a new patient; MFA, emailed recovery and forced first-use password change are absent. Actual registration without email delivery succeeded. Existing patient records cannot be claimed merely by matching email, which is a working protection.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Services/AccountService.cs",
+        "line": 60,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L60"
+      },
+      {
+        "file": "src/Appointments.Data/Entities.cs",
+        "line": 15,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/Entities.cs#L15"
+      },
+      {
+        "file": "README.md",
+        "line": 95,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/README.md#L95"
+      }
+    ],
+    "reproduction": [
+      "Register a fresh test email through the normal public form.",
+      "Sign in immediately; no email ownership proof is requested.",
+      "Inspect clinic/company sign-in and first-use credential flows for MFA or forced rotation; neither is implemented."
+    ],
+    "impact": "An unverified identity can reserve a globally unique email and obtain booking access. Privileged accounts rely on passwords and lockout alone. This is an assurance/policy gap, not a demonstrated takeover of an existing clinical profile.",
+    "recommendation": "Decide verified public onboarding, account recovery, privileged MFA or restricted administrative ingress, and staff identity checks before launch. If integrations are not ready, disable public registration where appropriate and use verified staff-created accounts. Do not imply email/phone verification or notifications in product claims.",
+    "verification": "Approve and test the chosen ownership/recovery policy, failed-verification paths, MFA or compensating controls, secure initial credential delivery and session revocation."
+  },
+  {
+    "id": "M08",
+    "severity": "Medium",
+    "title": "Application audit and incident visibility do not cover important security events",
+    "evidence": "Code observation supported by the exported audit schema: the application records selected mutations but not an authentication-failure event history, access-denied/read-access trail, or a full company metadata/password-change audit. Failed-attempt counters are reset and do not form a historical trail. The test did not inspect actual IIS, SIEM or database-provider logs.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Services/AccountService.cs",
+        "line": 33,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/AccountService.cs#L33"
+      },
+      {
+        "file": "src/Appointments.Api/Services/PlatformService.cs",
+        "line": 118,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Services/PlatformService.cs#L118"
+      },
+      {
+        "file": "src/Appointments.Data/PostgresAppointments.cs",
+        "line": 225,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/PostgresAppointments.cs#L225"
+      }
+    ],
+    "reproduction": [
+      "Cause failed logins, change platform metadata and change the company password in an isolated fixture.",
+      "Compare the application audit model/write paths with the existing appointment/account mutation audit.",
+      "Identify missing event types and confirm any external logging separately."
+    ],
+    "impact": "Incident reconstruction and detection depend on infrastructure that is not established here. The in-database audit also shares the application’s broad write authority and is not tamper-evident.",
+    "recommendation": "Define a privacy-conscious event catalogue, correlation IDs, trusted client attribution and external protected log storage. Add the missing security/company events, alerts and retention/access rules without logging passwords, tokens or unnecessary patient details. Define how sensitive reads are audited if required by policy.",
+    "verification": "Demonstrate a test incident from sign-in failure through account disable and investigation, including cross-instance correlation, alert delivery, retention and protection against accidental audit deletion."
+  },
+  {
+    "id": "M09",
+    "severity": "Medium",
+    "title": "Privacy and terms are still placeholders for a real-data launch",
+    "evidence": "Code-only launch-content gap: the public footer marks Privacy and Terms as “Наскоро” and has no working policy links. No actual legal/compliance documentation or organizational agreement was supplied to this audit.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/Views/Discover/Index.cshtml",
+        "line": 167,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Discover/Index.cshtml#L167"
+      }
+    ],
+    "reproduction": [
+      "Open the landing-page footer.",
+      "Observe the disabled privacy/terms text instead of a published notice."
+    ],
+    "impact": "Visitors are about to supply personal contact and appointment data without the intended public policy pages being available. The appropriate legal obligations depend on the deployment and organization; this audit is not a legal compliance certification.",
+    "recommendation": "Have the responsible company/clinic owners approve and publish accurate privacy, terms, retention/deletion, identity-verification and support policies. Address external map requests and relevant processing/vendor responsibilities. Link them from registration and the footer as required by the approved policy.",
+    "verification": "Confirm the final documents and operational procedures with the responsible owners, verify working accessible links, and ensure the product’s actual behavior matches its claims."
+  },
+  {
+    "id": "L01",
+    "severity": "Low",
+    "title": "Some malformed requests are classified as server/database outages",
+    "evidence": "Reproduced: a body over the 64 KiB API limit returned 500 rather than 413. A booking with empty serviceId on a legacy/no-service doctor reached a foreign-key failure and returned 503; the rules had treated empty as absent. Neither probe created an invalid appointment.",
+    "locations": [
+      {
+        "file": "src/Appointments.Api/Program.cs",
+        "line": 67,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Api/Program.cs#L67"
+      },
+      {
+        "file": "src/Appointments.Core/Catalogue.cs",
+        "line": 91,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/Catalogue.cs#L91"
+      },
+      {
+        "file": "src/Appointments.Core/AppointmentService.cs",
+        "line": 86,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/AppointmentService.cs#L86"
+      }
+    ],
+    "reproduction": [
+      "POST a roughly 70 KiB JSON body to an API endpoint.",
+      "POST a valid legacy-doctor booking with serviceId=\"\" rather than null.",
+      "Observe 500 and 503 respectively instead of precise input/size handling."
+    ],
+    "impact": "These responses mislead users, monitoring and retry logic into diagnosing application/database failure for invalid input. Database integrity remains protected.",
+    "recommendation": "Preserve BadHttpRequestException status codes such as 413, normalize optional service IDs consistently or reject empty IDs, and return structured validation errors. Include structured rate-limit responses as part of H02.",
+    "verification": "Assert exact 400/409/413/429/503 semantics for malformed, stale, oversized, limited and unavailable cases, with no partial persistence."
+  },
+  {
+    "id": "L02",
+    "severity": "Low",
+    "title": "Explicit browser security policies are incomplete",
+    "evidence": "Observed on the real workspace response: no Content-Security-Policy or X-Frame-Options header. X-Content-Type-Options and Referrer-Policy were present. No successful clickjacking or XSS exploit was demonstrated; HttpOnly/SameSite cookies, CSRF validation and HTML escaping remain important working protections.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/Program.cs",
+        "line": 80,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Program.cs#L80"
+      },
+      {
+        "file": "src/Appointments.Web/Views/Shared/_Layout.cshtml",
+        "line": 15,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Shared/_Layout.cshtml#L15"
+      }
+    ],
+    "reproduction": [
+      "Inspect security headers on authenticated Web pages and their actual deployed ingress.",
+      "Compare script, frame, image and map dependencies before choosing policies."
+    ],
+    "impact": "The browser has less defense in depth against unintended framing and future injection than it could. Infrastructure may add headers, but that was not verifiable here.",
+    "recommendation": "Introduce a tested CSP, beginning in report-only mode if appropriate, including frame-ancestors and suitable script/connect/frame sources. Consider a Permissions-Policy and consistent frame protection. Preserve approved Google Maps embedding and existing local assets.",
+    "verification": "Check real ingress headers and normal workflows with enforcement enabled; verify that unauthorized framing is blocked without breaking intended embedded content."
+  },
+  {
+    "id": "L03",
+    "severity": "Low",
+    "title": "Operational documentation contains contradictory legacy instructions",
+    "evidence": "Code/document review: README still states that staff cannot complete an unconfirmed past request, although the implemented/tested overdue-resolution path permits completion/no-show after its end. Some older feature documents still instruct migration per separate clinic database. The printed system guide is explicitly a historical snapshot and should not be mistaken for current instructions.",
+    "locations": [
+      {
+        "file": "README.md",
+        "line": 140,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/README.md#L140"
+      },
+      {
+        "file": "docs/PATIENT_PROFILES.md",
+        "line": 31,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/docs/PATIENT_PROFILES.md#L31"
+      },
+      {
+        "file": "docs/SHARED_DATABASE.md",
+        "line": 1,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/docs/SHARED_DATABASE.md#L1"
+      }
+    ],
+    "reproduction": [
+      "Compare README appointment-status guidance with ChangeStatus and the overdue tests.",
+      "Compare older per-clinic database migration notes with current shared-database/schema instructions."
+    ],
+    "impact": "An operator can follow an obsolete mental model during deployment or support, particularly when managing the original public clinic and newer schemas.",
+    "recommendation": "Consolidate a versioned current deployment/runbook index, mark superseded documents clearly, and update current status/migration guidance. Preserve historical artifacts as labeled snapshots rather than silently treating them as current.",
+    "verification": "Have a second operator follow only the current runbook through a disposable deployment, upgrade, clinic registration, backup and recovery."
+  },
+  {
+    "id": "L04",
+    "severity": "Low",
+    "title": "CI does not currently gate the full browser, accessibility or dependency-audit checks",
+    "evidence": "Workflow code observation: discovery_web_smoke runs Chromium only when TEST_BROWSER_EXECUTABLE is set; the checked-in CI job does not install/configure that browser path. DOM checks are present. Axe and package vulnerability audits are not configured as release gates. Remote GitHub job status was not queried.",
+    "locations": [
+      {
+        "file": ".github/workflows/ci.yml",
+        "line": 1,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/.github/workflows/ci.yml#L1"
+      }
+    ],
+    "reproduction": [
+      "Inspect the checked-in workflow’s test environment and browser installation steps.",
+      "Compare it with the environment used for the 140 Chromium checks and 13 axe scans in this audit."
+    ],
+    "impact": "Passing CI does not currently imply that the browser-only failures found here would be caught before release. A green badge must not be interpreted as end-to-end production approval.",
+    "recommendation": "Add a controlled real-browser job, accessibility regression checks, dependency-advisory checks and targeted regressions for the high-severity findings. Add Windows publish packaging verification and an actual staging smoke test where available.",
+    "verification": "Intentionally break a representative form/keyboard workflow in a disposable branch and prove the relevant CI gate fails, then verify artifacts and redacted failure traces are retained."
+  },
+  {
+    "id": "L05",
+    "severity": "Low",
+    "title": "Demo and PostgreSQL booking idempotency differ on the agreement flag",
+    "evidence": "Reproduced with the real domain service and JSON demo store: submit a normal request, then reuse its ID with AgreedTime=true. The demo returns the original pending appointment rather than rejecting the changed request. PostgreSQL fingerprints the full canonical command and rejects changed reuse. This is a demo/testing parity defect, not a demonstrated production duplicate-booking defect.",
+    "locations": [
+      {
+        "file": "src/Appointments.Core/AppointmentService.cs",
+        "line": 60,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Core/AppointmentService.cs#L60"
+      },
+      {
+        "file": "src/Appointments.Data/PostgresAppointments.cs",
+        "line": 73,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Data/PostgresAppointments.cs#L73"
+      }
+    ],
+    "reproduction": [
+      "In a disposable JSON demo, book a confirmation-required doctor using a fresh request ID.",
+      "Reuse that ID with only AgreedTime changed.",
+      "Observe successful replay in demo; compare with the production adapter’s fingerprint handling."
+    ],
+    "impact": "Demo tests and demonstrations can accept behavior the production backend correctly rejects, reducing confidence when relying only on demo/DOM paths.",
+    "recommendation": "Share canonical request normalization/fingerprint semantics or explicitly align the demo duplicate comparison with all relevant booking fields and request-ID normalization. Keep the stable original-response replay behavior.",
+    "verification": "Run the same idempotency matrix against both stores: identical retry, changed time/patient/service/agreement/duration, GUID format variants, and retries after later appointment changes."
+  },
+  {
+    "id": "L06",
+    "severity": "Low",
+    "title": "Account-creation errors discard nonsecret form input",
+    "evidence": "Reproduced through the real Web form: submit a new administrator account using an email already reserved by another account. After the validation/error redirect, name and email are both empty. Password clearing is correct and should remain.",
+    "locations": [
+      {
+        "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+        "line": 25,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Controllers/AccountsController.cs#L25"
+      },
+      {
+        "file": "src/Appointments.Web/Views/Accounts/Index.cshtml",
+        "line": 11,
+        "url": "https://github.com/RisteLalkov/AppointmentsWEB/blob/fcf2a0a/src/Appointments.Web/Views/Accounts/Index.cshtml#L11"
+      }
+    ],
+    "reproduction": [
+      "Enter a valid display name, role and password, but choose an already-used email in Accounts & access.",
+      "Submit and observe the server rejection.",
+      "The name/email/selection context is lost instead of retaining safe input for correction."
+    ],
+    "impact": "Users must re-enter data after a routine correctable error, making account provisioning more error-prone. No password exposure was observed.",
+    "recommendation": "Use a view model or a whitelisted safe PRG state to retain name, email, role and applicable profile selection. Never retain the password in HTML, query strings, TempData or logs.",
+    "verification": "Cause each account validation/uniqueness error and verify safe values remain, secrets are cleared, and linked-profile selections are revalidated before a successful retry."
+  }
+]

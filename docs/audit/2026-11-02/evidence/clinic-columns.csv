@@ -1,0 +1,443 @@
+table_schema,table_name,column_name,data_type,is_nullable,column_default,character_maximum_length
+clinic_audit_new,Accounts,Id,text,NO,,
+clinic_audit_new,Accounts,Email,character varying,NO,,120
+clinic_audit_new,Accounts,NormalizedEmail,character varying,NO,,120
+clinic_audit_new,Accounts,Name,character varying,NO,,80
+clinic_audit_new,Accounts,PasswordHash,text,NO,,
+clinic_audit_new,Accounts,Role,character varying,NO,,20
+clinic_audit_new,Accounts,DoctorId,character varying,YES,,64
+clinic_audit_new,Accounts,PatientId,character varying,YES,,64
+clinic_audit_new,Accounts,Enabled,boolean,NO,,
+clinic_audit_new,Accounts,IsDemo,boolean,NO,,
+clinic_audit_new,Accounts,FailedAttempts,integer,NO,,
+clinic_audit_new,Accounts,LockedUntil,timestamp with time zone,YES,,
+clinic_audit_new,Accounts,CreatedAt,timestamp with time zone,NO,,
+clinic_audit_new,AppointmentHistory,Id,character varying,NO,,64
+clinic_audit_new,AppointmentHistory,AppointmentId,character varying,NO,,64
+clinic_audit_new,AppointmentHistory,AppointmentVersion,integer,NO,,
+clinic_audit_new,AppointmentHistory,Kind,character varying,NO,,20
+clinic_audit_new,AppointmentHistory,ActorId,character varying,NO,,64
+clinic_audit_new,AppointmentHistory,ActorName,character varying,NO,,200
+clinic_audit_new,AppointmentHistory,ActorRole,character varying,NO,,20
+clinic_audit_new,AppointmentHistory,OccurredAt,timestamp with time zone,NO,,
+clinic_audit_new,AppointmentHistory,BeforeStart,timestamp with time zone,YES,,
+clinic_audit_new,AppointmentHistory,BeforeEnd,timestamp with time zone,YES,,
+clinic_audit_new,AppointmentHistory,BeforeStatus,character varying,YES,,20
+clinic_audit_new,AppointmentHistory,AfterStart,timestamp with time zone,NO,,
+clinic_audit_new,AppointmentHistory,AfterEnd,timestamp with time zone,NO,,
+clinic_audit_new,AppointmentHistory,AfterStatus,character varying,NO,,20
+clinic_audit_new,Appointments,Id,character varying,NO,,64
+clinic_audit_new,Appointments,DoctorId,character varying,NO,,64
+clinic_audit_new,Appointments,PatientId,character varying,NO,,64
+clinic_audit_new,Appointments,Start,timestamp with time zone,NO,,
+clinic_audit_new,Appointments,End,timestamp with time zone,NO,,
+clinic_audit_new,Appointments,Status,character varying,NO,,20
+clinic_audit_new,Appointments,Version,integer,NO,,
+clinic_audit_new,Appointments,CreatedBy,text,NO,,
+clinic_audit_new,Appointments,UpdatedAt,timestamp with time zone,NO,,
+clinic_audit_new,Appointments,RequestId,text,NO,,
+clinic_audit_new,Appointments,ServiceId,text,YES,,
+clinic_audit_new,Appointments,ServiceName,character varying,YES,,200
+clinic_audit_new,AuditEvents,Id,bigint,NO,,
+clinic_audit_new,AuditEvents,ActorId,text,NO,,
+clinic_audit_new,AuditEvents,Action,character varying,NO,,80
+clinic_audit_new,AuditEvents,TargetId,text,NO,,
+clinic_audit_new,AuditEvents,OccurredAt,timestamp with time zone,NO,,
+clinic_audit_new,AvailabilityExceptions,Id,text,NO,,
+clinic_audit_new,AvailabilityExceptions,DoctorId,character varying,NO,,64
+clinic_audit_new,AvailabilityExceptions,Date,date,NO,,
+clinic_audit_new,AvailabilityExceptions,Start,time without time zone,NO,,
+clinic_audit_new,AvailabilityExceptions,End,time without time zone,NO,,
+clinic_audit_new,AvailabilityExceptions,IsAvailable,boolean,NO,,
+clinic_audit_new,AvailabilityExceptions,Reason,character varying,NO,,120
+clinic_audit_new,CarelineProvisioning,ClinicId,text,NO,,
+clinic_audit_new,DoctorServices,DoctorId,character varying,NO,,64
+clinic_audit_new,DoctorServices,ServiceId,text,NO,,
+clinic_audit_new,Doctors,Id,character varying,NO,,64
+clinic_audit_new,Doctors,Name,character varying,NO,,200
+clinic_audit_new,Doctors,Specialty,character varying,NO,,200
+clinic_audit_new,Doctors,BookingMethod,text,NO,,
+clinic_audit_new,Doctors,Funding,text,NO,,
+clinic_audit_new,Doctors,IsService,boolean,NO,,
+clinic_audit_new,Doctors,RequiresConfirmation,boolean,NO,,
+clinic_audit_new,Doctors,StaffOnly,boolean,NO,,
+clinic_audit_new,Doctors,TuesdayFirst,boolean,NO,,
+clinic_audit_new,Doctors,DurationMinutes,integer,NO,,
+clinic_audit_new,Doctors,DemoScheduleEdited,boolean,NO,,
+clinic_audit_new,Doctors,ScheduleVersion,integer,NO,1,
+clinic_audit_new,Doctors,CatalogVersion,integer,NO,1,
+clinic_audit_new,Doctors,Enabled,boolean,NO,true,
+clinic_audit_new,Doctors,SpecialtyId,text,YES,,
+clinic_audit_new,Doctors,Subspecialty,character varying,NO,''::character varying,200
+clinic_audit_new,IdempotencyRequests,AccountId,text,NO,,
+clinic_audit_new,IdempotencyRequests,RequestId,text,NO,,
+clinic_audit_new,IdempotencyRequests,Fingerprint,character varying,NO,,64
+clinic_audit_new,IdempotencyRequests,ResponseJson,jsonb,NO,,
+clinic_audit_new,IdempotencyRequests,CreatedAt,timestamp with time zone,NO,,
+clinic_audit_new,Patients,Id,character varying,NO,,64
+clinic_audit_new,Patients,Name,character varying,NO,,80
+clinic_audit_new,Patients,Email,character varying,NO,,120
+clinic_audit_new,Patients,Phone,character varying,NO,,30
+clinic_audit_new,Patients,IsDemonstration,boolean,NO,,
+clinic_audit_new,Patients,Version,integer,NO,1,
+clinic_audit_new,Services,Id,text,NO,,
+clinic_audit_new,Services,Name,character varying,NO,,200
+clinic_audit_new,Services,SpecialtyId,text,NO,,
+clinic_audit_new,Services,DurationMinutes,integer,NO,,
+clinic_audit_new,Services,Enabled,boolean,NO,,
+clinic_audit_new,Services,Version,integer,NO,,
+clinic_audit_new,Sessions,TokenHash,character varying,NO,,64
+clinic_audit_new,Sessions,AccountId,text,NO,,
+clinic_audit_new,Sessions,ExpiresAt,timestamp with time zone,NO,,
+clinic_audit_new,Sessions,IsDemo,boolean,NO,,
+clinic_audit_new,Settings,Key,text,NO,,
+clinic_audit_new,Settings,Value,text,NO,,
+clinic_audit_new,SourceSchedules,Id,bigint,NO,,
+clinic_audit_new,SourceSchedules,Row,integer,NO,,
+clinic_audit_new,SourceSchedules,Days,text,NO,,
+clinic_audit_new,SourceSchedules,Start,text,NO,,
+clinic_audit_new,SourceSchedules,End,text,NO,,
+clinic_audit_new,SourceSchedules,Type,text,NO,,
+clinic_audit_new,SourceSchedules,Note,text,NO,,
+clinic_audit_new,SourceSchedules,DoctorId,character varying,NO,,64
+clinic_audit_new,Specialties,Id,text,NO,,
+clinic_audit_new,Specialties,Name,character varying,NO,,200
+clinic_audit_new,Specialties,Version,integer,NO,,
+clinic_audit_new,WorkingPeriods,Id,bigint,NO,,
+clinic_audit_new,WorkingPeriods,Day,integer,NO,,
+clinic_audit_new,WorkingPeriods,Start,time without time zone,NO,,
+clinic_audit_new,WorkingPeriods,End,time without time zone,NO,,
+clinic_audit_new,WorkingPeriods,DoctorId,character varying,NO,,64
+clinic_audit_new,__EFMigrationsHistory,MigrationId,character varying,NO,,150
+clinic_audit_new,__EFMigrationsHistory,ProductVersion,character varying,NO,,32
+clinic_east,Accounts,Id,text,NO,,
+clinic_east,Accounts,Email,character varying,NO,,120
+clinic_east,Accounts,NormalizedEmail,character varying,NO,,120
+clinic_east,Accounts,Name,character varying,NO,,80
+clinic_east,Accounts,PasswordHash,text,NO,,
+clinic_east,Accounts,Role,character varying,NO,,20
+clinic_east,Accounts,DoctorId,character varying,YES,,64
+clinic_east,Accounts,PatientId,character varying,YES,,64
+clinic_east,Accounts,Enabled,boolean,NO,,
+clinic_east,Accounts,IsDemo,boolean,NO,,
+clinic_east,Accounts,FailedAttempts,integer,NO,,
+clinic_east,Accounts,LockedUntil,timestamp with time zone,YES,,
+clinic_east,Accounts,CreatedAt,timestamp with time zone,NO,,
+clinic_east,AppointmentHistory,Id,character varying,NO,,64
+clinic_east,AppointmentHistory,AppointmentId,character varying,NO,,64
+clinic_east,AppointmentHistory,AppointmentVersion,integer,NO,,
+clinic_east,AppointmentHistory,Kind,character varying,NO,,20
+clinic_east,AppointmentHistory,ActorId,character varying,NO,,64
+clinic_east,AppointmentHistory,ActorName,character varying,NO,,200
+clinic_east,AppointmentHistory,ActorRole,character varying,NO,,20
+clinic_east,AppointmentHistory,OccurredAt,timestamp with time zone,NO,,
+clinic_east,AppointmentHistory,BeforeStart,timestamp with time zone,YES,,
+clinic_east,AppointmentHistory,BeforeEnd,timestamp with time zone,YES,,
+clinic_east,AppointmentHistory,BeforeStatus,character varying,YES,,20
+clinic_east,AppointmentHistory,AfterStart,timestamp with time zone,NO,,
+clinic_east,AppointmentHistory,AfterEnd,timestamp with time zone,NO,,
+clinic_east,AppointmentHistory,AfterStatus,character varying,NO,,20
+clinic_east,Appointments,Id,character varying,NO,,64
+clinic_east,Appointments,DoctorId,character varying,NO,,64
+clinic_east,Appointments,PatientId,character varying,NO,,64
+clinic_east,Appointments,Start,timestamp with time zone,NO,,
+clinic_east,Appointments,End,timestamp with time zone,NO,,
+clinic_east,Appointments,Status,character varying,NO,,20
+clinic_east,Appointments,Version,integer,NO,,
+clinic_east,Appointments,CreatedBy,text,NO,,
+clinic_east,Appointments,UpdatedAt,timestamp with time zone,NO,,
+clinic_east,Appointments,RequestId,text,NO,,
+clinic_east,Appointments,ServiceId,text,YES,,
+clinic_east,Appointments,ServiceName,character varying,YES,,200
+clinic_east,AuditEvents,Id,bigint,NO,,
+clinic_east,AuditEvents,ActorId,text,NO,,
+clinic_east,AuditEvents,Action,character varying,NO,,80
+clinic_east,AuditEvents,TargetId,text,NO,,
+clinic_east,AuditEvents,OccurredAt,timestamp with time zone,NO,,
+clinic_east,AvailabilityExceptions,Id,text,NO,,
+clinic_east,AvailabilityExceptions,DoctorId,character varying,NO,,64
+clinic_east,AvailabilityExceptions,Date,date,NO,,
+clinic_east,AvailabilityExceptions,Start,time without time zone,NO,,
+clinic_east,AvailabilityExceptions,End,time without time zone,NO,,
+clinic_east,AvailabilityExceptions,IsAvailable,boolean,NO,,
+clinic_east,AvailabilityExceptions,Reason,character varying,NO,,120
+clinic_east,DoctorServices,DoctorId,character varying,NO,,64
+clinic_east,DoctorServices,ServiceId,text,NO,,
+clinic_east,Doctors,Id,character varying,NO,,64
+clinic_east,Doctors,Name,character varying,NO,,200
+clinic_east,Doctors,Specialty,character varying,NO,,200
+clinic_east,Doctors,BookingMethod,text,NO,,
+clinic_east,Doctors,Funding,text,NO,,
+clinic_east,Doctors,IsService,boolean,NO,,
+clinic_east,Doctors,RequiresConfirmation,boolean,NO,,
+clinic_east,Doctors,StaffOnly,boolean,NO,,
+clinic_east,Doctors,TuesdayFirst,boolean,NO,,
+clinic_east,Doctors,DurationMinutes,integer,NO,,
+clinic_east,Doctors,DemoScheduleEdited,boolean,NO,,
+clinic_east,Doctors,ScheduleVersion,integer,NO,1,
+clinic_east,Doctors,CatalogVersion,integer,NO,1,
+clinic_east,Doctors,Enabled,boolean,NO,true,
+clinic_east,Doctors,SpecialtyId,text,YES,,
+clinic_east,Doctors,Subspecialty,character varying,NO,''::character varying,200
+clinic_east,IdempotencyRequests,AccountId,text,NO,,
+clinic_east,IdempotencyRequests,RequestId,text,NO,,
+clinic_east,IdempotencyRequests,Fingerprint,character varying,NO,,64
+clinic_east,IdempotencyRequests,ResponseJson,jsonb,NO,,
+clinic_east,IdempotencyRequests,CreatedAt,timestamp with time zone,NO,,
+clinic_east,Patients,Id,character varying,NO,,64
+clinic_east,Patients,Name,character varying,NO,,80
+clinic_east,Patients,Email,character varying,NO,,120
+clinic_east,Patients,Phone,character varying,NO,,30
+clinic_east,Patients,IsDemonstration,boolean,NO,,
+clinic_east,Patients,Version,integer,NO,1,
+clinic_east,Services,Id,text,NO,,
+clinic_east,Services,Name,character varying,NO,,200
+clinic_east,Services,SpecialtyId,text,NO,,
+clinic_east,Services,DurationMinutes,integer,NO,,
+clinic_east,Services,Enabled,boolean,NO,,
+clinic_east,Services,Version,integer,NO,,
+clinic_east,Sessions,TokenHash,character varying,NO,,64
+clinic_east,Sessions,AccountId,text,NO,,
+clinic_east,Sessions,ExpiresAt,timestamp with time zone,NO,,
+clinic_east,Sessions,IsDemo,boolean,NO,,
+clinic_east,Settings,Key,text,NO,,
+clinic_east,Settings,Value,text,NO,,
+clinic_east,SourceSchedules,Id,bigint,NO,,
+clinic_east,SourceSchedules,Row,integer,NO,,
+clinic_east,SourceSchedules,Days,text,NO,,
+clinic_east,SourceSchedules,Start,text,NO,,
+clinic_east,SourceSchedules,End,text,NO,,
+clinic_east,SourceSchedules,Type,text,NO,,
+clinic_east,SourceSchedules,Note,text,NO,,
+clinic_east,SourceSchedules,DoctorId,character varying,NO,,64
+clinic_east,Specialties,Id,text,NO,,
+clinic_east,Specialties,Name,character varying,NO,,200
+clinic_east,Specialties,Version,integer,NO,,
+clinic_east,WorkingPeriods,Id,bigint,NO,,
+clinic_east,WorkingPeriods,Day,integer,NO,,
+clinic_east,WorkingPeriods,Start,time without time zone,NO,,
+clinic_east,WorkingPeriods,End,time without time zone,NO,,
+clinic_east,WorkingPeriods,DoctorId,character varying,NO,,64
+clinic_east,__EFMigrationsHistory,MigrationId,character varying,NO,,150
+clinic_east,__EFMigrationsHistory,ProductVersion,character varying,NO,,32
+clinic_havana,Accounts,Id,text,NO,,
+clinic_havana,Accounts,Email,character varying,NO,,120
+clinic_havana,Accounts,NormalizedEmail,character varying,NO,,120
+clinic_havana,Accounts,Name,character varying,NO,,80
+clinic_havana,Accounts,PasswordHash,text,NO,,
+clinic_havana,Accounts,Role,character varying,NO,,20
+clinic_havana,Accounts,DoctorId,character varying,YES,,64
+clinic_havana,Accounts,PatientId,character varying,YES,,64
+clinic_havana,Accounts,Enabled,boolean,NO,,
+clinic_havana,Accounts,IsDemo,boolean,NO,,
+clinic_havana,Accounts,FailedAttempts,integer,NO,,
+clinic_havana,Accounts,LockedUntil,timestamp with time zone,YES,,
+clinic_havana,Accounts,CreatedAt,timestamp with time zone,NO,,
+clinic_havana,AppointmentHistory,Id,character varying,NO,,64
+clinic_havana,AppointmentHistory,AppointmentId,character varying,NO,,64
+clinic_havana,AppointmentHistory,AppointmentVersion,integer,NO,,
+clinic_havana,AppointmentHistory,Kind,character varying,NO,,20
+clinic_havana,AppointmentHistory,ActorId,character varying,NO,,64
+clinic_havana,AppointmentHistory,ActorName,character varying,NO,,200
+clinic_havana,AppointmentHistory,ActorRole,character varying,NO,,20
+clinic_havana,AppointmentHistory,OccurredAt,timestamp with time zone,NO,,
+clinic_havana,AppointmentHistory,BeforeStart,timestamp with time zone,YES,,
+clinic_havana,AppointmentHistory,BeforeEnd,timestamp with time zone,YES,,
+clinic_havana,AppointmentHistory,BeforeStatus,character varying,YES,,20
+clinic_havana,AppointmentHistory,AfterStart,timestamp with time zone,NO,,
+clinic_havana,AppointmentHistory,AfterEnd,timestamp with time zone,NO,,
+clinic_havana,AppointmentHistory,AfterStatus,character varying,NO,,20
+clinic_havana,Appointments,Id,character varying,NO,,64
+clinic_havana,Appointments,DoctorId,character varying,NO,,64
+clinic_havana,Appointments,PatientId,character varying,NO,,64
+clinic_havana,Appointments,Start,timestamp with time zone,NO,,
+clinic_havana,Appointments,End,timestamp with time zone,NO,,
+clinic_havana,Appointments,Status,character varying,NO,,20
+clinic_havana,Appointments,Version,integer,NO,,
+clinic_havana,Appointments,CreatedBy,text,NO,,
+clinic_havana,Appointments,UpdatedAt,timestamp with time zone,NO,,
+clinic_havana,Appointments,RequestId,text,NO,,
+clinic_havana,Appointments,ServiceId,text,YES,,
+clinic_havana,Appointments,ServiceName,character varying,YES,,200
+clinic_havana,AuditEvents,Id,bigint,NO,,
+clinic_havana,AuditEvents,ActorId,text,NO,,
+clinic_havana,AuditEvents,Action,character varying,NO,,80
+clinic_havana,AuditEvents,TargetId,text,NO,,
+clinic_havana,AuditEvents,OccurredAt,timestamp with time zone,NO,,
+clinic_havana,AvailabilityExceptions,Id,text,NO,,
+clinic_havana,AvailabilityExceptions,DoctorId,character varying,NO,,64
+clinic_havana,AvailabilityExceptions,Date,date,NO,,
+clinic_havana,AvailabilityExceptions,Start,time without time zone,NO,,
+clinic_havana,AvailabilityExceptions,End,time without time zone,NO,,
+clinic_havana,AvailabilityExceptions,IsAvailable,boolean,NO,,
+clinic_havana,AvailabilityExceptions,Reason,character varying,NO,,120
+clinic_havana,CarelineProvisioning,ClinicId,text,NO,,
+clinic_havana,DoctorServices,DoctorId,character varying,NO,,64
+clinic_havana,DoctorServices,ServiceId,text,NO,,
+clinic_havana,Doctors,Id,character varying,NO,,64
+clinic_havana,Doctors,Name,character varying,NO,,200
+clinic_havana,Doctors,Specialty,character varying,NO,,200
+clinic_havana,Doctors,BookingMethod,text,NO,,
+clinic_havana,Doctors,Funding,text,NO,,
+clinic_havana,Doctors,IsService,boolean,NO,,
+clinic_havana,Doctors,RequiresConfirmation,boolean,NO,,
+clinic_havana,Doctors,StaffOnly,boolean,NO,,
+clinic_havana,Doctors,TuesdayFirst,boolean,NO,,
+clinic_havana,Doctors,DurationMinutes,integer,NO,,
+clinic_havana,Doctors,DemoScheduleEdited,boolean,NO,,
+clinic_havana,Doctors,ScheduleVersion,integer,NO,1,
+clinic_havana,Doctors,CatalogVersion,integer,NO,1,
+clinic_havana,Doctors,Enabled,boolean,NO,true,
+clinic_havana,Doctors,SpecialtyId,text,YES,,
+clinic_havana,Doctors,Subspecialty,character varying,NO,''::character varying,200
+clinic_havana,IdempotencyRequests,AccountId,text,NO,,
+clinic_havana,IdempotencyRequests,RequestId,text,NO,,
+clinic_havana,IdempotencyRequests,Fingerprint,character varying,NO,,64
+clinic_havana,IdempotencyRequests,ResponseJson,jsonb,NO,,
+clinic_havana,IdempotencyRequests,CreatedAt,timestamp with time zone,NO,,
+clinic_havana,Patients,Id,character varying,NO,,64
+clinic_havana,Patients,Name,character varying,NO,,80
+clinic_havana,Patients,Email,character varying,NO,,120
+clinic_havana,Patients,Phone,character varying,NO,,30
+clinic_havana,Patients,IsDemonstration,boolean,NO,,
+clinic_havana,Patients,Version,integer,NO,1,
+clinic_havana,Services,Id,text,NO,,
+clinic_havana,Services,Name,character varying,NO,,200
+clinic_havana,Services,SpecialtyId,text,NO,,
+clinic_havana,Services,DurationMinutes,integer,NO,,
+clinic_havana,Services,Enabled,boolean,NO,,
+clinic_havana,Services,Version,integer,NO,,
+clinic_havana,Sessions,TokenHash,character varying,NO,,64
+clinic_havana,Sessions,AccountId,text,NO,,
+clinic_havana,Sessions,ExpiresAt,timestamp with time zone,NO,,
+clinic_havana,Sessions,IsDemo,boolean,NO,,
+clinic_havana,Settings,Key,text,NO,,
+clinic_havana,Settings,Value,text,NO,,
+clinic_havana,SourceSchedules,Id,bigint,NO,,
+clinic_havana,SourceSchedules,Row,integer,NO,,
+clinic_havana,SourceSchedules,Days,text,NO,,
+clinic_havana,SourceSchedules,Start,text,NO,,
+clinic_havana,SourceSchedules,End,text,NO,,
+clinic_havana,SourceSchedules,Type,text,NO,,
+clinic_havana,SourceSchedules,Note,text,NO,,
+clinic_havana,SourceSchedules,DoctorId,character varying,NO,,64
+clinic_havana,Specialties,Id,text,NO,,
+clinic_havana,Specialties,Name,character varying,NO,,200
+clinic_havana,Specialties,Version,integer,NO,,
+clinic_havana,WorkingPeriods,Id,bigint,NO,,
+clinic_havana,WorkingPeriods,Day,integer,NO,,
+clinic_havana,WorkingPeriods,Start,time without time zone,NO,,
+clinic_havana,WorkingPeriods,End,time without time zone,NO,,
+clinic_havana,WorkingPeriods,DoctorId,character varying,NO,,64
+clinic_havana,__EFMigrationsHistory,MigrationId,character varying,NO,,150
+clinic_havana,__EFMigrationsHistory,ProductVersion,character varying,NO,,32
+public,Accounts,Id,text,NO,,
+public,Accounts,Email,character varying,NO,,120
+public,Accounts,NormalizedEmail,character varying,NO,,120
+public,Accounts,Name,character varying,NO,,80
+public,Accounts,PasswordHash,text,NO,,
+public,Accounts,Role,character varying,NO,,20
+public,Accounts,DoctorId,character varying,YES,,64
+public,Accounts,PatientId,character varying,YES,,64
+public,Accounts,Enabled,boolean,NO,,
+public,Accounts,IsDemo,boolean,NO,,
+public,Accounts,FailedAttempts,integer,NO,,
+public,Accounts,LockedUntil,timestamp with time zone,YES,,
+public,Accounts,CreatedAt,timestamp with time zone,NO,,
+public,AppointmentHistory,Id,character varying,NO,,64
+public,AppointmentHistory,AppointmentId,character varying,NO,,64
+public,AppointmentHistory,AppointmentVersion,integer,NO,,
+public,AppointmentHistory,Kind,character varying,NO,,20
+public,AppointmentHistory,ActorId,character varying,NO,,64
+public,AppointmentHistory,ActorName,character varying,NO,,200
+public,AppointmentHistory,ActorRole,character varying,NO,,20
+public,AppointmentHistory,OccurredAt,timestamp with time zone,NO,,
+public,AppointmentHistory,BeforeStart,timestamp with time zone,YES,,
+public,AppointmentHistory,BeforeEnd,timestamp with time zone,YES,,
+public,AppointmentHistory,BeforeStatus,character varying,YES,,20
+public,AppointmentHistory,AfterStart,timestamp with time zone,NO,,
+public,AppointmentHistory,AfterEnd,timestamp with time zone,NO,,
+public,AppointmentHistory,AfterStatus,character varying,NO,,20
+public,Appointments,Id,character varying,NO,,64
+public,Appointments,DoctorId,character varying,NO,,64
+public,Appointments,PatientId,character varying,NO,,64
+public,Appointments,Start,timestamp with time zone,NO,,
+public,Appointments,End,timestamp with time zone,NO,,
+public,Appointments,Status,character varying,NO,,20
+public,Appointments,Version,integer,NO,,
+public,Appointments,CreatedBy,text,NO,,
+public,Appointments,UpdatedAt,timestamp with time zone,NO,,
+public,Appointments,RequestId,text,NO,,
+public,Appointments,ServiceId,text,YES,,
+public,Appointments,ServiceName,character varying,YES,,200
+public,AuditEvents,Id,bigint,NO,,
+public,AuditEvents,ActorId,text,NO,,
+public,AuditEvents,Action,character varying,NO,,80
+public,AuditEvents,TargetId,text,NO,,
+public,AuditEvents,OccurredAt,timestamp with time zone,NO,,
+public,AvailabilityExceptions,Id,text,NO,,
+public,AvailabilityExceptions,DoctorId,character varying,NO,,64
+public,AvailabilityExceptions,Date,date,NO,,
+public,AvailabilityExceptions,Start,time without time zone,NO,,
+public,AvailabilityExceptions,End,time without time zone,NO,,
+public,AvailabilityExceptions,IsAvailable,boolean,NO,,
+public,AvailabilityExceptions,Reason,character varying,NO,,120
+public,DoctorServices,DoctorId,character varying,NO,,64
+public,DoctorServices,ServiceId,text,NO,,
+public,Doctors,Id,character varying,NO,,64
+public,Doctors,Name,character varying,NO,,200
+public,Doctors,Specialty,character varying,NO,,200
+public,Doctors,BookingMethod,text,NO,,
+public,Doctors,Funding,text,NO,,
+public,Doctors,IsService,boolean,NO,,
+public,Doctors,RequiresConfirmation,boolean,NO,,
+public,Doctors,StaffOnly,boolean,NO,,
+public,Doctors,TuesdayFirst,boolean,NO,,
+public,Doctors,DurationMinutes,integer,NO,,
+public,Doctors,DemoScheduleEdited,boolean,NO,,
+public,Doctors,ScheduleVersion,integer,NO,1,
+public,Doctors,CatalogVersion,integer,NO,1,
+public,Doctors,Enabled,boolean,NO,true,
+public,Doctors,SpecialtyId,text,YES,,
+public,Doctors,Subspecialty,character varying,NO,''::character varying,200
+public,IdempotencyRequests,AccountId,text,NO,,
+public,IdempotencyRequests,RequestId,text,NO,,
+public,IdempotencyRequests,Fingerprint,character varying,NO,,64
+public,IdempotencyRequests,ResponseJson,jsonb,NO,,
+public,IdempotencyRequests,CreatedAt,timestamp with time zone,NO,,
+public,Patients,Id,character varying,NO,,64
+public,Patients,Name,character varying,NO,,80
+public,Patients,Email,character varying,NO,,120
+public,Patients,Phone,character varying,NO,,30
+public,Patients,IsDemonstration,boolean,NO,,
+public,Patients,Version,integer,NO,1,
+public,Services,Id,text,NO,,
+public,Services,Name,character varying,NO,,200
+public,Services,SpecialtyId,text,NO,,
+public,Services,DurationMinutes,integer,NO,,
+public,Services,Enabled,boolean,NO,,
+public,Services,Version,integer,NO,,
+public,Sessions,TokenHash,character varying,NO,,64
+public,Sessions,AccountId,text,NO,,
+public,Sessions,ExpiresAt,timestamp with time zone,NO,,
+public,Sessions,IsDemo,boolean,NO,,
+public,Settings,Key,text,NO,,
+public,Settings,Value,text,NO,,
+public,SourceSchedules,Id,bigint,NO,,
+public,SourceSchedules,Row,integer,NO,,
+public,SourceSchedules,Days,text,NO,,
+public,SourceSchedules,Start,text,NO,,
+public,SourceSchedules,End,text,NO,,
+public,SourceSchedules,Type,text,NO,,
+public,SourceSchedules,Note,text,NO,,
+public,SourceSchedules,DoctorId,character varying,NO,,64
+public,Specialties,Id,text,NO,,
+public,Specialties,Name,character varying,NO,,200
+public,Specialties,Version,integer,NO,,
+public,WorkingPeriods,Id,bigint,NO,,
+public,WorkingPeriods,Day,integer,NO,,
+public,WorkingPeriods,Start,time without time zone,NO,,
+public,WorkingPeriods,End,time without time zone,NO,,
+public,WorkingPeriods,DoctorId,character varying,NO,,64
+public,__EFMigrationsHistory,MigrationId,character varying,NO,,150
+public,__EFMigrationsHistory,ProductVersion,character varying,NO,,32

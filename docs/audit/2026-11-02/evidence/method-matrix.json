@@ -1,0 +1,1212 @@
+[
+  {
+    "path": "/api/clinics",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/clinics",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/clinics",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/clinics",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/clinics",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/clinics",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/health",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/health",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/health",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/health",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/health",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/health",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/health/database",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/health/database",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/health/database",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/health/database",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/health/database",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/health/database",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/reports",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/reports",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/reports",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/reports",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/reports",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/reports",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/slots",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/slots",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/slots",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/slots",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/slots",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/slots",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/patients",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/patients",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/patients",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/patients",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/patients",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/patients",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "POST",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "HEAD",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "GET",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "PUT",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "PATCH",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "DELETE",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "OPTIONS",
+    "status": 405
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "HEAD",
+    "status": 405
+  }
+]

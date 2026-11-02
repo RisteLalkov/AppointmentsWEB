@@ -1,0 +1,7 @@
+schemaname,tablename,indexname,indexdef
+public,PlatformClinics,PlatformClinics_pkey,"CREATE UNIQUE INDEX ""PlatformClinics_pkey"" ON public.""PlatformClinics"" USING btree (""Id"")"
+public,PlatformOperators,PlatformOperators_Email_key,"CREATE UNIQUE INDEX ""PlatformOperators_Email_key"" ON public.""PlatformOperators"" USING btree (""Email"")"
+public,PlatformOperators,PlatformOperators_pkey,"CREATE UNIQUE INDEX ""PlatformOperators_pkey"" ON public.""PlatformOperators"" USING btree (""Id"")"
+public,PlatformSchemaVersions,PlatformSchemaVersions_pkey,"CREATE UNIQUE INDEX ""PlatformSchemaVersions_pkey"" ON public.""PlatformSchemaVersions"" USING btree (""Version"")"
+public,PlatformSessions,IX_PlatformSessions_ExpiresAt,"CREATE INDEX ""IX_PlatformSessions_ExpiresAt"" ON public.""PlatformSessions"" USING btree (""ExpiresAt"")"
+public,PlatformSessions,PlatformSessions_pkey,"CREATE UNIQUE INDEX ""PlatformSessions_pkey"" ON public.""PlatformSessions"" USING btree (""TokenHash"")"

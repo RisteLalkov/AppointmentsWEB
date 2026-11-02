@@ -1,0 +1,272 @@
+[
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "unauthenticatedStatus": 200,
+    "declaredProtected": false
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "unauthenticatedStatus": 200,
+    "declaredProtected": false
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "POST",
+    "unauthenticatedStatus": 400,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "GET",
+    "unauthenticatedStatus": 404,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "POST",
+    "unauthenticatedStatus": 400,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "unauthenticatedStatus": 200,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "unauthenticatedStatus": 404,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "unauthenticatedStatus": 200,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "unauthenticatedStatus": 200,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "unauthenticatedStatus": 200,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "POST",
+    "unauthenticatedStatus": 400,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "POST",
+    "unauthenticatedStatus": 400,
+    "declaredProtected": false
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "POST",
+    "unauthenticatedStatus": 401,
+    "declaredProtected": true
+  }
+]

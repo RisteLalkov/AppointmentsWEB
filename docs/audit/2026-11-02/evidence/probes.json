@@ -1,0 +1,312 @@
+[
+  {
+    "name": "Unsupported method PUT",
+    "actual": 405,
+    "expected": 405,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unsupported method PATCH",
+    "actual": 405,
+    "expected": 405,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unsupported method DELETE",
+    "actual": 405,
+    "expected": 405,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Unsupported method OPTIONS",
+    "actual": 405,
+    "expected": 405,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Patient foreign appointment history",
+    "actual": 404,
+    "expected": 404,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Doctor cannot manage other schedule",
+    "actual": 403,
+    "expected": 403,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Null schedule element",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Null input /api/catalogue/doctors",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Null input /api/catalogue/services",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Null input /api/appointments",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Null input /api/auth/login",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Malformed/wrong-shaped appointment JSON {",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Malformed/wrong-shaped appointment JSON []",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Malformed/wrong-shaped appointment JSON \"text\"",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Oversized API body",
+    "actual": 500,
+    "expected": 413,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Invalid enum status",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Report maximum date",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Empty service ID booking",
+    "actual": 503,
+    "expected": 400,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Nonexistent schedule",
+    "actual": 404,
+    "expected": 404,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Bad public date",
+    "actual": 400,
+    "expected": 400,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Patient name stored as literal data",
+    "actual": "<img src=x onerror=alert(1)>",
+    "expected": "<img src=x onerror=alert(1)>",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Fractional schedule starts before configured hours",
+    "actual": {
+      "saveStatus": 200,
+      "first": "09:00:00"
+    },
+    "expected": null,
+    "passed": null,
+    "detail": null
+  },
+  {
+    "name": "Real Web login renders workspace",
+    "actual": 200,
+    "expected": 200,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Web security headers",
+    "actual": {
+      "X-Frame-Options": null,
+      "Content-Security-Policy": null,
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "same-origin"
+    },
+    "expected": null,
+    "passed": null,
+    "detail": null
+  },
+  {
+    "name": "Real browser full stack journey process",
+    "actual": 0,
+    "expected": 0,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Healthy clinic login with another clinic misbound",
+    "actual": 503,
+    "expected": 200,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Authenticated clinical bootstrap during platform registry outage",
+    "actual": 503,
+    "expected": 200,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Readiness health during platform outage",
+    "actual": 200,
+    "expected": 503,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Binding restored after fault injection",
+    "actual": 200,
+    "expected": 200,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Public availability on midnight DST transition",
+    "actual": 500,
+    "expected": 200,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Unrelated legitimate login after 30 other Web sign-ins",
+    "actual": 429,
+    "expected": 200,
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Concurrent administrators disabling each other",
+    "actual": {
+      "statuses": [
+        200,
+        200
+      ],
+      "activeAdministrators": 0
+    },
+    "expected": null,
+    "passed": null,
+    "detail": null
+  },
+  {
+    "name": "Small-clinic bootstrap latency ms",
+    "actual": {
+      "median": 26.46,
+      "max": 295.4
+    },
+    "expected": null,
+    "passed": null,
+    "detail": null
+  },
+  {
+    "name": "PostgreSQL server version",
+    "actual": "17.11 (Debian 17.11-1.pgdg13+2)",
+    "expected": null,
+    "passed": null,
+    "detail": null
+  },
+  {
+    "name": "Growing clinic bootstrap",
+    "actual": {
+      "status": 200,
+      "patients": 5003,
+      "appointments": 30002,
+      "jsonBytes": 11988214,
+      "milliseconds": 558.72
+    },
+    "expected": null,
+    "passed": null,
+    "detail": null
+  },
+  {
+    "name": "Paired isolated backups restore without SQL errors",
+    "actual": 2,
+    "expected": 2,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restored databases preserve credentials and appointments",
+    "actual": 30002,
+    "expected": 30002,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restored clinic binding",
+    "actual": "main",
+    "expected": "main",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "API publish includes all platform SQL assets",
+    "actual": true,
+    "expected": true,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "API publish includes Swagger assembly",
+    "actual": true,
+    "expected": true,
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Web publish includes current scripts and styles",
+    "actual": true,
+    "expected": true,
+    "passed": true,
+    "detail": null
+  }
+]

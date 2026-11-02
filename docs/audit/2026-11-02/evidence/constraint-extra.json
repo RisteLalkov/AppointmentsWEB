@@ -1,0 +1,14 @@
+[
+  {
+    "databaseKind": "clinical",
+    "cases": 24,
+    "passed": true,
+    "allChangesRolledBack": true
+  },
+  {
+    "databaseKind": "platform",
+    "cases": 7,
+    "passed": true,
+    "allChangesRolledBack": true
+  }
+]

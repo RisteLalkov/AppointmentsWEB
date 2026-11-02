@@ -1,0 +1,36 @@
+[
+  {
+    "host": "medtermin.mk",
+    "dnsError": "[Errno -3] Temporary failure in name resolution"
+  },
+  {
+    "host": "app.medtermin.mk",
+    "dnsError": "[Errno -3] Temporary failure in name resolution"
+  },
+  {
+    "host": "admin.medtermin.mk",
+    "dnsError": "[Errno -3] Temporary failure in name resolution"
+  },
+  {
+    "host": "api.medtermin.mk",
+    "dnsError": "[Errno -3] Temporary failure in name resolution"
+  },
+  {
+    "host": "10.20.1.102",
+    "port": 5432,
+    "tcpReachable": false,
+    "error": "[Errno 111] Connection refused"
+  },
+  {
+    "host": "10.20.1.100",
+    "port": 5544,
+    "tcpReachable": false,
+    "error": "[Errno 111] Connection refused"
+  },
+  {
+    "host": "10.20.1.100",
+    "port": 5543,
+    "tcpReachable": false,
+    "error": "[Errno 111] Connection refused"
+  }
+]

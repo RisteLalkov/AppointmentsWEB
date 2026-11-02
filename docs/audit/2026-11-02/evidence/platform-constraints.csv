@@ -1,0 +1,8 @@
+schema,table_name,conname,contype,definition
+public,PlatformClinics,PlatformClinics_State_check,c,"CHECK ((""State"" = ANY (ARRAY['Provisioning'::text, 'Ready'::text, 'Failed'::text])))"
+public,PlatformClinics,PlatformClinics_pkey,p,"PRIMARY KEY (""Id"")"
+public,PlatformOperators,PlatformOperators_Email_key,u,"UNIQUE (""Email"")"
+public,PlatformOperators,PlatformOperators_pkey,p,"PRIMARY KEY (""Id"")"
+public,PlatformSchemaVersions,PlatformSchemaVersions_pkey,p,"PRIMARY KEY (""Version"")"
+public,PlatformSessions,PlatformSessions_OperatorId_fkey,f,"FOREIGN KEY (""OperatorId"") REFERENCES ""PlatformOperators""(""Id"") ON DELETE CASCADE"
+public,PlatformSessions,PlatformSessions_pkey,p,"PRIMARY KEY (""TokenHash"")"

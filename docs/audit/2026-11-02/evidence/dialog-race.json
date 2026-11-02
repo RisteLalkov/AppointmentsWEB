@@ -1,0 +1,6 @@
+{
+  "normalErrors": 0,
+  "errorsAfterDialogReplacement": [
+    "Cannot set properties of null (setting 'innerHTML')"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "tested": 27,
+  "foreignKeys": 15,
+  "checks": 12,
+  "exitCode": 0,
+  "allChangesRolledBack": true
+}

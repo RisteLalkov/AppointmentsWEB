@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "parameters": "--vulnerable --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Web/Appointments.Web.csproj"
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Core/Appointments.Core.csproj"
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/tests/Appointments.Tests/Appointments.Tests.csproj"
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Api/Appointments.Api.csproj"
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Data/Appointments.Data.csproj"
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Contracts/Appointments.Contracts.csproj"
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/tests/Appointments.DatabaseTests/Appointments.DatabaseTests.csproj"
+    }
+  ]
+}

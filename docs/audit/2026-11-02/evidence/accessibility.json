@@ -1,0 +1,321 @@
+[
+  {
+    "path": "/Discover",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              ".discovery-filter-count"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.07 (foreground color: #667c6e, background color: #f0f5f1, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "passes": 27
+  },
+  {
+    "path": "/Account/Login",
+    "violations": [],
+    "passes": 21
+  },
+  {
+    "path": "/Account/Register",
+    "violations": [],
+    "passes": 22
+  },
+  {
+    "path": "/Discover/Doctor/91970396d2a64975a8ff4881da6faffc?clinicId=main&date=2026-11-12",
+    "violations": [],
+    "passes": 21
+  },
+  {
+    "path": "/Workspace#overview",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              ".section-link"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.71 (foreground color: #758b69, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".tone-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #63734d, background color: #e8eee4, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".badge"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.15 (foreground color: #9c6a2d, background color: #fbf1df, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "passes": 23
+  },
+  {
+    "path": "/Workspace#doctors",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              ".tone-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #63734d, background color: #e8eee4, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".tone-1"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #a97c59, background color: #f6e9df, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".tone-2"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.27 (foreground color: #7c7e9b, background color: #e8e9f4, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "passes": 25
+  },
+  {
+    "path": "/Workspace#calendar",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              "button[data-calendar-view=\"timeGridDay\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.02 (foreground color: #819277, background color: #f0f5f8, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[data-calendar-view=\"dayGridMonth\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.02 (foreground color: #819277, background color: #f0f5f8, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "button[data-calendar-view=\"timeGridRange\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.02 (foreground color: #819277, background color: #f0f5f8, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "#calendar-loading"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.9 (foreground color: #8c9d7e, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 2, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.97 (foreground color: #849479, background color: #edf8f4, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 3, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.99 (foreground color: #849479, background color: #f2f7fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 4, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.99 (foreground color: #849479, background color: #f2f7fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 5, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.99 (foreground color: #849479, background color: #f2f7fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 6, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.99 (foreground color: #849479, background color: #f2f7fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 7, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.99 (foreground color: #849479, background color: #f2f7fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "a[aria-label=\"November 8, 2026\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.99 (foreground color: #849479, background color: #f2f7fa, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      },
+      {
+        "id": "scrollable-region-focusable",
+        "impact": "serious",
+        "description": "Ensure elements that have scrollable content are accessible by keyboard in Safari",
+        "help": "Scrollable region must have keyboard access",
+        "nodes": [
+          {
+            "target": [
+              ".fc-scroller-liquid-absolute"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element should have focusable content\n  Element should be focusable"
+          }
+        ]
+      }
+    ],
+    "passes": 30
+  },
+  {
+    "path": "/Workspace#patients",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              ".tone-0"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #63734d, background color: #e8eee4, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".tone-1"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #a97c59, background color: #f6e9df, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".tone-2"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.27 (foreground color: #7c7e9b, background color: #e8e9f4, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "passes": 25
+  },
+  {
+    "path": "/Accounts",
+    "violations": [],
+    "passes": 25
+  },
+  {
+    "path": "/Account/Password",
+    "violations": [],
+    "passes": 20
+  },
+  {
+    "path": "/Workspace#reports",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "nodes": [
+          {
+            "target": [
+              "footer > span:nth-child(1)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "footer > span:nth-child(2)"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.62 (foreground color: #93a08e, background color: #f8fafc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "passes": 28
+  },
+  {
+    "path": "/Platform",
+    "violations": [],
+    "passes": 27
+  },
+  {
+    "path": "/Platform/Edit/audit-new",
+    "violations": [],
+    "passes": 14
+  }
+]
