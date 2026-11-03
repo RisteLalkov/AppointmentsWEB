@@ -1,6 +1,7 @@
 // Real Razor + Chromium tests. Demo workflows are independent of production data.
 // TEST_PUBLIC_WEB adds public/company checks against the discovery MVC fixture.
 const { chromium }=require('playwright');
+const { openAccountSettings, closeAccountSettings }=require('./helpers/account-settings.cjs');
 const { spawn }=require('node:child_process');
 const { mkdtemp,rm,mkdir }=require('node:fs/promises');
 const { resolve }=require('node:path');
@@ -10,6 +11,7 @@ let count=0;
 const check=(ok,label)=>{if(!ok)throw Error(label);console.log('PASS language browser '+label);count++;};
 const root=resolve(__dirname,'../..');
 async function switchLanguage(page,value){
+ await openAccountSettings(page);
  await Promise.all([page.waitForNavigation(),page.locator(`[data-language-form] button[value="${value}"]`).click()]);
  check(await page.locator('html').getAttribute('lang')===(value==='en-GB'?'en':'mk'),'Saved language renders on the server: '+value);
 }
@@ -45,7 +47,7 @@ async function selectedIcons(page,label){
   await page.locator('button[data-role=Administrator]').click();await page.locator('select[name=userId]').selectOption('admin');await page.locator('#demo-form button[type=submit]').click();
   await page.locator('.page-heading').waitFor();
   check((await page.locator('#navigation').innerText()).includes('Management')&&!(await page.locator('#navigation').innerText()).includes('Управување'),'Reception navigation is English');
-  check(await page.locator('.app-footer [data-language-form]').count()===1,'Language selector sits beside workspace theme control');
+  check(await page.locator('#account-settings-dialog [data-language-form]').count()===1,'Language selector sits beside theme control in account settings');
   await page.goto(base+'/Workspace#doctors');await page.locator('.doctor-card').first().waitFor();
   const dataName=await page.locator('.doctor-card h3').first().innerText();
   check(/[А-Яа-я]/.test(dataName),'Doctor record names retain Cyrillic');
@@ -80,9 +82,9 @@ async function selectedIcons(page,label){
   await page.goto(base+'/Workspace#calendar');await page.locator('.fc').waitFor();
   check(!(await page.locator('#calendar-title').innerText()).match(/[А-Яа-я]/),'Calendar buttons and date headings are English');
   for(const theme of ['default','dark','vibrant']){
-   await page.locator('[data-theme-select]').selectOption(theme);
+   await openAccountSettings(page);await page.locator('[data-theme-select]').selectOption(theme);
    for(const width of [390,320]){
-    await page.setViewportSize({width,height:850});await fits(page,theme+' English '+width);
+    await page.setViewportSize({width,height:850});await openAccountSettings(page);await fits(page,theme+' English '+width);
     await page.locator('[data-language-form]').scrollIntoViewIfNeeded();
     check(await page.locator('[data-language-form]').isVisible(),theme+' language selector is reachable at '+width);
     await selectedIcons(page,theme+' mobile');
@@ -90,14 +92,14 @@ async function selectedIcons(page,label){
      await mkdir(process.env.TEST_LANGUAGE_SCREENSHOTS,{recursive:true});
      await page.waitForFunction(()=>getComputedStyle(document.querySelector('#toast')).opacity==='0');
      await page.screenshot({path:resolve(process.env.TEST_LANGUAGE_SCREENSHOTS,'english-mobile-preferences.png')});
-     await page.locator('#menu-toggle').scrollIntoViewIfNeeded();await page.locator('#menu-toggle').click();
+     await closeAccountSettings(page);await page.locator('#menu-toggle').scrollIntoViewIfNeeded();await page.locator('#menu-toggle').click();
      await page.waitForFunction(()=>document.querySelector('#sidebar').getBoundingClientRect().x>=-1);
      await page.screenshot({path:resolve(process.env.TEST_LANGUAGE_SCREENSHOTS,'english-mobile-navigation.png')});
      await page.locator('#sidebar [data-page=calendar]').click();
     }
    }
   }
-  await page.setViewportSize({width:1440,height:1000});await page.goto(base+'/Workspace#doctors');await page.locator('.doctor-card').first().waitFor();
+  await closeAccountSettings(page);await page.setViewportSize({width:1440,height:1000});await page.goto(base+'/Workspace#doctors');await page.locator('.doctor-card').first().waitFor();
   if(process.env.TEST_LANGUAGE_SCREENSHOTS){await mkdir(process.env.TEST_LANGUAGE_SCREENSHOTS,{recursive:true});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:resolve(process.env.TEST_LANGUAGE_SCREENSHOTS,'english-doctors.png'),fullPage:true});}
   await switchLanguage(page,'mk-MK');check(page.url().endsWith('#doctors'),'Changing language preserves the selected workspace section');
   check((await page.locator('#navigation').innerText()).includes('Управување'),'Switching back restores Macedonian navigation');

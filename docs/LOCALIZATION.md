@@ -1,6 +1,6 @@
 # Interface languages and icons
 
-Macedonian (`mk-MK`) is the default on every first visit, including browsers configured in English. The **Јазик / Language** control sits next to **Изглед / Appearance** at the bottom of the workspace and public, account and company pages. The flag buttons select Macedonian or English (`en-GB`).
+Macedonian (`mk-MK`) is the default on every first visit, including browsers configured in English. The **Јазик / Language** control sits next to **Изглед / Appearance** inside the top-right account dialog in the workspace, and at the bottom of public, account and company pages. The flag buttons select Macedonian or English (`en-GB`).
 
 ## Behaviour
 
@@ -39,3 +39,9 @@ Pull `main`, build, then publish **both API and Web**, including every Web `wwwr
 - Disposable PostgreSQL/API checks verify translated permission/conflict responses, concurrent request cultures, unchanged stored records and stable protocol roles.
 
 Run the usual solution/Core, MVC, frontend and PostgreSQL suites. `tests/frontend/localization-browser.cjs` needs Playwright and Chromium; `tests/discovery_web_smoke.py` adds public/company browser coverage when `TEST_BROWSER_EXECUTABLE` is set. No production database is used by these checks.
+
+## Workspace account dialog
+
+Click the header name/avatar to open the native account dialog. The workspace theme/language controls and the current clinic time zone are grouped there, along with password change (for real API accounts) and CSRF-protected sign-out. They no longer appear in the workspace sidebar/footer/top bar. Public/login/company page selectors remain at the bottom. Background workspace refresh pauses while a dialog is open. Preference changes preserve the underlying form; language reload still warns about unsaved input.
+
+`account-settings.js` supplies opening, backdrop dismissal and focus return; native dialog behaviour supplies focus containment and Escape dismissal. The panel uses the existing theme variables and respects reduced motion and print styles. `tests/frontend/account-settings-browser.cjs` checks roles, themes, languages, phone layouts, draft preservation, password navigation and sign-out. This UI relocation needs a **Web-only** publish, with its updated Core assembly and all `wwwroot` assets; no API/database change is needed.

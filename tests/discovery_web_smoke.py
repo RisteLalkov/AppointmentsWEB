@@ -286,6 +286,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             check('<html lang="mk">' in localized.request('/Discover')[1],'Switching back restores the original Macedonian interface')
             if os.environ.get('TEST_BROWSER_EXECUTABLE'):
                 subprocess.run(['node',str(root/'tests/frontend/discovery-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
+                subprocess.run(['node',str(root/'tests/frontend/account-settings-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
                 subprocess.run(['node',str(root/'tests/frontend/localization-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
                 subprocess.run(['node',str(root/'tests/frontend/themes-browser.cjs')],env=dict(os.environ,TEST_PUBLIC_WEB=base),check=True,timeout=150)
             print(f'\n{count}/{count} MVC discovery/company contract checks passed (stub API).',flush=True)

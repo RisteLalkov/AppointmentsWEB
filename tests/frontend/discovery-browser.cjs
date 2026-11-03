@@ -1,6 +1,7 @@
 // Optional real Chromium UI checks. Requires Playwright installed separately.
 // Invoked by discovery_web_smoke.py when TEST_BROWSER_EXECUTABLE is provided.
 const { chromium } = require('playwright');
+const { openAccountSettings } = require('./helpers/account-settings.cjs');
 const { spawn } = require('node:child_process');
 const { mkdtemp, rm, mkdir } = require('node:fs/promises');
 const { tmpdir } = require('node:os');
@@ -161,7 +162,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   await navigation.getByRole('heading',{name:'Немате пристап до оваа страница.'}).waitFor();
   check(new URL(navigation.url()).pathname==='/Account/AccessDenied','Wrong-role navigation shows access denied without a login loop');
   await navigation.goto(publicUrl+'/Workspace');
-  await navigation.locator('.logout-button').click();
+  await openAccountSettings(navigation);await navigation.locator('#account-settings-dialog form[action="/Account/Logout"] button').click();
   await navigation.locator('#password').waitFor();
   await navigation.goBack();
   await navigation.locator('#password').waitFor();
@@ -360,7 +361,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(await page.locator('#main-dialog').evaluate(d=>d.open),'Escape closes the dropdown without dismissing the booking dialog');
   await page.getByRole('button',{name:/Провери го терминот/}).click();
   await page.locator('#submit-booking').click();await page.locator('.success-view').waitFor();
-  check((await page.locator('body').innerText()).split('Europe/Skopje').length-1===1,'Timezone appears only in the top bar after booking');
+  check(!(await page.locator('body').innerText()).includes('Europe/Skopje') && await page.locator('#account-settings-dialog #zone-label').textContent()==='Europe/Skopje','Timezone is only in closed account settings after booking');
   await page.locator('[data-detail]').click();await page.locator('[data-move]').click();
   check(await page.locator('#booking-doctor-input').isDisabled() && await page.locator('#booking-patient-input').isDisabled(),'Rescheduling retains locked doctor and patient selections');
   if(screenshots)await page.locator('#main-dialog').screenshot({path:resolve(screenshots,'booking-desktop.png')});
@@ -419,8 +420,9 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(true,'Touch submenu opens and selects specialties');
   await noOverflow(m,'Mobile catalogue');
   await m.locator('#menu-toggle').tap();
-  await m.locator('.sidebar-bottom .logout-button').scrollIntoViewIfNeeded();
-  check(await m.locator('.sidebar-bottom .logout-button').isVisible(),'Sidebar bottom logout action is reachable');
+  await m.keyboard.press('Escape');await openAccountSettings(m);
+  await m.locator('#account-settings-dialog form[action="/Account/Logout"] button').scrollIntoViewIfNeeded();
+  check(await m.locator('#account-settings-dialog form[action="/Account/Logout"] button').isVisible(),'Account dialog logout action is reachable on mobile');
   if(screenshots) await m.screenshot({path:resolve(screenshots,'sidebar-mobile.png'),fullPage:true});
   await m.goto(demoUrl+'/Workspace?book=d01#doctors');
   await m.locator('#booking-doctor-input').waitFor();

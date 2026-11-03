@@ -4,7 +4,7 @@
 
 **Current storage:** all clinics share one PostgreSQL database with separate clinic schemas; the optional platform database stays separate. See [setup and deployment](docs/SHARED_DATABASE.md).
 
-The user interface opens in **Macedonian (`mk-MK`)** by default, with **English (`en-GB`)** available from the flag selector beside the theme control, including the calendar, booking flow, all three roles, account management and validation messages. Existing database records and API identifiers remain compatible; **localization alone needs no database migration or reset**. Republish **both Web and API** to update all messages. See [localization and update instructions](docs/LOCALIZATION.md).
+The user interface opens in **Macedonian (`mk-MK`)** by default, with **English (`en-GB`)** available from the flag selector beside the theme control in account settings, including the calendar, booking flow, all three roles, account management and validation messages. Existing database records and API identifiers remain compatible; **localization alone needs no database migration or reset**. Republish **both Web and API** to update all messages. See [localization and update instructions](docs/LOCALIZATION.md).
 
 
 Doctor appointment scheduling with **ASP.NET Core MVC, a separate ASP.NET Core API, and PostgreSQL**. The existing patient, reception and doctor interfaces now share durable relational data through the API. All projects are in one Visual Studio solution.
@@ -223,14 +223,16 @@ cookie, database and tenant identifiers remain compatible with earlier releases.
 
 ## Appearance preferences
 
-Use **Изглед** below the workspace footer text to choose **Standard**, **Dark** (lighter slate canvas and high-contrast text) or **Vibrant** (subtle warm ivory with brighter accents). Standard remains the first-visit default. Public, login and company pages also offer the selector at the bottom.
+Click your name/avatar at the top right and use **Изглед** in the account dialog to choose **Standard**, **Dark** (lighter slate canvas and high-contrast text) or **Vibrant** (subtle warm ivory with brighter accents). Standard remains the first-visit default. Public, login and company pages also offer the selector at the bottom.
 
 The preference is stored locally for that browser/site, survives navigation/reload and synchronizes between tabs on the same origin. It does not create a database record or API request. Blocked browser storage still allows switching on the current page; printing uses the standard palette. Branding images are preserved. Theme changes need **only a Web republish**, including all wwwroot assets; preserve existing server configuration. No database upgrade or API republish is required for this appearance update.
 
 ## Interface languages and SVG icons
 
-Macedonian remains the first-visit default. Use **Јазик / Language** beside the theme selector at the bottom to choose **MK** or **EN**, with flag icons. The preference is remembered for this browser/hostname; switching preserves the current page and theme. Clinic-entered names and records keep their original spelling.
+Macedonian remains the first-visit default. Use **Јазик / Language** beside the theme selector in the account dialog to choose **MK** or **EN**, with flag icons. The preference is remembered for this browser/hostname; switching preserves the current page and theme. Clinic-entered names and records keep their original spelling.
 
 English covers public discovery, clinic/doctor availability, accounts, the company platform and the clinical workspace, including calendar labels, validation and API errors. Navigation and action icons use locally bundled SVGs for consistent rendering on phones. See [LOCALIZATION.md](docs/LOCALIZATION.md) for implementation and maintenance.
 
 For the language/icon update, republish **both API and Web**, including all `wwwroot` files, while preserving server configuration. **No database migration is required.**
+
+The workspace account dialog also contains **Промени лозинка**, **Одјави се**, and the clinic time zone. It supports keyboard focus containment, Escape/backdrop dismissal and mobile scrolling; sign-out remains a protected POST. This account-dialog update requires **only a Web republish**, including all `wwwroot` files. No API update or database migration is required.

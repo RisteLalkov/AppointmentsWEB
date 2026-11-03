@@ -2615,3 +2615,11 @@ input::placeholder, textarea::placeholder { color: var(--theme-muted, #617780); 
 th { background: var(--theme-info-soft, #f2f7fa); color: var(--theme-muted, #4a646d); }
 tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 #confirm-dialog p { color: var(--muted); }
+
+/* Keep schedule forms from widening the page beneath the account dialog on small phones. */
+.schedule-editor > .card, .period-row > select { min-width: 0; }
+@media (max-width: 650px) { .schedule-editor .form-row { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 380px) {
+  .period-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 28px; gap: 8px; }
+  .period-row .period-day { grid-column: 1 / -1; }
+}

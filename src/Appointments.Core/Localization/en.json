@@ -1021,5 +1021,10 @@
   "Ова барање веќе е употребено за друг термин. Повторно отворете го формуларот.": "This request has already been used for another appointment. Reopen the form.",
   "Овој запис е променет во друга сесија. Освежете и обидете се повторно.": "This record was changed in another session. Refresh and try again.",
   "Пациентот не е пронајден.": "The patient was not found.",
-  "Распоредот е променет. Освежете ја страницата пред зачувување.": "The schedule has changed. Refresh the page before saving."
+  "Распоредот е променет. Освежете ја страницата пред зачувување.": "The schedule has changed. Refresh the page before saving.",
+  "Лични поставки": "Personal settings",
+  "Поставки на сметката за {0}": "Account settings for {0}",
+  "Затвори поставки": "Close settings",
+  "Поставки на приказот": "Display preferences",
+  "Временска зона": "Time zone"
 }

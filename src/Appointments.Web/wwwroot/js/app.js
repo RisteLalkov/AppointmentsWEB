@@ -1755,7 +1755,7 @@ const icon = window.MedTerminIcons.icon;
     if (
       !state ||
       document.hidden ||
-      dialog.open ||
+      document.querySelector("dialog[open]") ||
       refreshInFlight ||
       ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)
     )

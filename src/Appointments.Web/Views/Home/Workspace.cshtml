@@ -35,27 +35,30 @@
                 @if (Backend.DemoEnabled) {
                     <a class="switch-user" href="/Demo"><span aria-hidden="true">@Icon("arrow-left-right")</span> @T("Промени демо-корисник")</a>
                 }
-                @if (Backend.UseApi && !isDemo) {
-                    <a class="switch-user" href="/Account/Password"><span aria-hidden="true">@Icon("key-round")</span> @T("Промени лозинка")</a>
-                }
-                <form asp-controller="Account" asp-action="Logout" method="post">
-                    <button class="switch-user logout-button" type="submit"><span aria-hidden="true">@Icon("log-out")</span> @T("Одјави се")</button>
-                </form>
                 <div class="demo-label"><span class="dot" aria-hidden="true"></span> @(isDemo ? T("ДЕМО-РЕЖИМ") : T("ПОВРЗАНО"))</div>
             </div>
         </div>
     </aside>
     <div class="main-shell">
-        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="@T("Отвори или затвори навигација")" aria-expanded="false">@Icon("menu")</button><span class="breadcrumb">@T("Работен простор") <span>/</span> <strong id="page-label">@T("Преглед")</strong></span></div><div class="topbar-right"><span class="zone-label" id="zone-label">Europe/Skopje</span><span class="avatar small">@Model.Name[..1]</span><div class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? T("Рецепционер") : Model.Role.RoleLabel())@(isDemo ? T(" · Демо") : "")</small></div></div></header>
+        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="@T("Отвори или затвори навигација")" aria-expanded="false">@Icon("menu")</button><span class="breadcrumb">@T("Работен простор") <span>/</span> <strong id="page-label">@T("Преглед")</strong></span></div><div class="topbar-right">
+            <button type="button" class="account-trigger" id="account-menu-button" aria-haspopup="dialog" aria-controls="account-settings-dialog" aria-expanded="false" aria-label="@T("Поставки на сметката за {0}", Model.Name)">
+                <span class="avatar small" aria-hidden="true">@(string.IsNullOrWhiteSpace(Model.Name) ? "?" : StringInfo.GetNextTextElement(Model.Name.Trim()))</span>
+                <span class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? T("Рецепционер") : Model.Role.RoleLabel())@(isDemo ? T(" · Демо") : "")</small></span>
+                <span class="account-trigger-chevron" aria-hidden="true">@Icon("chevron-down")</span>
+            </button>
+        </div></header>
         <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> @T("Се подготвува вашиот работен простор…")</div></div></main>
-        <footer class="app-footer"><span>МедТермин <span class="muted">/</span> @T("Повеќе спокој во секојдневието.")</span><div class="footer-preferences"><span>@(isDemo ? T("Измислени пациенти · Заеднички демо-податоци") : T("Вашите термини, на едно место."))</span><partial name="_AppearancePreferences" /></div></footer>
+        <footer class="app-footer"><span>МедТермин <span class="muted">/</span> @T("Повеќе спокој во секојдневието.")</span><div class="footer-preferences"><span>@(isDemo ? T("Измислени пациенти · Заеднички демо-податоци") : T("Вашите термини, на едно место."))</span></div></footer>
     </div>
 </div>
+<partial name="_AccountSettings" model="Model" />
 <dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">@T("МЕДТЕРМИН")</span><h2 id="dialog-title">@T("Термин")</h2></div><button class="icon-button" id="close-dialog" aria-label="@T("Затвори прозорец")">@Icon("x")</button></div><div id="dialog-content"></div></dialog>
 <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-header"><h2 id="confirm-title">@T("Потврдете ја постапката")</h2></div><p id="confirm-message"></p><div class="dialog-actions"><button class="btn secondary" id="confirm-no">@T("Задржи ја тековната состојба")</button><button class="btn primary" id="confirm-yes">@T("Потврди")</button></div></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div hidden id="csrf">@Html.AntiForgeryToken()</div>
+@section Styles { <link rel="stylesheet" href="~/css/account-settings.css" asp-append-version="true" /> }
 @section Scripts {
+    <script src="~/js/account-settings.js" asp-append-version="true"></script>
     <script src="~/vendor/fullcalendar.min.js" asp-append-version="true"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
 }

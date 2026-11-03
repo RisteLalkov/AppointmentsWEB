@@ -1,0 +1,33 @@
+@model DemoActor
+@inject BackendSettings Backend
+@{
+    var isDemo = !Backend.UseApi || User.FindFirst("demo")?.Value == "True";
+    var role = Model.Role == DemoRole.Administrator ? T("Рецепционер") : Model.Role.RoleLabel();
+    var clinic = User.FindFirst("clinicName")?.Value;
+    var initial = string.IsNullOrWhiteSpace(Model.Name) ? "?" : StringInfo.GetNextTextElement(Model.Name.Trim());
+}
+<dialog id="account-settings-dialog" class="account-settings" aria-labelledby="account-settings-title">
+    <header class="account-settings-header">
+        <div><span class="eyebrow">@T("Лични поставки")</span><h2 id="account-settings-title">@T("Вашата сметка")</h2></div>
+        <button type="button" class="icon-button account-settings-close" data-account-settings-close aria-label="@T("Затвори поставки")" autofocus>@Icon("x")</button>
+    </header>
+    <div class="account-settings-identity">
+        <span class="avatar" aria-hidden="true">@initial</span>
+        <div><h3>@Model.Name</h3><span class="account-settings-role">@role@(isDemo ? T(" · Демо") : "")</span>
+            @if (!string.IsNullOrWhiteSpace(clinic)) { <p class="account-settings-clinic">@clinic</p> }
+        </div>
+    </div>
+    <section class="account-settings-preferences" aria-labelledby="account-preferences-title">
+        <h3 id="account-preferences-title">@T("Поставки на приказот")</h3>
+        <partial name="_AppearancePreferences" />
+        <div class="account-settings-timezone"><span>@Icon("globe") @T("Временска зона")</span><strong id="zone-label">Europe/Skopje</strong></div>
+    </section>
+    <div class="account-settings-actions">
+        @if (Backend.UseApi && !isDemo) {
+            <a class="account-settings-action" href="/Account/Password"><span class="account-action-icon" aria-hidden="true">@Icon("key-round")</span><span>@T("Промени лозинка")</span><span class="account-action-arrow" aria-hidden="true">@Icon("chevron-right")</span></a>
+        }
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            <button type="submit" class="account-settings-action account-settings-signout"><span class="account-action-icon" aria-hidden="true">@Icon("log-out")</span><span>@T("Одјави се")</span></button>
+        </form>
+    </div>
+</dialog>

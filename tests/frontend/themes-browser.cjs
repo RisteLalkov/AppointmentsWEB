@@ -1,4 +1,5 @@
 const { chromium } = require('playwright');
+const { openAccountSettings, closeAccountSettings } = require('./helpers/account-settings.cjs');
 const { spawn } = require('node:child_process');
 const { mkdtemp, rm, mkdir } = require('node:fs/promises');
 const { resolve } = require('node:path');
@@ -27,13 +28,15 @@ async function contrast(page,selector){
   check(await page.locator('html').getAttribute('data-theme')==='default','First visit retains standard theme');
   await page.locator('button[data-role=Administrator]').click();await page.locator('select[name=userId]').selectOption('admin');await page.locator('#demo-form button[type=submit]').click();
   await page.locator('#main-content .card').first().waitFor();
-  check(await page.locator('.app-footer [data-theme-select]').count()===1&&await page.locator('[data-theme-select]').count()===1,'One selector follows workspace footer text');
+  check(await page.locator('#account-settings-dialog [data-theme-select]').count()===1&&await page.locator('[data-theme-select]').count()===1,'One selector is in account settings');
   check(await page.locator('.card').first().evaluate(e=>getComputedStyle(e).backgroundColor)==='rgb(255, 255, 255)','Default cards keep original white');
   const other=await context.newPage();await other.goto(url+'/Workspace');
   const screens=process.env.TEST_THEME_SCREENSHOTS;if(screens)await mkdir(screens,{recursive:true});
   for(const theme of ['dark','vibrant','default']){
    await page.evaluate(()=>window.themeApp=document.querySelector('#app'));
+   await openAccountSettings(page);
    await page.locator('[data-theme-select]').selectOption(theme);
+   await closeAccountSettings(page);
    check(await page.evaluate(()=>window.themeApp===document.querySelector('#app')),'Switch '+theme+' preserves workspace DOM');
    await other.waitForFunction(t=>document.documentElement.dataset.theme===t,theme);
    check(await other.locator('[data-theme-select]').inputValue()===theme,theme+' synchronizes across tabs');
@@ -58,14 +61,14 @@ async function contrast(page,selector){
    for(const width of [390,320]){
     await page.setViewportSize({width,height:850});
     check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),theme+' fits '+width+'px');
-    await page.locator('[data-theme-select]').scrollIntoViewIfNeeded();check(await page.locator('[data-theme-select]').isVisible(),theme+' selector remains reachable on '+width+'px');
+    await openAccountSettings(page);await page.locator('[data-theme-select]').scrollIntoViewIfNeeded();check(await page.locator('[data-theme-select]').isVisible(),theme+' selector remains reachable on '+width+'px');await closeAccountSettings(page);
    }
    await page.setViewportSize({width:1440,height:1000});
   }
-  await page.locator('[data-theme-select]').selectOption('dark');await page.emulateMedia({media:'print'});
+  await openAccountSettings(page);await page.locator('[data-theme-select]').selectOption('dark');await page.emulateMedia({media:'print'});
   check(await page.locator('[data-theme-select]').isHidden(),'Printing hides the selector');
   check(await page.locator('html').evaluate(e=>getComputedStyle(e).backgroundColor)==='rgb(248, 250, 252)','Dark preference does not print a dark canvas');
-  await page.emulateMedia({media:'screen'});
+  await page.emulateMedia({media:'screen'});await closeAccountSettings(page);
   if(process.env.TEST_PUBLIC_WEB){
    const publicPage=await context.newPage();await publicPage.goto(process.env.TEST_PUBLIC_WEB+'/Discover');
    for(const theme of ['dark','vibrant']){
