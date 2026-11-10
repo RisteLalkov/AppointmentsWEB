@@ -1,0 +1,92 @@
+const {chromium}=require('playwright');
+const {mkdir}=require('node:fs/promises');
+const {resolve}=require('node:path');
+const base=process.env.TEST_WEB_URL,secret=process.env.TEST_PASSWORD,fixture=JSON.parse(process.env.TEST_GLOBAL_FIXTURE);
+let checks=0;
+function check(ok,label){if(!ok)throw Error(label);checks++;console.log('PASS global browser '+label);}
+(async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:process.env.TEST_BROWSER_EXECUTABLE,args:['--no-sandbox']});
+ const errors=[];const screens=process.env.TEST_GLOBAL_SCREENSHOTS;
+ try{
+  if(screens)await mkdir(screens,{recursive:true});
+  const context=await browser.newContext({viewport:{width:1360,height:950}});
+  const page=await context.newPage();page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
+  const login=async(p,email,clinic='main',returnUrl='/Workspace')=>{
+   await p.goto(base+'/Account/Login?clinicId='+clinic+'&returnUrl='+encodeURIComponent(returnUrl));
+   await p.locator('[name=Email]').fill(email);await p.locator('[name=Password]').fill(secret);
+   await Promise.all([p.waitForNavigation(),p.locator('form[action="/Account/Login"] button[type=submit]').click()]);
+  };
+  await login(page,'ana@global.test');await page.locator('.overview-grid').waitFor();
+  check(await page.locator('#sidebar a[href="/PatientClinics"]').isVisible(),'Only the personal patient workspace offers My clinics');
+  const oldToken=await page.locator('#csrf input').inputValue();
+  const other=await context.newPage();await other.goto(base+'/PatientClinics');
+  check(await other.locator('[data-patient-visit]').count()===2,'Personal page shows this patient’s appointments across two clinics');
+  check(await other.locator('[data-patient-clinic=main]').innerText().then(t=>t.includes('PT-')),'Clinic cards show the correct local patient number');
+  await other.locator('[data-patient-clinic=east] button[type=submit]').click();await other.waitForURL(url=>url.pathname==='/Workspace');await other.locator('#app .page-heading').waitFor();
+  check(await other.locator('meta[name=careline-clinic]').getAttribute('content')==='east','Switching clinics updates the signed-in workspace');
+  const stale=await page.request.get(base+'/data/bootstrap',{headers:{'X-Workspace-Clinic':'main'}});
+  check(stale.status()===409,'An old tab cannot silently read the newly selected clinic');
+  const forged=await page.request.post(base+'/data/patients',{headers:{'X-Workspace-Clinic':'east','X-CSRF-TOKEN':oldToken},data:{name:'Forbidden stale mutation',email:'',phone:''}});
+  check(forged.status()===400,'Changing the workspace header cannot revive an old clinic’s CSRF token');
+  await other.goto(base+'/PatientClinics');await other.locator('[data-patient-visit="'+fixture.mainVisit+'"]').getByRole('button').click();await other.locator('#main-dialog[open]').waitFor();
+  check((await other.locator('#main-dialog').innerText()).includes('Д-р main'),'Aggregated appointment opens its own clinic and private details');
+  await other.locator('#close-dialog').click();await other.goto(base+'/PatientClinics');
+  await other.locator('[data-patient-clinic=closed]').waitFor();
+  check(await other.locator('[data-patient-clinic=closed] button, [data-patient-clinic=closed] a').count()===0,'Closed registration has no misleading join button');
+  if(screens)await other.screenshot({path:resolve(screens,'patient-home.png'),fullPage:true});
+  await other.locator('[data-language-form] button[value="en-GB"]').click();await other.locator('html[lang=en]').waitFor();
+  check((await other.locator('h1').innerText())==='My clinics' && (await other.locator('#patient-visits-title').innerText()).startsWith('Upcoming'),'Personal patient pages are translated into English');
+  await other.setViewportSize({width:320,height:740});
+  check(await other.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Patient home fits a 320px phone');
+  if(screens)await other.screenshot({path:resolve(screens,'patient-home-mobile.png'),fullPage:true});
+  await context.close();
+
+  // Start with an actual self-registration, then book at a second clinic without signing up again.
+  const fresh=await browser.newContext({viewport:{width:1360,height:950},locale:'en-US'});const p=await fresh.newPage();p.setDefaultTimeout(12000);p.on('pageerror',e=>errors.push(e.message));
+  await p.goto(base+'/Account/Register?clinicId=main&returnUrl=%2FPatientClinics');
+  await p.locator('#clinic-id').selectOption('main');await p.locator('[name=Name]').fill('Елена Стојанова');await p.locator('[name=Email]').fill('browser@global.test');await p.locator('[name=Password]').fill(secret);
+  await Promise.all([p.waitForURL(url=>url.pathname==='/Account/Login'),p.locator('form[action="/Account/Register"] button[type=submit]').click()]);
+  await p.locator('[name=Email]').fill('browser@global.test');await p.locator('[name=Password]').fill(secret);await p.locator('form[action="/Account/Login"] button[type=submit]').click();await p.waitForURL(url=>url.pathname==='/PatientClinics');
+  check(await p.locator('[data-patient-clinic=main] button').count()===1 && await p.locator('[data-patient-clinic=east] a').count()===1,'One self-registration gives a personal account with one initial clinic');
+  await p.goto(base+'/Discover/Doctor/'+fixture.doctor.id+'?clinicId=east&date='+fixture.date+'&serviceId='+fixture.service.id);await p.locator('.public-slot-link').first().waitFor();
+  const href=await p.locator('.public-slot-link').first().getAttribute('href'),selection=new URL(href,base).searchParams;
+  await p.locator('.public-slot-link').first().click();await p.waitForURL(url=>url.pathname==='/PatientClinics/Join');
+  check(await p.locator('form[action="/PatientClinics/Select"]').count()===1 && await p.locator('input[type=password]').count()===0,'Another clinic asks for explicit profile consent, not another account/password');
+  const before=await p.request.get(base+'/data/bootstrap',{headers:{'X-Workspace-Clinic':'main'}});
+  check(before.status()===200,'Viewing the join confirmation leaves the existing workspace unchanged');
+  if(screens)await p.screenshot({path:resolve(screens,'join-clinic.png'),fullPage:true});
+  await p.locator('form[action="/PatientClinics/Select"] button[type=submit]').click();await p.locator('#booking-date').waitFor();
+  check(await p.locator('meta[name=careline-clinic]').getAttribute('content')==='east' && await p.locator('#booking-date').inputValue()===selection.get('date'),'Joining carries the selected clinic/date through to booking');
+  check(await p.locator('.slot.selected').innerText()===selection.get('time') && await p.locator('#booking-service').inputValue()===selection.get('serviceId'),'Publicly selected time and service survive clinic joining');
+  check(await p.locator('#booking-patient').count()===0,'Patient still books only for their own clinic profile');
+  await p.locator('#review-booking').click();await p.locator('#submit-booking').click();await p.locator('.success-view').waitFor();await p.locator('[data-detail]').click();await p.locator('.detail-list').waitFor();
+  check((await p.locator('.detail-list').innerText()).includes('Елена Стојанова'),'Normal booking/details remain available with the shared login');
+  await p.locator('#close-dialog').click();await p.goto(base+'/PatientClinics');
+  check(await p.locator('[data-patient-visit]').count()===1 && !(await p.locator('.patient-home').innerText()).includes('Ана Петрова'),'Aggregated visits never reveal another patient’s appointments');
+  await p.goto(base+'/Account/Password');await p.locator('[name=CurrentPassword]').fill(secret);await p.locator('[name=NewPassword]').fill(secret+'-browser');await p.locator('form[action="/Account/Password"] button[type=submit]').click();await p.waitForURL(url=>url.pathname==='/Account/Login');
+  check(await p.locator('form[action="/Account/Login"]').isVisible(),'Personal password changes use the existing form and sign the user out');
+  await fresh.close();
+
+  const staffContext=await browser.newContext();const s=await staffContext.newPage();await login(s,'main@global.test');await s.locator('.overview-grid').waitFor();
+  check(await s.locator('#sidebar a[href="/PatientClinics"]').count()===0,'Reception has no cross-clinic patient selector');
+  await s.goto(base+'/Accounts');
+  check(await s.locator('#role option[value=Patient], [data-account-profile=Patient]').count()===0,'Reception cannot create or link patient login accounts');
+  check(await s.locator('#role option[value=Doctor]').count()===1 && await s.locator('#role option[value=Administrator]').count()===1,'Reception retains doctor and receptionist account management');
+  await s.goto(base+'/Accounts?search=ana%40global.test');const row=s.locator('.account-row');
+  check(await row.count()===1 && await row.locator('details').count()===0 && await row.locator('form[action="/Accounts/Access"]').count()===1,'Patient row offers clinic-local access control without global credentials');
+  await s.goto(base+'/Discover/Book?clinicId=east&doctorId='+fixture.doctor.id);
+  check(await s.locator('.inline-error').isVisible() && await s.locator('meta[name=careline-clinic]').getAttribute('content')==='main','Reception cannot switch to another clinic through public booking');
+  await s.goto(base+'/PatientClinics');check((await s.title()).includes('Пристапот') || (await s.locator('body').innerText()).includes('Немате'),'Reception cannot open the personal clinic-selection page');
+  await s.goto(base+'/PatientSupport');check(!(await s.locator('[name=NewPassword]').count()),'A receptionist cannot open company patient recovery');
+  await staffContext.close();
+  const companyContext=await browser.newContext();const c=await companyContext.newPage();
+  await c.goto(base+'/Platform/Login');await c.locator('[name=Email]').fill('company@global.test');await c.locator('[name=Password]').fill(secret);await Promise.all([c.waitForNavigation(),c.locator('form[action="/Platform/Login"] button.primary').click()]);
+  await c.locator('a[href="/PatientSupport"]').click();await c.locator('#support-email').fill('legacy@global.test');await Promise.all([c.waitForNavigation(),c.locator('form[action="/PatientSupport"] button[type=submit]').click()]);
+  check(await c.locator('[name=NewPassword]').count()===1 && !(await c.locator('body').innerText()).includes('legacy-patient'),'Company support can find the login without exposing clinic record identifiers');
+  await c.locator('[name=NewPassword]').fill(secret+'-recovered');await c.locator('[name=confirmed]').check();await Promise.all([c.waitForNavigation(),c.locator('form[action="/PatientSupport/Password"] button[type=submit]').click()]);
+  check(await c.locator('.success-notice').isVisible(),'Company recovery works through the protected MVC form');
+  await c.setViewportSize({width:320,height:740});check(await c.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Company patient recovery fits a 320px phone');await companyContext.close();
+  check(errors.length===0,'No uncaught browser errors: '+errors.join('; '));
+  console.log(`${checks}/${checks} global patient browser checks passed.`);
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

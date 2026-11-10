@@ -9,5 +9,5 @@
         @if (clinics.Count != 1) { <option value="">@T("Изберете ја вашата клиника")</option> }
         @foreach (var clinic in clinics) { <option value="@clinic.Id" selected="@(clinic.Id == selected)">@clinic.Name</option> }
     </select>
-    <p class="field-help">@T("Сметката и термините се однесуваат само на избраната клиника.")</p>
+    <p class="field-help">@T("Ова е првата клиника за вашиот профил. Истата сметка подоцна можете да ја користите и во други клиники.")</p>
 </div>

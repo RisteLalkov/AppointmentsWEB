@@ -31,7 +31,7 @@ public sealed class AccountsController(ApiClient api, BackendSettings settings) 
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(new AccountManagementViewModel()); }
     }
     [HttpPost] public Task<IActionResult> Create(AccountInput input, CancellationToken ct) => Save("api/accounts", input, UiText.T("Сметката за {0} ({1}) е успешно создадена.", input.Name, input.Email), ct);
-    [HttpPost] public Task<IActionResult> Access(string id, bool enabled, CancellationToken ct) => Save($"api/accounts/{Uri.EscapeDataString(id ?? "")}/access", new AccountAccessInput(enabled), enabled ? UiText.T("Сметката е овозможена.") : UiText.T("Сметката е оневозможена и сите сесии се одјавени."), ct);
+    [HttpPost] public Task<IActionResult> Access(string id, bool enabled, CancellationToken ct) => Save($"api/accounts/{Uri.EscapeDataString(id ?? "")}/access", new AccountAccessInput(enabled), enabled ? UiText.T("Пристапот до оваа клиника е овозможен.") : UiText.T("Пристапот до оваа клиника е оневозможен."), ct);
     [HttpPost] public Task<IActionResult> Credentials(string id, LoginInput input, CancellationToken ct) => Save($"api/accounts/{Uri.EscapeDataString(id ?? "")}/credentials", input, UiText.T("Податоците за најава се ажурирани. Постоечките сесии се одјавени."), ct);
     private async Task<IActionResult> Save(string path, object input, string notice, CancellationToken ct)
     {

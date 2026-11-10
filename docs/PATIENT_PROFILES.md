@@ -21,19 +21,16 @@ Patient contact information is separate from account identity. Changing a contac
 - `PostgresAppointments.PatientDetailsAsync`: repeatable-read snapshot and role-scoped appointment query.
 - `UpdatePatientAsync`: transaction, patient advisory lock, version validation, EF concurrency token, database unique email protection and `patient.updated` audit event. Audit events identify actor/target/time without copying contact values.
 - API: `GET /api/patients/{id}` returns `{ patient, appointments, canEdit }`; `POST /api/patients/{id}` accepts `{ name, email, phone, version }` and returns the updated patient. Web proxies use the corresponding `/data/patients/{id}` routes with existing session, clinic and anti-forgery checks.
-- Existing database-per-clinic routing is unchanged. No client-supplied tenant ID is accepted by these profile methods.
+- All clinics use separate schemas in the shared appointments database. No client-supplied tenant ID is accepted by these profile methods.
 - Profiles currently load the permitted appointment history as a whole, like the existing workspace bootstrap. Server pagination can be added when data volume warrants it.
 
 ## Upgrade existing deployments
 
-1. Pull `main` and build `Appointments.sln` in Release.
-2. Back up each clinic database. Pause API/Web traffic during deployment.
-3. In DBeaver, connect to the actual PostgreSQL server (**10.20.1.102** for the current deployment), select **appointments**, and execute the entire `database/004-patient-profiles.sql` script as its schema owner/migration account. Scripts 001–003 must already be applied. With multiple clinics, run 004 separately in every active clinic database.
-4. The script only adds `Patients.Version` (existing patients start at 1) and its positive-value constraint, then records the EF migration. It does not replace patients, accounts, appointments or clinic settings. It is safe to rerun after successful completion.
-5. Publish **Appointments.Api** and **Appointments.Web**, including static assets, and restart their application pools. Keep server connection strings and tenant settings. No change is needed to database passwords or API ports.
-6. Open **Пациенти → Види профил** and test a fictional patient. Hard-refresh the browser if needed.
-
-Fresh development databases using migrations receive the new schema automatically. JSON demo mode needs no SQL; older JSON patient records default to version 1. Do not enable automatic schema changes for a production runtime account merely to avoid the migration step.
+Use the current [global patient account deployment instructions](GLOBAL_PATIENT_ACCOUNTS.md).
+The complete API `--migrate` upgrades every registered clinic schema; do not use
+old database-per-clinic deployment steps. Patient contact records and login
+identities are separate. Staff contact edits do not change a global login, and
+reception can no longer create/link patient logins or reset their passwords.
 
 ## Verification
 

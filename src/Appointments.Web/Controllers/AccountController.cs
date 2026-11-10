@@ -25,7 +25,7 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
         if (User.Identity?.IsAuthenticated != true) return null;
         try
         {
-            if (settings.UseApi) await api.SendAsync<System.Text.Json.JsonElement>("api/auth/me", ct: ct);
+            if (settings.UseApi) await api.SendAsync<System.Text.Json.JsonElement>("api/auth/me", ct: ct, patientIdentity: User.HasClaim("globalPatient", "true"));
             return LocalRedirect(SafeReturn(returnUrl));
         }
         catch (RuleException e) when (e.StatusCode == 401)
@@ -47,7 +47,7 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
         ViewData["SelectedClinic"] = clinicId; ViewData["ReturnUrl"] = SafeReturn(returnUrl);
         if (await SignedInRedirect(returnUrl, ct) is { } signedIn) return signedIn;
         if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Внесете е-пошта и лозинка."); return View(); }
-        try { var session = await api.SendAsync<SessionResponse>("api/auth/login", input, false, ct); await WebSession.SignInAsync(HttpContext, session); return LocalRedirect(SafeReturn(returnUrl)); }
+        try { var session = await api.SendAsync<SessionResponse>("api/auth/login", input with { ClinicId = clinicId }, false, ct); await WebSession.SignInAsync(HttpContext, session); return LocalRedirect(SafeReturn(returnUrl)); }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
     [HttpGet] public async Task<IActionResult> Register(string? clinicId, string? returnUrl, CancellationToken ct)
@@ -78,7 +78,7 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
     }
     [Authorize, HttpPost] public async Task<IActionResult> Logout(CancellationToken ct)
     {
-        try { if (settings.UseApi) await api.SendAsync<object>("api/auth/logout", new { }, ct: ct); }
+        try { if (settings.UseApi) await api.SendAsync<object>("api/auth/logout", new { }, ct: ct, patientIdentity: User.HasClaim("globalPatient", "true")); }
         catch (RuleException) { TempData["Notice"] = UiText.T("Одјавени сте од овој прелистувач. Серверот беше недостапен; серверската сесија автоматски истекува во рок од два часа."); }
         await HttpContext.SignOutAsync(); return RedirectToAction(nameof(Login));
     }
@@ -91,7 +91,7 @@ public sealed class AccountController(ApiClient api, BackendSettings settings) :
     [Authorize, HttpPost] public async Task<IActionResult> Password(ChangePasswordInput input, CancellationToken ct)
     {
         if (!ModelState.IsValid) { ViewData["Error"] = UiText.T("Внесете ги двете лозинки."); return View(); }
-        try { await api.SendAsync<object>("api/auth/password", input, ct: ct); await HttpContext.SignOutAsync(); TempData["Notice"] = UiText.T("Лозинката е променета. Сите претходни сесии се одјавени."); return RedirectToAction(nameof(Login)); }
+        try { await api.SendAsync<object>("api/auth/password", input, ct: ct, patientIdentity: User.HasClaim("globalPatient", "true")); await HttpContext.SignOutAsync(); TempData["Notice"] = UiText.T("Лозинката е променета. Сите претходни сесии се одјавени."); return RedirectToAction(nameof(Login)); }
         catch (RuleException e) { ViewData["Error"] = e.Message; return View(); }
     }
 }

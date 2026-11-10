@@ -37,7 +37,7 @@ jobs:
         run: npm test --prefix tests/frontend
   postgres-integration:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:17-alpine
@@ -90,6 +90,7 @@ jobs:
           export TEST_BROWSER_EXECUTABLE="$(node -p 'require("playwright").chromium.executablePath()')"
           export TEST_API_DLL="$RUNNER_TEMP/medtermin-api/Appointments.Api.dll"
           export TEST_WEB_DLL="$RUNNER_TEMP/medtermin-web/Appointments.Web.dll"
+          python tests/global_patients_integration.py
           python tests/high_severity_integration.py
           python tests/tester_feedback_integration.py
           node tests/frontend/account-settings-browser.cjs

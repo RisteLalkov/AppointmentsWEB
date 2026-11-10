@@ -184,7 +184,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             csrf=anon.csrf('/Account/Login?returnUrl='+urllib.parse.quote(book))
             status,_,h=anon.request('/Account/Login',{'Email':'p@test.test','Password':'Test-password-123','clinicId':'east','returnUrl':book,'__RequestVerificationToken':csrf})
             check(status==302 and h['Location']==book,'Successful authentication returns to selected booking action')
-            check('X-Clinic' not in calls[-1][3] and set(calls[-1][2])=={'email','password'},'Web sends no chosen tenant to credential resolution')
+            check('X-Clinic' not in calls[-1][3] and set(calls[-1][2])=={'email','password','clinicId'},'Web sends a patient clinic preference without forcing staff credential routing')
             status,_,h=anon.request(book)
             check(status==302 and h['Location']=='/Workspace?book=d01#doctors','Matching clinic continues to selected doctor in workspace')
             selection='/Discover/Book?clinicId=main&doctorId=d01&date=2026-12-01&time=09%3A00&serviceId=s01'
@@ -219,7 +219,7 @@ with tempfile.TemporaryDirectory(prefix='careline-public-web-') as temp:
             admin=Client(base);csrf=admin.csrf('/Account/Login')
             admin.request('/Account/Login',{'Email':'accounts-admin@test.test','Password':'Test-password-123','__RequestVerificationToken':csrf})
             status,accounts_html,_=admin.request('/Accounts')
-            check(status==200 and 'value="d01"' in accounts_html and 'value="p01"' in accounts_html and not any('value="'+i+'"' in accounts_html for i in ['p-linked','d-linked','service-only']), 'Account creation offers only unlinked patient and real doctor profiles, including disabled-account links')
+            check(status==200 and 'value="d01"' in accounts_html and 'name="PatientId"' not in accounts_html and not any('value="'+i+'"' in accounts_html for i in ['p-linked','d-linked','service-only']), 'Account creation offers only unlinked patient and real doctor profiles, including disabled-account links')
             reg=Client(base);csrf=reg.csrf('/Account/Register?clinicId=main&returnUrl='+urllib.parse.quote(book))
             status,_,h=reg.request('/Account/Register',{'Name':'Test Patient','Email':'new@test.test','Password':'Test-password-123','clinicId':'main','returnUrl':book,'__RequestVerificationToken':csrf})
             check(status==302 and 'returnUrl=' in h['Location'] and 'doctorId' in urllib.parse.unquote(h['Location']),'Registration retains doctor through subsequent login')

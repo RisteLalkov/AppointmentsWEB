@@ -48,6 +48,7 @@ builder.Services.AddSingleton<ClinicConnections>();
 builder.Services.AddSingleton<IdentityDirectory>();
 builder.Services.AddHostedService<RegistryRefreshService>();
 builder.Services.AddScoped<AutomaticLogin>();
+builder.Services.AddScoped<GlobalPatients>();
 builder.Services.AddScoped<PublicDiscovery>();
 builder.Services.AddScoped<PlatformService>();
 builder.Services.AddScoped<PreviewSeeder>();
@@ -60,6 +61,7 @@ builder.Services.AddSingleton(bookingPolicy);
 builder.Services.AddScoped(sp => new SchedulingClock(sp.GetRequiredService<TimeProvider>(), sp.GetRequiredService<ClinicContext>().Current.TimeZone));
 builder.Services.AddScoped<PostgresAppointments>(); builder.Services.AddScoped<AccountService>(); builder.Services.AddScoped<DatabaseInitializer>();
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
+builder.Services.AddScoped<IPasswordHasher<PatientAccount>, PasswordHasher<PatientAccount>>();
 builder.Services.Configure<PasswordHasherOptions>(o => o.IterationCount = 210000);
 builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOptions, SessionAuthentication>("Session", _ => { })
     .AddScheme<AuthenticationSchemeOptions, PlatformAuthentication>("PlatformSession", _ => { });
@@ -137,6 +139,10 @@ app.Use(async (context, next) =>
     if (context.Request.Path.StartsWithSegments("/api") && !context.Request.Path.StartsWithSegments("/api/platform")) clinics.RequireFresh();
     var directory = path.Equals("/api/clinics", StringComparison.OrdinalIgnoreCase) || path.Equals("/api/auth/login", StringComparison.OrdinalIgnoreCase)
         || context.Request.Path.StartsWithSegments("/api/public") || context.Request.Path.StartsWithSegments("/api/platform");
+    var patientToken = context.Request.Headers.Authorization.ToString().StartsWith("Bearer u1.", StringComparison.OrdinalIgnoreCase);
+    if (patientToken && (context.Request.Path.StartsWithSegments("/api/patient")
+        || path.Equals("/api/auth/logout", StringComparison.OrdinalIgnoreCase) || path.Equals("/api/auth/password", StringComparison.OrdinalIgnoreCase)
+        || path.Equals("/api/auth/me", StringComparison.OrdinalIgnoreCase) && !context.Request.Headers.ContainsKey("X-Clinic"))) directory = true;
     if (!directory && (context.Request.Path.StartsWithSegments("/api") || path.Equals("/health/database", StringComparison.OrdinalIgnoreCase)))
     {
         var values = context.Request.Headers["X-Clinic"];
@@ -161,9 +167,10 @@ app.MapGet("/health", async (CancellationToken ct) => {
         await connection.OpenAsync(ct);
         await using var command = new NpgsqlCommand("SELECT 1 FROM careline_identity.accounts LIMIT 1", connection);
         await command.ExecuteScalarAsync(ct);
+        await app.Services.GetRequiredService<IdentityDirectory>().RequirePatientStoreAsync(ct);
         return Results.Ok(new { status = "ready" });
     }
-    catch (NpgsqlException) { return Results.Json(new { status = "unavailable" }, statusCode: 503); }
+    catch (Exception e) when (e is NpgsqlException or InvalidOperationException) { return Results.Json(new { status = "unavailable" }, statusCode: 503); }
 }).AllowAnonymous();
 app.MapGet("/health/database", async (AppointmentsDbContext db, CancellationToken ct) => await db.Database.CanConnectAsync(ct) ? Results.Ok(new { status = "ready" }) : Results.StatusCode(503)).RequireAuthorization();
 app.MapOpenApi().AllowAnonymous();
@@ -178,7 +185,12 @@ var identityDirectory = app.Services.GetRequiredService<IdentityDirectory>();
 var migrateClinics = explicitMigration || app.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("Database:ApplyMigrations");
 var initialize = selectedIndex >= 0 ? new[] { clinics.Resolve(args[selectedIndex + 1]) }
     : clinics.Clinics.Where(c => c.Enabled || migrateClinics && clinics.Configured.Any(configured => configured.Id == c.Id));
-if (migrateClinics) await identityDirectory.InitializeAsync(CancellationToken.None);
+if (migrateClinics)
+{
+    await SharedClinicDatabase.PrepareAsync(clinics.Configured[0], CancellationToken.None);
+    await identityDirectory.InitializeAsync(CancellationToken.None);
+}
+else await identityDirectory.RequirePatientStoreAsync(CancellationToken.None);
 foreach (var clinic in initialize)
 {
     await using var scope = app.Services.CreateAsyncScope();
@@ -187,6 +199,7 @@ foreach (var clinic in initialize)
     try
     {
         await scope.ServiceProvider.GetRequiredService<DatabaseInitializer>().InitializeAsync(explicitMigration || auto, CancellationToken.None);
+        if (migrateClinics) await scope.ServiceProvider.GetRequiredService<GlobalPatients>().AdoptAsync(clinic, CancellationToken.None);
         if (migrateClinics) await identityDirectory.AttachAsync(clinic, CancellationToken.None);
         else await identityDirectory.RequireInstalledAsync(clinic, CancellationToken.None);
     }

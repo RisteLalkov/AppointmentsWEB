@@ -161,3 +161,16 @@ adoption marker and clinic-metadata version. See the deployment and one-time ste
 in [PLATFORM_CLINIC_TRANSFER.md](PLATFORM_CLINIC_TRANSFER.md). Routine details then
 come from the platform row and are editable in the Web interface; duplicate IDs
 without explicit adoption remain invalid.
+
+## Patient login across clinics (10 November 2026)
+
+The shared database now also contains canonical patient credentials and sessions
+in `careline_identity`, alongside its existing directory. Each clinic keeps an
+independent profile/membership, patient number and clinical history. Staff stay
+clinic-bound; patient tokens require an enabled membership for clinical reads.
+Deploy Web/API together and run the full API `--migrate` with hosts stopped.
+See [patient account design and deployment](GLOBAL_PATIENT_ACCOUNTS.md).
+
+Run `python tests/global_patients_integration.py` with the same guarded test
+connection. With `TEST_BROWSER_EXECUTABLE` and Playwright `NODE_PATH` set, it also
+executes real MVC/Chromium cross-clinic patient workflows.

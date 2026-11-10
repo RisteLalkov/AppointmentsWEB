@@ -8,6 +8,6 @@
         <form asp-action="Login" method="post"><input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" /><input type="hidden" name="clinicId" value="@ViewData["SelectedClinic"]" /><div class="field"><label for="email">@T("Е-пошта")</label><input id="email" name="Email" type="email" autocomplete="username" maxlength="120" required></div><div class="field"><label for="password">@T("Лозинка")</label><input id="password" name="Password" type="password" autocomplete="current-password" maxlength="128" required></div><button class="btn primary wide" type="submit">@T("Најави се") @Icon("arrow-up-right")</button></form>
         <div class="divider"></div><p>@T("Првпат сте тука?") <a asp-action="Register" asp-route-clinicId="@ViewData["SelectedClinic"]" asp-route-returnUrl="@ViewData["ReturnUrl"]">@T("Создајте пациентска сметка")</a></p>
         @if (Backend.DemoEnabled) { <a class="btn secondary wide" href="/Demo">@T("Разгледајте ја демо-верзијата")</a> }
-        <p class="field-help" style="margin-top:20px">@T("Ви треба помош за пристап до постоечки профил? Контактирајте ја рецепцијата. Обновувањето лозинка преку е-пошта не е овозможено.")</p>
+        <p class="field-help" style="margin-top:20px">@T("За лична пациентска лозинка контактирајте ја поддршката на МедТермин. За службена сметка контактирајте ја вашата клиника. Обновувањето преку е-пошта не е овозможено.")</p>
     </section>
 </main>

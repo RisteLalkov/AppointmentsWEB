@@ -8,7 +8,6 @@ const icon = window.MedTerminIcons.icon;
     const role = form.querySelector('#role');
     const help = form.querySelector('#account-role-help');
     const messages = {
-        Patient: tr("Поврзете ја сметката со постоечки пациентски профил."),
         Doctor: tr("Поврзете ја сметката со постоечки лекарски профил."),
         Administrator: tr("Администраторот управува со рецепцијата. Не е потребен пациентски или лекарски профил.")
     };

@@ -3,11 +3,12 @@ using Appointments.Core;
 
 namespace Appointments.Api.Services;
 
-public sealed class AutomaticLogin(ClinicConnections connections, ClinicRegistry clinics, IServiceScopeFactory scopes)
+public sealed class AutomaticLogin(ClinicConnections connections, ClinicRegistry clinics, IServiceScopeFactory scopes, GlobalPatients patients)
 {
     public async Task<SessionResponse> LoginAsync(LoginInput input, CancellationToken ct)
     {
         clinics.RequireFresh();
+        if (await patients.ExistsAsync(AccountService.Email(input.Email), ct)) return await patients.LoginAsync(input, ct);
         var matches = await connections.FindEmailAsync(AccountService.Email(input.Email), ct);
         if (matches.Count != 1 || !matches[0].Clinic.Enabled)
             throw new RuleException("Е-поштата или лозинката е неточна, или сметката е недостапна.", 401);

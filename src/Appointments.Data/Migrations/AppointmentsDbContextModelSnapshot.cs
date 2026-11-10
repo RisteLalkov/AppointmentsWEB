@@ -448,6 +448,10 @@ namespace Appointments.Data.Migrations
                     b.Property<int>("FailedAttempts")
                         .HasColumnType("integer");
 
+                    b.Property<string>("GlobalPatientId")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
                     b.Property<bool>("IsDemo")
                         .HasColumnType("boolean");
 
@@ -481,6 +485,9 @@ namespace Appointments.Data.Migrations
                     b.HasIndex("DoctorId")
                         .IsUnique();
 
+                    b.HasIndex("GlobalPatientId")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
                         .IsUnique();
 
@@ -489,6 +496,8 @@ namespace Appointments.Data.Migrations
 
                     b.ToTable("Accounts", null, t =>
                         {
+                            t.HasCheckConstraint("CK_Account_GlobalPatient", "\"GlobalPatientId\" IS NULL OR (\"Role\" = 'Patient' AND NOT \"IsDemo\" AND \"PasswordHash\" = '')");
+
                             t.HasCheckConstraint("CK_Account_RoleLink", "(\"Role\" = 'Patient' AND \"PatientId\" IS NOT NULL AND \"DoctorId\" IS NULL) OR (\"Role\" = 'Doctor' AND \"DoctorId\" IS NOT NULL AND \"PatientId\" IS NULL) OR (\"Role\" = 'Administrator' AND \"DoctorId\" IS NULL AND \"PatientId\" IS NULL)");
                         });
                 });
@@ -561,6 +570,108 @@ namespace Appointments.Data.Migrations
                     b.HasKey("AccountId", "RequestId");
 
                     b.ToTable("IdempotencyRequests");
+                });
+
+            modelBuilder.Entity("Appointments.Data.PatientAccount", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("FailedAttempts")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("HomeClinicId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("LockedUntil")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("PatientAccounts", "careline_identity", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Appointments.Data.PatientAccountSession", b =>
+                {
+                    b.Property<string>("TokenHash")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PatientAccountId")
+                        .IsRequired()
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("TokenHash");
+
+                    b.HasIndex("PatientAccountId");
+
+                    b.ToTable("PatientSessions", "careline_identity", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Appointments.Data.PatientMembership", b =>
+                {
+                    b.Property<string>("PatientAccountId")
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("ClinicId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("PatientNumber")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("PatientAccountId", "ClinicId");
+
+                    b.HasIndex("ClinicId", "AccountId")
+                        .IsUnique();
+
+                    b.HasIndex("ClinicId", "PatientId")
+                        .IsUnique();
+
+                    b.ToTable("PatientMemberships", "careline_identity", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Appointments.Core.Appointment", b =>
@@ -734,6 +845,11 @@ namespace Appointments.Data.Migrations
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Appointments.Data.PatientAccount", null)
+                        .WithMany()
+                        .HasForeignKey("GlobalPatientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Appointments.Core.Patient", null)
                         .WithMany()
                         .HasForeignKey("PatientId")
@@ -745,6 +861,26 @@ namespace Appointments.Data.Migrations
                     b.HasOne("Appointments.Data.Account", null)
                         .WithMany()
                         .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Appointments.Data.PatientAccountSession", b =>
+                {
+                    b.HasOne("Appointments.Data.PatientAccount", "PatientAccount")
+                        .WithMany()
+                        .HasForeignKey("PatientAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PatientAccount");
+                });
+
+            modelBuilder.Entity("Appointments.Data.PatientMembership", b =>
+                {
+                    b.HasOne("Appointments.Data.PatientAccount", null)
+                        .WithMany()
+                        .HasForeignKey("PatientAccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

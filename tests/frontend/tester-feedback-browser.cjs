@@ -92,7 +92,7 @@ function check(ok, message) { if (!ok) throw Error(message); checks++; console.l
   check(await page.locator('#navigation-backdrop').isHidden() && !await page.locator('.main-shell').evaluate(e=>e.inert), 'Resizing an open drawer to desktop restores normal navigation');
   await page.goto(base+'/Accounts');await page.locator('#account-results-count').waitFor();
   check(await page.locator('.account-row').count()===20 && await page.locator('.account-pagination').isVisible(), 'Account list is paginated at 20 rows');
-  check(await page.locator('#patient option[value="'+fixture.people[1].id+'"]').count()===1 && await page.locator('#patient option').count()===3, 'Account profile choices use all linked accounts, including those on other pages');
+  check(await page.locator('#patient, #role option[value=Patient]').count()===0 && await page.locator('#doctor option').count()===1, 'Reception offers staff roles only and excludes already linked doctor profiles across all account pages');
   await page.locator('.account-pagination a').last().click();check(new URL(page.url()).searchParams.get('page')==='2' && await page.locator('.account-row').count()===4, 'Next page displays the remaining accounts');
   await page.locator('#account-search').fill('PERSON-00@FEEDBACK.TEST');await page.locator('#account-role-filter').selectOption('Patient');await page.locator('#account-status-filter').selectOption('disabled');await Promise.all([page.waitForNavigation(), page.locator('.account-list-filters button[type=submit]').click()]);
   check(await page.locator('.account-row').count()===1 && (await page.locator('#account-results-count').innerText()).includes('1 од 24'), 'Search is case-insensitive and combines role/access filters with an accurate count');
@@ -100,7 +100,7 @@ function check(ok, message) { if (!ok) throw Error(message); checks++; console.l
   check(await page.locator('.account-row').count()===1 && (await page.locator('.account-row').innerText()).includes('person-01@feedback.test'), 'Cyrillic account-name search works');
   await page.locator('#account-role-filter').selectOption('Doctor');await Promise.all([page.waitForNavigation(), page.locator('.account-list-filters button[type=submit]').click()]);
   check(await page.locator('.account-row').count()===0 && await page.locator('.account-empty').isVisible(), 'No-match filters show an explicit empty state');
-  await page.locator('.account-list-filters a').click();await page.locator('#name').fill(fixture.people[0].name);await page.locator('#email').fill('created@feedback.test');await page.locator('#role').selectOption('Patient');await page.locator('#patient').selectOption(fixture.people[0].id);await page.locator('#password').fill(process.env.TEST_PASSWORD);await page.locator('#account-create-form button[type=submit]').click();
+  await page.locator('.account-list-filters a').click();await page.locator('#name').fill(fixture.people[0].name);await page.locator('#email').fill('created@feedback.test');await page.locator('#role').selectOption('Administrator');await page.locator('#password').fill(process.env.TEST_PASSWORD);await page.locator('#account-create-form button[type=submit]').click();
   await page.locator('.success-notice').waitFor();
   check((await page.locator('.success-notice').innerText()).includes('created@feedback.test') && await page.locator('.success-notice').evaluate(e=>document.activeElement===e), 'Account-created success identifies the account and receives focus');
   for (const theme of ['default','dark','vibrant']) {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Appointments.Api.Services;
 
-public sealed class AccountService(AppointmentsDbContext db, PostgresAppointments operations, IPasswordHasher<Account> hasher, SchedulingClock clock, ClinicContext clinicContext, ClinicConnections connections, ClinicRegistry registry)
+public sealed class AccountService(AppointmentsDbContext db, PostgresAppointments operations, IPasswordHasher<Account> hasher, SchedulingClock clock, ClinicContext clinicContext, ClinicConnections connections, ClinicRegistry registry, GlobalPatients patients)
 {
     public static string HashToken(string token) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
     public static string Email(string email) => email.Trim().ToLowerInvariant();
@@ -57,35 +57,16 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
         operations.Audit(account.Actor(), demo ? "session.demo.created" : "session.created", account.Id);
         await db.SaveChangesAsync(ct); return new(token, expires, account.Actor(), demo, clinicContext.Current.Summary());
     }
-    public async Task<AccountSummary> RegisterAsync(RegisterInput input, CancellationToken ct)
-    {
-        if (!clinicContext.Current.AllowRegistration) throw new RuleException("За создавање сметка контактирајте ја рецепцијата на клиниката.", 403);
-        ValidatePassword(input.Password);
-        await using var identityLease = await connections.IdentityLockAsync(ct);
-        await registry.RefreshAsync(ct);
-        if (!registry.Resolve(clinicContext.Current.Id).AllowRegistration)
-            throw new RuleException("За создавање сметка контактирајте ја рецепцијата на клиниката.", 403);
-        await connections.RequireUniqueAsync(Email(input.Email), clinicContext.Current.Id, null, ct);
-        if (input.Name.Trim().Length < 2) throw new RuleException("Внесете име со најмалку два знака.");
-        return await operations.TransactionAsync(async () =>
-        {
-            var email = Email(input.Email);
-            if (await db.Patients.AnyAsync(p => p.Email == email, ct)) throw new RuleException("Не може да се создаде сметка со овие податоци. Проверете со рецепцијата дали веќе имате пациентски профил.", 409);
-            var patient = new Patient(Guid.NewGuid().ToString("N"), input.Name.Trim(), email, "", false);
-            var account = new Account { Email = email, NormalizedEmail = email, Name = patient.Name, Role = DemoRole.Patient, PatientId = patient.Id };
-            account.PasswordHash = hasher.HashPassword(account, input.Password); db.Patients.Add(patient); db.Accounts.Add(account);
-            operations.Audit(account.Actor(), "account.registered", account.Id); await db.SaveChangesAsync(ct); return Summary(account);
-        }, ct);
-    }
+    public Task<AccountSummary> RegisterAsync(RegisterInput input, CancellationToken ct) => patients.RegisterAsync(input, clinicContext.Current, ct);
     public async Task<AccountSummary> CreateAsync(DemoActor actor, AccountInput input, CancellationToken ct)
     {
         Admin(actor); ValidatePassword(input.Password);
+        if (input.Role == DemoRole.Patient) throw new RuleException("Пациентите создаваат една лична сметка преку самостојна регистрација.", 403);
         await using var identityLease = await connections.IdentityLockAsync(ct);
         await registry.RefreshAsync(ct);
         await connections.RequireUniqueAsync(Email(input.Email), clinicContext.Current.Id, null, ct);
         if (!Enum.IsDefined(input.Role) || input.Name.Trim().Length is < 2 or > 80 || input.Email.Length > 120) throw new RuleException("Внесете важечко име, е-пошта и улога.");
         if (input.Role == DemoRole.Doctor && (input.DoctorId == null || input.PatientId != null || !await db.Doctors.AnyAsync(d => d.Id == input.DoctorId && !d.IsService, ct))) throw new RuleException("Изберете конкретен лекар за лекарската сметка.");
-        if (input.Role == DemoRole.Patient && (input.PatientId == null || input.DoctorId != null || !await db.Patients.AnyAsync(p => p.Id == input.PatientId, ct))) throw new RuleException("Изберете еден пациент за пациентската сметка.");
         if (input.Role == DemoRole.Administrator && (input.PatientId != null || input.DoctorId != null)) throw new RuleException("Сметките на рецепцијата не може да се поврзат со лекарски или пациентски профил.");
         return await operations.TransactionAsync(async () =>
         {
@@ -130,6 +111,8 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
     public async Task<bool> CredentialsAsync(DemoActor actor, string id, LoginInput input, CancellationToken ct)
     {
         Admin(actor); ValidatePassword(input.Password);
+        if (await db.Accounts.AnyAsync(a => a.Id == id && a.Role == DemoRole.Patient, ct))
+            throw new RuleException("Рецепцијата не може да ја менува личната лозинка на пациентот.", 403);
         await using var identityLease = await connections.IdentityLockAsync(ct);
         await registry.RefreshAsync(ct);
         await connections.RequireUniqueAsync(Email(input.Email), clinicContext.Current.Id, id, ct);

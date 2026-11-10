@@ -48,7 +48,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.HttpOnly = true; o.Cookie.SameSite = SameSiteMode.Strict; o.ExpireTimeSpan = TimeSpan.FromHours(8);
     o.Events.OnValidatePrincipal = async context =>
     {
-        if (settings.UseApi && string.IsNullOrEmpty(context.Principal?.FindFirst("clinicId")?.Value))
+        if (settings.UseApi && string.IsNullOrEmpty(context.Principal?.FindFirst("clinicId")?.Value)
+            && context.Principal?.HasClaim("globalPatient", "true") != true)
         {
             context.RejectPrincipal();
             await Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions.SignOutAsync(context.HttpContext, CookieAuthenticationDefaults.AuthenticationScheme);

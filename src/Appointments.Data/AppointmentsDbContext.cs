@@ -20,6 +20,9 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
     public DbSet<IdempotencyRequest> IdempotencyRequests => Set<IdempotencyRequest>();
     public DbSet<AuditEvent> AuditEvents => Set<AuditEvent>();
     public DbSet<ClinicSetting> Settings => Set<ClinicSetting>();
+    public DbSet<PatientAccount> PatientAccounts => Set<PatientAccount>();
+    public DbSet<PatientAccountSession> PatientAccountSessions => Set<PatientAccountSession>();
+    public DbSet<PatientMembership> PatientMemberships => Set<PatientMembership>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -115,5 +118,24 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
         b.Entity<IdempotencyRequest>(r => { r.HasKey(r => new { r.AccountId, r.RequestId }); r.Property(r => r.Fingerprint).HasMaxLength(64); r.Property(r => r.ResponseJson).HasColumnType("jsonb"); r.HasOne<Account>().WithMany().HasForeignKey(r => r.AccountId).OnDelete(DeleteBehavior.Restrict); });
         b.Entity<AuditEvent>(a => { a.HasKey(a => a.Id); a.HasIndex(a => a.OccurredAt); a.Property(a => a.Action).HasMaxLength(80); });
         b.Entity<ClinicSetting>().HasKey(s => s.Key);
+        // Shared tables are installed once by 009-global-patients.sql, not once per clinic.
+        b.Entity<PatientAccount>(x => {
+            x.ToTable("PatientAccounts", "careline_identity", t => t.ExcludeFromMigrations()); x.HasKey(a => a.Id);
+            x.Property(a => a.Id).HasMaxLength(64); x.Property(a => a.Email).HasMaxLength(120); x.Property(a => a.Name).HasMaxLength(80);
+            x.HasIndex(a => a.Email).IsUnique();
+        });
+        b.Entity<PatientAccountSession>(x => {
+            x.ToTable("PatientSessions", "careline_identity", t => t.ExcludeFromMigrations()); x.HasKey(s => s.TokenHash);
+            x.HasOne(s => s.PatientAccount).WithMany().HasForeignKey(s => s.PatientAccountId).OnDelete(DeleteBehavior.Cascade);
+        });
+        b.Entity<PatientMembership>(x => {
+            x.ToTable("PatientMemberships", "careline_identity", t => t.ExcludeFromMigrations()); x.HasKey(m => new { m.PatientAccountId, m.ClinicId });
+            x.HasOne<PatientAccount>().WithMany().HasForeignKey(m => m.PatientAccountId).OnDelete(DeleteBehavior.Restrict);
+            x.HasIndex(m => new { m.ClinicId, m.AccountId }).IsUnique(); x.HasIndex(m => new { m.ClinicId, m.PatientId }).IsUnique();
+        });
+        account.Property(a => a.GlobalPatientId).HasMaxLength(64);
+        account.HasIndex(a => a.GlobalPatientId).IsUnique();
+        account.HasOne<PatientAccount>().WithMany().HasForeignKey(a => a.GlobalPatientId).OnDelete(DeleteBehavior.Restrict);
+        account.ToTable("Accounts", t => t.HasCheckConstraint("CK_Account_GlobalPatient", "\"GlobalPatientId\" IS NULL OR (\"Role\" = 'Patient' AND NOT \"IsDemo\" AND \"PasswordHash\" = '')"));
     }
 }

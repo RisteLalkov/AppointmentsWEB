@@ -76,8 +76,7 @@ with tempfile.TemporaryDirectory(prefix='medtermin-feedback-') as temporary:
         service = request('/api/catalogue/services', dict(name='Електрокардиографски преглед и детална проценка на кардиоваскуларната функција', specialtyId=spec['id'], enabled=True, durationMinutes=30, doctorIds=[doctor['id']]))
         people = [request('/api/patients', dict(name='Ана Петрова', email=f'ana-{i}@feedback.test', phone=f'+3897012345{i}')) for i in range(2)]
         for i in range(22):
-            p = request('/api/patients', dict(name=f'Корисник {i:02}', email=f'person-{i:02}@feedback.test', phone=''))
-            account = request('/api/accounts', dict(name=p['name'], email=p['email'], password=password, role='Patient', patientId=p['id']))
+            account = request('/api/auth/register', dict(name=f'Корисник {i:02}', email=f'person-{i:02}@feedback.test', password=password))
             if i == 0: request('/api/accounts/'+account['id']+'/access', dict(enabled=False))
         request('/api/accounts', dict(name=doctor['name'], email='doctor@feedback.test', password=password, role='Doctor', doctorId=doctor['id']))
         updated = request('/api/patients/'+people[0]['id'], dict(name=people[0]['name'], email=people[0]['email'], phone=people[0]['phone'], version=people[0]['version'], number=999999))

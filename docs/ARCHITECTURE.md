@@ -1,5 +1,14 @@
 # Connected architecture
 
+## Shared patient identities (10 November 2026)
+
+Patients now have one login across clinics; staff remain assigned to one clinic.
+Credentials, global sessions and memberships live in the existing clinical
+`careline_identity` schema. Clinical records stay in their original clinic schemas.
+The normal browser → MVC → API boundary remains unchanged. See
+[global patient accounts](GLOBAL_PATIENT_ACCOUNTS.md) for the current model,
+concurrency, recovery, API changes and required complete maintenance upgrade.
+
 ## Project boundaries
 
 | Project | Responsibility |
@@ -46,9 +55,9 @@ Availability reads do not lock the calendar and are advisory until submission. E
 
 ## Authentication boundaries
 
-PasswordHasher uses versioned salted PBKDF2 hashes with 210,000 iterations. Random 48-byte session secrets are base64url encoded; only their SHA-256 hashes enter the database. Expiry is absolute at two hours. Password changes, credential provisioning and disabling accounts revoke sessions. Sign-in locks the account row logically with a transaction advisory lock so failed-attempt counters cannot be lost across API instances.
+PasswordHasher uses versioned salted PBKDF2 hashes with 210,000 iterations. Random 48-byte session secrets are base64url encoded; only their SHA-256 hashes enter the database. Expiry is absolute at two hours. Password changes and staff credential provisioning revoke sessions. Disabling a patient membership denies that clinic only; it does not revoke the shared login or affect another clinic. Sign-in locks the account row logically with a transaction advisory lock so failed-attempt counters cannot be lost across API instances.
 
-Registration only creates a new patient. Existing patient identity must be verified by reception before account linking; matching an email is not proof. This implementation does not claim email ownership verification, MFA, federated OAuth/OIDC, or self-service password recovery. It is a first-party server session protocol; use a mature identity provider if third-party API clients or federation become requirements.
+Patient registration creates one shared personal identity plus a new local profile in its first clinic. Joining another clinic explicitly creates another local profile, not another password. Reception cannot create/link patient logins. Matching a contact email never claims its history; existing established password accounts retain their original profile links during migration. Company support handles patient password recovery. This implementation does not claim email ownership verification, MFA, federated OAuth/OIDC, or self-service password recovery. It is a first-party server session protocol; use a mature identity provider if third-party API clients or federation become requirements.
 
 Development demo access requires both Development environment and `Demo:Enabled`. Production rejects demo routes and existing demo-issued sessions. Demo users start with empty password hashes, so they cannot use password login until an administrator explicitly provisions credentials. Demo and password sessions in Development use the same database, which must remain isolated from real patient information.
 

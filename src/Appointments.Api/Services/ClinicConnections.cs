@@ -64,6 +64,10 @@ public sealed class ClinicConnections(ClinicRegistry clinics, IConfiguration con
     }
     public async Task RequireUniqueAsync(string email, string clinicId, string? accountId, CancellationToken ct)
     {
+        await using (var shared = new AppointmentsDbContext(new DbContextOptionsBuilder<AppointmentsDbContext>()
+            .UseNpgsql(SharedClinicDatabase.Connection(configuration, "main")).Options))
+            if (await shared.PatientAccounts.AnyAsync(a => a.Email == email, ct))
+                throw new RuleException("Оваа е-пошта веќе има сметка. Најавете се со постоечката лозинка.", 409);
         if (clinics.HasPlatform)
         {
             await using var platform = clinics.PlatformDb();

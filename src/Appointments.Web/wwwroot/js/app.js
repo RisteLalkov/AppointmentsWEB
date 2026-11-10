@@ -200,7 +200,11 @@ const icon = window.MedTerminIcons.icon;
     if (isDoctor()) doctorFilter = state.actor.doctorId;
     if (render) {
       renderPage();
-      const url = new URL(location.href), selected = url.searchParams.get("book");
+      const url = new URL(location.href), selected = url.searchParams.get("book"), appointment = url.searchParams.get("appointment");
+      if (appointment && !selected) {
+        url.searchParams.delete("appointment"); history.replaceState(null, "", url.pathname + url.search + url.hash);
+        if (state.appointments.some(a => a.id === appointment)) details(appointment);
+      }
       if (selected) {
         const date = url.searchParams.get("date"), time = url.searchParams.get("time"), service = url.searchParams.get("serviceId");
         for (const key of ["book", "date", "time", "serviceId"]) url.searchParams.delete(key);

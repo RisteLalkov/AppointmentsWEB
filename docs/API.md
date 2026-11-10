@@ -4,7 +4,7 @@ Base URL in local Development: `http://localhost:5181`. Swagger UI: `/swagger`; 
 
 ## Sessions
 
-`POST /api/auth/login` accepts `{"email":"you@example.test","password":"your-password"}` and returns `accessToken`, `expiresAt`, `actor`, `demoMode`, `clinic`. The API resolves a unique clinic account from the email; a clinic hint cannot choose the account. Use `Authorization: Bearer <accessToken>` thereafter. Never log or commit tokens/passwords. The MVC client stores this token in its protected HttpOnly authentication cookie, not localStorage.
+`POST /api/auth/login` accepts `{"email":"you@example.test","password":"your-password"}` and returns `accessToken`, `expiresAt`, `actor`, `demoMode`, `clinic`. The API resolves staff to their one assigned clinic. A patient receives a shared personal login and may supply an optional clinic preference; it grants access only with an existing enabled membership. Use `Authorization: Bearer <accessToken>` thereafter. Never log or commit tokens/passwords. The MVC client stores this token in its protected HttpOnly authentication cookie, not localStorage.
 
 | Method / route | Access / purpose |
 | --- | --- |
@@ -60,8 +60,8 @@ Administrator only. Do not create Doctor accounts for unnamed service providers.
 | Method / route | Behavior |
 | --- | --- |
 | GET `/api/accounts` | Safe summaries; no hashes/tokens |
-| POST `/api/accounts` | `email`, `name`, `password`, `role`, and exactly its `doctorId` or `patientId` link (neither for Administrator) |
-| POST `/api/accounts/{id}/credentials` | `email`, `password`; set credentials, disable demo switching for that identity, revoke sessions |
+| POST `/api/accounts` | `email`, `name`, `password`, `role` Doctor/Administrator; `doctorId` required for Doctor, no profile for Administrator; Patient creation returns 403 |
+| POST `/api/accounts/{id}/credentials` | `email`, `password`; staff accounts only; patient targets return 403 |
 | POST `/api/accounts/{id}/access` | `enabled` boolean; disabling revokes sessions; self-disabling refused |
 | GET `/api/accounts/audit?take=100` | Recent operational audit events; at most 500 |
 
@@ -121,3 +121,25 @@ not JWTs. Public operations require no token; registration still selects a clini
 **Try it out** executes the actual API with the supplied account's permissions.
 No extra privileges are granted by Swagger. Authorization is not configured for
 persistent browser storage; sign out of the UI when done with a shared computer.
+
+## Global patient accounts (10 November 2026)
+
+Patients use `u1.` bearer tokens for one shared login; staff retain `c1.<clinic>.`
+tokens and company operators retain the separate `p1.` scheme. Login accepts an
+optional `clinicId` preference **only for patients**. It never creates a membership.
+Clinical requests still select `X-Clinic` and require an enabled local membership.
+`GET auth/me` without X-Clinic returns the personal patient identity, not a local
+profile. Its response and `SessionResponse` include `globalPatient`.
+
+| Endpoint | Access and behavior |
+| --- | --- |
+| GET `/api/patient/home` | Global patient only; own joined/available clinic choices and up to 100 own upcoming visits |
+| POST `/api/patient/clinics/{clinicId}` | Global patient; explicit join/select, registration policy checked for first join; idempotent profile creation |
+| POST `/api/auth/password` | Current patient password required; changes the one shared password and revokes all its sessions |
+| POST `/api/auth/logout` | Revokes this patient session across its clinic contexts |
+| GET `/api/platform/patients?email=...` | Company operator only; exact normalized email search, no unfiltered directory/history |
+| POST `/api/platform/patients/{id}/password` | Company operator only; newPassword 12–128 chars, revoke all sessions, audited reset |
+
+Personal identity routes do not require X-Clinic. Staff cannot join another clinic
+or use these patient endpoints. Local account access toggles apply only to the
+selected clinic. See [design and migration](GLOBAL_PATIENT_ACCOUNTS.md).

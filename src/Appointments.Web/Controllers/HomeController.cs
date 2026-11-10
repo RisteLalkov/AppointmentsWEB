@@ -15,8 +15,10 @@ public sealed class HomeController(DemoIdentity identity, BackendSettings settin
         if (host.Equals("admin.medtermin.mk", StringComparison.OrdinalIgnoreCase)) return Redirect("/Platform");
         if (host.Equals("app.medtermin.mk", StringComparison.OrdinalIgnoreCase)) return Redirect("/Workspace");
         if (host.Equals("medtermin.mk", StringComparison.OrdinalIgnoreCase)) return Redirect("/Discover");
+        if (User.HasClaim("globalPatient", "true") && !User.HasClaim(c => c.Type == "clinicId")) return Redirect("/PatientClinics");
         return User.Identity?.IsAuthenticated == true ? View("Workspace", identity.Actor) : Redirect(settings.UseApi ? "/Discover" : "/Demo");
     }
-    [HttpGet("/Workspace")] public IActionResult Workspace() => View("Workspace", identity.Actor);
+    [HttpGet("/Workspace")] public IActionResult Workspace() => User.HasClaim("globalPatient", "true") && !User.HasClaim(c => c.Type == "clinicId")
+        ? Redirect("/PatientClinics") : View("Workspace", identity.Actor);
     [AllowAnonymous] public IActionResult Error() { Response.StatusCode = 500; return View(); }
 }

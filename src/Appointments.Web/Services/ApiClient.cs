@@ -8,7 +8,7 @@ namespace Appointments.Web.Services;
 
 public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor, IConfiguration configuration)
 {
-    public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default, string? clinicId = null, bool platform = false)
+    public async Task<T> SendAsync<T>(string path, object? body = null, bool authenticated = true, CancellationToken ct = default, string? clinicId = null, bool platform = false, bool patientIdentity = false)
     {
         using var request = new HttpRequestMessage(body == null ? HttpMethod.Get : HttpMethod.Post, path);
         var secret = configuration["Hosting:WebProxyKey"] ?? "";
@@ -31,8 +31,10 @@ public sealed class ApiClient(HttpClient client, IHttpContextAccessor accessor, 
         }
         else if (authenticated)
         {
-            clinicId = accessor.HttpContext!.User.FindFirst("clinicId")?.Value;
-            if (string.IsNullOrEmpty(clinicId)) throw new RuleException(UiText.T("Најавете се повторно."), 401);
+            var patient = accessor.HttpContext!.User.HasClaim("globalPatient", "true");
+            if (patientIdentity && !patient) throw new RuleException(UiText.T("Потребна е лична пациентска сметка."), 403);
+            clinicId = patientIdentity ? null : accessor.HttpContext.User.FindFirst("clinicId")?.Value;
+            if (string.IsNullOrEmpty(clinicId) && !patient) throw new RuleException(UiText.T("Најавете се повторно."), 401);
             var token = await accessor.HttpContext.GetTokenAsync("api_token");
             if (string.IsNullOrEmpty(token)) throw new RuleException(UiText.T("Најавете се повторно."), 401);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

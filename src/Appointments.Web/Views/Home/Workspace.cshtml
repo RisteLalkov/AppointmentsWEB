@@ -11,6 +11,7 @@
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? T("РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА") : Model.Role == DemoRole.Doctor ? T("РАБОТЕН ПРОСТОР ЗА ЛЕКАР") : T("РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ"))</div>
         <nav aria-label="@T("Главна навигација")" id="navigation">
             <button class="nav-item active" data-page="overview"><span aria-hidden="true">@Icon("layout-dashboard")</span> @T("Преглед")</button>
+            @if (User.HasClaim("globalPatient", "true")) { <a class="nav-item" href="/PatientClinics"><span aria-hidden="true">@Icon("building-2")</span> @T("Мои клиники")</a> }
             @if (Model.Role == DemoRole.Patient) {
                 <button class="nav-item" data-page="doctors"><span aria-hidden="true">@Icon("stethoscope")</span> @T("Пронајди лекар")</button>
             } else {

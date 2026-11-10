@@ -55,7 +55,9 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
                 return RedirectToAction("Login", "Account", new { clinicId, returnUrl = Url.Action(nameof(Book), new { clinicId, doctorId, date = date?.ToString("yyyy-MM-dd"), time = time?.ToString("HH:mm"), serviceId }) });
             if (User.FindFirst("clinicId")?.Value != clinicId)
             {
-                Response.StatusCode = 403; ViewData["Error"] = UiText.T("Вашата сметка припаѓа на друга клиника. За пристап до оваа клиника контактирајте ја нејзината рецепција. Не е променет вашиот работен простор.");
+                if (User.HasClaim("globalPatient", "true"))
+                    return RedirectToAction("Join", "PatientClinics", new { clinicId, returnUrl = Url.Action(nameof(Book), new { clinicId, doctorId, date = date?.ToString("yyyy-MM-dd"), time = time?.ToString("HH:mm"), serviceId }) });
+                Response.StatusCode = 403; ViewData["Error"] = UiText.T("Оваа сметка важи само во нејзината клиника. Не е променет вашиот работен простор.");
                 return View("Doctor", doctor);
             }
             var selection = date.HasValue && time.HasValue ? "&date=" + date.Value.ToString("yyyy-MM-dd") + "&time=" + time.Value.ToString("HH:mm") + "&serviceId=" + E(serviceId) : "";

@@ -85,14 +85,14 @@ The wider calendar includes specialty/service-profile filters and custom date pe
 | Workspace | Workflows |
 | --- | --- |
 | Patient | Password registration/sign-in, directory and profiles, genuine available slots, review/confirmation, upcoming/history, details, rescheduling and cancellation |
-| Reception | All-doctor day/week/month calendar, filters/search, patient creation/search, phone booking, status changes, schedules and exceptions, account creation/provisioning/disable |
+| Reception | All-doctor day/week/month calendar, filters/search, patient creation/search, phone booking, status changes, schedules and exceptions, staff account creation, clinic-local patient access/disable |
 | Doctor | Own calendar/appointments, phone booking, statuses, rescheduling/cancellation, own working hours and time away |
 
 FullCalendar Standard **6.1.20** remains bundled locally, with free day/week/month views, appointment cards, status colors, current-time indicator, availability backgrounds and validated/revertible drag rescheduling. No paid resource timeline is used. The list and slot-picker flows support keyboard operation without dragging. All existing visual design and role flows are retained; new account screens use the same style.
 
 Password authentication uses ASP.NET Core's password hasher, database-backed opaque sessions, 2-hour expiry, sign-out revocation, account disabling and password-change revocation across instances. Five failed sign-ins lock an account for 15 minutes. Authentication endpoints have a 30 requests/minute/IP limit per API process. The browser has an encrypted HttpOnly SameSite cookie; API tokens are not placed in browser JavaScript or local storage. The API re-checks the live account and session on each request, and enforces role/ownership itself.
 
-Registration always creates a **new patient**. It cannot claim an existing patient record by matching an email. Reception must verify identity and provision a sign-in linked to that profile through **Accounts & access**. In Development, every demo profile already has a demo account: use **Set sign-in credentials** on that account to convert it to password access. For a new normal patient/doctor, create an account and select exactly the matching profile. One sign-in is allowed per linked doctor/patient; administrators have no profile link.
+Patients register **one shared personal account** and use the same email/password in every clinic. **My clinics** lists their own upcoming visits and lets them explicitly join or open a clinic. Each clinic keeps a separate local patient profile and history; matching an existing contact email never claims that contact's history. Reception creates/manages **Doctor and Administrator staff accounts only**, and may enable/disable a patient's access to its own clinic. Patient password recovery belongs to company support, not clinic staff. Staff accounts and permissions stay bound to exactly one clinic. See [global patient accounts, deployment and recovery](docs/GLOBAL_PATIENT_ACCOUNTS.md).
 
 Email verification, email password recovery, MFA, messages/reminders and external calendar synchronization are **not implemented**. No fake notifications are sent. Administrator credential provisioning is available locally until an identity verification/recovery policy is implemented.
 
@@ -205,11 +205,11 @@ include patient and inclusive date-range filters. This release requires
 
 ## Multiple clinics
 
-One Web/API deployment serves all clinics in **one PostgreSQL database**, with an isolated schema per clinic, clinic-bound sessions and automatic clinic resolution at sign-in. The existing clinic keeps its `public` tables as `main`. Future clinics get schemas in that same database; no database pool is needed. The optional platform database stays separate. See [shared database setup and deployment](docs/SHARED_DATABASE.md), including `--migrate` and platform script **006** after **005**. Publish both API and Web.
+One Web/API deployment serves all clinics in **one PostgreSQL database**, with an isolated schema per clinic, clinic-bound staff sessions and shared patient identities. The existing clinic keeps its `public` tables as `main`. Future clinics get schemas in that same database; no database pool is needed. The optional platform database stays separate. See [shared database setup and deployment](docs/SHARED_DATABASE.md), including `--migrate` and platform script **006** after **005**. Publish both API and Web.
 
 ### Patient details and contact editing
 
-Open **Пациенти → Види профил** for contacts and filtered appointment history. Patient accounts also have **Мој профил**. Existing installations must apply `database/004-patient-profiles.sql` in each clinic database before publishing both applications. See [patient profiles and deployment](docs/PATIENT_PROFILES.md).
+Open **Пациенти → Види профил** for contacts and filtered appointment history. Patient accounts also have **Мој профил**. Existing installations must run the complete API `--migrate` upgrade for the shared database when publishing both applications. See [patient profiles and deployment](docs/PATIENT_PROFILES.md).
 
 ## Public directory and company onboarding
 

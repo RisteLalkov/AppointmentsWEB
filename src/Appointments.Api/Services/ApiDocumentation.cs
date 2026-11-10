@@ -35,13 +35,14 @@ public static class ApiDocumentation
                 if ((path.Equals("/health/database", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
                     && !path.StartsWith("/api/public", StringComparison.OrdinalIgnoreCase)
                     && !path.StartsWith("/api/platform", StringComparison.OrdinalIgnoreCase)
+                    && !path.StartsWith("/api/patient", StringComparison.OrdinalIgnoreCase)
                     && !path.Equals("/api/clinics", StringComparison.OrdinalIgnoreCase)
                     && !path.Equals("/api/auth/login", StringComparison.OrdinalIgnoreCase))
                 {
                     operation.Parameters ??= [];
                     operation.Parameters.Add(new OpenApiParameter
                     {
-                        Name = "X-Clinic", In = ParameterLocation.Header, Required = true,
+                        Name = "X-Clinic", In = ParameterLocation.Header, Required = !new[] { "/api/auth/me", "/api/auth/logout", "/api/auth/password" }.Contains(path, StringComparer.OrdinalIgnoreCase),
                         Description = "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
                         Schema = new OpenApiSchema { Type = JsonSchemaType.String }
                     });

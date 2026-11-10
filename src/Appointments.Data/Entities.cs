@@ -12,6 +12,7 @@ public sealed class Account
     public DemoRole Role { get; set; }
     public string? DoctorId { get; set; }
     public string? PatientId { get; set; }
+    public string? GlobalPatientId { get; set; }
     public bool Enabled { get; set; } = true;
     public bool IsDemo { get; set; }
     public int FailedAttempts { get; set; }
@@ -47,4 +48,33 @@ public sealed class ClinicSetting
 {
     public string Key { get; set; } = "";
     public string Value { get; set; } = "";
+}
+
+// Patient credentials and sessions are shared; clinical profiles and permissions remain local.
+public sealed class PatientAccount
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString("N");
+    public string Email { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string PasswordHash { get; set; } = "";
+    public bool Enabled { get; set; } = true;
+    public int FailedAttempts { get; set; }
+    public DateTimeOffset? LockedUntil { get; set; }
+    public string HomeClinicId { get; set; } = "";
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+}
+public sealed class PatientAccountSession
+{
+    public string TokenHash { get; set; } = "";
+    public string PatientAccountId { get; set; } = "";
+    public DateTimeOffset ExpiresAt { get; set; }
+    public PatientAccount PatientAccount { get; set; } = null!;
+}
+public sealed class PatientMembership
+{
+    public string PatientAccountId { get; set; } = "";
+    public string ClinicId { get; set; } = "";
+    public string AccountId { get; set; } = "";
+    public string PatientId { get; set; } = "";
+    public long PatientNumber { get; set; }
 }

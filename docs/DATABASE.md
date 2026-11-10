@@ -22,6 +22,17 @@ dotnet ef migrations script --idempotent --project src/Appointments.Data --start
 
 The design-time factory builds the model without connecting to PostgreSQL. Do not edit an already deployed migration; add another. Review manually authored exclusion SQL when generating future migrations because EF's model snapshot does not represent it. Test migrations on a restored copy before production. Use a privileged migration role for DDL and extension installation; the normal API account should have only needed table/sequence DML privileges. The local Compose development owner is intentionally not a production privilege template.
 
+## Shared patient login (10 November 2026)
+
+See [global patient accounts](GLOBAL_PATIENT_ACCOUNTS.md) for the required upgrade.
+`009-global-patients.sql` installs the canonical patient credentials, sessions,
+memberships, security audit and minimal busy intervals in `careline_identity`.
+Migration `20261110131050_GlobalPatientMemberships` adds the local membership link.
+Run the published API's **full `--migrate` with all Web/API hosts stopped**; running
+only the EF-generated SQL does not install the shared SQL functions or triggers.
+Back up the entire appointments database, including its shared schemas, and the
+platform database. There is no new database or platform schema change.
+
 ## Patient numbers (10 November 2026)
 
 Migration `20261110091110_PatientNumbers` adds a positive, unique PostgreSQL identity column, `Patients.Number`, in each clinic schema. Existing patients receive numbers automatically; their original IDs, contacts, accounts, appointments and history stay intact. The Web formats these as `PT-000001` and shows them in the directory, profile and booking flow. Numbers belong to one clinic, remain unchanged when contacts are edited, and may contain gaps. They are identifiers, not patient counts or proof of identity. Concurrent staff additions and public registrations use the database sequence, not a browser counter.

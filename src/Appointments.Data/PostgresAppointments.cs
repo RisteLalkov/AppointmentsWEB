@@ -190,7 +190,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     {
         var doctor = await db.Doctors.AsSplitQuery().SingleOrDefaultAsync(d => d.Id == doctorId, ct) ?? throw new RuleException("Лекарот не е пронајден.", 404);
         var now = clock.UtcNow; var today = clock.Today;
-        return new DemoState
+        var state = new DemoState
         {
             Doctors = [doctor],
             Services = await db.Services.AsNoTracking().ToListAsync(ct),
@@ -199,7 +199,20 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             Appointments = await db.Appointments.Where(a => a.End >= now && (a.DoctorId == doctorId || (patientId != null && a.PatientId == patientId))).ToListAsync(ct),
             Exceptions = await db.Exceptions.Where(e => e.DoctorId == doctorId && e.Date >= today).ToListAsync(ct)
         };
+        if (patientId != null)
+        {
+            var identity = await db.Accounts.Where(a => a.PatientId == patientId).Select(a => a.GlobalPatientId).SingleOrDefaultAsync(ct);
+            if (identity != null)
+            {
+                var clinic = await db.Settings.Where(s => s.Key == "ClinicId").Select(s => s.Value).SingleAsync(ct);
+                var busy = await db.Database.SqlQuery<PatientBusyInterval>($"SELECT \"Start\", \"End\" FROM careline_identity.\"PatientBookings\" WHERE \"PatientAccountId\"={identity} AND \"ClinicId\"<>{clinic} AND \"End\">={now}").ToListAsync(ct);
+                // Internal rule inputs only: never saved or returned as another clinic's records.
+                state.Appointments.AddRange(busy.Select(b => new Appointment { Id = "global-busy-" + Guid.NewGuid().ToString("N"), DoctorId = "global-busy", PatientId = patientId, Start = b.Start, End = b.End, Status = AppointmentStatus.Confirmed }));
+            }
+        }
+        return state;
     }
+    private sealed class PatientBusyInterval { public DateTimeOffset Start { get; set; } public DateTimeOffset End { get; set; } }
     private Task<int> LockCatalogueSharedAsync(CancellationToken ct) => db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock_shared(hashtextextended(current_schema() || ':careline:catalogue', 0))", ct);
     public async Task<object> SaveCatalogueAsync(DemoActor actor, string kind, object input, CancellationToken ct)
     {

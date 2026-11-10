@@ -1,0 +1,24 @@
+@model Appointments.Contracts.PatientHome
+@{ ViewData["Title"] = T("Мои клиники"); }
+<main class="patient-home account-admin">
+    <header class="patient-home-header"><a class="brand" href="/Discover"><partial name="_BrandMark" /> МедТермин.</a><nav><a href="/Discover">@T("Лекари и клиники")</a><a href="/Account/Password">@T("Промени лозинка")</a><form asp-controller="Account" asp-action="Logout" method="post"><button class="btn secondary small" type="submit">@T("Одјави се")</button></form></nav></header>
+    @if (ViewData["Error"] is string || TempData["Error"] is string) { <p class="inline-error" role="alert">@(ViewData["Error"] ?? TempData["Error"])</p> }
+    @if (Model != null) {
+        <div class="page-heading"><div><span class="eyebrow">@T("ЕДНА СМЕТКА ЗА ВАШАТА ГРИЖА")</span><h1>@T("Мои клиники")</h1><p class="muted">@Model.Name · @Model.Email</p><p>@T("Изберете клиника. Вашата најава важи за сите, а секоја клиника има свој пациентски профил и историја.")</p></div></div>
+        <section aria-labelledby="patient-visits-title" class="patient-home-section"><h2 id="patient-visits-title">@T("Претстојни термини во сите клиники")</h2>
+        @if (Model.Appointments.Count == 0) { <p class="inline-note">@T("Немате претстојни термини. Изберете клиника или пронајдете лекар за да закажете.")</p> }
+        <div class="patient-home-grid">@foreach (var visit in Model.Appointments) {
+            <article class="card patient-visit" data-patient-visit="@visit.AppointmentId"><span class="eyebrow">@visit.ClinicName</span><h3>@visit.DoctorName</h3><p><strong>@visit.LocalStart</strong></p><p class="muted">@visit.ServiceName</p><span class="badge @(visit.Status)">@(visit.Status == AppointmentStatus.Scheduled ? T("Чека потврда") : T("Потврден"))</span>
+            <form asp-action="Select" method="post"><input type="hidden" name="clinicId" value="@visit.ClinicId"><input type="hidden" name="returnUrl" value="@($"/Workspace?appointment={Uri.EscapeDataString(visit.AppointmentId)}#appointments")"><button class="btn secondary" type="submit">@T("Види термин") @Icon("arrow-up-right")</button></form></article>
+        }</div></section>
+        <section class="patient-home-section" aria-labelledby="patient-clinics-title"><h2 id="patient-clinics-title">@T("Клиники")</h2><div class="patient-home-grid">@foreach (var option in Model.Clinics) {
+            <article class="card patient-clinic" data-patient-clinic="@option.Clinic.Id"><span class="patient-clinic-icon" aria-hidden="true">@Icon("building-2")</span><h3>@option.Clinic.Name</h3>
+            @if (option.Joined) { <p class="patient-number">@T("Број на пациент"): @option.PatientNumber</p> } else { <p class="muted">@T("Не е потребна нова сметка или лозинка.")</p> }
+            @if (!option.Available) { <p class="inline-note warning">@T("Пристапот до оваа клиника е оневозможен или привремено недостапен.")</p> }
+            else if (!option.Joined && !option.Clinic.AllowRegistration) { <p class="inline-note">@T("Клиниката не прифаќа нови онлајн пациенти.")</p> }
+            else if (option.Joined) { <form asp-action="Select" method="post"><input type="hidden" name="clinicId" value="@option.Clinic.Id"><button class="btn primary" type="submit">@T("Отвори клиника") @Icon("arrow-up-right")</button></form> }
+            else { <a class="btn secondary" asp-action="Join" asp-route-clinicId="@option.Clinic.Id">@T("Продолжи во клиниката") @Icon("arrow-up-right")</a> }
+            </article>
+        }</div></section>
+    }
+</main>

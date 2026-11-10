@@ -207,10 +207,13 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         check(patient.request(f"/api/appointments/{appt['id']}/status", {'status': 'Confirmed', 'version': cancelled['version']})[0] == 403, 'Patient cannot elevate appointment status')
         new_patient = admin.ok('/api/patients', {'name': 'Phone Patient', 'email': 'phone@integration.test'})
         check(not new_patient['isDemonstration'], 'Normal receptionist creates a non-demo scheduling profile')
-        check(anon.request('/api/auth/register', {'name': 'Impersonator', 'email': 'phone@integration.test', 'password': password})[0] == 409, 'Registration cannot claim an existing patient record')
-        linked = admin.ok('/api/accounts', {'email': 'phone-login@integration.test', 'name': 'Phone Patient', 'password': password, 'role': 'Patient', 'patientId': new_patient['id']})
+        independent = anon.ok('/api/auth/register', {'name': 'Independent contact', 'email': 'phone@integration.test', 'password': password})
+        check(independent['patientId'] != new_patient['id'], 'Registration cannot claim an existing contact record by email')
+        check(admin.request('/api/accounts', {'email': 'forbidden-link@integration.test', 'name': 'Phone Patient', 'password': password, 'role': 'Patient', 'patientId': new_patient['id']})[0] == 403, 'Reception cannot provision or link personal patient accounts')
+        linked = anon.ok('/api/auth/register', {'email': 'phone-login@integration.test', 'name': 'Phone Patient', 'password': password})
+        new_patient = admin.ok('/api/patients/' + linked['patientId'])['patient']
         linked_client = Client(api2).login('phone-login@integration.test')
-        check(linked_client.ok('/api/auth/me')['actor']['patientId'] == new_patient['id'], 'Reception provisions account linked to existing patient')
+        check(linked_client.ok('/api/bootstrap')['actor']['patientId'] == new_patient['id'], 'Patient self-registration owns its clinic-local profile')
         profile_path = '/api/patients/' + registration['patientId']
         profile = admin.ok(profile_path)
         check(profile['canEdit'] and any(x['id'] == appt['id'] for x in profile['appointments']), 'Patient profile includes cancelled appointment history')
@@ -225,8 +228,8 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         check(sorted(code for code,_ in edits) == [200,409], 'Concurrent patient edits across API processes save exactly once')
         updated = admin.ok(edit_path)['patient']
         check(updated['version'] == 2 and updated['email'] == 'updated@integration.test' and updated['name'] == contact['name'], 'Updated normalized patient contacts persist')
-        check(linked_client.ok(edit_path)['patient']['name'] == contact['name'] and Client(api2).login('phone-login@integration.test').ok('/api/auth/me')['actor']['patientId'] == new_patient['id'], 'Contact edits preserve linked account credentials and patient identity')
-        check(doctor.request(edit_path, dict(contact,version=2,email='phone@integration.test'))[0] == 200, 'Doctor may edit clinic patient contacts')
+        check(linked_client.ok(edit_path)['patient']['name'] == contact['name'] and Client(api2).login('phone-login@integration.test').ok('/api/bootstrap')['actor']['patientId'] == new_patient['id'], 'Contact edits preserve linked account credentials and patient identity')
+        check(doctor.request(edit_path, dict(contact,version=2,email='doctor-edit@integration.test'))[0] == 200, 'Doctor may edit clinic patient contacts')
         check(admin.request(edit_path, dict(contact,version=3,email='patient@integration.test'))[0] == 409, 'Patient edit prevents duplicate email')
         check(admin.request(edit_path, dict(contact,version=3,name=' '))[0] == 400 and admin.request(edit_path,dict(contact,version=3,phone='invalid!'))[0] == 400, 'Patient edit validates name and phone on server')
         # Direct SQL checks deliberately bypass all API validation; constraints must still hold.
@@ -251,7 +254,7 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         admin_web.web_login('admin@integration.test')
         accounts_page = unescape(admin_web.ok('/Accounts?search=phone-login%40integration.test'))
         check('Корисници и пристап' in accounts_page and 'phone-login@integration.test' in accounts_page, 'Administrator account management Razor page renders live accounts')
-        check('<option value="Patient">Пациент</option>' in accounts_page and '<option value="Doctor">Лекар</option>' in accounts_page, 'Account role options preserve API values behind Macedonian labels')
+        check('<option value="Patient">Пациент</option>' not in accounts_page.split('id="account-create-form"')[1].split('</form>')[0] and '<option value="Doctor">Лекар</option>' in accounts_page, 'Account creation offers staff roles and removes patient linking')
         check(not pathlib.Path(web_env['Demo__DataPath']).exists(), 'API-backed MVC never creates a local JSON store')
         # Restart an API; sessions, schedules and appointments survive.
         server1.terminate(); server1.wait(timeout=15)
@@ -264,7 +267,7 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         audit = admin.ok('/api/accounts/audit?take=500')
         check(any(a['action'] == 'appointment.created' for a in audit) and all('password' not in a and 'token' not in a for a in audit), 'Administrative audit records actions without credential payloads')
         admin.ok(f"/api/accounts/{linked['id']}/access", {'enabled': False})
-        check(linked_client.request('/api/bootstrap')[0] == 401, 'Disabling account revokes sessions across API instances')
+        check(linked_client.request('/api/bootstrap')[0] == 403, 'Disabling a clinic membership immediately blocks its patient requests')
         # Changing a password invalidates even sessions created on the other instance.
         patient_other = Client(api2).login('patient@integration.test')
         revoked_web = Client(web_url)

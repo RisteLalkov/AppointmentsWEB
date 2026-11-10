@@ -8,10 +8,13 @@ have been replaced.
 See [shared database setup, existing test deployment, isolation and verification](SHARED_DATABASE.md)
 for the current configuration and migration commands.
 
-Login still resolves the clinic from credentials. Patient registration selects its
-intended clinic; accounts and patient profiles are clinic-local. Globally unique
-sign-in emails, role checks, protected MVC cookies, clinic-bound bearer sessions,
-stale-tab checks and antiforgery tokens continue to enforce clinic boundaries.
+Staff login resolves exactly one clinic from credentials. Patients register once,
+then explicitly join or select clinics using the same personal login. Clinical
+profiles, history and access permissions remain clinic-local. Global patient
+credentials and minimal busy intervals live in `appointments.careline_identity`.
+Role checks, protected MVC cookies, clinic-bound staff sessions, membership-bound
+patient requests, stale-tab checks and antiforgery enforce clinic boundaries.
+See [global patient accounts](GLOBAL_PATIENT_ACCOUNTS.md).
 
 Company operators use `/Platform`; clinic administrators cannot create clinics or
 access platform administration. Operator-configured clinics use `Tenancy:Clinics`

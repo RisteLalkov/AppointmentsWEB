@@ -23,6 +23,7 @@
         <div class="account-settings-timezone"><span>@Icon("globe") @T("Временска зона")</span><strong id="zone-label">Europe/Skopje</strong></div>
     </section>
     <div class="account-settings-actions">
+        @if (User.HasClaim("globalPatient", "true")) { <a class="account-settings-action" href="/PatientClinics"><span class="account-action-icon" aria-hidden="true">@Icon("building-2")</span><span>@T("Мои клиники")</span><span class="account-action-arrow" aria-hidden="true">@Icon("chevron-right")</span></a> }
         @if (Backend.UseApi && !isDemo) {
             <a class="account-settings-action" href="/Account/Password"><span class="account-action-icon" aria-hidden="true">@Icon("key-round")</span><span>@T("Промени лозинка")</span><span class="account-action-arrow" aria-hidden="true">@Icon("chevron-right")</span></a>
         }

@@ -1,5 +1,9 @@
 using System.Text.Json;
 using Npgsql;
+using Appointments.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 internal static class TenantFixtures
 {
@@ -51,6 +55,14 @@ internal static class TenantFixtures
                 await using var query = new NpgsqlCommand(request.RootElement.GetProperty("sql").GetString(), target);
                 var result = await query.ExecuteScalarAsync();
                 Console.WriteLine(JsonSerializer.Serialize(result is DBNull ? null : result));
+            }
+            else if (operation == "--tenant-legacy-patient-schema")
+            {
+                var value = new NpgsqlConnectionStringBuilder(fixtures[0]) { SearchPath = "public,careline_extensions" };
+                await using var target = new NpgsqlConnection(value.ConnectionString); await target.OpenAsync();
+                await new NpgsqlCommand("CREATE SCHEMA careline_extensions; CREATE EXTENSION btree_gist WITH SCHEMA careline_extensions", target).ExecuteNonQueryAsync();
+                await using var db = new AppointmentsDbContext(new DbContextOptionsBuilder<AppointmentsDbContext>().UseNpgsql(value.ConnectionString).Options);
+                await db.GetService<IMigrator>().MigrateAsync("20261110091110_PatientNumbers");
             }
             else if (operation == "--tenant-legacy-extension")
             {

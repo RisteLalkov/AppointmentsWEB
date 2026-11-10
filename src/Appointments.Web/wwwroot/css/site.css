@@ -2677,3 +2677,28 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 #existing-accounts { scroll-margin-top: 20px; }
 @media (max-width: 650px) { .account-list-filters { grid-template-columns: minmax(0, 1fr); padding: 16px; } }
 @media print { .navigation-backdrop, .sidebar-close, .localized-date-native, .localized-date-icon { display: none !important; } }
+
+/* Personal clinic selection leaves the clinic workspaces and staff navigation intact. */
+.patient-home-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom:45px; }
+.patient-home-header .brand { margin:0; }
+.patient-home-header nav { display:flex; align-items:center; flex-wrap:wrap; gap:18px; }
+.patient-home-header form { margin:0; }
+.patient-home .page-heading { margin-bottom:32px; }
+.patient-home .page-heading p { max-width:720px; }
+.patient-home-section { margin:36px 0; }
+.patient-home-section h2 { margin-bottom:20px; }
+.patient-home-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.patient-clinic, .patient-visit { padding:25px; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
+.patient-clinic h3, .patient-visit h3 { font-size:1.125rem; line-height:1.5; margin:0; overflow-wrap:anywhere; }
+.patient-clinic p, .patient-visit p { margin:0; overflow-wrap:anywhere; }
+.patient-clinic form, .patient-clinic > .btn, .patient-visit form { margin-top:auto; padding-top:12px; }
+.patient-clinic-icon { display:flex; padding:13px; border-radius:13px; color:var(--green-dark); background:var(--theme-success-soft,#e5f5ec); }
+.patient-clinic-icon svg { width:25px; height:25px; }
+.patient-home .btn { white-space:normal; text-align:center; }
+.patient-join { max-width:680px; padding:35px; margin:35px auto; }
+.patient-join h1 { font-size:2rem; margin:20px 0; overflow-wrap:anywhere; }
+.patient-join p { line-height:1.7; }
+.patient-join form { margin:25px 0; }
+.patient-home-back { display:inline-flex; align-items:center; gap:8px; margin-top:16px; }
+@media(max-width:1000px) { .patient-home-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:650px) { .patient-home-grid { grid-template-columns:minmax(0,1fr); } .patient-home-header nav { gap:12px; } .patient-join { padding:24px; } }
