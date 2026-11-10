@@ -41,3 +41,4 @@ await using (var tx = await connection.BeginTransactionAsync())
 }
 Console.WriteLine($"{passed}/{passed} direct PostgreSQL constraint checks passed.");
 await CatalogueUpgrade.Verify(connectionString);
+await PatientNumbers.Verify(connectionString);

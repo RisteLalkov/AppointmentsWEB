@@ -82,7 +82,7 @@ jobs:
         run: |
           dotnet publish src/Appointments.Api -c Release --no-build -o "$RUNNER_TEMP/medtermin-api"
           dotnet publish src/Appointments.Web -c Release --no-build -o "$RUNNER_TEMP/medtermin-web"
-      - name: High-severity concurrency, transport, outage and real-form regressions
+      - name: Published API/Web concurrency, security and usability regressions
         env:
           CARELINE_TEST_CONNECTION: Host=localhost;Port=5432;Database=careline_integration;Username=careline_test;Password=isolated-ci-password
         run: |
@@ -91,6 +91,7 @@ jobs:
           export TEST_API_DLL="$RUNNER_TEMP/medtermin-api/Appointments.Api.dll"
           export TEST_WEB_DLL="$RUNNER_TEMP/medtermin-web/Appointments.Web.dll"
           python tests/high_severity_integration.py
+          python tests/tester_feedback_integration.py
           node tests/frontend/account-settings-browser.cjs
           node tests/frontend/themes-browser.cjs
           node tests/frontend/localization-browser.cjs

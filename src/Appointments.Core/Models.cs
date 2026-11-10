@@ -30,6 +30,7 @@ public record Doctor
 public record Patient(string Id, string Name, string Email, string Phone, bool IsDemonstration = true)
 {
     public int Version { get; init; } = 1;
+    public long Number { get; init; }
 }
 public record PatientDetailsResult(Patient Patient, IReadOnlyList<Appointment> Appointments, bool CanEdit);
 public record PatientUpdateCommand(string Name, string? Email, string? Phone, int Version);

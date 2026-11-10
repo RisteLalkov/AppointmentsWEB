@@ -32,7 +32,7 @@ public sealed class DatabaseInitializer(AppointmentsDbContext db, SchedulingCloc
             db.Doctors.AddRange(seed.Doctors);
             if (clinic.SeedDemoData && environment.IsDevelopment() && configuration.GetValue<bool>("Demo:Enabled"))
             {
-                db.Patients.AddRange(seed.Patients); db.Appointments.AddRange(seed.Appointments);
+                db.Patients.AddRange(seed.Patients.Select(p => p with { Number = 0 })); db.Appointments.AddRange(seed.Appointments);
                 foreach (var actor in DemoSeed.Actors(seed.Doctors, seed.Patients))
                     db.Accounts.Add(new() { Id = actor.Id, Name = actor.Name, Email = actor.Id + "@demo.example.test", NormalizedEmail = actor.Id + "@demo.example.test", Role = actor.Role, DoctorId = actor.DoctorId, PatientId = actor.PatientId, IsDemo = true });
             }

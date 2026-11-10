@@ -196,7 +196,7 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
    await accounts.locator('#account-create-form button[type=submit]').click();
    const data=new URLSearchParams((await sent).postData());
    check(data.has('PatientId')===(role==='Patient') && data.has('DoctorId')===(role==='Doctor'),role+' form submits only its applicable profile');
-   await accounts.locator('[role=status]').filter({hasText:'Сметката е создадена.'}).waitFor();
+   await accounts.locator('[role=status]').filter({hasText:'е успешно создадена.'}).waitFor();
   }
   if(screenshots)await accounts.screenshot({path:resolve(screenshots,'accounts-desktop.png'),fullPage:true});
   for(const width of [390,320]) {await accounts.setViewportSize({width,height:900});await noOverflow(accounts,'Account creation at '+width+'px');}

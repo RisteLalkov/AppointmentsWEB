@@ -24,7 +24,7 @@ public sealed class PreviewSeeder(AppointmentsDbContext db, SchedulingClock cloc
                 var id = "preview-" + sample.Id;
                 if (existingPatients.Any(p => p.Id == id)) continue;
                 // Reserved addresses cannot send mail to an unrelated real person.
-                var patient = sample with { Id = id, Email = id + "@example.test" };
+                var patient = sample with { Id = id, Email = id + "@example.test", Number = 0 };
                 db.Patients.Add(patient);
             }
             // Remove old demo suffixes only from the known original synthetic profiles.

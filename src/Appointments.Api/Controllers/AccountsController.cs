@@ -10,7 +10,7 @@ namespace Appointments.Api.Controllers;
 [ApiController, Authorize(Roles = "Administrator"), Route("api/accounts"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public sealed class AccountsController(AccountService service, AppointmentsDbContext db) : ApiControllerBase
 {
-    [HttpGet] public async Task<IReadOnlyList<AccountSummary>> List(CancellationToken ct) => (await db.Accounts.AsNoTracking().OrderBy(a => a.Name).ToListAsync(ct)).Select(AccountService.Summary).ToList();
+    [HttpGet] public async Task<IReadOnlyList<AccountSummary>> List(CancellationToken ct) => (await db.Accounts.AsNoTracking().OrderBy(a => a.Name).ThenBy(a => a.Id).ToListAsync(ct)).Select(AccountService.Summary).ToList();
     [HttpPost] public Task<AccountSummary> Create(AccountInput input, CancellationToken ct) => service.CreateAsync(Actor, input, ct);
     [HttpPost("{id}/credentials")] public async Task<object> Credentials(string id, LoginInput input, CancellationToken ct) { await service.CredentialsAsync(Actor, id, input, ct); return new { saved = true }; }
     [HttpPost("{id}/access")] public async Task<object> Access(string id, AccountAccessInput input, CancellationToken ct) { await service.AccessAsync(Actor, id, input.Enabled, ct); return new { saved = true }; }

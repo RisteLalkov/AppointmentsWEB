@@ -1,11 +1,11 @@
-@model List<Appointments.Contracts.AccountSummary>
+@model Appointments.Web.Models.AccountManagementViewModel
 @{ ViewData["Title"] = T("Управување со сметки"); var workspace = ViewData["Workspace"] as Appointments.Contracts.BootstrapResponse; }
 <main class="account-admin">
     <a class="brand" href="/"><partial name="_BrandMark" /> МедТермин.</a>
     <p class="clinic-context">@T("Клиника:") <strong>@User.FindFirst("clinicName")?.Value</strong></p>
     <div class="page-heading"><div><span class="eyebrow">@T("РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА")</span><h1>@T("Корисници и пристап")</h1><p class="muted">@T("Управувајте со пристапот на пациентите и медицинскиот тим.")</p></div><a class="btn secondary" href="/">@T("Назад во работниот простор")</a></div>
     @if (ViewData["Error"] is string error || TempData["Error"] is string) { <div class="inline-error" role="alert">@(ViewData["Error"] ?? TempData["Error"])</div> }
-    @if (TempData["Notice"] is string notice) { <div class="inline-note" role="status">@notice</div> }
+    @if (TempData["Notice"] is string notice) { <div class="success-notice" role="status" tabindex="-1"><span class="success-notice-icon" aria-hidden="true">@Icon("circle-check")</span><div><strong>@T("Постапката е успешна")</strong><p>@notice</p></div></div> }
     <section class="card account-section account-create-section" aria-labelledby="create-account-title">
         <div class="account-create-heading"><span class="eyebrow">@T("НОВ КОРИСНИК")</span><h2 id="create-account-title">@T("Создај сметка")</h2><p>@T("Изберете улога и поврзете го соодветниот профил.")</p></div>
         <form asp-action="Create" method="post" class="account-grid" id="account-create-form">
@@ -13,20 +13,36 @@
             <div class="field"><label for="email">@T("Е-пошта за најава")</label><input id="email" name="Email" type="email" required maxlength="120" autocomplete="off"></div>
             <div class="account-role-panel">
                 <div class="field"><label for="role">@T("Улога")</label><select id="role" name="Role" aria-describedby="account-role-help"><option value="Patient">@T("Пациент")</option><option value="Doctor">@T("Лекар")</option><option value="Administrator">@T("Администратор")</option></select></div>
-                <div class="field" data-account-profile="Patient"><label for="patient">@T("Пациентски профил")</label><select id="patient" name="PatientId"><option value="">@T("Изберете пациент")</option>@foreach(var p in (workspace?.Patients ?? []).Where(p => !Model.Any(a => a.PatientId == p.Id))) { <option value="@p.Id">@p.Name</option> }</select></div>
-                <div class="field" data-account-profile="Doctor"><label for="doctor">@T("Лекарски профил")</label><select id="doctor" name="DoctorId"><option value="">@T("Изберете лекар")</option>@foreach(var d in (workspace?.Doctors ?? []).Where(d => !d.IsService && !Model.Any(a => a.DoctorId == d.Id))) { <option value="@d.Id">@d.Name</option> }</select></div>
+                <div class="field" data-account-profile="Patient"><label for="patient">@T("Пациентски профил")</label><select id="patient" name="PatientId"><option value="">@T("Изберете пациент")</option>@foreach(var p in (workspace?.Patients ?? []).Where(p => !Model.AllAccounts.Any(a => a.PatientId == p.Id))) { <option value="@p.Id">@p.Name · @(p.Number > 0 ? $"PT-{p.Number:D6}" : p.Id)@(string.IsNullOrEmpty(p.Email) ? "" : " · " + p.Email)@(string.IsNullOrEmpty(p.Phone) ? "" : " · " + p.Phone)</option> }</select></div>
+                <div class="field" data-account-profile="Doctor"><label for="doctor">@T("Лекарски профил")</label><select id="doctor" name="DoctorId"><option value="">@T("Изберете лекар")</option>@foreach(var d in (workspace?.Doctors ?? []).Where(d => !d.IsService && !Model.AllAccounts.Any(a => a.DoctorId == d.Id))) { <option value="@d.Id">@d.Name</option> }</select></div>
                 <p class="account-role-help" id="account-role-help" role="status">@T("Пациентите и лекарите се поврзуваат со постоечки профил. Администраторите немаат поврзан профил.")</p>
             </div>
             <div class="field account-initial-password"><label for="password">@T("Почетна лозинка")</label><input id="password" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password" aria-describedby="account-password-help"><small id="account-password-help">@T("Од 12 до 128 знаци. Споделете ја лозинката приватно со корисникот.")</small></div>
             <div class="account-create-footer"><p>@T("Секој профил може да има една сметка. Нов пациентски профил се додава во работниот простор.")</p><button class="btn primary" type="submit">@T("Создај сметка") <span aria-hidden="true">@Icon("arrow-right")</span></button></div>
         </form>
     </section>
-    <section class="card account-section"><h2>@T("Постоечки сметки")</h2><p class="muted">@T("Управувајте со пристапот и податоците за најава. Промената на лозинка ги одјавува сите сесии на сметката. Споделете ги новите податоци приватно; не се испраќа е-пошта.")</p>
-    <div class="account-list">@foreach(var a in Model) {
+    <section class="card account-section" id="existing-accounts"><h2>@T("Постоечки сметки")</h2><p class="muted">@T("Управувајте со пристапот и податоците за најава. Промената на лозинка ги одјавува сите сесии на сметката. Споделете ги новите податоци приватно; не се испраќа е-пошта.")</p>
+    <form method="get" action="/Accounts#existing-accounts" class="account-list-filters" role="search">
+        <div class="field"><label for="account-search">@T("Пребарај сметки")</label><input id="account-search" name="search" value="@Model.Search" maxlength="120" placeholder="@T("Име или е-пошта…")" type="search"></div>
+        <div class="field"><label for="account-role-filter">@T("Улога")</label><select id="account-role-filter" name="role"><option value="">@T("Сите улоги")</option>@foreach (var role in Enum.GetValues<DemoRole>()) { <option value="@role" selected="@(Model.Role == role.ToString())">@role.RoleLabel()</option> }</select></div>
+        <div class="field"><label for="account-status-filter">@T("Пристап")</label><select id="account-status-filter" name="status"><option value="">@T("Сите состојби")</option><option value="enabled" selected="@(Model.Status == "enabled")">@T("Овозможена")</option><option value="disabled" selected="@(Model.Status == "disabled")">@T("Оневозможена")</option></select></div>
+        <div class="account-filter-actions"><button class="btn primary small" type="submit">@Icon("search") @T("Пребарај")</button><a class="btn secondary small" href="/Accounts#existing-accounts">@T("Исчисти")</a></div>
+    </form>
+    <p class="results-count" role="status" id="account-results-count">@T("Пронајдени: {0} од {1} сметки.", Model.Matches, Model.AllAccounts.Count)</p>
+    <div class="account-list">@foreach(var a in Model.Accounts) {
         <article class="account-row"><div><strong>@a.Name</strong><p>@a.Email</p><span class="badge">@a.Role.RoleLabel() · @(a.Enabled ? T("Овозможена") : T("Оневозможена"))</span></div>
-        <div class="account-actions"><form asp-action="Access" method="post"><input name="id" type="hidden" value="@a.Id"><input name="enabled" type="hidden" value="@(a.Enabled ? "false" : "true")"><button class="btn secondary small" type="submit">@(a.Enabled ? T("Оневозможи пристап") : T("Овозможи пристап"))</button></form>
-        <details><summary>@T("Постави податоци за најава")</summary><form asp-action="Credentials" method="post"><input name="id" type="hidden" value="@a.Id"><div class="field"><label for="email-@a.Id">@T("Е-пошта")</label><input id="email-@a.Id" name="Email" value="@a.Email" type="email" required maxlength="120" autocomplete="off"></div><div class="field"><label for="password-@a.Id">@T("Нова лозинка")</label><input id="password-@a.Id" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div><button class="btn primary small" type="submit">@T("Зачувај и одјави ги сите сесии")</button></form></details></div></article>
-    }</div></section>
+        <div class="account-actions"><form asp-action="Access" method="post"><input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}#existing-accounts")"><input name="id" type="hidden" value="@a.Id"><input name="enabled" type="hidden" value="@(a.Enabled ? "false" : "true")"><button class="btn secondary small" type="submit">@(a.Enabled ? T("Оневозможи пристап") : T("Овозможи пристап"))</button></form>
+        <details><summary>@T("Постави податоци за најава")</summary><form asp-action="Credentials" method="post"><input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}#existing-accounts")"><input name="id" type="hidden" value="@a.Id"><div class="field"><label for="email-@a.Id">@T("Е-пошта")</label><input id="email-@a.Id" name="Email" value="@a.Email" type="email" required maxlength="120" autocomplete="off"></div><div class="field"><label for="password-@a.Id">@T("Нова лозинка")</label><input id="password-@a.Id" name="Password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></div><button class="btn primary small" type="submit">@T("Зачувај и одјави ги сите сесии")</button></form></details></div></article>
+    }</div>
+    @if (Model.Matches == 0) { <p class="account-empty">@T("Нема сметки што одговараат на избраните филтри.")</p> }
+    @if (Model.Pages > 1) {
+        <nav class="account-pagination" aria-label="@T("Страници со сметки")">
+            @if (Model.Page > 1) { <a class="btn secondary small" asp-action="Index" asp-route-search="@Model.Search" asp-route-role="@Model.Role" asp-route-status="@Model.Status" asp-route-page="@(Model.Page - 1)" asp-fragment="existing-accounts">@Icon("chevron-left") @T("Претходна")</a> }
+            <span>@T("Страница {0} од {1}", Model.Page, Model.Pages)</span>
+            @if (Model.Page < Model.Pages) { <a class="btn secondary small" asp-action="Index" asp-route-search="@Model.Search" asp-route-role="@Model.Role" asp-route-status="@Model.Status" asp-route-page="@(Model.Page + 1)" asp-fragment="existing-accounts">@T("Следна") @Icon("chevron-right")</a> }
+        </nav>
+    }
+    </section>
 </main>
 
-@section Scripts { <script src="~/js/account-create.js" asp-append-version="true"></script> }
+@section Scripts { <script src="~/js/account-create.js" asp-append-version="true"></script><script src="~/js/accounts.js" asp-append-version="true"></script> }

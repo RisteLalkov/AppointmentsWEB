@@ -345,6 +345,12 @@ namespace Appointments.Data.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
+                    b.Property<long>("Number")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Number"));
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -362,8 +368,13 @@ namespace Appointments.Data.Migrations
                         .IsUnique()
                         .HasFilter("\"Email\" <> ''");
 
+                    b.HasIndex("Number")
+                        .IsUnique();
+
                     b.ToTable("Patients", null, t =>
                         {
+                            t.HasCheckConstraint("CK_Patient_Number", "\"Number\" > 0");
+
                             t.HasCheckConstraint("CK_Patient_Version", "\"Version\" > 0");
                         });
                 });

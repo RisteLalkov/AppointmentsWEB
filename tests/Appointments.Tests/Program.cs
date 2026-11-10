@@ -390,6 +390,19 @@ Test("Concurrent requests keep their own interface language", () => {
         Equal(english ? "Doctor" : "Лекар", UiText.T("Лекар"));
     });
 });
+Test("Patient numbers backfill legacy demo records and remain unique across concurrent additions and edits", () => {
+    using var f=New();
+    var original=f.Service.Patients(admin).ToDictionary(p=>p.Id,p=>p.Number);
+    True(original.Values.All(n=>n>0));Equal(original.Count,original.Values.Distinct().Count());
+    Parallel.For(0,12,i=>f.Service.AddPatient(admin,"Same name","", ""));
+    var all=f.Service.Patients(admin);Equal(all.Count,all.Select(p=>p.Number).Distinct().Count());
+    var p=all.First();var updated=f.Service.UpdatePatient(admin,p.Id,new("Renamed patient",p.Email,p.Phone,p.Version));
+    Equal(p.Number,updated.Number);Equal(p.Id,updated.Id);
+    foreach(var item in original)Equal(item.Value,all.Single(p=>p.Id==item.Key).Number);
+    f.Store.Dispose();using var reopened=new JsonDemoStore(f.Path,f.Seed);
+    Equal(all.Count,reopened.Read(state=>state.Patients.Count));
+    foreach(var patient in all)Equal(patient.Number,reopened.Read(state=>state.Patients.Single(p=>p.Id==patient.Id).Number));
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

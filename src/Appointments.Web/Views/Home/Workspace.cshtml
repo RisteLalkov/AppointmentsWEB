@@ -5,6 +5,7 @@
 <a class="skip-link" href="#main-content">@T("Прескокни до содржината")</a>
 <div class="app-shell">
     <aside class="sidebar" id="sidebar" tabindex="0" aria-label="@T("Навигација и корисничка сметка")">
+        <button type="button" class="icon-button sidebar-close" id="close-navigation" aria-label="@T("Затвори навигација")">@Icon("x")</button>
         <a class="brand" href="/"><partial name="_BrandMark" /> МедТермин<span class="brand-dot">.</span></a>
         @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">@T("КЛИНИКА")</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? T("РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА") : Model.Role == DemoRole.Doctor ? T("РАБОТЕН ПРОСТОР ЗА ЛЕКАР") : T("РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ"))</div>
@@ -35,10 +36,11 @@
                 @if (Backend.DemoEnabled) {
                     <a class="switch-user" href="/Demo"><span aria-hidden="true">@Icon("arrow-left-right")</span> @T("Промени демо-корисник")</a>
                 }
-                <div class="demo-label"><span class="dot" aria-hidden="true"></span> @(isDemo ? T("ДЕМО-РЕЖИМ") : T("ПОВРЗАНО"))</div>
+                @if (isDemo) { <div class="demo-label"><span class="dot" aria-hidden="true"></span> @T("ДЕМО-РЕЖИМ")</div> }
             </div>
         </div>
     </aside>
+    <button type="button" class="navigation-backdrop" id="navigation-backdrop" aria-label="@T("Затвори навигација")" tabindex="-1" hidden></button>
     <div class="main-shell">
         <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="@T("Отвори или затвори навигација")" aria-expanded="false">@Icon("menu")</button><span class="breadcrumb">@T("Работен простор") <span>/</span> <strong id="page-label">@T("Преглед")</strong></span></div><div class="topbar-right">
             <button type="button" class="account-trigger" id="account-menu-button" aria-haspopup="dialog" aria-controls="account-settings-dialog" aria-expanded="false" aria-label="@T("Поставки на сметката за {0}", Model.Name)">
@@ -59,6 +61,7 @@
 @section Styles { <link rel="stylesheet" href="~/css/account-settings.css" asp-append-version="true" /> }
 @section Scripts {
     <script src="~/js/account-settings.js" asp-append-version="true"></script>
+    <script src="~/js/navigation-drawer.js" asp-append-version="true"></script>
     <script src="~/vendor/fullcalendar.min.js" asp-append-version="true"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
 }

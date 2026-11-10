@@ -2623,3 +2623,57 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
   .period-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 28px; gap: 8px; }
   .period-row .period-day { grid-column: 1 / -1; }
 }
+
+/* Day-first entry with the browser's native calendar and unchanged ISO submission values. */
+.localized-date { display: block; position: relative; min-width: 0; width: 100%; }
+.localized-date .localized-date-display { width: 100%; min-width: 0; padding-right: 52px; font-variant-numeric: tabular-nums; }
+.localized-date .localized-date-native { position: absolute; inset: 0 0 0 auto; width: 44px; min-width: 0; max-width: 44px; height: 100%; padding: 0; margin: 0; opacity: 0; cursor: pointer; z-index: 1; }
+.localized-date-native::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; cursor: pointer; }
+.localized-date-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: flex; color: var(--green-dark); pointer-events: none; }
+.localized-date-icon .ui-icon { width: 20px; height: 20px; }
+.localized-date-native:focus-visible ~ .localized-date-icon { outline: 2px solid var(--focus); outline-offset: 5px; border-radius: 3px; }
+.localized-date:has(input:disabled) .localized-date-icon { opacity: .4; }
+.localized-date-display[aria-invalid="true"] { border-color: var(--theme-danger, #a33a31); }
+
+/* A dismissible mobile drawer with an independent backdrop and visible close control. */
+.sidebar-close, .navigation-backdrop { display: none; }
+@media (max-width: 650px) {
+  body.navigation-open { overflow: hidden; }
+  .sidebar-close { display: inline-flex; position: absolute; top: 7px; right: 7px; width: 34px; height: 34px; z-index: 1; }
+  .sidebar .brand { padding-right: 16px; font-size: 20px; }
+  .navigation-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 29; width: 100%; height: 100dvh; padding: 0; border: 0; border-radius: 0; background: #133b4659; cursor: pointer; }
+}
+
+.patient-number { display: block; margin: 7px 0 10px; color: var(--green-dark); font-size: .8125rem; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
+.patient-code { display: inline-block; padding: 5px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--theme-info-soft, #eef5f8); color: var(--green-dark); font-weight: 650; font-variant-numeric: tabular-nums; }
+.detail-list .patient-number { margin-bottom: 0; }
+#patient-results .records-table table { min-width: 1100px; }
+#patient-results .records-table th:nth-child(1) { width: 13%; }
+#patient-results .records-table th:nth-child(2) { width: 20%; }
+#patient-results .records-table th:nth-child(3) { width: 23%; }
+#patient-results .records-table th:nth-child(4) { width: 17%; }
+#patient-results .records-table th:nth-child(5) { width: 27%; }
+.patient-actions .record-action span { overflow-wrap: anywhere; }
+
+/* Fixed column boundaries keep long group labels away from report totals. */
+.report-table-card table { table-layout: fixed; min-width: 1700px; }
+.report-table-card thead th { white-space: normal; overflow-wrap: normal; text-align: right; padding: 14px 12px; font-size: .8125rem; letter-spacing: .35px; }
+.report-table-card thead th:first-child { width: 280px; text-align: left; }
+.report-table-card tbody th { max-width: none; white-space: normal; overflow-wrap: anywhere; line-height: 1.55; padding: 14px 16px; text-transform: none; letter-spacing: 0; }
+.report-table-card td { text-align: right; padding: 14px 12px; }
+
+.success-notice { display: flex; align-items: flex-start; gap: 14px; margin: 22px 0; padding: 19px 21px; border: 1px solid var(--line); border-left: 4px solid var(--theme-success, #176544); border-radius: 13px; background: var(--theme-success-soft, #e5f5ec); color: var(--theme-success, #175939); }
+.success-notice-icon { display: flex; flex: 0 0 auto; margin-top: 2px; }
+.success-notice-icon .ui-icon { width: 25px; height: 25px; }
+.success-notice strong { display: block; font-size: 1.0625rem; font-weight: 700; }
+.success-notice p { margin: 6px 0 0; line-height: 1.6; overflow-wrap: anywhere; }
+.success-notice:focus { outline: 2px solid var(--theme-success, #176544); outline-offset: 3px; }
+.account-list-filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)); align-items: end; gap: 15px 18px; margin: 24px 0 16px; padding: 20px; background: var(--theme-info-soft, #f2f7fa); border: 1px solid var(--line); border-radius: 13px; }
+.account-list-filters .field { margin: 0; min-width: 0; }
+.account-filter-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 9px; }
+.account-pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px; margin: 24px 0 0; }
+.account-pagination span { font-size: .9375rem; color: var(--muted); }
+.account-empty { padding: 25px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); }
+#existing-accounts { scroll-margin-top: 20px; }
+@media (max-width: 650px) { .account-list-filters { grid-template-columns: minmax(0, 1fr); padding: 16px; } }
+@media print { .navigation-backdrop, .sidebar-close, .localized-date-native, .localized-date-icon { display: none !important; } }

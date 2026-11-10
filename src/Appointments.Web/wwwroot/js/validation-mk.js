@@ -3,10 +3,11 @@
 const { t: tr, html, locale } = window.MedTerminI18n;
 const icon = window.MedTerminIcons.icon;
 // Translate native constraint-validation messages, including dynamically added forms.
-// Date/time input widgets themselves follow the browser/operating-system language.
+// Localized date controls own their strict format/range validation.
 (() => {
   document.addEventListener("invalid", (event) => {
     const field = event.target;
+    if (field.closest?.(".localized-date")) return;
     if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) return;
     field.setCustomValidity("");
     const validity = field.validity;
@@ -23,7 +24,7 @@ const icon = window.MedTerminIcons.icon;
   }, true);
   for (const name of ["input", "change"]) {
     document.addEventListener(name, (event) => {
-      if (typeof event.target.setCustomValidity === "function") event.target.setCustomValidity("");
+      if (!event.target.closest?.(".localized-date") && typeof event.target.setCustomValidity === "function") event.target.setCustomValidity("");
     });
   }
 })();

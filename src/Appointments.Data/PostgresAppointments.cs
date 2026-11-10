@@ -146,7 +146,8 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         {
             // Normalizing addresses makes the unique index case-insensitive by construction.
             var email = (input.Email ?? "").Trim().ToLowerInvariant();
-            var patient = Rules(new()).AddPatient(actor, input.Name, email, input.Phone ?? "") with { IsDemonstration = demo };
+            // PostgreSQL allocates the clinic's number atomically, including concurrent registrations.
+            var patient = Rules(new()).AddPatient(actor, input.Name, email, input.Phone ?? "") with { IsDemonstration = demo, Number = 0 };
             db.Patients.Add(patient);
             if (demo) db.Accounts.Add(new() { Id = patient.Id, Email = patient.Id + "@demo.example.test", NormalizedEmail = patient.Id + "@demo.example.test", Name = patient.Name, Role = DemoRole.Patient, PatientId = patient.Id, IsDemo = true });
             Audit(actor, "patient.created", patient.Id); await db.SaveChangesAsync(ct); return patient;

@@ -369,7 +369,7 @@ try {
   patientInput.dispatchEvent(new admin.w.Event('input', {bubbles:true}));
   assert(admin.$('#booking-patient-list').textContent.includes('Other session update'), "Patient field directly filters its dropdown");
   admin.click('#booking-patient-list [role="option"]');
-  assert(admin.$('#booking-patient').value === contact.id && patientInput.value === 'Other session update', "Patient dropdown commits the actual patient ID and display name");
+  assert(admin.$('#booking-patient').value === contact.id && patientInput.value.startsWith('Other session update · PT-'), "Patient dropdown commits the patient ID and displays a stable patient number");
   admin.click("#close-dialog");
   await pat.page("profile");
   await until(() => pat.$("#profile-appointments"));

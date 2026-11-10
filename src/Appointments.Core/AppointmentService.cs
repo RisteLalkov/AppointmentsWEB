@@ -146,7 +146,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
         return store.Write(s =>
         {
             UniquePatientEmail(s, email);
-            var patient = new Patient(Guid.NewGuid().ToString("N"), name, email, phone); s.Patients.Add(patient); return patient;
+            var patient = new Patient(Guid.NewGuid().ToString("N"), name, email, phone) { Number = checked(s.Patients.Select(p => p.Number).DefaultIfEmpty().Max() + 1) }; s.Patients.Add(patient); return patient;
         });
     }
     public PatientDetailsResult PatientDetails(DemoActor actor, string id) => store.Read(s =>

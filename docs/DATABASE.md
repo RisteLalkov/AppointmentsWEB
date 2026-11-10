@@ -22,6 +22,19 @@ dotnet ef migrations script --idempotent --project src/Appointments.Data --start
 
 The design-time factory builds the model without connecting to PostgreSQL. Do not edit an already deployed migration; add another. Review manually authored exclusion SQL when generating future migrations because EF's model snapshot does not represent it. Test migrations on a restored copy before production. Use a privileged migration role for DDL and extension installation; the normal API account should have only needed table/sequence DML privileges. The local Compose development owner is intentionally not a production privilege template.
 
+## Patient numbers (10 November 2026)
+
+Migration `20261110091110_PatientNumbers` adds a positive, unique PostgreSQL identity column, `Patients.Number`, in each clinic schema. Existing patients receive numbers automatically; their original IDs, contacts, accounts, appointments and history stay intact. The Web formats these as `PT-000001` and shows them in the directory, profile and booking flow. Numbers belong to one clinic, remain unchanged when contacts are edited, and may contain gaps. They are identifiers, not patient counts or proof of identity. Concurrent staff additions and public registrations use the database sequence, not a browser counter.
+
+Publish both API and Web from the same revision. Back up the clinic database, stop both IIS applications, and run the published API's normal `--migrate` maintenance command using its existing server settings before restarting either application:
+
+```powershell
+Set-Location C:\inetpub\AppointmentsAPI
+dotnet .\Appointments.Api.dll --migrate
+```
+
+Run this on the application server, in the actual API publish folder. The API connects to the configured PostgreSQL server and upgrades the registered clinic schemas; there is no need to run commands on the database server, reset data, re-import patients, or seed a preview. Keep `appointments_platform` configured so platform-managed clinics are included. Wait for a successful exit before restarting IIS. This release does not add a platform-database schema change.
+
 ## Configuration
 
 | Setting | Host | Meaning |
