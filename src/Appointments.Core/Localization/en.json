@@ -312,7 +312,7 @@
   "Исклучокот не е пронајден.": "The exception was not found.",
   "Исклучоци и отсуства": "Exceptions and absences",
   "Искористеност ≈": "Utilisation ≈",
-  "Искористеноста е приближна: зафатени минути / минути достапни за целосни прегледи, според сегашното работно време и зачуваните исклучоци. Се сметаат сите неоткажани термини, вклучувајќи недоаѓања. Не се чуваат историски верзии на распоредот; правилото „прво вторник“ не го намалува физичкиот капацитет. При нула капацитет се прикажува „—“.": "Utilisation is approximate: booked minutes / minutes available for full appointments, based on current working hours and saved exceptions. All non-cancelled appointments count, including no-shows. Historical schedule versions are not stored; the “Tuesday first” rule does not reduce physical capacity. Zero capacity is displayed as “—”.",
+  "Искористеноста е приближна: зафатени минути / минути достапни за целосни прегледи, според сегашното работно време и зачуваните исклучоци. Се сметаат сите неоткажани термини, вклучувајќи недоаѓања. Не се чуваат историски верзии на распоредот. При нула капацитет се прикажува „—“.": "Utilisation is approximate: booked minutes / minutes available for full appointments, based on current working hours and saved exceptions. All non-cancelled appointments count, including no-shows. Historical schedule versions are not stored. Zero capacity is displayed as “—”.",
   "Искористеноста е проценка според сегашниот распоред.": "Utilisation is estimated from the current schedule.",
   "Истече времето за одговор од серверот. Освежете пред да се обидете повторно; последната промена можеби е зачувана.": "The server response timed out. Refresh before trying again; your last change may have been saved.",
   "Историја на вашите термини": "Your appointment history",
@@ -1110,5 +1110,13 @@
   "Изберете важечки период во следните 180 дена.": "Choose a valid date range within the next 180 days.",
   "Немате пристап до друг пациент.": "You do not have access to another patient.",
   "Изберете од 1 до 100 лекари.": "Choose between 1 and 100 doctors.",
-  "Немате пристап до друг лекар.": "You do not have access to another doctor."
+  "Немате пристап до друг лекар.": "You do not have access to another doctor.",
+  "Изберете датум од денес до следните 180 дена и период во цели минути во истиот ден.": "Choose a date within the next 180 days and a same-day time range in whole minutes.",
+  "Датумот не може да се претстави во избраната временска зона.": "The date cannot be represented in the selected time zone.",
+  "Терминот е зачуван. Освежете за најновите податоци.": "The appointment is saved. Refresh to see the latest details.",
+  "Терминот е зачуван, но освежувањето не успеа. Обидете се повторно подоцна.": "The appointment is saved, but the refresh failed. Try refreshing again later.",
+  "Вчитај ја тековната состојба": "Load the current details",
+  "Промените се зачувани, но освежувањето не успеа. Освежете подоцна.": "Your changes are saved, but the refresh failed. Try refreshing again later.",
+  "Барањето е преголемо.": "The request is too large.",
+  "Невалидно HTTP барање.": "Invalid HTTP request."
 }

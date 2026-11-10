@@ -100,6 +100,12 @@ app.Use(async (context, next) =>
     try { await next(); }
     catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
     catch (RuleException e) { context.Response.StatusCode = e.StatusCode; await context.Response.WriteAsJsonAsync(new { error = e.Message }); }
+    catch (BadHttpRequestException e)
+    {
+        context.Response.StatusCode = e.StatusCode;
+        await context.Response.WriteAsJsonAsync(new { error = e.StatusCode == StatusCodes.Status413PayloadTooLarge
+            ? UiText.T("Барањето е преголемо.") : UiText.T("Невалидно HTTP барање.") });
+    }
     catch (Exception e) when (e is NpgsqlException or DbUpdateException)
     {
         app.Logger.LogError(e, "Database request failed."); context.Response.StatusCode = 503;

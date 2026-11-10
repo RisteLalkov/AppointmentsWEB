@@ -1,0 +1,1316 @@
+[
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "Id",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "Email",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "PasswordHash",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "Enabled",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": "true"
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "FailedAttempts",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": "0"
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "LockedUntil",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "HomeClinicId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "column_name": "CreatedAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": "now()"
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "column_name": "PatientAccountId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "column_name": "ClinicId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "column_name": "AppointmentId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "column_name": "Start",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "column_name": "End",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "column_name": "Id",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "column_name": "PatientAccountId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "column_name": "ActorId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "column_name": "ActorType",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "column_name": "Action",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "column_name": "OccurredAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": "now()"
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "column_name": "PatientAccountId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "column_name": "ClinicId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "column_name": "AccountId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "column_name": "PatientId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "column_name": "PatientNumber",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientSessions",
+    "column_name": "TokenHash",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientSessions",
+    "column_name": "PatientAccountId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "PatientSessions",
+    "column_name": "ExpiresAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "accounts",
+    "column_name": "email",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "accounts",
+    "column_name": "clinic_id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "accounts",
+    "column_name": "account_id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "accounts",
+    "column_name": "is_demo",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "clinics",
+    "column_name": "clinic_id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "careline_identity",
+    "table_name": "clinics",
+    "column_name": "schema_name",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "Id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "Email",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "NormalizedEmail",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "PasswordHash",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "Role",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "DoctorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "PatientId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "Enabled",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "IsDemo",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "FailedAttempts",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "LockedUntil",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "CreatedAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Accounts",
+    "column_name": "GlobalPatientId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "Id",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "AppointmentId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "AppointmentVersion",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "Kind",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "ActorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "ActorName",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "ActorRole",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "OccurredAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "BeforeStart",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "BeforeEnd",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "BeforeStatus",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "AfterStart",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "AfterEnd",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AppointmentHistory",
+    "column_name": "AfterStatus",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "Id",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "DoctorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "PatientId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "Start",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "End",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "Status",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "Version",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "CreatedBy",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "UpdatedAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "RequestId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "ServiceId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Appointments",
+    "column_name": "ServiceName",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AuditEvents",
+    "column_name": "Id",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AuditEvents",
+    "column_name": "ActorId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AuditEvents",
+    "column_name": "Action",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AuditEvents",
+    "column_name": "TargetId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AuditEvents",
+    "column_name": "OccurredAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "Id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "DoctorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "Date",
+    "data_type": "date",
+    "udt_name": "date",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "Start",
+    "data_type": "time without time zone",
+    "udt_name": "time",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "End",
+    "data_type": "time without time zone",
+    "udt_name": "time",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "IsAvailable",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "column_name": "Reason",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "DoctorServices",
+    "column_name": "DoctorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "DoctorServices",
+    "column_name": "ServiceId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "Id",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "Specialty",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "BookingMethod",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "Funding",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "IsService",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "RequiresConfirmation",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "StaffOnly",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "TuesdayFirst",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "DurationMinutes",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "DemoScheduleEdited",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "ScheduleVersion",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": "1"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "CatalogVersion",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": "1"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "Enabled",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": "true"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "SpecialtyId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Doctors",
+    "column_name": "Subspecialty",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": "''::character varying"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "IdempotencyRequests",
+    "column_name": "AccountId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "IdempotencyRequests",
+    "column_name": "RequestId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "IdempotencyRequests",
+    "column_name": "Fingerprint",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "IdempotencyRequests",
+    "column_name": "ResponseJson",
+    "data_type": "jsonb",
+    "udt_name": "jsonb",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "IdempotencyRequests",
+    "column_name": "CreatedAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "Id",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "Email",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "Phone",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "IsDemonstration",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "Version",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": "1"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Patients",
+    "column_name": "Number",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Services",
+    "column_name": "Id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Services",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Services",
+    "column_name": "SpecialtyId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Services",
+    "column_name": "DurationMinutes",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Services",
+    "column_name": "Enabled",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Services",
+    "column_name": "Version",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Sessions",
+    "column_name": "TokenHash",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Sessions",
+    "column_name": "AccountId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Sessions",
+    "column_name": "ExpiresAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Sessions",
+    "column_name": "IsDemo",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Settings",
+    "column_name": "Key",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Settings",
+    "column_name": "Value",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "Id",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "Row",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "Days",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "Start",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "End",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "Type",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "Note",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "SourceSchedules",
+    "column_name": "DoctorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Specialties",
+    "column_name": "Id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Specialties",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "Specialties",
+    "column_name": "Version",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "WorkingPeriods",
+    "column_name": "Id",
+    "data_type": "bigint",
+    "udt_name": "int8",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "WorkingPeriods",
+    "column_name": "Day",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "WorkingPeriods",
+    "column_name": "Start",
+    "data_type": "time without time zone",
+    "udt_name": "time",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "WorkingPeriods",
+    "column_name": "End",
+    "data_type": "time without time zone",
+    "udt_name": "time",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "WorkingPeriods",
+    "column_name": "DoctorId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "__EFMigrationsHistory",
+    "column_name": "MigrationId",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "__EFMigrationsHistory",
+    "column_name": "ProductVersion",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  }
+]

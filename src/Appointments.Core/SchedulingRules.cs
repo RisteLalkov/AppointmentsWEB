@@ -4,6 +4,10 @@ public static class SchedulingRules
 {
     public static bool Active(Appointment a) => a.Status != AppointmentStatus.Cancelled;
     public static bool Overlaps(DateTimeOffset a, DateTimeOffset b, DateTimeOffset c, DateTimeOffset d) => a < d && c < b;
+    public static bool MinuteAligned(TimeOnly time) => time.Ticks % TimeSpan.TicksPerMinute == 0;
+    public static bool PatientAvailable(DemoState state, string patientId, DateTimeOffset start, DateTimeOffset end, string? excludeId = null) =>
+        !state.Appointments.Any(a => a.Id != excludeId && a.PatientId == patientId && Active(a) && Overlaps(start,end,a.Start,a.End))
+        && !state.PatientBusyPeriods.Any(b => b.PatientId == patientId && Overlaps(start,end,b.Start,b.End));
     public static List<Slot> Slots(DemoState state, Doctor doctor, DateOnly date, SchedulingClock clock, string? excludeId = null, bool includePast = false)
     {
         if (!includePast && (date < clock.Today || date > clock.Today.AddDays(180))) return [];
@@ -13,6 +17,8 @@ public static class SchedulingRules
         var results = new List<Slot>();
         foreach (var (start, end) in periods)
         {
+            // Fail closed for invalid legacy/imported values instead of rounding outside their hours.
+            if (!MinuteAligned(start) || !MinuteAligned(end) || start >= end || doctor.DurationMinutes <= 0) continue;
             for (var minute = start.Hour * 60 + start.Minute; minute + doctor.DurationMinutes <= end.Hour * 60 + end.Minute; minute += doctor.DurationMinutes)
             {
                 var time = new TimeOnly(minute / 60, minute % 60);

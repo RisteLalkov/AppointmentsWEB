@@ -22,8 +22,8 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     {
         if (actor.Role != DemoRole.Administrator) throw new RuleException("Извештаите се достапни само за администратори.", 403);
         ReportBuilder.Validate(query);
-        var start = clock.ToInstant(query.From, TimeOnly.MinValue) ?? throw new RuleException("Невалиден почетен датум во временската зона.");
-        var end = clock.ToInstant(query.To.AddDays(1), TimeOnly.MinValue) ?? throw new RuleException("Невалиден краен датум во временската зона.");
+        var start = clock.StartOfDay(query.From);
+        var end = clock.StartOfDay(query.To.AddDays(1));
         await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
         var state = new DemoState
         {
@@ -98,7 +98,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     public async Task<Appointment> BookAsync(DemoActor actor, BookingCommand command, CancellationToken ct)
     {
         if (!Guid.TryParse(command.RequestId, out var key)) throw new RuleException("Потребен е важечки идентификатор на барањето. Повторно отворете го формуларот за закажување.");
-        command = command with { RequestId = key.ToString("N") };
+        command = command with { RequestId = key.ToString("N"), ServiceId = string.IsNullOrEmpty(command.ServiceId) ? null : command.ServiceId };
         var fingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(command, JsonDemoStore.JsonOptions))));
         return await TransactionAsync(async () =>
         {
@@ -242,7 +242,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
                 var clinic = await db.Settings.Where(s => s.Key == "ClinicId").Select(s => s.Value).SingleAsync(ct);
                 var busy = await db.Database.SqlQuery<PatientBusyInterval>($"SELECT \"Start\", \"End\" FROM careline_identity.\"PatientBookings\" WHERE \"PatientAccountId\"={identity} AND \"ClinicId\"<>{clinic} AND \"End\">={now}").ToListAsync(ct);
                 // Internal rule inputs only: never saved or returned as another clinic's records.
-                state.Appointments.AddRange(busy.Select(b => new Appointment { Id = "global-busy-" + Guid.NewGuid().ToString("N"), DoctorId = "global-busy", PatientId = patientId, Start = b.Start, End = b.End, Status = AppointmentStatus.Confirmed }));
+                state.PatientBusyPeriods.AddRange(busy.Select(b => new PatientBusyPeriod(patientId, b.Start, b.End)));
             }
         }
     }

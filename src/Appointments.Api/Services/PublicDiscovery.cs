@@ -43,8 +43,8 @@ public sealed class PublicDiscovery(ClinicRegistry registry, ClinicConnections c
         if (state.DoctorServices.Count > 0 && state.Services.Count == 0)
             return Result(UiText.T("Во моментов нема услуги достапни за онлајн закажување. Контактирајте ја клиниката."));
         doctor = CatalogueService.ForBooking(state, doctor, serviceId);
-        var from = clock.ToInstant(day, TimeOnly.MinValue)!.Value;
-        var to = clock.ToInstant(day.AddDays(1), TimeOnly.MinValue)!.Value;
+        var from = clock.StartOfDay(day);
+        var to = clock.StartOfDay(day.AddDays(1));
         state.Exceptions = await db.Exceptions.AsNoTracking().Where(e => e.DoctorId == doctorId && e.Date == day).ToListAsync(ct);
         state.Appointments = await db.Appointments.AsNoTracking()
             .Where(a => a.DoctorId == doctorId && a.Status != AppointmentStatus.Cancelled && a.Start < to && a.End > from)

@@ -31,8 +31,7 @@ public static class AvailabilityOverview
     {
         var selected = Patient(state, actor, patientId);
         var slots = rules.Availability(actor, doctorId, date, excludeId, serviceId);
-        return selected == null ? slots : slots.Where(s => !state.Appointments.Any(a => a.Id != excludeId && a.PatientId == selected
-            && SchedulingRules.Active(a) && SchedulingRules.Overlaps(s.Start, s.End, a.Start, a.End))).ToList();
+        return selected == null ? slots : slots.Where(s => SchedulingRules.PatientAvailable(state, selected, s.Start, s.End, excludeId)).ToList();
     }
     public static IReadOnlyList<AvailabilityDay> Days(IAppointmentService rules, DemoState state, DemoActor actor, SchedulingClock clock,
         string doctorId, DateOnly from, DateOnly to, string? excludeId, string? serviceId, string? patientId)

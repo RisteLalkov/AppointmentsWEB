@@ -1,0 +1,115 @@
+{
+  "engine": "axe-core",
+  "version": "4.14.0",
+  "browser": "Chromium 154.0.8037.57",
+  "rules": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21aa"
+  ],
+  "scenarios": [
+    {
+      "role": "Administrator",
+      "path": "overview",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "doctors",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "patients",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "calendar",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "catalogue/specialties",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "catalogue/services",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "reports",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "appointments",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "doctors",
+      "theme": "dark",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Administrator",
+      "path": "doctors",
+      "theme": "vibrant",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Doctor",
+      "path": "overview",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Doctor",
+      "path": "appointments",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Doctor",
+      "path": "calendar",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Doctor",
+      "path": "availability",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Patient",
+      "path": "overview",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Patient",
+      "path": "doctors",
+      "theme": "default",
+      "detectedViolations": 0
+    },
+    {
+      "role": "Patient",
+      "path": "appointments",
+      "theme": "default",
+      "detectedViolations": 0
+    }
+  ],
+  "manualReviewPerformed": false
+}

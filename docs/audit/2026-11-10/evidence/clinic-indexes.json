@@ -1,0 +1,320 @@
+[
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientAccounts",
+    "indexname": "PatientAccounts_Email_key",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientAccounts_Email_key\" ON careline_identity.\"PatientAccounts\" USING btree (\"Email\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientAccounts",
+    "indexname": "PatientAccounts_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientAccounts_pkey\" ON careline_identity.\"PatientAccounts\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientBookings",
+    "indexname": "PatientBookings_PatientAccountId_tstzrange_excl",
+    "indexdef": "CREATE INDEX \"PatientBookings_PatientAccountId_tstzrange_excl\" ON careline_identity.\"PatientBookings\" USING gist (\"PatientAccountId\", tstzrange(\"Start\", \"End\", '[)'::text))"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientBookings",
+    "indexname": "PatientBookings_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientBookings_pkey\" ON careline_identity.\"PatientBookings\" USING btree (\"ClinicId\", \"AppointmentId\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientEvents",
+    "indexname": "PatientEvents_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientEvents_pkey\" ON careline_identity.\"PatientEvents\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientMemberships",
+    "indexname": "PatientMemberships_ClinicId_AccountId_key",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientMemberships_ClinicId_AccountId_key\" ON careline_identity.\"PatientMemberships\" USING btree (\"ClinicId\", \"AccountId\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientMemberships",
+    "indexname": "PatientMemberships_ClinicId_PatientId_key",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientMemberships_ClinicId_PatientId_key\" ON careline_identity.\"PatientMemberships\" USING btree (\"ClinicId\", \"PatientId\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientMemberships",
+    "indexname": "PatientMemberships_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientMemberships_pkey\" ON careline_identity.\"PatientMemberships\" USING btree (\"PatientAccountId\", \"ClinicId\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientSessions",
+    "indexname": "PatientSessions_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PatientSessions_pkey\" ON careline_identity.\"PatientSessions\" USING btree (\"TokenHash\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "PatientSessions",
+    "indexname": "ix_patient_sessions_account",
+    "indexdef": "CREATE INDEX ix_patient_sessions_account ON careline_identity.\"PatientSessions\" USING btree (\"PatientAccountId\")"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "accounts",
+    "indexname": "accounts_pkey",
+    "indexdef": "CREATE UNIQUE INDEX accounts_pkey ON careline_identity.accounts USING btree (clinic_id, account_id)"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "accounts",
+    "indexname": "ix_identity_email",
+    "indexdef": "CREATE INDEX ix_identity_email ON careline_identity.accounts USING btree (email)"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "clinics",
+    "indexname": "clinics_pkey",
+    "indexdef": "CREATE UNIQUE INDEX clinics_pkey ON careline_identity.clinics USING btree (clinic_id)"
+  },
+  {
+    "schemaname": "careline_identity",
+    "tablename": "clinics",
+    "indexname": "clinics_schema_name_key",
+    "indexdef": "CREATE UNIQUE INDEX clinics_schema_name_key ON careline_identity.clinics USING btree (schema_name)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Accounts",
+    "indexname": "IX_Accounts_DoctorId",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Accounts_DoctorId\" ON public.\"Accounts\" USING btree (\"DoctorId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Accounts",
+    "indexname": "IX_Accounts_GlobalPatientId",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Accounts_GlobalPatientId\" ON public.\"Accounts\" USING btree (\"GlobalPatientId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Accounts",
+    "indexname": "IX_Accounts_NormalizedEmail",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Accounts_NormalizedEmail\" ON public.\"Accounts\" USING btree (\"NormalizedEmail\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Accounts",
+    "indexname": "IX_Accounts_PatientId",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Accounts_PatientId\" ON public.\"Accounts\" USING btree (\"PatientId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Accounts",
+    "indexname": "PK_Accounts",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Accounts\" ON public.\"Accounts\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "AppointmentHistory",
+    "indexname": "IX_AppointmentHistory_AppointmentId_AppointmentVersion",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_AppointmentHistory_AppointmentId_AppointmentVersion\" ON public.\"AppointmentHistory\" USING btree (\"AppointmentId\", \"AppointmentVersion\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "AppointmentHistory",
+    "indexname": "PK_AppointmentHistory",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_AppointmentHistory\" ON public.\"AppointmentHistory\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "EX_Appointments_Doctor",
+    "indexdef": "CREATE INDEX \"EX_Appointments_Doctor\" ON public.\"Appointments\" USING gist (\"DoctorId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "EX_Appointments_Patient",
+    "indexdef": "CREATE INDEX \"EX_Appointments_Patient\" ON public.\"Appointments\" USING gist (\"PatientId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "IX_Appointments_CreatedBy_RequestId",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Appointments_CreatedBy_RequestId\" ON public.\"Appointments\" USING btree (\"CreatedBy\", \"RequestId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "IX_Appointments_DoctorId_Start",
+    "indexdef": "CREATE INDEX \"IX_Appointments_DoctorId_Start\" ON public.\"Appointments\" USING btree (\"DoctorId\", \"Start\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "IX_Appointments_PatientId_Start",
+    "indexdef": "CREATE INDEX \"IX_Appointments_PatientId_Start\" ON public.\"Appointments\" USING btree (\"PatientId\", \"Start\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "IX_Appointments_ServiceId",
+    "indexdef": "CREATE INDEX \"IX_Appointments_ServiceId\" ON public.\"Appointments\" USING btree (\"ServiceId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Appointments",
+    "indexname": "PK_Appointments",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Appointments\" ON public.\"Appointments\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "AuditEvents",
+    "indexname": "IX_AuditEvents_OccurredAt",
+    "indexdef": "CREATE INDEX \"IX_AuditEvents_OccurredAt\" ON public.\"AuditEvents\" USING btree (\"OccurredAt\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "AuditEvents",
+    "indexname": "PK_AuditEvents",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_AuditEvents\" ON public.\"AuditEvents\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "AvailabilityExceptions",
+    "indexname": "IX_AvailabilityExceptions_DoctorId_Date",
+    "indexdef": "CREATE INDEX \"IX_AvailabilityExceptions_DoctorId_Date\" ON public.\"AvailabilityExceptions\" USING btree (\"DoctorId\", \"Date\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "AvailabilityExceptions",
+    "indexname": "PK_AvailabilityExceptions",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_AvailabilityExceptions\" ON public.\"AvailabilityExceptions\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "DoctorServices",
+    "indexname": "IX_DoctorServices_ServiceId",
+    "indexdef": "CREATE INDEX \"IX_DoctorServices_ServiceId\" ON public.\"DoctorServices\" USING btree (\"ServiceId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "DoctorServices",
+    "indexname": "PK_DoctorServices",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_DoctorServices\" ON public.\"DoctorServices\" USING btree (\"DoctorId\", \"ServiceId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Doctors",
+    "indexname": "IX_Doctors_SpecialtyId",
+    "indexdef": "CREATE INDEX \"IX_Doctors_SpecialtyId\" ON public.\"Doctors\" USING btree (\"SpecialtyId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Doctors",
+    "indexname": "PK_Doctors",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Doctors\" ON public.\"Doctors\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "IdempotencyRequests",
+    "indexname": "PK_IdempotencyRequests",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_IdempotencyRequests\" ON public.\"IdempotencyRequests\" USING btree (\"AccountId\", \"RequestId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Patients",
+    "indexname": "IX_Patients_Email",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Patients_Email\" ON public.\"Patients\" USING btree (\"Email\") WHERE ((\"Email\")::text <> ''::text)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Patients",
+    "indexname": "IX_Patients_Number",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Patients_Number\" ON public.\"Patients\" USING btree (\"Number\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Patients",
+    "indexname": "PK_Patients",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Patients\" ON public.\"Patients\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Services",
+    "indexname": "IX_Services_SpecialtyId_Name",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Services_SpecialtyId_Name\" ON public.\"Services\" USING btree (\"SpecialtyId\", \"Name\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Services",
+    "indexname": "PK_Services",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Services\" ON public.\"Services\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Sessions",
+    "indexname": "IX_Sessions_AccountId",
+    "indexdef": "CREATE INDEX \"IX_Sessions_AccountId\" ON public.\"Sessions\" USING btree (\"AccountId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Sessions",
+    "indexname": "IX_Sessions_ExpiresAt",
+    "indexdef": "CREATE INDEX \"IX_Sessions_ExpiresAt\" ON public.\"Sessions\" USING btree (\"ExpiresAt\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Sessions",
+    "indexname": "PK_Sessions",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Sessions\" ON public.\"Sessions\" USING btree (\"TokenHash\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Settings",
+    "indexname": "PK_Settings",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Settings\" ON public.\"Settings\" USING btree (\"Key\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "SourceSchedules",
+    "indexname": "IX_SourceSchedules_DoctorId",
+    "indexdef": "CREATE INDEX \"IX_SourceSchedules_DoctorId\" ON public.\"SourceSchedules\" USING btree (\"DoctorId\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "SourceSchedules",
+    "indexname": "PK_SourceSchedules",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_SourceSchedules\" ON public.\"SourceSchedules\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Specialties",
+    "indexname": "IX_Specialties_Name",
+    "indexdef": "CREATE UNIQUE INDEX \"IX_Specialties_Name\" ON public.\"Specialties\" USING btree (\"Name\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "Specialties",
+    "indexname": "PK_Specialties",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_Specialties\" ON public.\"Specialties\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "WorkingPeriods",
+    "indexname": "IX_WorkingPeriods_DoctorId_Day",
+    "indexdef": "CREATE INDEX \"IX_WorkingPeriods_DoctorId_Day\" ON public.\"WorkingPeriods\" USING btree (\"DoctorId\", \"Day\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "WorkingPeriods",
+    "indexname": "PK_WorkingPeriods",
+    "indexdef": "CREATE UNIQUE INDEX \"PK_WorkingPeriods\" ON public.\"WorkingPeriods\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "__EFMigrationsHistory",
+    "indexname": "PK___EFMigrationsHistory",
+    "indexdef": "CREATE UNIQUE INDEX \"PK___EFMigrationsHistory\" ON public.\"__EFMigrationsHistory\" USING btree (\"MigrationId\")"
+  }
+]

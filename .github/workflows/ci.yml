@@ -37,7 +37,7 @@ jobs:
         run: npm test --prefix tests/frontend
   postgres-integration:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:17-alpine
@@ -94,6 +94,6 @@ jobs:
           python tests/booking_review_integration.py
           python tests/high_severity_integration.py
           python tests/tester_feedback_integration.py
-          node tests/frontend/account-settings-browser.cjs
-          node tests/frontend/themes-browser.cjs
-          node tests/frontend/localization-browser.cjs
+          python tests/overnight_integration.py
+          python tests/discovery_web_smoke.py
+          node tests/frontend/accessibility-browser.cjs

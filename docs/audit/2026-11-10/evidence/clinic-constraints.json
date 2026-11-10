@@ -1,0 +1,538 @@
+[
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "conname": "PatientAccounts_Email_key",
+    "contype": "u",
+    "convalidated": true,
+    "definition": "UNIQUE (\"Email\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientAccounts",
+    "conname": "PatientAccounts_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "conname": "PatientBookings_PatientAccountId_fkey",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"PatientAccountId\") REFERENCES careline_identity.\"PatientAccounts\"(\"Id\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "conname": "PatientBookings_PatientAccountId_tstzrange_excl",
+    "contype": "x",
+    "convalidated": true,
+    "definition": "EXCLUDE USING gist (\"PatientAccountId\" WITH =, tstzrange(\"Start\", \"End\", '[)'::text) WITH &&)"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "conname": "PatientBookings_check",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"Start\" < \"End\"))"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientBookings",
+    "conname": "PatientBookings_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"ClinicId\", \"AppointmentId\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "conname": "PatientEvents_ActorType_check",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"ActorType\" = ANY (ARRAY['Patient'::text, 'PlatformOperator'::text])))"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "conname": "PatientEvents_PatientAccountId_fkey",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"PatientAccountId\") REFERENCES careline_identity.\"PatientAccounts\"(\"Id\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientEvents",
+    "conname": "PatientEvents_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "conname": "PatientMemberships_ClinicId_AccountId_key",
+    "contype": "u",
+    "convalidated": true,
+    "definition": "UNIQUE (\"ClinicId\", \"AccountId\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "conname": "PatientMemberships_ClinicId_PatientId_key",
+    "contype": "u",
+    "convalidated": true,
+    "definition": "UNIQUE (\"ClinicId\", \"PatientId\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "conname": "PatientMemberships_PatientAccountId_fkey",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"PatientAccountId\") REFERENCES careline_identity.\"PatientAccounts\"(\"Id\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "conname": "PatientMemberships_PatientNumber_check",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"PatientNumber\" > 0))"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientMemberships",
+    "conname": "PatientMemberships_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"PatientAccountId\", \"ClinicId\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientSessions",
+    "conname": "PatientSessions_PatientAccountId_fkey",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"PatientAccountId\") REFERENCES careline_identity.\"PatientAccounts\"(\"Id\") ON DELETE CASCADE"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "PatientSessions",
+    "conname": "PatientSessions_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"TokenHash\")"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "accounts",
+    "conname": "accounts_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (clinic_id, account_id)"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "clinics",
+    "conname": "clinics_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (clinic_id)"
+  },
+  {
+    "schema": "careline_identity",
+    "table_name": "clinics",
+    "conname": "clinics_schema_name_key",
+    "contype": "u",
+    "convalidated": true,
+    "definition": "UNIQUE (schema_name)"
+  },
+  {
+    "schema": "public",
+    "table_name": "Accounts",
+    "conname": "CK_Account_GlobalPatient",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK (((\"GlobalPatientId\" IS NULL) OR (((\"Role\")::text = 'Patient'::text) AND (NOT \"IsDemo\") AND (\"PasswordHash\" = ''::text))))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Accounts",
+    "conname": "CK_Account_RoleLink",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK (((((\"Role\")::text = 'Patient'::text) AND (\"PatientId\" IS NOT NULL) AND (\"DoctorId\" IS NULL)) OR (((\"Role\")::text = 'Doctor'::text) AND (\"DoctorId\" IS NOT NULL) AND (\"PatientId\" IS NULL)) OR (((\"Role\")::text = 'Administrator'::text) AND (\"DoctorId\" IS NULL) AND (\"PatientId\" IS NULL))))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Accounts",
+    "conname": "FK_Accounts_Doctors_DoctorId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"DoctorId\") REFERENCES \"Doctors\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Accounts",
+    "conname": "FK_Accounts_PatientAccounts_GlobalPatientId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"GlobalPatientId\") REFERENCES careline_identity.\"PatientAccounts\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Accounts",
+    "conname": "FK_Accounts_Patients_PatientId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"PatientId\") REFERENCES \"Patients\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Accounts",
+    "conname": "PK_Accounts",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "AppointmentHistory",
+    "conname": "CK_History_AfterRange",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"AfterStart\" < \"AfterEnd\"))"
+  },
+  {
+    "schema": "public",
+    "table_name": "AppointmentHistory",
+    "conname": "CK_History_Before",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK (((((\"Kind\")::text = 'Created'::text) AND (\"BeforeStart\" IS NULL) AND (\"BeforeEnd\" IS NULL) AND (\"BeforeStatus\" IS NULL)) OR (((\"Kind\")::text <> 'Created'::text) AND (\"BeforeStart\" IS NOT NULL) AND (\"BeforeEnd\" IS NOT NULL) AND (\"BeforeStart\" < \"BeforeEnd\") AND (\"BeforeStatus\" IS NOT NULL))))"
+  },
+  {
+    "schema": "public",
+    "table_name": "AppointmentHistory",
+    "conname": "CK_History_Version",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"AppointmentVersion\" > 0))"
+  },
+  {
+    "schema": "public",
+    "table_name": "AppointmentHistory",
+    "conname": "FK_AppointmentHistory_Appointments_AppointmentId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"AppointmentId\") REFERENCES \"Appointments\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "AppointmentHistory",
+    "conname": "PK_AppointmentHistory",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "CK_Appointment_Range",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"Start\" < \"End\"))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "CK_Appointment_Status",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK (((\"Status\")::text = ANY ((ARRAY['Scheduled'::character varying, 'Confirmed'::character varying, 'Completed'::character varying, 'Cancelled'::character varying, 'NoShow'::character varying])::text[])))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "CK_Appointment_Version",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"Version\" > 0))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "EX_Appointments_Doctor",
+    "contype": "x",
+    "convalidated": true,
+    "definition": "EXCLUDE USING gist (\"DoctorId\" WITH =, tstzrange(\"Start\", \"End\", '[)'::text) WITH &&) WHERE (((\"Status\")::text <> 'Cancelled'::text))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "EX_Appointments_Patient",
+    "contype": "x",
+    "convalidated": true,
+    "definition": "EXCLUDE USING gist (\"PatientId\" WITH =, tstzrange(\"Start\", \"End\", '[)'::text) WITH &&) WHERE (((\"Status\")::text <> 'Cancelled'::text))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "FK_Appointments_Doctors_DoctorId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"DoctorId\") REFERENCES \"Doctors\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "FK_Appointments_Patients_PatientId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"PatientId\") REFERENCES \"Patients\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "FK_Appointments_Services_ServiceId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"ServiceId\") REFERENCES \"Services\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Appointments",
+    "conname": "PK_Appointments",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "AuditEvents",
+    "conname": "PK_AuditEvents",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "conname": "CK_Exception_Range",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"Start\" < \"End\"))"
+  },
+  {
+    "schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "conname": "FK_AvailabilityExceptions_Doctors_DoctorId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"DoctorId\") REFERENCES \"Doctors\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "AvailabilityExceptions",
+    "conname": "PK_AvailabilityExceptions",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "DoctorServices",
+    "conname": "FK_DoctorServices_Doctors_DoctorId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"DoctorId\") REFERENCES \"Doctors\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "DoctorServices",
+    "conname": "FK_DoctorServices_Services_ServiceId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"ServiceId\") REFERENCES \"Services\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "DoctorServices",
+    "conname": "PK_DoctorServices",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"DoctorId\", \"ServiceId\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Doctors",
+    "conname": "CK_Doctor_Duration",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((((\"DurationMinutes\" >= 10) AND (\"DurationMinutes\" <= 120)) AND ((\"DurationMinutes\" % 5) = 0)))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Doctors",
+    "conname": "FK_Doctors_Specialties_SpecialtyId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"SpecialtyId\") REFERENCES \"Specialties\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Doctors",
+    "conname": "PK_Doctors",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "IdempotencyRequests",
+    "conname": "FK_IdempotencyRequests_Accounts_AccountId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"AccountId\") REFERENCES \"Accounts\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "IdempotencyRequests",
+    "conname": "PK_IdempotencyRequests",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"AccountId\", \"RequestId\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Patients",
+    "conname": "CK_Patient_Number",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"Number\" > 0))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Patients",
+    "conname": "CK_Patient_Version",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"Version\" > 0))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Patients",
+    "conname": "PK_Patients",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Services",
+    "conname": "CK_Service_Duration",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((((\"DurationMinutes\" >= 10) AND (\"DurationMinutes\" <= 120)) AND ((\"DurationMinutes\" % 5) = 0)))"
+  },
+  {
+    "schema": "public",
+    "table_name": "Services",
+    "conname": "FK_Services_Specialties_SpecialtyId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"SpecialtyId\") REFERENCES \"Specialties\"(\"Id\") ON DELETE RESTRICT"
+  },
+  {
+    "schema": "public",
+    "table_name": "Services",
+    "conname": "PK_Services",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Sessions",
+    "conname": "FK_Sessions_Accounts_AccountId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"AccountId\") REFERENCES \"Accounts\"(\"Id\") ON DELETE CASCADE"
+  },
+  {
+    "schema": "public",
+    "table_name": "Sessions",
+    "conname": "PK_Sessions",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"TokenHash\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Settings",
+    "conname": "PK_Settings",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Key\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "SourceSchedules",
+    "conname": "FK_SourceSchedules_Doctors_DoctorId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"DoctorId\") REFERENCES \"Doctors\"(\"Id\") ON DELETE CASCADE"
+  },
+  {
+    "schema": "public",
+    "table_name": "SourceSchedules",
+    "conname": "PK_SourceSchedules",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "Specialties",
+    "conname": "PK_Specialties",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "WorkingPeriods",
+    "conname": "CK_WorkingPeriod_Range",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK (((\"Start\" < \"End\") AND ((\"Day\" >= 0) AND (\"Day\" <= 6))))"
+  },
+  {
+    "schema": "public",
+    "table_name": "WorkingPeriods",
+    "conname": "FK_WorkingPeriods_Doctors_DoctorId",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"DoctorId\") REFERENCES \"Doctors\"(\"Id\") ON DELETE CASCADE"
+  },
+  {
+    "schema": "public",
+    "table_name": "WorkingPeriods",
+    "conname": "PK_WorkingPeriods",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "__EFMigrationsHistory",
+    "conname": "PK___EFMigrationsHistory",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"MigrationId\")"
+  }
+]

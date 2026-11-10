@@ -1,0 +1,58 @@
+[
+  {
+    "schema": "public",
+    "table_name": "PlatformClinics",
+    "conname": "PlatformClinics_State_check",
+    "contype": "c",
+    "convalidated": true,
+    "definition": "CHECK ((\"State\" = ANY (ARRAY['Provisioning'::text, 'Ready'::text, 'Failed'::text])))"
+  },
+  {
+    "schema": "public",
+    "table_name": "PlatformClinics",
+    "conname": "PlatformClinics_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "PlatformOperators",
+    "conname": "PlatformOperators_Email_key",
+    "contype": "u",
+    "convalidated": true,
+    "definition": "UNIQUE (\"Email\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "PlatformOperators",
+    "conname": "PlatformOperators_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Id\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "PlatformSchemaVersions",
+    "conname": "PlatformSchemaVersions_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"Version\")"
+  },
+  {
+    "schema": "public",
+    "table_name": "PlatformSessions",
+    "conname": "PlatformSessions_OperatorId_fkey",
+    "contype": "f",
+    "convalidated": true,
+    "definition": "FOREIGN KEY (\"OperatorId\") REFERENCES \"PlatformOperators\"(\"Id\") ON DELETE CASCADE"
+  },
+  {
+    "schema": "public",
+    "table_name": "PlatformSessions",
+    "conname": "PlatformSessions_pkey",
+    "contype": "p",
+    "convalidated": true,
+    "definition": "PRIMARY KEY (\"TokenHash\")"
+  }
+]

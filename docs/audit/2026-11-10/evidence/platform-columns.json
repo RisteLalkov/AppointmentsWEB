@@ -1,0 +1,254 @@
+[
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Id",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "ConnectionName",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "TimeZone",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "State",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "AdminEmail",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "AdminName",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Description",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Address",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Phone",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Discoverable",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "AllowRegistration",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "CreatedBy",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "CreatedAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Adopted",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": "false"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformClinics",
+    "column_name": "Version",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": "1"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "Id",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "Email",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "Name",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "PasswordHash",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "Enabled",
+    "data_type": "boolean",
+    "udt_name": "bool",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "FailedAttempts",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformOperators",
+    "column_name": "LockedUntil",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformSchemaVersions",
+    "column_name": "Version",
+    "data_type": "integer",
+    "udt_name": "int4",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformSchemaVersions",
+    "column_name": "AppliedAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": "now()"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformSessions",
+    "column_name": "TokenHash",
+    "data_type": "character varying",
+    "udt_name": "varchar",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformSessions",
+    "column_name": "OperatorId",
+    "data_type": "text",
+    "udt_name": "text",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_schema": "public",
+    "table_name": "PlatformSessions",
+    "column_name": "ExpiresAt",
+    "data_type": "timestamp with time zone",
+    "udt_name": "timestamptz",
+    "is_nullable": "NO",
+    "column_default": null
+  }
+]

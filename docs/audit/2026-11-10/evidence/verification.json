@@ -1,0 +1,68 @@
+{
+  "baseCommit": "86d23bb",
+  "date": "2026-11-10",
+  "scope": "Disposable local fixtures only; no production access",
+  "pendingModelChanges": false,
+  "appliedMigrations": [
+    "20260922194435_InitialPostgres",
+    "20260930135621_ServiceCatalogue",
+    "20261001070652_AppointmentHistory",
+    "20261005225240_PatientProfiles",
+    "20261110091110_PatientNumbers",
+    "20261110131050_GlobalPatientMemberships"
+  ],
+  "pendingMigrations": [],
+  "mappedTables": 18,
+  "nuget": {
+    "version": 1,
+    "parameters": "--vulnerable --include-transitive",
+    "sources": [
+      "https://api.nuget.org/v3/index.json"
+    ],
+    "projects": [
+      {
+        "path": "/workspace/AppointmentsWEB/src/Appointments.Web/Appointments.Web.csproj"
+      },
+      {
+        "path": "/workspace/AppointmentsWEB/src/Appointments.Core/Appointments.Core.csproj"
+      },
+      {
+        "path": "/workspace/AppointmentsWEB/tests/Appointments.Tests/Appointments.Tests.csproj"
+      },
+      {
+        "path": "/workspace/AppointmentsWEB/src/Appointments.Api/Appointments.Api.csproj"
+      },
+      {
+        "path": "/workspace/AppointmentsWEB/src/Appointments.Data/Appointments.Data.csproj"
+      },
+      {
+        "path": "/workspace/AppointmentsWEB/src/Appointments.Contracts/Appointments.Contracts.csproj"
+      },
+      {
+        "path": "/workspace/AppointmentsWEB/tests/Appointments.DatabaseTests/Appointments.DatabaseTests.csproj"
+      }
+    ]
+  },
+  "npm": {
+    "auditReportVersion": 2,
+    "vulnerabilities": {},
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 1,
+        "dev": 40,
+        "optional": 0,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 40
+      }
+    }
+  }
+}

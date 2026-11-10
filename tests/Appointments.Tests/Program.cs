@@ -422,6 +422,40 @@ Test("First availability honors service duration, date order and doctor permissi
     Equal(monday.AddDays(1),first.Slot!.Date);Equal("long",first.ServiceId);Equal(60d,(first.Slot.End-first.Slot.Start).TotalMinutes);
     Reject(()=>AvailabilityOverview.Next(rules,state,doc,f.Clock,["d2"],monday,null),403);
 });
+Test("Working hours and exceptions reject seconds and fractional minutes",()=>{
+    using var f=New();
+    Reject(()=>f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new TimeOnly(9,0,30),new(10,0))],30),400);
+    Reject(()=>f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new TimeOnly(9,0).Add(TimeSpan.FromTicks(1)),new(10,0))],30),400);
+    Reject(()=>f.Service.AddException(admin,"d1",monday,new TimeOnly(9,0,30),new(10,0),true,"Extra period"),400);
+});
+Test("Legacy sub-minute hours cannot generate slots before their actual start",()=>{
+    using var f=New();var state=f.Store.Read(s=>s);var d=state.Doctors[0];
+    d.WorkingPeriods=[new(DayOfWeek.Monday,new TimeOnly(9,0,30),new(10,0))];
+    Equal(0,SchedulingRules.Slots(state,d,monday,f.Clock).Count);
+});
+Test("Date-query boundaries include midnight DST gaps and both repeated midnights",()=>{
+    var time=new FakeTime();var clock=new SchedulingClock(time,"America/Havana");
+    var gap=new DateOnly(2027,3,14);True(clock.ToInstant(gap,TimeOnly.MinValue)==null);
+    Equal(new DateTime(2027,3,14,1,0,0),clock.Local(clock.StartOfDay(gap)));
+    Equal(23d,(clock.StartOfDay(gap.AddDays(1))-clock.StartOfDay(gap)).TotalHours);
+    var repeated=new DateOnly(2026,11,1);True(clock.ToInstant(repeated,TimeOnly.MinValue)==null);
+    Equal(25d,(clock.StartOfDay(repeated.AddDays(1))-clock.StartOfDay(repeated)).TotalHours);
+    Equal(TimeSpan.FromHours(4),clock.StartOfDay(repeated).TimeOfDay);
+});
+Test("Cross-clinic busy intervals prevent overlaps without consuming a local quota",()=>{
+    using var f=New();var state=f.Store.Read(s=>s);var start=f.Clock.ToInstant(monday,new TimeOnly(10,0))!.Value;
+    state.PatientBusyPeriods.Add(new("p1",start,start.AddMinutes(30)));
+    True(!SchedulingRules.PatientAvailable(state,"p1",start,start.AddMinutes(30)));
+    True(SchedulingRules.PatientAvailable(state,"p1",start.AddMinutes(30),start.AddMinutes(60)));
+    new BookingPolicy{MaxFutureAppointments=1}.Check(pat,state.Appointments,"p1","d1",start.AddHours(1),AppointmentStatus.Confirmed,f.Clock);
+    True(!JsonSerializer.Serialize(state,JsonDemoStore.JsonOptions).Contains("patientBusyPeriods"));
+});
+Test("Empty optional services are saved and replayed as null",()=>{
+    using var f=New();
+    var input=new BookingCommand("d1","p1",monday,new(10,0),30,Guid.NewGuid().ToString(),"");
+    var visit=f.Service.Book(admin,input);True(visit.ServiceId==null);
+    Equal(visit.Id,f.Service.Book(admin,input with{ServiceId=null}).Id);
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

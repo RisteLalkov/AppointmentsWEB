@@ -192,6 +192,14 @@ const icon = window.MedTerminIcons.icon;
       throw Object.assign(new Error(result.error || tr("Проверете го формуларот и обидете се повторно.")), { status: response.status });
     return result;
   }
+  function rememberSaved(collection, record) {
+    const index = state[collection].findIndex(item => item.id === record.id);
+    if (index >= 0) state[collection][index] = record; else state[collection].push(record);
+  }
+  async function refreshAfterSave() {
+    try { await load(false); return true; }
+    catch { toast(tr("Промените се зачувани, но освежувањето не успеа. Освежете подоцна."), true); return false; }
+  }
   async function load(render = true) {
     state = await api("bootstrap");
     state.specialties ||= []; state.services ||= []; state.doctorServices ||= [];
@@ -679,19 +687,22 @@ const icon = window.MedTerminIcons.icon;
       ))
     )
       return;
+    const origin = $("#detail-error");
     button.disabled = true;
     try {
-      await api(`appointments/${id}/status`, { status, version: a.version });
-      await load(false);
+      const saved = await api(`appointments/${id}/status`, { status, version: a.version }); rememberSaved("appointments", saved);
+      const refreshed = await refreshAfterSave();
+      if (!origin?.isConnected || !dialog.open) return;
       details(id);
       renderPage();
-      toast(
+      if (refreshed) toast(
         status === "Cancelled"
           ? tr("Прегледот е откажан. Терминот е повторно достапен.")
           : tr("Терминот е ажуриран."),
       );
     } catch (e) {
-      $("#detail-error").innerHTML =
+      if (!origin?.isConnected || !dialog.open) return;
+      origin.innerHTML =
         `<div class="inline-error" role="alert">${escape(e.message)}</div>`;
       button.disabled = false;
     }
@@ -971,9 +982,9 @@ const icon = window.MedTerminIcons.icon;
       );
       $("#review-booking").disabled = !slots.length;
     } catch (e) {
-      if (request === slotRequest)
-        container.innerHTML = html`<div class="inline-error" role="alert">${escape(e.message)}</div><button class="btn secondary small" id="retry-slots">Обиди се повторно</button>`;
-      $("#retry-slots")?.addEventListener("click", loadSlots);
+      if (request !== slotRequest || booking !== b || !container.isConnected || !dialog.open) return;
+      container.innerHTML = html`<div class="inline-error" role="alert">${escape(e.message)}</div><button class="btn secondary small" id="retry-slots">Обиди се повторно</button>`;
+      $("#retry-slots", container)?.addEventListener("click", loadSlots);
     }
   }
   function reviewBooking() {
@@ -1008,6 +1019,7 @@ const icon = window.MedTerminIcons.icon;
   async function submitBooking() {
     const b = booking,
       button = $("#submit-booking");
+    const active = () => booking === b && dialog.open && button.isConnected;
     button.disabled = true;
     $("#booking-back").disabled = true;
     try {
@@ -1026,12 +1038,16 @@ const icon = window.MedTerminIcons.icon;
               agreedTime: b.agreedTime === true,
             },
       );
-      await load(false);
+      // A successful mutation is committed even when a later read is unavailable.
+      rememberSaved("appointments", a);
+      let refreshError = "";
+      try { await load(false); } catch (error) { refreshError = error.message; }
+      if (!active()) { refreshFirstSlots(); toast(tr("Терминот е зачуван. Освежете за најновите податоци.")); return; }
       renderPage();
       booking = null;
       openDialog(
         a.status === "Scheduled" ? tr("Вашиот термин е резервиран.") : tr("Сè е подготвено."),
-        html`<div class="success-view"><div class="success-mark">${icon("check")}</div><h3>${a.status === "Scheduled" ? tr("Чека потврда") : tr("Терминот е потврден")}</h3><p>${escape(doctor(a.doctorId).name)}<br>${formatDate(dayOf(a.start), { weekday: "long", day: "numeric", month: "long" })} во <strong>${timeOf(a.start)}</strong></p>${badge(a.status)}<p style="margin-top:18px">Број на резервација <strong>CL-${a.id.slice(0, 8).toUpperCase()}</strong><br>Не е испратена е-пошта или SMS.</p></div><div class="dialog-actions"><button class="btn secondary" data-action="close">Готово</button><button class="btn primary" data-detail="${a.id}">Види термин ${icon("arrow-up-right")}</button></div>`,
+        html`${refreshError ? `<p class="inline-note warning" role="status">${escape(tr("Терминот е зачуван, но освежувањето не успеа. Обидете се повторно подоцна."))}</p>` : ""}<div class="success-view"><div class="success-mark">${icon("check")}</div><h3>${a.status === "Scheduled" ? tr("Чека потврда") : tr("Терминот е потврден")}</h3><p>${escape(doctor(a.doctorId).name)}<br>${formatDate(dayOf(a.start), { weekday: "long", day: "numeric", month: "long" })} во <strong>${timeOf(a.start)}</strong></p>${badge(a.status)}<p style="margin-top:18px">Број на резервација <strong>CL-${a.id.slice(0, 8).toUpperCase()}</strong><br>Не е испратена е-пошта или SMS.</p></div><div class="dialog-actions"><button class="btn secondary" data-action="close">Готово</button><button class="btn primary" data-detail="${a.id}">Види термин ${icon("arrow-up-right")}</button></div>`,
         tr("ПОВЕЌЕ СПОКОЈ ВО СЕКОЈДНЕВИЕТО"),
       );
       toast(
@@ -1040,10 +1056,25 @@ const icon = window.MedTerminIcons.icon;
           : tr("Терминот е зачуван и видлив во сите соодветни работни простори."),
       );
     } catch (e) {
+      if (!active()) return;
       $("#booking-error").innerHTML =
-        `<div class="inline-error" role="alert">${escape(e.message)}</div>`;
+        `<div class="inline-error" role="alert">${escape(e.message)}</div>${b.moveId && e.status === 409 ? `<button type="button" class="btn secondary small" id="reload-booking">${escape(tr("Вчитај ја тековната состојба"))}</button>` : ""}`;
       button.disabled = false;
       $("#booking-back").disabled = false;
+      $("#reload-booking")?.addEventListener("click", async event => {
+        const reload = event.currentTarget; reload.disabled = true;
+        try {
+          await load(false);
+          if (!active()) return;
+          const current = state.appointments.find(visit => visit.id === b.moveId);
+          if (!current) { closeDialog(); toast(tr("Терминот не е пронајден или немате пристап до него."), true); return; }
+          const currentDoctor = doctor(current.doctorId);
+          const editable = currentDoctor?.enabled !== false && (!isPatient() || !currentDoctor?.staffOnly)
+            && ["Scheduled", "Confirmed"].includes(current.status) && new Date(current.start) > new Date(state.utcNow);
+          if (!editable) { closeDialog(); renderPage(); details(current.id); return; }
+          await openBooking(current.doctorId, dayOf(current.start), timeOf(current.start), current.id);
+        } catch (error) { if (active()) { toast(error.message, true); reload.disabled = false; } }
+      });
     }
   }
   function renderCalendar() {
@@ -1367,8 +1398,12 @@ const icon = window.MedTerminIcons.icon;
         if (kind !== "specialties") Object.assign(input, { specialtyId: f.get("specialtyId"), enabled: f.has("enabled") });
         if (kind === "doctors") { input.subspecialty = f.get("subspecialty"); input.requiresConfirmation = f.has("requiresConfirmation"); input.staffOnly = f.has("staffOnly"); }
         if (kind === "services") Object.assign(input, { durationMinutes: Number(f.get("durationMinutes")), doctorIds: f.getAll("doctorIds") });
-        await api("catalogue/" + kind, input); await load(false); closeDialog(); renderPage(); toast(tr("Податоците се зачувани."));
-      } catch (err) { $("#catalogue-error").textContent = err.message; button.disabled = false; }
+        const saved = await api("catalogue/" + kind, input); rememberSaved(kind, saved);
+        if (kind === "services") state.doctorServices = state.doctorServices.filter(link => link.serviceId !== saved.id).concat(input.doctorIds.map(doctorId => ({doctorId, serviceId:saved.id})));
+        const refreshed = await refreshAfterSave();
+        if (!form.isConnected || !dialog.open) return;
+        closeDialog(); renderPage(); if (refreshed) toast(tr("Податоците се зачувани."));
+      } catch (err) { if (form.isConnected && dialog.open) { $("#catalogue-error", form).textContent = err.message; button.disabled = false; } }
     };
   }
   function renderReports() {
@@ -1407,7 +1442,7 @@ const icon = window.MedTerminIcons.icon;
       const periodLabel = row => data.query.groupBy === "month" ? formatDate(row.key, { month: "long", year: "numeric" }) : (data.query.groupBy === "week" ? tr("Недела од ") : "") + formatDate(row.key);
       const max = Math.max(1, ...data.periods.map(r => r.metrics.total));
       target.innerHTML = html`<p class="results-count">${formatDate(data.query.from)} – ${formatDate(data.query.to)} · Пресметано во ${timeOf(data.generatedAt)}</p><div class="stats-grid report-stats">${tiles.map(([label,value,note]) => `<article class="card stat-card"><span class="stat-label">${label}</span><strong class="stat-value">${value}</strong><div class="stat-note">${note}</div></article>`).join("")}</div>
-        <details class="report-definitions"><summary>Како се пресметуваат показателите</summary><p>Периодот ги опфаќа двата датума според локалниот почеток на прегледот. Броевите ги користат тековните статуси. „Вкупно“ ги вклучува сите статуси; процентот на откажување е откажани / вкупно. Процентот на недоаѓање е недоаѓања / (реализирани + недоаѓања). Пациентите во периодот се единствени пациенти, вклучувајќи ги и откажаните термини.</p><p>Искористеноста е приближна: зафатени минути / минути достапни за целосни прегледи, според сегашното работно време и зачуваните исклучоци. Се сметаат сите неоткажани термини, вклучувајќи недоаѓања. Не се чуваат историски верзии на распоредот; правилото „прво вторник“ не го намалува физичкиот капацитет. При нула капацитет се прикажува „—“.</p><p>Услугите се од каталогот; старите услужни профили остануваат посебна група. Старите лекарски термини без услуга се „Без заведена услуга“. Капацитетот по услуга е споделениот капацитет на соодветните лекари и не се собира меѓу услуги. Неделите почнуваат во понеделник. Првиот и последниот збирен период може да бидат делумни.</p></details>
+        <details class="report-definitions"><summary>Како се пресметуваат показателите</summary><p>Периодот ги опфаќа двата датума според локалниот почеток на прегледот. Броевите ги користат тековните статуси. „Вкупно“ ги вклучува сите статуси; процентот на откажување е откажани / вкупно. Процентот на недоаѓање е недоаѓања / (реализирани + недоаѓања). Пациентите во периодот се единствени пациенти, вклучувајќи ги и откажаните термини.</p><p>Искористеноста е приближна: зафатени минути / минути достапни за целосни прегледи, според сегашното работно време и зачуваните исклучоци. Се сметаат сите неоткажани термини, вклучувајќи недоаѓања. Не се чуваат историски верзии на распоредот. При нула капацитет се прикажува „—“.</p><p>Услугите се од каталогот; старите услужни профили остануваат посебна група. Старите лекарски термини без услуга се „Без заведена услуга“. Капацитетот по услуга е споделениот капацитет на соодветните лекари и не се собира меѓу услуги. Неделите почнуваат во понеделник. Првиот и последниот збирен период може да бидат делумни.</p></details>
         <p class="inline-note report-caveat">Искористеноста е проценка според сегашниот распоред. ${m.outsideCapacityMinutes ? html`${hours(m.outsideCapacityMinutes)} часа неоткажани термини се надвор од пресметаниот капацитет.` : ""} Капацитетот е споделен меѓу услугите; старите термини без услуга остануваат нераспределени.</p>
         ${m.total ? "" : html("<div class=\"inline-note\">Нема термини за избраните филтри. Капацитетот, ако постои, е прикажан подолу.</div>")}
         <section class="card report-chart-card"><div class="card-head"><h3>Термини низ периодот</h3><span class="muted">Сите статуси</span></div><div class="report-chart" tabindex="0" role="img" aria-label="Број на термини по период; точните вредности се во табелата подолу.">${data.periods.map(r => `<div class="report-bar" title="${escape(periodLabel(r))}: ${r.metrics.total}"><span>${r.metrics.total}</span><i style="height:${Math.max(2, r.metrics.total / max * 120)}px"></i><small>${escape(data.query.groupBy === "day" ? formatDate(r.key, { day: "numeric", month: "short" }) : periodLabel(r))}</small></div>`).join("")}</div></section>
@@ -1511,13 +1546,15 @@ const icon = window.MedTerminIcons.icon;
     openDialog(tr("Уреди податоци за пациентот"), html`<p class="inline-note">Промените важат за контактите во оваа клиника. Сметката и е-поштата за најава остануваат исти.</p><form id="edit-patient-form"><div class="field"><label for="edit-patient-name">Име и презиме</label><input id="edit-patient-name" name="name" required minlength="2" maxlength="80" value="${escape(p.name)}" autocomplete="name"></div><div class="field"><label for="edit-patient-email">Е-пошта за контакт · незадолжително</label><input id="edit-patient-email" name="email" type="email" maxlength="120" value="${escape(p.email)}" autocomplete="email"></div><div class="field"><label for="edit-patient-phone">Телефон · незадолжително</label><input id="edit-patient-phone" name="phone" type="tel" maxlength="30" value="${escape(p.phone)}" autocomplete="tel"></div><div id="edit-patient-error" role="alert"></div><div class="dialog-actions"><button type="button" class="btn secondary" data-action="close">Откажи</button><button type="submit" class="btn primary">Зачувај промени</button></div></form>`, tr("КОНТАКТНИ ПОДАТОЦИ"));
     $("#edit-patient-form").onsubmit = async e => {
       e.preventDefault();
-      const button = $("button[type=submit]", e.target), errorBox = $("#edit-patient-error");
+      const form = e.target, button = $("button[type=submit]", form), errorBox = $("#edit-patient-error", form);
       button.disabled = true; errorBox.textContent = "";
       try {
-        await api("patients/" + encodeURIComponent(p.id), { ...Object.fromEntries(new FormData(e.target)), version: p.version });
-        closeDialog();
-        await load(false); renderPage();
-        toast(tr("Податоците за пациентот се зачувани."));
+        const saved = await api("patients/" + encodeURIComponent(p.id), { ...Object.fromEntries(new FormData(form)), version: p.version });
+        rememberSaved("patients", saved);
+        const refreshed = await refreshAfterSave();
+        if (!form.isConnected || !dialog.open) return;
+        closeDialog(); renderPage();
+        if (refreshed) toast(tr("Податоците за пациентот се зачувани."));
       } catch (error) {
         if (errorBox.isConnected) {
           errorBox.innerHTML = `<div class="inline-error">${escape(error.message)}</div>${error.status === 409 ? html("<button type=\"button\" class=\"btn secondary small\" id=\"reload-patient-contact\">Отфрли ги внесените промени и вчитај ги тековните податоци</button>") : ""}`;
@@ -1541,14 +1578,16 @@ const icon = window.MedTerminIcons.icon;
     };
     $("#patient-form").onsubmit = async (e) => {
       e.preventDefault();
-      const button = $("button[type=submit]", e.target);
+      const form = e.target, button = $("button[type=submit]", form);
       button.disabled = true;
       try {
         const p = await api(
           "patients",
           Object.fromEntries(new FormData(e.target)),
         );
-        await load(false);
+        rememberSaved("patients", p);
+        const refreshed = await refreshAfterSave();
+        if (!form.isConnected || !dialog.open) return;
         if (returnBooking) {
           booking = { ...returnBooking, patientId: p.id };
           bookingForm();
@@ -1557,9 +1596,10 @@ const icon = window.MedTerminIcons.icon;
           closeDialog();
           renderPage();
         }
-        toast(tr("Пациентот е додаден."));
+        if (refreshed) toast(tr("Пациентот е додаден."));
       } catch (err) {
-        $("#patient-error").innerHTML =
+        if (!form.isConnected || !dialog.open) return;
+        $("#patient-error", form).innerHTML =
           `<div class="inline-error" role="alert">${escape(err.message)}</div>`;
         button.disabled = false;
       }

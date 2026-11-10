@@ -53,6 +53,7 @@ public record Appointment
 public record Slot(DateOnly Date, TimeOnly Time, DateTimeOffset Start, DateTimeOffset End);
 public record BookingCommand(string DoctorId, string PatientId, DateOnly Date, TimeOnly Time, int DurationMinutes, string RequestId, string? ServiceId = null, [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)] bool AgreedTime = false);
 public record MoveCommand(DateOnly Date, TimeOnly Time, int Version);
+public record PatientBusyPeriod(string PatientId, DateTimeOffset Start, DateTimeOffset End);
 public sealed class DemoState
 {
     public int SchemaVersion { get; set; } = 1;
@@ -64,6 +65,9 @@ public sealed class DemoState
     public List<DoctorService> DoctorServices { get; set; } = [];
     public List<AvailabilityException> Exceptions { get; set; } = [];
     public List<Appointment> Appointments { get; set; } = [];
+    // Private rule inputs from other clinics, never persisted as visits or counted in local quotas.
+    [System.Text.Json.Serialization.JsonIgnore]
+    public List<PatientBusyPeriod> PatientBusyPeriods { get; set; } = [];
     public List<AppointmentHistoryEntry> AppointmentHistory { get; set; } = [];
 }
 public sealed class RuleException(string message, int statusCode = 400) : Exception(UiText.T(message))

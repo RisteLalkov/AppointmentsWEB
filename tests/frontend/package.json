@@ -2,6 +2,11 @@
   "name": "careline-dom-checks",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node localization.mjs && node password-visibility.mjs && node themes.mjs && node dates.mjs && node smoke.mjs" },
-  "devDependencies": { "jsdom": "26.1.0" }
+  "scripts": {
+    "test": "node localization.mjs && node password-visibility.mjs && node themes.mjs && node dates.mjs && node smoke.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.14.0",
+    "jsdom": "26.1.0"
+  }
 }

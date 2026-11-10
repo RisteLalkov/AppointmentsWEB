@@ -45,11 +45,12 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
         doctor = CatalogueService.ForBooking(s, doctor, serviceId, excludeId == null ? null : FindAppointment(s, excludeId));
         var slots = SchedulingRules.Slots(s, doctor, date, clock, excludeId);
         if (actor.Role == DemoRole.Patient)
-            slots = slots.Where(slot => !s.Appointments.Any(a => a.Id != excludeId && a.PatientId == actor.PatientId && SchedulingRules.Active(a) && SchedulingRules.Overlaps(a.Start, a.End, slot.Start, slot.End))).ToList();
+            slots = slots.Where(slot => SchedulingRules.PatientAvailable(s, actor.PatientId!, slot.Start, slot.End, excludeId)).ToList();
         return slots;
     });
     public Appointment Book(DemoActor actor, BookingCommand command) => store.Write(s =>
     {
+        command = command with { ServiceId = string.IsNullOrEmpty(command.ServiceId) ? null : command.ServiceId };
         var doctor = FindDoctor(s, command.DoctorId);
         if (command.AgreedTime && actor.Role != DemoRole.Administrator)
             throw new RuleException("Само рецепцијата може да внесе термин договорен со лекар.", 403);
@@ -94,7 +95,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     });
     private static void CheckPatientConflict(DemoState s, string patientId, Slot slot, string? excludeId = null)
     {
-        if (s.Appointments.Any(a => a.Id != excludeId && a.PatientId == patientId && SchedulingRules.Active(a) && SchedulingRules.Overlaps(a.Start, a.End, slot.Start, slot.End)))
+        if (!SchedulingRules.PatientAvailable(s, patientId, slot.Start, slot.End, excludeId))
             throw new RuleException("Овој пациент веќе има закажан преглед во тоа време.", 409);
     }
     public Appointment Move(DemoActor actor, string id, MoveCommand command) => store.Write(s =>
@@ -188,7 +189,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     {
         Staff(actor, doctorId);
         if (durationMinutes is < 10 or > 120 || durationMinutes % 5 != 0) throw new RuleException("Изберете времетраење од 10 до 120 минути, во чекори од 5 минути.");
-        if (periods.Count > 21 || periods.Any(p => p == null || !Enum.IsDefined(p.Day) || p.Start >= p.End || p.Start.Second != 0 || p.End.Second != 0 || (p.End - p.Start).TotalMinutes < durationMinutes)) throw new RuleException("Секој работен период мора да овозможува цел преглед и да завршува истиот ден.");
+        if (periods.Count > 21 || periods.Any(p => p == null || !Enum.IsDefined(p.Day) || p.Start >= p.End || !SchedulingRules.MinuteAligned(p.Start) || !SchedulingRules.MinuteAligned(p.End) || (p.End - p.Start).TotalMinutes < durationMinutes)) throw new RuleException("Секој работен период мора да овозможува цел преглед и да завршува истиот ден.");
         if (periods.Any(p => periods.Any(q => !ReferenceEquals(p, q) && p.Day == q.Day && p.Start < q.End && q.Start < p.End))) throw new RuleException("Работните периоди не смеат да се преклопуваат.");
         store.Write(s =>
         {
@@ -206,7 +207,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     public AvailabilityException AddException(DemoActor actor, string doctorId, DateOnly date, TimeOnly start, TimeOnly end, bool isAvailable, string reason)
     {
         Staff(actor, doctorId); reason = reason.Trim();
-        if (date < clock.Today || date > clock.Today.AddDays(180) || start >= end) throw new RuleException("Изберете датум од денес до следните 180 дена и важечки временски период во истиот ден.");
+        if (date < clock.Today || date > clock.Today.AddDays(180) || start >= end || !SchedulingRules.MinuteAligned(start) || !SchedulingRules.MinuteAligned(end)) throw new RuleException("Изберете датум од денес до следните 180 дена и период во цели минути во истиот ден.");
         if (reason.Length is < 2 or > 120) throw new RuleException("Внесете причина со должина од 2 до 120 знаци. Не внесувајте медицински податоци.");
         return store.Write(s =>
         {

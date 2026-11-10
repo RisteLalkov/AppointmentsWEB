@@ -1,0 +1,80 @@
+{
+  "final-accessibility": [
+    "17/17 accessibility scenarios passed (automated coverage only)."
+  ],
+  "final-api": [
+    "7/7 direct PostgreSQL constraint checks passed.",
+    "23/23 language runtime checks passed.",
+    "16/16 password visibility checks passed.",
+    "14/14 theme preference checks passed.",
+    "42/42 date control checks passed.",
+    "85/85 DOM integration checks passed. No layout/visual assertions are made.",
+    "126/126 PostgreSQL/API/MVC integration checks passed."
+  ],
+  "final-booking": [
+    "22/22 booking-review browser checks passed.",
+    "21/21 booking-review API/database checks passed."
+  ],
+  "final-build": [
+    "    0 Warning(s)",
+    "    0 Error(s)"
+  ],
+  "final-core": [
+    "102/102 tests passed; 0 failed."
+  ],
+  "final-discovery": [
+    "138/138 Chromium UI checks passed (stub public API, JSON demo workspace).",
+    "87/87 account settings browser checks passed.",
+    "72/72 language browser checks passed.",
+    "46/46 theme browser checks passed.",
+    "89/89 MVC discovery/company contract checks passed (stub API)."
+  ],
+  "final-dom": [
+    "23/23 language runtime checks passed.",
+    "16/16 password visibility checks passed.",
+    "14/14 theme preference checks passed.",
+    "42/42 date control checks passed.",
+    "85/85 DOM integration checks passed. No layout/visual assertions are made."
+  ],
+  "final-feedback": [
+    "52/52 tester-feedback browser checks passed.",
+    "PASS Real PostgreSQL contact updates cannot change assigned patient numbers"
+  ],
+  "final-global": [
+    "30/30 global patient browser checks passed.",
+    "64/64 global patient API/PostgreSQL checks passed."
+  ],
+  "final-high": [
+    "65/65 high-severity integration checks passed."
+  ],
+  "final-http": [
+    "38/38 HTTP integration checks passed."
+  ],
+  "final-overnight": [
+    "11/11 overnight browser checks passed.",
+    "8/8 overnight API/database checks passed."
+  ],
+  "final-platform": [
+    "103/103 PostgreSQL platform/discovery checks passed."
+  ],
+  "final-tenancy": [
+    "12/12 tenant DOM checks passed. No visual/layout assertions.",
+    "75/75 multi-tenant API/MVC isolation checks passed."
+  ],
+  "recheck-api": [
+    "7/7 direct PostgreSQL constraint checks passed.",
+    "23/23 language runtime checks passed.",
+    "16/16 password visibility checks passed.",
+    "14/14 theme preference checks passed.",
+    "42/42 date control checks passed.",
+    "85/85 DOM integration checks passed. No layout/visual assertions are made.",
+    "126/126 PostgreSQL/API/MVC integration checks passed."
+  ],
+  "recheck-discovery": [
+    "138/138 Chromium UI checks passed (stub public API, JSON demo workspace).",
+    "87/87 account settings browser checks passed.",
+    "72/72 language browser checks passed.",
+    "46/46 theme browser checks passed.",
+    "89/89 MVC discovery/company contract checks passed (stub API)."
+  ]
+}

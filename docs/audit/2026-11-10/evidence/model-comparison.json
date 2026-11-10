@@ -1,0 +1,146 @@
+[
+  {
+    "schema": "public",
+    "table": "Accounts",
+    "columns": 14,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "columns": 14,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Appointments",
+    "columns": 12,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "AuditEvents",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "columns": 7,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Doctors",
+    "columns": 16,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "DoctorServices",
+    "columns": 2,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "columns": 9,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Patients",
+    "columns": 7,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientSessions",
+    "columns": 3,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Services",
+    "columns": 6,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Sessions",
+    "columns": 4,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Settings",
+    "columns": 2,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "SourceSchedules",
+    "columns": 8,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "Specialties",
+    "columns": 3,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  },
+  {
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "columns": 5,
+    "missing": [],
+    "extra": [],
+    "nullableMismatch": []
+  }
+]

@@ -1,0 +1,140 @@
+[
+  {
+    "schema": "careline_identity",
+    "table": "clinics",
+    "rows": 1,
+    "contentMatches": true
+  },
+  {
+    "schema": "careline_identity",
+    "table": "accounts",
+    "rows": 73,
+    "contentMatches": true
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "rows": 3,
+    "contentMatches": true
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientSessions",
+    "rows": 3,
+    "contentMatches": true
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientEvents",
+    "rows": 12,
+    "contentMatches": true
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "rows": 3,
+    "contentMatches": true
+  },
+  {
+    "schema": "careline_identity",
+    "table": "PatientBookings",
+    "rows": 1,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "__EFMigrationsHistory",
+    "rows": 6,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "AuditEvents",
+    "rows": 55,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Settings",
+    "rows": 2,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Patients",
+    "rows": 38,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "rows": 2,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Accounts",
+    "rows": 76,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "SourceSchedules",
+    "rows": 46,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Doctors",
+    "rows": 41,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "rows": 94,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "rows": 7,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Appointments",
+    "rows": 1497,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Sessions",
+    "rows": 11,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Specialties",
+    "rows": 36,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "Services",
+    "rows": 2,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "DoctorServices",
+    "rows": 1,
+    "contentMatches": true
+  },
+  {
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "rows": 13,
+    "contentMatches": true
+  }
+]

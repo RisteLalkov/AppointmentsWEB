@@ -1,0 +1,38 @@
+[
+  {
+    "schemaname": "public",
+    "tablename": "PlatformClinics",
+    "indexname": "PlatformClinics_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PlatformClinics_pkey\" ON public.\"PlatformClinics\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "PlatformOperators",
+    "indexname": "PlatformOperators_Email_key",
+    "indexdef": "CREATE UNIQUE INDEX \"PlatformOperators_Email_key\" ON public.\"PlatformOperators\" USING btree (\"Email\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "PlatformOperators",
+    "indexname": "PlatformOperators_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PlatformOperators_pkey\" ON public.\"PlatformOperators\" USING btree (\"Id\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "PlatformSchemaVersions",
+    "indexname": "PlatformSchemaVersions_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PlatformSchemaVersions_pkey\" ON public.\"PlatformSchemaVersions\" USING btree (\"Version\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "PlatformSessions",
+    "indexname": "IX_PlatformSessions_ExpiresAt",
+    "indexdef": "CREATE INDEX \"IX_PlatformSessions_ExpiresAt\" ON public.\"PlatformSessions\" USING btree (\"ExpiresAt\")"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "PlatformSessions",
+    "indexname": "PlatformSessions_pkey",
+    "indexdef": "CREATE UNIQUE INDEX \"PlatformSessions_pkey\" ON public.\"PlatformSessions\" USING btree (\"TokenHash\")"
+  }
+]
