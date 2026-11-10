@@ -5,13 +5,18 @@ namespace Appointments.Core;
 public static class DemoSeed
 {
     private static readonly string[] Names = ["Ана Петрова", "Марко Николов", "Елена Стојанова", "Давид Иванов", "Сара Димитрова", "Никола Петров", "Марија Трајкова", "Стефан Ангелов", "Ивана Поповска", "Александар Костов", "Теодора Наумова", "Мартин Ристов", "Катерина Јовановска", "Филип Стојанов", "Симона Митревска", "Бојан Спасов", "Јована Георгиева", "Андреј Николовски", "Анастасија Димова", "Петар Велков", "Леона Тасевска", "Даниел Илиев", "Мила Крстевска", "Дејан Павлов", "Викторија Здравкова", "Горан Трајчев", "Билјана Младеновска", "Зоран Колев", "Наташа Дамјановска", "Дарко Соколов", "Софија Јовевска", "Кристијан Попов"];
-    public static DemoState Create(string doctorJson, SchedulingClock clock)
+    public static DemoState Create(string doctorJson, SchedulingClock clock, int patientCount = 32)
     {
+        if (patientCount is < 32 or > 200) throw new ArgumentOutOfRangeException(nameof(patientCount));
+        string[] given = ["Ана","Марко","Елена","Давид","Сара","Никола","Марија","Стефан","Ивана","Александар","Теодора","Мартин","Катерина","Филип","Симона","Бојан"];
+        string[] surnames = ["Петров","Стојанов","Николов","Трајков","Јовановски","Ристевски","Ангеловски","Поповски","Наумов","Митревски"];
+        string[] femaleSurnames = ["Петрова","Стојанова","Николова","Трајкова","Јовановска","Ристевска","Ангеловска","Поповска","Наумова","Митревска"];
+        var names = Enumerable.Range(0, patientCount).Select(i => i < Names.Length ? Names[i] : $"{given[i % given.Length]} {(i % 2 == 0 ? femaleSurnames : surnames)[(i / given.Length) % surnames.Length]}");
         var state = new DemoState
         {
             TimeZoneId = clock.Zone.Id,
             Doctors = JsonSerializer.Deserialize<List<Doctor>>(doctorJson, JsonDemoStore.JsonOptions)!,
-            Patients = Names.Select((name, i) => new Patient($"p{i+1:00}", name, $"patient{i+1:00}@example.test", "") { Number = i + 1 }).ToList()
+            Patients = names.Select((name, i) => new Patient($"p{i+1:00}", name, $"patient{i+1:00}@example.test", "") { Number = i + 1 }).ToList()
         };
         var totals = state.Patients.ToDictionary(p => p.Id, _ => 0);
         var futureCounts = state.Patients.ToDictionary(p => p.Id, _ => 0);

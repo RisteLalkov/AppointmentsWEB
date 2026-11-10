@@ -51,15 +51,44 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
     public IQueryable<Appointment> FilterService(IQueryable<Appointment> query, string serviceId) => serviceId == "unassigned"
         ? query.Where(a => a.ServiceId == null && !db.Doctors.Any(d => d.Id == a.DoctorId && d.IsService))
         : query.Where(a => a.ServiceId == serviceId || (a.ServiceId == null && a.DoctorId == serviceId && db.Doctors.Any(d => d.Id == a.DoctorId && d.IsService)));
-    public async Task<IReadOnlyList<Slot>> SlotsAsync(DemoActor actor, string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null)
+    public async Task<IReadOnlyList<Slot>> SlotsAsync(DemoActor actor, string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null, string? patientId = null)
     {
-        var state = await LoadAsync(doctorId, actor.PatientId, ct);
+        var state = await LoadAsync(doctorId, actor.Role == DemoRole.Patient ? actor.PatientId : patientId, ct);
         if (excludeId != null && state.Appointments.All(a => a.Id != excludeId))
         {
             var appointment = await db.Appointments.AsNoTracking().SingleOrDefaultAsync(a => a.Id == excludeId, ct);
             if (appointment != null) state.Appointments.Add(appointment);
         }
-        return Rules(state).Availability(actor, doctorId, date, excludeId, serviceId);
+        return AvailabilityOverview.Slots(Rules(state), state, actor, doctorId, date, excludeId, serviceId, patientId);
+    }
+    public async Task<IReadOnlyList<AvailabilityDay>> AvailabilityDaysAsync(DemoActor actor, string doctorId, DateOnly from, DateOnly to, string? excludeId, string? serviceId, string? patientId, CancellationToken ct)
+    {
+        AvailabilityOverview.ValidateRange(clock, from, to, 31);
+        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+        var state = await LoadAsync(doctorId, actor.Role == DemoRole.Patient ? actor.PatientId : patientId, ct);
+        if (!string.IsNullOrEmpty(excludeId) && state.Appointments.All(a => a.Id != excludeId))
+        {
+            var existing = await db.Appointments.AsNoTracking().SingleOrDefaultAsync(a => a.Id == excludeId, ct);
+            if (existing != null) state.Appointments.Add(existing);
+        }
+        return AvailabilityOverview.Days(Rules(state), state, actor, clock, doctorId, from, to, excludeId, serviceId, patientId);
+    }
+    public async Task<IReadOnlyList<DoctorNextSlot>> NextSlotsAsync(DemoActor actor, string doctorIds, DateOnly from, string? serviceId, CancellationToken ct)
+    {
+        var ids = doctorIds.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Distinct().ToArray();
+        AvailabilityOverview.ValidateRange(clock, from, from, 181);
+        if (ids.Length is < 1 or > 100) throw new RuleException("Изберете од 1 до 100 лекари.");
+        await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead, ct);
+        var state = new DemoState {
+            Doctors = await db.Doctors.AsNoTracking().AsSplitQuery().Where(d => ids.Contains(d.Id)).ToListAsync(ct),
+            Services = await db.Services.AsNoTracking().ToListAsync(ct),
+            DoctorServices = await db.DoctorServices.AsNoTracking().Where(a => ids.Contains(a.DoctorId)).ToListAsync(ct),
+            Patients = await db.Patients.AsNoTracking().Where(p => p.Id == actor.PatientId).ToListAsync(ct),
+            Appointments = await db.Appointments.AsNoTracking().Where(a => a.End >= clock.UtcNow && (ids.Contains(a.DoctorId) || a.PatientId == actor.PatientId)).ToListAsync(ct),
+            Exceptions = await db.Exceptions.AsNoTracking().Where(e => ids.Contains(e.DoctorId) && e.Date >= from).ToListAsync(ct)
+        };
+        await AddPatientBusyAsync(state, actor.PatientId, ct);
+        return AvailabilityOverview.Next(Rules(state), state, actor, clock, ids, from, serviceId);
     }
     public async Task<IReadOnlyList<AvailabilityException>> ExceptionsAsync(DemoActor actor, string doctorId, CancellationToken ct)
     {
@@ -199,6 +228,12 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
             Appointments = await db.Appointments.Where(a => a.End >= now && (a.DoctorId == doctorId || (patientId != null && a.PatientId == patientId))).ToListAsync(ct),
             Exceptions = await db.Exceptions.Where(e => e.DoctorId == doctorId && e.Date >= today).ToListAsync(ct)
         };
+        await AddPatientBusyAsync(state, patientId, ct);
+        return state;
+    }
+    private async Task AddPatientBusyAsync(DemoState state, string? patientId, CancellationToken ct)
+    {
+        var now = clock.UtcNow;
         if (patientId != null)
         {
             var identity = await db.Accounts.Where(a => a.PatientId == patientId).Select(a => a.GlobalPatientId).SingleOrDefaultAsync(ct);
@@ -210,7 +245,6 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
                 state.Appointments.AddRange(busy.Select(b => new Appointment { Id = "global-busy-" + Guid.NewGuid().ToString("N"), DoctorId = "global-busy", PatientId = patientId, Start = b.Start, End = b.End, Status = AppointmentStatus.Confirmed }));
             }
         }
-        return state;
     }
     private sealed class PatientBusyInterval { public DateTimeOffset Start { get; set; } public DateTimeOffset End { get; set; } }
     private Task<int> LockCatalogueSharedAsync(CancellationToken ct) => db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock_shared(hashtextextended(current_schema() || ':careline:catalogue', 0))", ct);

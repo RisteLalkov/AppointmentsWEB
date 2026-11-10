@@ -91,6 +91,7 @@ jobs:
           export TEST_API_DLL="$RUNNER_TEMP/medtermin-api/Appointments.Api.dll"
           export TEST_WEB_DLL="$RUNNER_TEMP/medtermin-web/Appointments.Web.dll"
           python tests/global_patients_integration.py
+          python tests/booking_review_integration.py
           python tests/high_severity_integration.py
           python tests/tester_feedback_integration.py
           node tests/frontend/account-settings-browser.cjs

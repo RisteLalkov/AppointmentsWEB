@@ -30,7 +30,9 @@ public sealed class AppointmentsController(PostgresAppointments service) : ApiCo
         return Ok(new { total = await query.CountAsync(ct), items = await query.OrderBy(a => a.Start).ThenBy(a => a.Id).Skip(skip).Take(take).ToListAsync(ct) });
     }
     [HttpGet("appointments/{id}/history")] public Task<AppointmentHistoryResult> History(string id, CancellationToken ct) => service.HistoryAsync(Actor, id, ct);
-    [HttpGet("slots")] public Task<IReadOnlyList<Slot>> Slots(string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null) => service.SlotsAsync(Actor, doctorId, date, excludeId, ct, serviceId);
+    [HttpGet("slots")] public Task<IReadOnlyList<Slot>> Slots(string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null, string? patientId = null) => service.SlotsAsync(Actor, doctorId, date, excludeId, ct, serviceId, patientId);
+    [HttpGet("availability/days")] public Task<IReadOnlyList<AvailabilityDay>> Days(string doctorId, DateOnly from, DateOnly to, CancellationToken ct, string? excludeId = null, string? serviceId = null, string? patientId = null) => service.AvailabilityDaysAsync(Actor, doctorId, from, to, excludeId, serviceId, patientId, ct);
+    [HttpGet("availability/next")] public Task<IReadOnlyList<DoctorNextSlot>> Next(string doctorIds, DateOnly from, CancellationToken ct, string? serviceId = null) => service.NextSlotsAsync(Actor, doctorIds, from, serviceId, ct);
     [HttpGet("exceptions")] public Task<IReadOnlyList<AvailabilityException>> Exceptions(string doctorId, CancellationToken ct) => service.ExceptionsAsync(Actor, doctorId, ct);
     [HttpPost("appointments")] public Task<Appointment> Book(BookingCommand input, CancellationToken ct) => service.BookAsync(Actor, input, ct);
     [HttpPost("appointments/{id}/move")] public Task<Appointment> Move(string id, MoveCommand input, CancellationToken ct) => service.MoveAsync(Actor, id, input, ct);

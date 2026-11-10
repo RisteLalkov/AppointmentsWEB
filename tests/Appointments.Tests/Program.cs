@@ -403,6 +403,25 @@ Test("Patient numbers backfill legacy demo records and remain unique across conc
     Equal(all.Count,reopened.Read(state=>state.Patients.Count));
     foreach(var patient in all)Equal(patient.Number,reopened.Read(state=>state.Patients.Single(p=>p.Id==patient.Id).Number));
 });
+Test("Availability month summaries reuse booking rules and staff patient conflicts", () => {
+    using var f=New(); f.Service.Book(pat,Cmd());
+    var state=f.Store.Read(s=>s); var rules=AvailabilityOverview.ForSnapshot(state,f.Clock);
+    var summary=AvailabilityOverview.Days(rules,state,admin,f.Clock,"d2",monday,monday.AddDays(6),null,null,"p1");
+    Equal(7,summary.Count);Equal(0,summary.Last().Count);
+    Equal(f.Service.Availability(pat,"d2",monday).Count,summary.First().Count);
+    Reject(()=>AvailabilityOverview.Days(rules,state,pat,f.Clock,"d1",monday,monday,null,null,"p2"),403);
+    Reject(()=>AvailabilityOverview.Days(rules,state,admin,f.Clock,"d1",monday,monday.AddDays(31),null,null,null));
+});
+Test("First availability honors service duration, date order and doctor permissions", () => {
+    using var f=New();var state=f.Store.Read(s=>s);
+    state.Services.Add(new MedicalService{Id="long",Name="Long visit",SpecialtyId=state.Doctors[0].SpecialtyId!,DurationMinutes=60});
+    state.DoctorServices.Add(new("d1","long"));
+    state.Doctors[0].WorkingPeriods=[new(DayOfWeek.Monday,new(9,0),new(9,30)),new(DayOfWeek.Tuesday,new(10,0),new(12,0))];
+    var rules=AvailabilityOverview.ForSnapshot(state,f.Clock);
+    var first=AvailabilityOverview.Next(rules,state,admin,f.Clock,["d1"],monday,null).Single();
+    Equal(monday.AddDays(1),first.Slot!.Date);Equal("long",first.ServiceId);Equal(60d,(first.Slot.End-first.Slot.Start).TotalMinutes);
+    Reject(()=>AvailabilityOverview.Next(rules,state,doc,f.Clock,["d2"],monday,null),403);
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

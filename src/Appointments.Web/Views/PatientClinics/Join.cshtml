@@ -4,7 +4,7 @@
     <section class="card patient-join">
     @if (ViewData["Error"] is string error) { <p class="inline-error" role="alert">@error</p> }
     @if (Model != null) {
-        <span class="eyebrow">@T("ЕДНА СМЕТКА ЗА ВАШАТА ГРИЖА")</span><h1>@Model.Clinic.Name</h1>
+        <h1>@Model.Clinic.Name</h1>
         <p>@(Model.Joined ? T("Ќе се отвори вашиот работен простор во избраната клиника.") : T("Продолжувањето создава ваш пациентски профил во оваа клиника. Не е потребна нова сметка или лозинка."))</p>
         @if (!Model.Joined) { <p class="inline-note">@T("Постоечки контактни записи и историја не се поврзуваат автоматски само според е-пошта.")</p> }
         @if (Model.Available && (Model.Joined || Model.Clinic.AllowRegistration)) {

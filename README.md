@@ -236,3 +236,19 @@ English covers public discovery, clinic/doctor availability, accounts, the compa
 For the language/icon update, republish **both API and Web**, including all `wwwroot` files, while preserving server configuration. **No database migration is required.**
 
 The workspace account dialog also contains **Промени лозинка**, **Одјави се**, and the clinic time zone. It supports keyboard focus containment, Escape/backdrop dismissal and mobile scrolling; sign-out remains a protected POST. This account-dialog update requires **only a Web republish**, including all `wwwroot` files. No API update or database migration is required.
+
+## Booking review and expanded sample clinic (10 November 2026)
+
+The workspace now uses quieter, functional headings. Booking supports service-first
+reception selection, a green/red availability calendar, and patient names/numbers
+without contact details in the dropdown. Doctor cards and lists show clickable
+first availability, including the actual service; a service filter narrows the
+search. Suggestions refresh after booking and during the existing idle refresh.
+The landing page is unchanged.
+
+Publish API and Web together. This update adds no structural migration beyond the
+previous shared-patient-account upgrade. The complete API publish includes
+`seed-sample-clinic.cmd`: run it explicitly for an existing test clinic to add
+12 doctors, 160 patients, specialties/services and appointment history. It does
+not run at startup, overwrite existing hours, or create login credentials.
+See [Macedonian deployment, sample data and verification instructions](docs/BOOKING_REVIEW_2026-11-10.md).

@@ -7,6 +7,7 @@
     <Content Include="../Appointments.Web/Seed/doctors.json" Link="Seed/doctors.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="../../deployment/seed-sample-clinic.cmd" Link="seed-sample-clinic.cmd" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="../../database/008-identity-directory.sql" Link="database/008-identity-directory.sql" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../database/009-global-patients.sql" Link="database/009-global-patients.sql" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../database/005-platform-registry.sql" Link="database/005-platform-registry.sql" CopyToOutputDirectory="PreserveNewest" />

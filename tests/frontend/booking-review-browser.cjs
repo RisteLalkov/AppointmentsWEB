@@ -1,0 +1,68 @@
+const {chromium}=require('playwright');
+const {mkdir}=require('node:fs/promises');const {resolve}=require('node:path');
+const fixture=JSON.parse(process.env.TEST_REVIEW_FIXTURE),base=process.env.TEST_WEB_URL;
+let checks=0;function check(ok,label){if(!ok)throw Error(label);checks++;console.log('PASS booking browser '+label);}
+(async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:process.env.TEST_BROWSER_EXECUTABLE,args:['--no-sandbox']});
+ try{
+  const context=await browser.newContext({viewport:{width:1360,height:1000},locale:'en-US'}),page=await context.newPage();page.setDefaultTimeout(12000);
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));const screens=process.env.TEST_REVIEW_SCREENSHOTS;
+  if(screens)await mkdir(screens,{recursive:true});
+  const shot=async name=>{if(screens)await page.screenshot({path:resolve(screens,name+'.png'),fullPage:true});};
+  await page.goto(base+'/Account/Login');await page.locator('[name=Email]').fill('admin@feedback.test');await page.locator('[name=Password]').fill(process.env.TEST_PASSWORD);await page.locator('form[action="/Account/Login"] button[type=submit]').click();await page.locator('.overview-grid').waitFor();
+  check(!(await page.locator('#app').innerText()).includes('ВАШАТА ГРИЖА') && !(await page.locator('.app-footer').innerText()).includes('спокој'),'Reception overview and footer use practical language');
+  await page.goto(base+'/Workspace#doctors');await page.locator(`[data-next-doctor="${fixture.doctors[0].id}"] button`).waitFor();
+  check(await page.locator('.next-slot-button').count()===3,'Scheduled doctors show clickable first availability in card view');
+  check((await page.locator(`[data-next-doctor="${fixture.doctors[3].id}"]`).innerText()).includes('Нема слободни термини'),'Unscheduled doctor has an accurate no-slots message');
+  await shot('doctor-first-slots');
+  const first=page.locator(`[data-next-doctor="${fixture.doctors[0].id}"] button`),firstText=await first.innerText(),time=firstText.match(/\d{2}:\d{2}/)[0];await first.click();await page.locator('.slot.selected').waitFor();const firstDate=await page.locator('#booking-date').inputValue();
+  check((await page.locator('#dialog-title').innerText())==='Нов термин' && (await page.locator('.slot.selected').innerText())===time,'First-slot action opens neutral booking dialog with that time selected');
+  const patientOptions=await page.locator('#booking-patient option').allTextContents();
+  check(patientOptions.slice(1).every(t=>t.includes('PT-')&&!t.includes('@')),'Patient dropdown contains names and identifiers without email');
+  await page.locator('#booking-patient').evaluate((e,id)=>{e.value=id;e.dispatchEvent(new Event('change',{bubbles:true}));},fixture.people[0].id);
+  await page.locator('.slot.selected').waitFor();
+  check((await page.locator('.slot.selected').innerText())===time,'Selecting a patient keeps an already chosen time when it is still free');
+  await page.locator('#booking-date').fill(fixture.date);await page.locator('#booking-slots .empty-state').waitFor();
+  await page.locator('.availability-calendar-open').click();await page.locator('.availability-day.unavailable').first().waitFor();
+  const goTo=async date=>{for(let i=0;i<3;i++){if(await page.locator(`.availability-day[data-date="${date}"]`).count())return;await page.locator('.availability-calendar-header button').last().click();await page.locator('.availability-day.available,.availability-day.unavailable').first().waitFor();}throw Error('Date missing from calendar: '+date);};
+  await goTo(fixture.date);check(await page.locator(`[data-date="${fixture.date}"]`).evaluate(e=>e.classList.contains('unavailable')),'Fully booked date is red');
+  await goTo(fixture.green);check(await page.locator(`[data-date="${fixture.green}"]`).evaluate(e=>e.classList.contains('available')),'Date with free slots is green');
+  check((await page.locator(`[data-date="${fixture.green}"]`).getAttribute('aria-label')).includes('Има слободни термини'),'Availability is conveyed by accessible text as well as color');
+  await shot('availability-calendar');
+  await page.locator('.availability-calendar-header button').last().click();await page.locator('.availability-day.available,.availability-day.unavailable').first().waitFor();
+  await page.keyboard.press('Escape');check(await page.locator('#main-dialog').isVisible()&&await page.locator('.availability-calendar').isHidden(),'Month navigation retains keyboard focus; Escape closes only the date calendar');
+  await page.locator('.availability-calendar-open').click();await page.locator('.availability-day.available,.availability-day.unavailable').first().waitFor();await goTo(fixture.green);await page.locator(`[data-date="${fixture.green}"]`).click();await page.locator('.slot').first().waitFor();
+  check(await page.locator('#booking-date').inputValue()===fixture.green,'Calendar selection retains ISO dates and loads actual slots');
+  await page.locator('#booking-date').fill(firstDate);await page.locator('.slot').first().waitFor();await page.locator('.slot').first().click();await page.locator('#review-booking').click();await page.locator('#submit-booking').click();await page.locator('.success-view').waitFor();
+  await page.locator('#close-dialog').click();
+  await page.waitForFunction(({id,text})=>{const button=document.querySelector(`[data-next-doctor="${id}"] button`);return button&&button.innerText!==text;},{id:fixture.doctors[0].id,text:firstText});
+  check((await page.locator(`[data-next-doctor="${fixture.doctors[0].id}"] button`).innerText())!==firstText,'Booking a suggested time refreshes the doctor card to the next free slot');
+  // Generic booking has no explicit doctor choice, so a service may be chosen first.
+  await page.goto(base+'/Workspace');await page.locator('.page-heading [data-action=book]').click();await page.locator('#booking-service-input').fill(fixture.services[1].name);await page.locator('#booking-service-input').press('Enter');
+  const choices=await page.locator('#booking-doctor option').evaluateAll(options=>options.map(o=>o.value));
+  check(choices.length===2&&choices.every(id=>[fixture.doctors[1].id,fixture.doctors[2].id].includes(id)),'Choosing service before doctor filters to exactly its assigned doctors');
+  check(await page.locator('#booking-service').inputValue()===fixture.services[1].id,'Service selection is preserved when an eligible doctor is selected automatically');
+  await page.locator('#booking-doctor-input').fill(fixture.doctors[2].name);await page.locator('#booking-doctor-input').press('Enter');
+  check(await page.locator('#booking-doctor').inputValue()===fixture.doctors[2].id && await page.locator('#booking-service').inputValue()===fixture.services[1].id,'Choosing another matching doctor keeps the selected service');
+  await page.locator('#close-dialog').click();await page.goto(base+'/Workspace');await page.locator('.page-heading [data-action=book]').click();
+  const defaultService=await page.locator('#booking-service').inputValue();await page.locator('#booking-service-input').click();await page.locator('#booking-service-input').press('Enter');
+  check(await page.locator('#booking-doctor option').count()===(defaultService===fixture.services[0].id?1:2),'Explicitly choosing the preselected service also filters eligible doctors');
+  await page.locator('#close-dialog').click();await page.goto(base+'/Workspace#doctors');await page.locator('#doctor-service-filter').selectOption(fixture.services[1].id);await page.locator('.next-slot-button').first().waitFor();
+  check(await page.locator('.doctor-card').count()===2,'Doctor service filter applies to results and first-slot lookup');
+  await page.goto(base+'/Workspace#calendar');await page.locator('#calendar-from-display').waitFor();
+  const alignment=await page.evaluate(()=>{const a=document.querySelector('#calendar-from-display').getBoundingClientRect(),b=document.querySelector('#calendar-to-display').getBoundingClientRect(),c=document.querySelector('#calendar-range-form button[type=submit]').getBoundingClientRect();return [a,b].every(r=>Math.abs(r.top-c.top)<2&&Math.abs(r.bottom-c.bottom)<2);});
+  check(alignment,'Calendar period action aligns with both date fields');await shot('calendar-filter-alignment');
+  await page.setViewportSize({width:320,height:800});await page.goto(base+'/Workspace#doctors');await page.locator('#doctor-service-filter').selectOption('');await page.locator(`[data-book="${fixture.doctors[0].id}"]`).click();await page.locator('.availability-calendar-open').click();await page.locator('.availability-day.available,.availability-day.unavailable').first().waitFor();
+  check(await page.locator('.availability-calendar').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth;}),'Availability calendar fits a 320px phone');
+  await page.locator('.availability-calendar-legend').scrollIntoViewIfNeeded();
+  check(await page.locator('.availability-calendar-legend').isVisible(),'Phone users can scroll to the final calendar row and legend');
+  await shot('availability-calendar-mobile');
+  await page.keyboard.press('Escape');await page.locator('#close-dialog').click();
+  await page.locator('#account-menu-button').click();
+  await page.locator('[data-language-form] button[value="en-GB"]').click();await page.locator('html[lang=en]').waitFor();
+  await page.locator(`[data-book="${fixture.doctors[0].id}"]`).click();await page.locator('.availability-calendar-open').click();await page.locator('.availability-day.available,.availability-day.unavailable').first().waitFor();
+  check((await page.locator('.availability-calendar').innerText()).includes('Slots available'),'Booking calendar is translated into English');
+  check(errors.length===0,'No uncaught browser errors: '+errors.join('; '));
+  console.log(`${checks}/${checks} booking-review browser checks passed.`);
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

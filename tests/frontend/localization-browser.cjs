@@ -108,7 +108,7 @@ async function selectedIcons(page,label){
    await page.goto(base+'/Demo');await page.locator('button[data-role='+role+']').click();await page.locator('#demo-form button[type=submit]').click();await page.locator('.page-heading').waitFor();
    check((await page.locator('.user-info small').innerText()).includes(role),role+' role label is English');
    await page.goto(base+'/Workspace#appointments');await page.locator('#appointment-results').waitFor();
-   check((await page.locator('.page-heading').innerText()).includes(role==='Patient'?'Your appointments':'All your appointments'),role+' appointment workflow renders in English');
+   check((await page.locator('.page-heading').innerText()).includes(role==='Patient'?'Your appointments':'Appointments'),role+' appointment workflow renders in English');
   }
   const token=await page.locator('[data-language-form] [name=__RequestVerificationToken]').inputValue();
   check((await page.request.post(base+'/Preferences/Language',{form:{culture:'en-GB'}})).status()===400,'Language action rejects missing CSRF');

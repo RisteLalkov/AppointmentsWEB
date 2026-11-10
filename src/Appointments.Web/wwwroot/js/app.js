@@ -51,6 +51,7 @@ const icon = window.MedTerminIcons.icon;
     refreshInFlight = false;
   let toastTimer, lastFocus;
   let patientRequest = 0, patientProfile, patientProfileId = "", patientFilters;
+  let doctorService = "", nextSlotRequest = 0, nextSlotTimer;
   let calendarSpecialty = "", calendarService = "", calendarRange, reportRequest = 0, reportFilters;
   const serviceOptions = selected => html`<option value="">Сите услуги / прегледи</option><option value="unassigned" ${selected === "unassigned" ? "selected" : ""}>Без заведена услуга</option>${[...state.services, ...state.doctors.filter(d => d.isService)].map(d => `<option value="${d.id}" ${selected === d.id ? "selected" : ""}>${escape(d.name)}</option>`).join("")}`;
   const specialtyOptions = selected => html`<option value="">Сите специјалности</option>${[...new Set(state.doctors.map(d => d.specialty))].sort().map(v => `<option value="${escape(v)}" ${selected === v ? "selected" : ""}>${escape(v)}</option>`).join("")}`;
@@ -141,10 +142,10 @@ const icon = window.MedTerminIcons.icon;
     title,
     subtitle,
     action = "",
-    eyebrow = tr("ВАШАТА ГРИЖА, НА ЕДНО МЕСТО"),
+    eyebrow = "",
     overviewDate = false,
   ) =>
-    `<div class="page-heading"><div><span class="eyebrow">${escape(eyebrow)}</span><h1>${escape(title)}</h1><p${overviewDate ? ' class="overview-date"' : ''}>${overviewDate ? html`<span class="overview-date-chip"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2"/></svg><time datetime="${escape(state.today)}">${escape(subtitle)}</time></span><span class="overview-day-note">Да направиме простор за убав ден.</span>` : escape(subtitle)}</p></div>${action}</div>`;
+    `<div class="page-heading"><div>${eyebrow ? `<span class="eyebrow">${escape(eyebrow)}</span>` : ""}<h1>${escape(title)}</h1><p${overviewDate ? ' class="overview-date"' : ''}>${overviewDate ? html`<span class="overview-date-chip"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2"/></svg><time datetime="${escape(state.today)}">${escape(subtitle)}</time></span>` : escape(subtitle)}</p></div>${action}</div>`;
   const bookButton = (label) =>
     html`<button class="btn primary" data-action="book"><span aria-hidden="true">${icon("plus")}</span> ${escape(label || tr("Нов термин"))}</button>`;
   const doctorOptions = (selected = "", all = false, bookable = false) =>
@@ -386,17 +387,16 @@ const icon = window.MedTerminIcons.icon;
         undefined,
         true,
       ) +
-      (isPatient()
-        ? html`<section class="hero-banner"><div><span class="eyebrow">ДОБРОТО ЗДРАВЈЕ ЗАПОЧНУВА ТУКА</span><h2>Одвојте време за себе.<br /><em>Чекор кон подобро здравје.</em></h2><p>Пронајдете го соодветниот специјалист и термин што ви одговара. Сите детали ќе бидат на едно место.</p><button class="btn primary" data-nav="doctors">Пронајдете го вашиот лекар <span aria-hidden="true">${icon("arrow-up-right")}</span></button></div><div class="hero-visual" aria-hidden="true"><span class="hero-plus"><img src="/images/company-mark.svg" width="100" height="100" alt="" /></span><span class="hero-tag">Вашето здравје. Вашето темпо.</span></div></section>`
-        : "") +
+      (isPatient() ? html`<section class="patient-booking-prompt"><div><h2>Закажете преглед</h2><p>Изберете лекар и проверете ги слободните термини.</p></div><button class="btn secondary" data-nav="doctors">Пронајди лекар ${icon("arrow-up-right")}</button></section>` : "") +
       html`<section class="stats-grid" aria-label="Преглед на термините">${stats.map(([label, value, note, symbol]) => `<div class="stat-card"><span class="stat-label">${label}</span><span class="stat-symbol" aria-hidden="true">${icon(symbol)}</span><strong class="stat-value">${value}</strong><div class="stat-note">${note}</div></div>`).join("")}</section>
-        <div class="overview-grid"><section class="card"><div class="card-head"><h3>${isPatient() ? tr("Вашите следни термини") : tr("Следни термини")}</h3><button class="section-link" data-nav="appointments">Прикажи ги сите ${icon("arrow-up-right")}</button></div>${future.length ? future.slice(0, 6).map(appointmentRow).join("") : empty(tr("Време за одмор"), tr("Немате претстојни термини. Изберете лекар за следниот преглед."))}</section><div><section class="card"><div class="card-head"><h3>Преглед на неделата</h3><span class="muted" style="font-size:0.8125rem">${formatDate(week, { day: "numeric", month: "short" })}</span></div><div class="card-body"><div class="week-chart" aria-label="Број на термини по денови">${counts.map((n, i) => `<div class="chart-col ${addDays(week, i) === state.today ? "current" : ""}"><span class="chart-count">${n}</span><div class="chart-bar" style="height:${Math.max(3, (n / max) * 105)}px"></div><small>${[tr("пон."), tr("вто."), tr("сре."), tr("чет."), tr("пет."), tr("саб."), tr("нед.")][i]}</small></div>`).join("")}</div><div class="week-chart-caption">${counts.reduce((a, b) => a + b, 0)} термини · од понеделник до недела</div></div></section><section class="card" style="margin-top:20px"><div class="card-head"><h3>Брз пристап</h3></div><div class="quick-list"><button data-nav="${isPatient() ? "doctors" : "calendar"}"><span>${isPatient() ? tr("Разгледајте ги можностите за преглед") : tr("Отворете го календарот")}<small>${isPatient() ? tr("Пронајдете специјалист за следниот преглед") : tr("Јасен преглед на секој ден")}</small></span>${icon("arrow-up-right")}</button><button data-nav="${isPatient() ? "appointments" : "availability"}"><span>${isPatient() ? tr("Управувајте со вашите термини") : tr("Работно време и отсуства")}<small>${isPatient() ? tr("Презакажете или откажете претстоен преглед") : tr("Ажурирајте ја вашата достапност")}</small></span>${icon("arrow-up-right")}</button></div></section></div></div>`;
+        <div class="overview-grid"><section class="card"><div class="card-head"><h3>${isPatient() ? tr("Вашите следни термини") : tr("Следни термини")}</h3><button class="section-link" data-nav="appointments">Прикажи ги сите ${icon("arrow-up-right")}</button></div>${future.length ? future.slice(0, 6).map(appointmentRow).join("") : empty(tr("Нема претстојни термини"), tr("Немате претстојни термини. Изберете лекар за следниот преглед."))}</section><div><section class="card"><div class="card-head"><h3>Преглед на неделата</h3><span class="muted" style="font-size:0.8125rem">${formatDate(week, { day: "numeric", month: "short" })}</span></div><div class="card-body"><div class="week-chart" aria-label="Број на термини по денови">${counts.map((n, i) => `<div class="chart-col ${addDays(week, i) === state.today ? "current" : ""}"><span class="chart-count">${n}</span><div class="chart-bar" style="height:${Math.max(3, (n / max) * 105)}px"></div><small>${[tr("пон."), tr("вто."), tr("сре."), tr("чет."), tr("пет."), tr("саб."), tr("нед.")][i]}</small></div>`).join("")}</div><div class="week-chart-caption">${counts.reduce((a, b) => a + b, 0)} термини · од понеделник до недела</div></div></section><section class="card" style="margin-top:20px"><div class="card-head"><h3>Брз пристап</h3></div><div class="quick-list"><button data-nav="${isPatient() ? "doctors" : "calendar"}"><span>${isPatient() ? tr("Разгледајте ги можностите за преглед") : tr("Отворете го календарот")}<small>${isPatient() ? tr("Пронајдете специјалист за следниот преглед") : tr("Дневен, неделен и месечен приказ")}</small></span>${icon("arrow-up-right")}</button><button data-nav="${isPatient() ? "appointments" : "availability"}"><span>${isPatient() ? tr("Управувајте со вашите термини") : tr("Работно време и отсуства")}<small>${isPatient() ? tr("Презакажете или откажете претстоен преглед") : tr("Ажурирајте ја вашата достапност")}</small></span>${icon("arrow-up-right")}</button></div></section></div></div>`;
   }
   function filteredDoctors() {
     return ownDoctors().filter(
       (d) =>
         (!isPatient() || d.enabled !== false) &&
         (!specialty || d.specialty === specialty) &&
+        (!doctorService || servicesFor(d.id).some(s => s.id === doctorService)) &&
         (!search ||
           `${d.name} ${d.specialty}`
             .toLocaleLowerCase()
@@ -436,10 +436,10 @@ const icon = window.MedTerminIcons.icon;
   function renderDoctors() {
     app.innerHTML =
       heading(
-        isPatient() ? tr("Соодветна грижа за вас.") : tr("Вашата листа на лекари."),
+        isPatient() ? tr("Пронајди лекар") : tr("Лекари"),
         tr("Разгледајте ги специјалистите и нивните работни распореди."),
         isAdmin() ? html("<button class=\"btn primary\" id=\"catalogue-add\" data-action=\"add-doctor\"><svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><use href=\"/icons/interface.svg#plus\"></use></svg> Додај лекар</button>") : "",
-        isPatient() ? tr("ПРОНАЈДЕТЕ ГО ВАШИОТ ЛЕКАР") : tr("ЛУЃЕТО ШТО СЕ ГРИЖАТ ЗА ВАС"),
+        "",
       ) +
       html`<div class="toolbar"><div class="search-field"><label class="visually-hidden" for="doctor-search">Пребарај лекари</label><input id="doctor-search" placeholder="Пребарајте по име или специјалност" value="${escape(search)}" /></div><label class="visually-hidden" for="specialty">Специјалност</label><select id="specialty"><option value="">Сите специјалности</option>${[
         ...new Set(ownDoctors().map((d) => d.specialty)),
@@ -449,7 +449,7 @@ const icon = window.MedTerminIcons.icon;
           (s) =>
             `<option ${s === specialty ? "selected" : ""}>${escape(s)}</option>`,
         )
-        .join("")}</select></div><div id="doctor-results"></div>`;
+        .join("")}</select><label class="visually-hidden" for="doctor-service-filter">Услуга / преглед</label><select id="doctor-service-filter"><option value="">Сите услуги / прегледи</option>${state.services.filter(s => s.enabled).map(s => `<option value="${s.id}" ${doctorService === s.id ? "selected" : ""}>${escape(s.name)}</option>`).join("")}</select></div><div id="doctor-results"></div>`;
     $("#doctor-search").addEventListener("input", (e) => {
       search = e.target.value;
       doctorResults();
@@ -458,6 +458,7 @@ const icon = window.MedTerminIcons.icon;
       specialty = e.target.value;
       doctorResults();
     });
+    $("#doctor-service-filter").addEventListener("change", e => { doctorService = e.target.value; doctorResults(); });
     doctorResults();
   }
   // This legacy sentinel is application metadata, not a translated record value.
@@ -466,9 +467,37 @@ const icon = window.MedTerminIcons.icon;
   function doctorResults() {
     const list = filteredDoctors();
     const status = d => d.enabled === false ? tr("Неактивен") : d.staffOnly ? tr("Закажување преку рецепција") : d.workingPeriods.length ? tr("Утврдено работно време") : tr("По договор");
-    const cards = `<div class="doctor-grid">${list.map((d, i) => html`<article class="card doctor-card"><div class="doctor-card-top">${avatar(d.name, i)}<span class="badge">${status(d)}</span>${doctorMenu(d)}</div><h3>${escape(d.name)}</h3><div class="specialty">${escape(d.specialty)}</div><div class="doctor-card-meta"><span>${icon("clock")} ${d.durationMinutes} мин.</span><span>${escape(fundingLabel(d))}</span></div><div class="doctor-card-actions doctor-actions">${doctorActions(d)}</div></article>`).join("")}</div>`;
-    const table = html`<section class="card table-wrap records-table" tabindex="0" aria-label="Листа со постапки"><table><thead><tr><th>Лекар / профил</th><th>Специјалност</th><th>Достапност</th><th>Постапки</th></tr></thead><tbody>${list.map(d => html`<tr><td><div class="doctor-list-heading"><strong>${escape(d.name)}</strong>${doctorMenu(d)}</div><small>${d.durationMinutes} мин. · ${escape(fundingLabel(d))}</small></td><td>${escape(d.specialty)}${d.subspecialty ? `<small>${escape(d.subspecialty)}</small>` : ""}</td><td><span class="badge">${status(d)}</span></td><td><div class="record-actions doctor-actions">${doctorActions(d)}</div></td></tr>`).join("")}</tbody></table></section>`;
+    const cards = `<div class="doctor-grid">${list.map((d, i) => html`<article class="card doctor-card"><div class="doctor-card-top">${avatar(d.name, i)}<span class="badge">${status(d)}</span>${doctorMenu(d)}</div><h3>${escape(d.name)}</h3><div class="specialty">${escape(d.specialty)}</div><div class="doctor-card-meta"><span>${icon("clock")} ${d.durationMinutes} мин.</span><span>${escape(fundingLabel(d))}</span></div><div class="doctor-next-slot" data-next-doctor="${d.id}" aria-live="polite">${tr("Се проверува првиот слободен термин…")}</div><div class="doctor-card-actions doctor-actions">${doctorActions(d)}</div></article>`).join("")}</div>`;
+    const table = html`<section class="card table-wrap records-table" tabindex="0" aria-label="Листа со постапки"><table><thead><tr><th>Лекар / профил</th><th>Специјалност</th><th>Достапност</th><th>Постапки</th></tr></thead><tbody>${list.map(d => html`<tr><td><div class="doctor-list-heading"><strong>${escape(d.name)}</strong>${doctorMenu(d)}</div><small>${d.durationMinutes} мин. · ${escape(fundingLabel(d))}</small></td><td>${escape(d.specialty)}${d.subspecialty ? `<small>${escape(d.subspecialty)}</small>` : ""}</td><td><span class="badge">${status(d)}</span><div class="doctor-next-slot" data-next-doctor="${d.id}" aria-live="polite">${tr("Се проверува првиот слободен термин…")}</div></td><td><div class="record-actions doctor-actions">${doctorActions(d)}</div></td></tr>`).join("")}</tbody></table></section>`;
     $("#doctor-results").innerHTML = html`<div class="records-heading"><p class="results-count">${list.length} лекари и услуги</p>${viewSwitch("doctors")}</div>` + (list.length ? recordView("doctors") === "list" ? table : cards : empty(tr("Не се пронајдени лекари"), tr("Обидете се со друго име или специјалност.")));
+    refreshFirstSlots();
+  }
+  function refreshFirstSlots() {
+    if (page !== "doctors" || !$("#doctor-results")) return;
+    clearTimeout(nextSlotTimer);
+    const list = filteredDoctors(), request = ++nextSlotRequest;
+    if (list.length) nextSlotTimer = setTimeout(() => loadFirstSlots(list, request), 140);
+  }
+  async function loadFirstSlots(list, request) {
+    if (request !== nextSlotRequest || page !== "doctors") return;
+    try {
+      for (let start = 0; start < list.length; start += 100) {
+        const result = await api(`availability/next?doctorIds=${encodeURIComponent(list.slice(start, start + 100).map(d => d.id).join(","))}&from=${state.today}&serviceId=${encodeURIComponent(doctorService)}`);
+        if (request !== nextSlotRequest || page !== "doctors") return;
+        for (const item of result) {
+          const el = $$("[data-next-doctor]").find(e => e.dataset.nextDoctor === item.doctorId);
+          if (!el) continue;
+          const focused = el.contains(document.activeElement), selectedService = state.services.find(s => s.id === item.serviceId);
+          el.innerHTML = item.slot ? `<span>${escape(tr("Прв слободен термин"))}</span><button type="button" class="next-slot-button">${escape(formatDate(item.slot.date, {day:"numeric",month:"short",weekday:"short"}))} · ${item.slot.time.slice(0,5)} ${icon("arrow-up-right")}</button>${selectedService ? `<small>${escape(selectedService.name)} · ${selectedService.durationMinutes} ${escape(tr("мин."))}</small>` : ""}`
+            : `<span>${escape(item.reason === "ReceptionOnly" ? tr("За термин контактирајте ја рецепцијата.") : item.reason === "Inactive" ? tr("Неактивен лекар") : item.reason === "NoActiveServices" ? tr("Нема активна услуга за овој лекар.") : tr("Нема слободни термини во следните 180 дена. Проверете со лекарот за термин по договор."))}</span>`;
+          el.querySelector("button")?.addEventListener("click", () => openBooking(item.doctorId, item.slot.date, item.slot.time.slice(0,5), undefined, undefined, item.serviceId));
+          if (focused) { const target = el.querySelector("button") || el; if (target === el) el.tabIndex = -1; target.focus({preventScroll:true}); }
+        }
+      }
+    } catch (e) {
+      if (request !== nextSlotRequest || page !== "doctors") return;
+      $$("[data-next-doctor]").forEach(el => { el.textContent = tr("Достапноста не може да се вчита. Обидете се повторно."); });
+    }
   }
   function scheduleList(d) {
     return d.workingPeriods.length
@@ -484,6 +513,7 @@ const icon = window.MedTerminIcons.icon;
     lastFocus = document.activeElement;
     $("#dialog-title").textContent = title;
     $("#dialog-eyebrow").textContent = eyebrow;
+    $("#dialog-eyebrow").hidden = !eyebrow;
     $("#dialog-content").innerHTML = content;
     if (!dialog.open) dialog.showModal();
   }
@@ -492,11 +522,12 @@ const icon = window.MedTerminIcons.icon;
     booking = null;
     slotRequest++;
     lastFocus?.focus();
+    refreshFirstSlots();
   }
   function profile(id) {
     const d = doctor(id);
     openDialog(
-      tr("Запознајте го вашиот лекар"),
+      tr("Профил на лекар"),
       html`<div class="profile-header">${avatar(d.name, Number(id.slice(1)), "lg")}<div><h3>${escape(d.name)}</h3><p>${escape(d.specialty)}</p></div></div><div class="form-row"><div><label>Времетраење на прегледот</label><p>${d.durationMinutes} минути <small class="muted">· прилагодливо времетраење</small></p></div><div><label>Начин на закажување</label><p style="font-size:0.9375rem">${d.staffOnly ? tr("Преку рецепција") : d.requiresConfirmation ? tr("Онлајн, со потврда од персоналот") : tr("Онлајн закажување")}</p></div></div>${d.subspecialty ? html`<p class="inline-note">Субспецијалност: ${escape(d.subspecialty)}</p>` : ""}<h3>Услуги и прегледи</h3>${servicesFor(d.id).length ? `<ul class="schedule-summary">${servicesFor(d.id).map(x => html`<li><span>${escape(x.name)}</span><strong>${x.durationMinutes} мин.</strong></li>`).join("")}</ul>` : html("<p class=\"inline-note\">Засега нема заведени активни услуги за овој профил.</p>")}<h3>Работен распоред</h3>${scheduleList(d)}<div class="dialog-actions">${d.enabled === false ? html("<span class=\"inline-note\">Лекарот е неактивен за нови закажувања.</span>") : html`<button class="btn primary" data-book="${d.id}">Пронајди термин ${icon("arrow-up-right")}</button>`}</div>`,
       tr("ПРОФИЛ НА ЛЕКАР"),
     );
@@ -504,7 +535,7 @@ const icon = window.MedTerminIcons.icon;
   function renderAppointments() {
     app.innerHTML =
       heading(
-        isPatient() ? tr("Вашите термини.") : tr("Сите прегледи на едно место."),
+        isPatient() ? tr("Вашите термини.") : tr("Термини"),
         tr("Следете ги претстојните и претходните прегледи."),
         bookButton(),
       ) +
@@ -686,6 +717,8 @@ const icon = window.MedTerminIcons.icon;
     }
     booking = {
       doctorId: selected,
+      doctorChosen: !!(doctorId || a || isDoctor() || doctorFilter),
+      serviceFirst: false,
       serviceId: a?.serviceId || (!moveId && (servicesFor(selected).find(s => s.id === (serviceId || calendarService))?.id || servicesFor(selected)[0]?.id)) || "",
       date: date || (a ? dayOf(a.start) : state.today),
       time: time || "",
@@ -801,7 +834,7 @@ const icon = window.MedTerminIcons.icon;
       const changed = select.value !== option.value;
       select.value = option.value;
       sync(); close();
-      if (changed) select.dispatchEvent(new Event("change", { bubbles: true }));
+      if (changed || (["booking-doctor", "booking-service"].includes(select.id) && !booking?.doctorChosen)) select.dispatchEvent(new Event("change", { bubbles: true }));
       // Doctor/service changes rebuild the dialog. Restore focus without reopening.
       const current = document.getElementById(input.id);
       if (current && current !== input) {
@@ -851,19 +884,28 @@ const icon = window.MedTerminIcons.icon;
   function bookingForm() {
     const b = booking,
       d = doctor(b.doctorId);
+    const offeredServices = !b.doctorChosen || b.serviceFirst ? state.services.filter(s => s.enabled && ownDoctors().some(x => x.enabled !== false && servicesFor(x.id).some(v => v.id === s.id))) : servicesFor(d.id);
     openDialog(
-      b.moveId ? tr("Пронајди нов термин") : tr("Одвојте време за вашето здравје"),
-      html`<div class="steps"><span class="step active">01 · Лекар и термин</span><span class="step">02 · Проверка</span><span class="step">03 · Закажано</span></div><div class="field"><label for="booking-doctor">Лекар</label><select id="booking-doctor" ${b.moveId || isDoctor() ? "disabled" : ""}>${doctorOptions(b.doctorId, false, true)}</select></div>${b.moveId ? html`<div class="inline-note">Услуга: ${escape(state.appointments.find(a => a.id === b.moveId)?.serviceName || tr("Без заведена услуга"))}</div>` : html`<div class="field"><label for="booking-service">Услуга / преглед</label><select id="booking-service" ${servicesFor(d.id).length ? "" : "disabled"}>${servicesFor(d.id).length ? servicesFor(d.id).map(x => html`<option value="${x.id}" ${x.id === b.serviceId ? "selected" : ""}>${escape(x.name)} · ${x.durationMinutes} мин.</option>`).join("") : html("<option value=\"\">Нема заведена достапна услуга</option>")}</select></div>`}${d.requiresConfirmation && !b.agreedTime ? html`<div class="inline-note warning">${d.staffOnly ? tr("Преку рецепција") : d.requiresConfirmation ? tr("Онлајн, со потврда од персоналот") : tr("Онлајн закажување")} · Потребна е потврда од персоналот.</div>` : ""}<div class="form-row" style="margin-top:17px"><div class="field"><label for="booking-date">Изберете датум</label><input type="date" id="booking-date" value="${b.date}" min="${state.today}" max="${addDays(state.today, 180)}" required></div><div class="field"><label>Времетраење на прегледот</label><div class="inline-note">${bookingDuration(b)} минути</div></div></div>${!isPatient() ? html`<div class="field"><label for="booking-patient">Пациент</label><select id="booking-patient" ${b.moveId ? "disabled" : ""}><option value="">Изберете пациент</option>${state.patients.map((p) => `<option value="${p.id}" ${p.id === b.patientId ? "selected" : ""}>${escape(patientLabel(p))}</option>`).join("")}</select>${b.moveId ? "" : html("<button class=\"link-button\" style=\"font-size:0.875rem;margin-top:8px\" id=\"new-patient-from-booking\"><svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><use href=\"/icons/interface.svg#plus\"></use></svg> Додај пациент</button>")}</div>` : ""}${isAdmin() && !b.moveId ? html`<section class="agreed-booking"><label class="catalogue-toggle"><input id="booking-agreed" type="checkbox" ${b.agreedTime ? "checked" : ""}> Термин договорен со лекар</label><div id="agreed-time-field" ${b.agreedTime ? "" : "hidden"}><label for="booking-agreed-time">Договорено време</label><input id="booking-agreed-time" type="time" step="60" value="${b.agreedTime ? b.time || "" : ""}"><p>Изберете време што лекарот го одобрил. Преклопувања и отсуства не се дозволени.</p></div></section>` : ""}<div class="slots-label"><strong>Слободни термини</strong><span id="slot-count"></span></div><div id="booking-slots" aria-live="polite"></div><div id="booking-error"></div><div class="dialog-actions"><button class="btn secondary" data-action="close">Назад</button><button class="btn primary" id="review-booking">Провери го терминот ${icon("arrow-up-right")}</button></div>`,
-      tr("ЗАКАЖЕТЕ ТЕРМИН"),
+      b.moveId ? tr("Презакажи термин") : tr("Нов термин"),
+      html`<div class="steps"><span class="step active">01 · Лекар и термин</span><span class="step">02 · Проверка</span><span class="step">03 · Закажано</span></div><div class="field"><label for="booking-doctor">Лекар</label><select id="booking-doctor" ${b.moveId || isDoctor() ? "disabled" : ""}>${ownDoctors().filter(x => (x.enabled !== false || x.id === b.doctorId) && (!b.serviceFirst || !b.serviceId || servicesFor(x.id).some(s => s.id === b.serviceId))).map(x => `<option value="${x.id}" ${x.id === b.doctorId ? "selected" : ""}>${escape(x.name)}</option>`).join("")}</select></div>${b.moveId ? html`<div class="inline-note">Услуга: ${escape(state.appointments.find(a => a.id === b.moveId)?.serviceName || tr("Без заведена услуга"))}</div>` : html`<div class="field"><label for="booking-service">Услуга / преглед</label><select id="booking-service" ${offeredServices.length ? "" : "disabled"}>${offeredServices.length && !b.serviceId ? html("<option value=\"\" disabled selected>Изберете услуга</option>") : ""}${offeredServices.length ? offeredServices.map(x => html`<option value="${x.id}" ${x.id === b.serviceId ? "selected" : ""}>${escape(x.name)} · ${x.durationMinutes} мин.</option>`).join("") : html("<option value=\"\">Нема заведена достапна услуга</option>")}</select></div>`}${d.requiresConfirmation && !b.agreedTime ? html`<div class="inline-note warning">${d.staffOnly ? tr("Преку рецепција") : d.requiresConfirmation ? tr("Онлајн, со потврда од персоналот") : tr("Онлајн закажување")} · Потребна е потврда од персоналот.</div>` : ""}<div class="form-row" style="margin-top:17px"><div class="field"><label for="booking-date">Изберете датум</label><input type="date" id="booking-date" value="${b.date}" min="${state.today}" max="${addDays(state.today, 180)}" required></div><div class="field"><label>Времетраење на прегледот</label><div class="inline-note">${bookingDuration(b)} минути</div></div></div>${!isPatient() ? html`<div class="field"><label for="booking-patient">Пациент</label><select id="booking-patient" ${b.moveId ? "disabled" : ""}><option value="">Изберете пациент</option>${state.patients.map((p) => `<option value="${p.id}" ${p.id === b.patientId ? "selected" : ""}>${escape([p.name, patientCode(p)].filter(Boolean).join(" · "))}</option>`).join("")}</select>${b.moveId ? "" : html("<button class=\"link-button\" style=\"font-size:0.875rem;margin-top:8px\" id=\"new-patient-from-booking\"><svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><use href=\"/icons/interface.svg#plus\"></use></svg> Додај пациент</button>")}</div>` : ""}${isAdmin() && !b.moveId ? html`<section class="agreed-booking"><label class="catalogue-toggle"><input id="booking-agreed" type="checkbox" ${b.agreedTime ? "checked" : ""}> Термин договорен со лекар</label><div id="agreed-time-field" ${b.agreedTime ? "" : "hidden"}><label for="booking-agreed-time">Договорено време</label><input id="booking-agreed-time" type="time" step="60" value="${b.agreedTime ? b.time || "" : ""}"><p>Изберете време што лекарот го одобрил. Преклопувања и отсуства не се дозволени.</p></div></section>` : ""}<div class="slots-label"><strong>Слободни термини</strong><span id="slot-count"></span></div><div id="booking-slots" aria-live="polite"></div><div id="booking-error"></div><div class="dialog-actions"><button class="btn secondary" data-action="close">Назад</button><button class="btn primary" id="review-booking">Провери го терминот ${icon("arrow-up-right")}</button></div>`,
+      "",
     );
     $("#booking-doctor").addEventListener("change", async (e) => {
       b.doctorId = e.target.value;
-      b.serviceId = servicesFor(b.doctorId)[0]?.id || "";
+      b.doctorChosen = true;
+      b.serviceId = b.serviceFirst && servicesFor(b.doctorId).some(s => s.id === b.serviceId) ? b.serviceId : servicesFor(b.doctorId)[0]?.id || "";
       b.time = ""; b.agreedTime = false;
       bookingForm();
       await loadSlots();
     });
-    $("#booking-service")?.addEventListener("change", async e => { b.serviceId = e.target.value; b.time = ""; bookingForm(); await loadSlots(); });
+    $("#booking-service")?.addEventListener("change", async e => {
+      b.serviceId = e.target.value;
+      if (!b.doctorChosen || b.serviceFirst) {
+        b.serviceFirst = true;
+        if (!servicesFor(b.doctorId).some(s => s.id === b.serviceId)) b.doctorId = ownDoctors().find(x => x.enabled !== false && servicesFor(x.id).some(s => s.id === b.serviceId))?.id;
+      }
+      b.time = ""; b.agreedTime = false; bookingForm(); await loadSlots();
+    });
     $("#booking-date").addEventListener("change", async (e) => {
       b.date = e.target.value;
       b.time = "";
@@ -872,11 +914,12 @@ const icon = window.MedTerminIcons.icon;
     });
     $("#booking-patient")?.addEventListener(
       "change",
-      (e) => (b.patientId = e.target.value),
+      (e) => { b.patientId = e.target.value; loadSlots(); },
     );
     $("#new-patient-from-booking")?.addEventListener("click", () =>
       addPatientForm({ ...b }),
     );
+    window.MedTerminDates?.availability($("#booking-date"), (from, to) => api(`availability/days?doctorId=${encodeURIComponent(b.doctorId)}&from=${from}&to=${to}&serviceId=${encodeURIComponent(b.serviceId || "")}&patientId=${encodeURIComponent(b.patientId || "")}&excludeId=${encodeURIComponent(b.moveId || "")}`));
     searchableBookingSelect($("#booking-doctor"), tr("Пребарајте лекар…"));
     searchableBookingSelect($("#booking-service"), tr("Пребарајте услуга…"));
     searchableBookingSelect($("#booking-patient"), tr("Пребарајте пациент…"));
@@ -904,7 +947,7 @@ const icon = window.MedTerminIcons.icon;
     try {
       if (!b.date) throw new Error(tr("Изберете датум за приказ на слободните термини."));
       const slots = await api(
-        `slots?doctorId=${encodeURIComponent(b.doctorId)}&serviceId=${encodeURIComponent(b.serviceId || "")}&date=${b.date}${b.moveId ? "&excludeId=" + b.moveId : ""}`,
+        `slots?doctorId=${encodeURIComponent(b.doctorId)}&serviceId=${encodeURIComponent(b.serviceId || "")}&date=${b.date}&patientId=${encodeURIComponent(b.patientId || "")}${b.moveId ? "&excludeId=" + b.moveId : ""}`,
       );
       if (request !== slotRequest || booking !== b) return;
       b.slots = slots;
@@ -1016,12 +1059,10 @@ const icon = window.MedTerminIcons.icon;
     }
     app.innerHTML =
       heading(
-        isDoctor()
-          ? tr("Вашиот ден, добро испланиран.")
-          : tr("Јасен преглед на секој ден."),
+        tr("Календар"),
         tr("Кликнете на слободно време за закажување. Отворете преглед за да ги видите деталите."),
         bookButton(),
-        tr("ВАШИОТ РАСПОРЕД"),
+        "",
       ) +
       html`<section class="card workspace-filters"><div class="card-head"><div><h3>Филтри на календарот</h3><p class="filter-description">Изберете лекар и прегледајте ги термините што ви се потребни.</p></div><button class="btn secondary small" id="refresh-calendar">${icon("refresh-cw")} Освежи</button></div><div class="card-body"><div class="calendar-filter-grid">${isAdmin() ? html`<label>Лекар<select id="calendar-doctor">${calendarDoctorOptions}</select></label><label>Специјалност<select id="calendar-specialty">${specialtyOptions(calendarSpecialty)}</select></label><label>Услуга<select id="calendar-service">${serviceOptions(calendarService)}</select></label>` : html`<div class="filter-provider"><span>Вашиот календар</span><strong>${escape(doctor(doctorFilter).name)}</strong></div>`}<label>Статус<select id="calendar-status"><option value="">Сите статуси</option>${statuses.map((s) => `<option value="${s}" ${s === statusFilter ? "selected" : ""}>${statusLabel(s)}</option>`).join("")}</select></label></div><form id="calendar-range-form" class="calendar-range"><label>Од<input type="date" id="calendar-from" value="${calendarRange.from}" required></label><label>До<input type="date" id="calendar-to" value="${calendarRange.to}" required></label><button class="btn secondary small" type="submit">Прикажи период</button><span class="filter-hint">До 31 ден · ${matchingDoctors.length} профили</span><span id="calendar-range-error" role="alert"></span></form></div></section><div class="calendar-layout"><section class="card calendar-panel ${calendarView === "timeGridRange" ? "custom-range" : ""}" style="--range-width:${Math.max(1, (new Date(calendarRange.to) - new Date(calendarRange.from)) / 86400000 + 1) * 110}px"><div class="calendar-top"><div class="calendar-nav"><button class="icon-button" id="calendar-prev" aria-label="Претходен период">${icon("chevron-left")}</button><button class="icon-button" id="calendar-next" aria-label="Следен период">${icon("chevron-right")}</button><h2 id="calendar-title"></h2><button class="btn secondary small" id="calendar-today">Денес</button></div><div class="calendar-views" role="group" aria-label="Приказ на календарот">${[
         ["timeGridDay", tr("Ден")],
@@ -1300,7 +1341,7 @@ const icon = window.MedTerminIcons.icon;
     const hasStatus = catalogueTab !== "specialties";
     const kinds = { doctors: tr("Лекари"), patients: tr("Пациенти"), specialties: tr("Специјалности"), services: tr("Услуги") };
     const items = state[catalogueTab].filter(x => `${x.name} ${x.specialty || ""}`.toLocaleLowerCase().includes(catalogueSearch.toLocaleLowerCase()));
-    app.innerHTML = heading(tr("Управување со клиниката."), tr("Лекари, пациенти, специјалности и услуги на едно место."), html("<button class=\"btn primary\" id=\"catalogue-add\"><svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><use href=\"/icons/interface.svg#plus\"></use></svg> Додај запис</button>"), tr("ОРГАНИЗАЦИЈА НА КЛИНИКАТА")) +
+    app.innerHTML = heading(tr("Управување со клиниката."), tr("Уредувајте ги податоците на клиниката."), html("<button class=\"btn primary\" id=\"catalogue-add\"><svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><use href=\"/icons/interface.svg#plus\"></use></svg> Додај запис</button>"), "") +
       html`<section class="card workspace-filters"><div class="card-head"><h3>${kinds[catalogueTab]}</h3><div class="records-heading"><span class="muted">${items.length} записи</span></div></div><div class="card-body"><label for="catalogue-search">Пребарај по име</label><input id="catalogue-search" value="${escape(catalogueSearch)}" placeholder="Пребарај по назив…"></div></section>
       ${hasStatus ? html`<p class="inline-note">Деактивирањето спречува нови закажувања. Постоечките термини и историјата се задржуваат. Работното време се уредува преку Лекари ${icon("arrow-right")} Достапност; сметките за најава во Сметки и пристап.</p>` : ""}
       <section class="card table-wrap"><table><thead><tr><th>Назив</th><th>Информации</th>${hasStatus ? html`<th>Статус</th>` : ""}<th>Постапки</th></tr></thead><tbody>${items.map(x => html`<tr><td><strong>${escape(x.name)}</strong>${x.isService ? html("<small class=\"catalogue-subtext\">Увезен услужен профил</small>") : ""}</td><td>${escape(catalogueTab === "doctors" ? x.specialty + (x.subspecialty ? " · " + x.subspecialty : "") : catalogueTab === "services" ? html`${state.specialties.find(s => s.id === x.specialtyId)?.name || ""} · ${x.durationMinutes} минути · ${state.doctorServices.filter(a => a.serviceId === x.id).length} профили` : html`${state.doctors.filter(d => d.specialtyId === x.id).length} лекари / профили`)}</td>${hasStatus ? `<td><span class="badge ${x.enabled === false ? "Cancelled" : "Confirmed"}">${x.enabled === false ? tr("Неактивен") : tr("Активен")}</span></td>` : ""}<td><button class="table-action" data-catalogue-edit="${x.id}">Измени ${icon("arrow-up-right")}</button>${catalogueTab === "doctors" ? html`<button class="table-action" data-catalogue-schedule="${x.id}">Работно време ${icon("arrow-up-right")}</button>` : ""}</td></tr>`).join("") || html`<tr><td colspan="${hasStatus ? 4 : 3}">Нема соодветни записи.</td></tr>`}</tbody></table></section>`;
@@ -1334,7 +1375,7 @@ const icon = window.MedTerminIcons.icon;
     if (!isAdmin()) return;
     reportFilters ||= { from: state.today.slice(0, 8) + "01", to: state.today, groupBy: "day", doctorId: "", specialty: "", serviceId: "" };
     const f = reportFilters;
-    app.innerHTML = heading(tr("Извештаи и статистика."), tr("Јасен преглед на термините, исходите и искористеноста."), "", tr("ПОДАТОЦИ ЗА ПОДОБРО ПЛАНИРАЊЕ")) +
+    app.innerHTML = heading(tr("Извештаи и статистика."), tr("Јасен преглед на термините, исходите и искористеноста."), "", "") +
       html`<section class="card workspace-filters report-controls"><div class="card-head"><div><h3>Филтри на извештајот</h3><p class="filter-description">Изберете период и профили за преглед на резултатите.</p></div></div><form id="report-form" class="card-body"><div class="report-filter-grid"><label>Од<input type="date" name="from" value="${f.from}" required></label><label>До<input type="date" name="to" value="${f.to}" required></label><label>Групирање<select name="groupBy">${[["day",tr("По ден")],["week",tr("По недела")],["month",tr("По месец")]].map(([v,l]) => `<option value="${v}" ${v === f.groupBy ? "selected" : ""}>${l}</option>`).join("")}</select></label><label>Лекар / профил<select name="doctorId">${doctorOptions(f.doctorId, true)}</select></label><label>Специјалност<select name="specialty">${specialtyOptions(f.specialty)}</select></label><label>Услуга<select name="serviceId">${serviceOptions(f.serviceId)}</select></label></div><div class="report-presets"><button type="button" class="btn secondary small" data-report-preset="today">Денес</button><button type="button" class="btn secondary small" data-report-preset="week">Оваа недела</button><button type="button" class="btn secondary small" data-report-preset="month">Овој месец</button><button type="button" class="btn secondary small" id="report-reset">Исчисти филтри</button><button class="btn primary small" type="submit">Прикажи извештај ${icon("arrow-up-right")}</button></div></form></section><div id="report-results" aria-live="polite"></div>`;
     const form = $("#report-form");
     form.onsubmit = e => { e.preventDefault(); reportFilters = Object.fromEntries(new FormData(form)); loadReport(); };
@@ -1392,10 +1433,10 @@ const icon = window.MedTerminIcons.icon;
   function renderPatients() {
     app.innerHTML =
       heading(
-        tr("Пациентите во центарот на грижата."),
+        tr("Пациенти"),
         tr("Пронајдете пациенти и организирајте ги нивните термини."),
         html("<button class=\"btn primary\" data-action=\"add-patient\"><svg class=\"ui-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\"><use href=\"/icons/interface.svg#plus\"></use></svg> Додај пациент</button>"),
-        tr("СПИСОК НА ПАЦИЕНТИ"),
+        "",
       ) +
       html`<div class="toolbar"><div class="search-field"><label class="visually-hidden" for="patient-search">Пребарај пациенти</label><input id="patient-search" placeholder="Пребарајте по број, име, е-пошта или телефон…" value="${escape(search)}"></div></div><div class="inline-note" style="margin-bottom:20px">${state.demoMode ? tr("Демо-режим: користете само измислени контактни податоци.") : tr("Контактните податоци служат за закажување. Не внесувајте медицински податоци во овој простор.")}</div><div id="patient-results"></div>`;
     $("#patient-search").oninput = (e) => {
@@ -1431,7 +1472,7 @@ const icon = window.MedTerminIcons.icon;
       state.appointments = [...state.appointments.filter(a => a.patientId !== p.id), ...result.appointments];
       const count = status => result.appointments.filter(a => a.status === status).length;
       const stats = [[tr("Претстојни"), result.appointments.filter(upcoming).length], [tr("Завршени"), count("Completed")], [tr("Откажани"), count("Cancelled")], [tr("Недоаѓања"), count("NoShow")]];
-      app.innerHTML = heading(tr("Грижата започнува со добар преглед."), tr("Контактите и термините на пациентот, на едно место."), back, tr("ПРОФИЛ НА ПАЦИЕНТ")) +
+      app.innerHTML = heading(tr("Профил на пациент"), tr("Контактни податоци и историја на термини."), back, tr("ПРОФИЛ НА ПАЦИЕНТ")) +
         html`<section class="card patient-summary"><div class="patient-summary-main">${avatar(p.name, 0, "lg")}<div><h2>${escape(p.name)}</h2>${patientNumber(p)}<span class="badge">${tr("Пациент")}</span></div><div class="patient-summary-actions">${result.canEdit ? html("<button class=\"btn secondary\" id=\"edit-patient\">Уреди податоци</button>") : ""}<button class="btn primary" data-patient-book="${escape(p.id)}">${icon("plus")} Закажи термин</button></div></div><dl class="patient-contacts"><div><dt>Е-пошта за контакт</dt><dd>${escape(p.email || tr("Не е наведена"))}</dd></div><div><dt>Телефон</dt><dd>${escape(p.phone || tr("Не е наведен"))}</dd></div></dl><p class="filter-description">Контактните податоци се користат за закажување. ${result.canEdit ? tr("Нивното уредување не ја менува сметката или е-поштата за најава.") : tr("За промена на контактните податоци обратете се во рецепција.")}</p></section>` +
         `<p class="results-count">${isDoctor() ? tr("Прикажани се само термините со вас. Контактите се споделени со тимот во оваа клиника.") : tr("Прикажани се термините на пациентот во оваа клиника.")}</p><div class="stats-grid patient-stats">${stats.map(([label, value]) => `<div class="stat-card"><span class="stat-label">${label}</span><strong class="stat-value">${value}</strong></div>`).join("")}</div>` +
         html`<section class="card workspace-filters appointment-filters"><div class="card-head"><div><h3>Историја на термини</h3><p class="filter-description">Филтрирајте по период, статус, лекар или услуга. Датумите ги вклучуваат двата дена.</p></div><button class="btn secondary small" id="clear-patient-filters">Исчисти</button></div><div class="card-body"><div class="chip-tabs" role="group" aria-label="Период на термините">${[["all", tr("Сите")], ["upcoming", tr("Претстојни")], ["past", tr("Претходни")]].map(([value, label]) => `<button data-patient-period="${value}" class="${patientFilters.period === value ? "active" : ""}" aria-pressed="${patientFilters.period === value}">${label}</button>`).join("")}</div><div class="report-filter-grid"><label>Статус<select id="profile-status"><option value="">Сите статуси</option>${statuses.map(x => `<option value="${x}" ${patientFilters.status === x ? "selected" : ""}>${statusLabel(x)}</option>`).join("")}</select></label>${!isDoctor() ? html`<label>Лекар<select id="profile-doctor">${doctorOptions(patientFilters.doctor, true)}</select></label>` : ""}<label>Услуга<select id="profile-service">${serviceOptions(patientFilters.service)}</select></label><label>Од датум<input type="date" id="profile-from" value="${escape(patientFilters.from)}"></label><label>До датум<input type="date" id="profile-to" value="${escape(patientFilters.to)}"></label></div><div id="profile-filter-error" class="filter-error" role="alert"></div></div></section><div id="profile-appointments" aria-live="polite"></div>`;
@@ -1537,7 +1578,7 @@ const icon = window.MedTerminIcons.icon;
     let scheduleVersion = d.scheduleVersion;
     app.innerHTML =
       heading(
-        tr("Простор за грижа. Време за вас."),
+        tr("Достапност и работно време"),
         tr("Управувајте со работното време, паузите, отсуствата и дополнителните термини."),
         "",
         tr("ДОСТАПНОСТ"),
@@ -1765,6 +1806,7 @@ const icon = window.MedTerminIcons.icon;
       else if (page === "appointments") appointmentResults();
       else if (page === "profile") await renderPatientProfile(true);
       else if (page === "patients") patientResults();
+      else if (page === "doctors") refreshFirstSlots();
     } catch {
     } finally {
       refreshInFlight = false;
