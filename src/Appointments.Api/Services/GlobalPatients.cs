@@ -156,7 +156,7 @@ public sealed class GlobalPatients(ClinicConnections connections, ClinicRegistry
         await LockAsync(db, session.PatientAccountId, ct);
         await db.PatientAccountSessions.Where(s => s.TokenHash == session.TokenHash).ExecuteDeleteAsync(ct); await tx.CommitAsync(ct);
     }
-    public async Task<PatientHome> HomeAsync(string token, CancellationToken ct, string? clinicId = null)
+    public async Task<PatientHome> HomeAsync(string token, CancellationToken ct, string? clinicId = null, bool includeVisits = true)
     {
         var session = await SessionAsync(token, ct) ?? throw Failure();
         await using var db = Open();
@@ -172,7 +172,7 @@ public sealed class GlobalPatients(ClinicConnections connections, ClinicRegistry
                 {
                     await using var local = await connections.OpenAsync(registry.Resolve(clinic.Id), ct);
                     available = await local.Accounts.AnyAsync(a => a.Id == membership.AccountId && a.GlobalPatientId == session.PatientAccountId && a.PatientId == membership.PatientId && a.Enabled, ct);
-                    if (available && (string.IsNullOrEmpty(clinicId) || clinic.Id == clinicId))
+                    if (available && includeVisits && (string.IsNullOrEmpty(clinicId) || clinic.Id == clinicId))
                     {
                         var appointments = await (from a in local.Appointments.AsNoTracking()
                             join doctor in local.Doctors.AsNoTracking() on a.DoctorId equals doctor.Id

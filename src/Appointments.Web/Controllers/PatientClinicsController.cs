@@ -10,6 +10,16 @@ namespace Appointments.Web.Controllers;
 public sealed class PatientClinicsController(ApiClient api) : Controller
 {
     private bool Global => User.HasClaim("globalPatient", "true");
+    [HttpGet] public async Task<IActionResult> Switcher(CancellationToken ct)
+    {
+        if (!Global) return Forbid();
+        try
+        {
+            var clinics = await api.SendAsync<List<PatientClinicOption>>("api/patient/clinics", ct: ct, patientIdentity: true);
+            return PartialView("_ClinicSwitcher", clinics);
+        }
+        catch (RuleException e) { return StatusCode(e.StatusCode, new { error = e.Message }); }
+    }
     private string Return(string? value)
     {
         if (!Url.IsLocalUrl(value)) return "/Workspace";

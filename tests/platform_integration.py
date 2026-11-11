@@ -107,7 +107,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
             check(anon.request('/api/public/doctors?'+query)[0] == 400, 'Public query limits: '+query[:25])
         doctors = anon.ok('/api/public/doctors?pageSize=2')
         check(len(doctors['items']) == 2 and doctors['total'] > 2, 'Public doctors are paginated on server')
-        allowed = {'id','name','specialty','subspecialty','clinic','services','staffOnly'}
+        allowed = {'id','name','specialty','subspecialty','clinic','services','staffOnly','byAgreement'}
         check(all(set(d) == allowed and set(d['clinic']) == {'id','name','timeZone','allowRegistration','description','address','phone'} for d in doctors['items']), 'Public DTOs exclude clinical and account metadata')
         page2 = anon.ok('/api/public/doctors?pageSize=2&page=2')['items']
         check(not {d['id'] for d in doctors['items']} & {d['id'] for d in page2}, 'Adjacent public pages do not repeat doctors')
@@ -179,7 +179,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(anon.request(preview_path+'?date=2000-01-01')[0]==400 and anon.request(preview_path+'?date=bad')[0]==400, 'Public date validation rejects past and malformed dates')
         check(anon.request(preview_path+'?date=2999-01-01')[0]==400, 'Public preview respects booking horizon')
         check(anon.request(preview_path+'?serviceId=unknown')[0]==409, 'Public preview rejects unassigned services')
-        preview_patient=admin.ok('/api/patients',dict(name='Availability test',email='',phone='070123456'))
+        preview_patient=admin.ok('/api/patients',dict(name='Availability test',email='availability@platform.test',phone='070123456'))
         visit=admin.ok('/api/appointments',dict(doctorId=doctor['id'],patientId=preview_patient['id'],serviceId=service['id'],date=preview_date,time='09:00',durationMinutes=30,requestId=uuid.uuid4().hex))
         check(len(anon.ok(preview_path+'?date='+preview_date)['slots'])==3, 'Occupied appointment is absent from public slots')
         admin.ok('/api/appointments/'+visit['id']+'/status',dict(status='Cancelled',version=visit['version']))

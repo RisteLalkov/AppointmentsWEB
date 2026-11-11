@@ -1,0 +1,17 @@
+@model IReadOnlyList<Appointments.Contracts.PatientClinicOption>
+@{ var current = User.FindFirst("clinicId")?.Value; }
+<div class="clinic-switch-options">
+@foreach (var option in Model.Where(c => c.Joined)) {
+    var selected = option.Clinic.Id == current;
+    <form asp-controller="PatientClinics" asp-action="Select" method="post">
+        <input type="hidden" name="clinicId" value="@option.Clinic.Id" />
+        <input type="hidden" name="returnUrl" value="/Workspace" />
+        <button type="submit" class="clinic-switch-option @(selected ? "selected" : "")" disabled="@(!option.Available || selected)" aria-current="@(selected ? "true" : null)">
+            <span class="clinic-switch-icon" aria-hidden="true">@Icon("building-2")</span>
+            <span><strong>@option.Clinic.Name</strong><small>@(selected ? T("Тековна клиника") : !option.Available ? T("Привремено недостапна") : T("Отвори клиника"))</small></span>
+            <span aria-hidden="true">@Icon(selected ? "check" : "arrow-up-right")</span>
+        </button>
+    </form>
+}
+</div>
+<a class="btn secondary wide" href="/PatientClinics">@Icon("building-2") @T("Сите мои клиники")</a>

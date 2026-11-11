@@ -51,6 +51,8 @@ public sealed class DiscoverController(ApiClient api, BackendSettings backend) :
         try
         {
             var doctor = await api.SendAsync<PublicDoctor>($"api/public/clinics/{E(clinicId)}/doctors/{E(doctorId)}", authenticated: false, ct: ct);
+            if ((doctor.StaffOnly || doctor.ByAgreement) && (User.Identity?.IsAuthenticated != true || User.IsInRole("Patient")))
+                return RedirectToAction(nameof(Doctor), new { id = doctorId, clinicId });
             if (User.Identity?.IsAuthenticated != true)
                 return RedirectToAction("Login", "Account", new { clinicId, returnUrl = Url.Action(nameof(Book), new { clinicId, doctorId, date = date?.ToString("yyyy-MM-dd"), time = time?.ToString("HH:mm"), serviceId }) });
             if (User.FindFirst("clinicId")?.Value != clinicId)

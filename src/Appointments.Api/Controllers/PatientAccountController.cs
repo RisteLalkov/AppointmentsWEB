@@ -12,5 +12,6 @@ public sealed class PatientAccountController(GlobalPatients patients) : Controll
     private string Token => HttpContext.Items["GlobalPatientToken"] as string
         ?? throw new RuleException("Потребна е лична пациентска сметка.", 403);
     [HttpGet("home")] public Task<PatientHome> Home(CancellationToken ct, string? clinicId = null) => patients.HomeAsync(Token, ct, clinicId);
+    [HttpGet("clinics")] public async Task<IReadOnlyList<PatientClinicOption>> Clinics(CancellationToken ct) => (await patients.HomeAsync(Token, ct, includeVisits: false)).Clinics;
     [HttpPost("clinics/{clinicId}")] public Task<SessionResponse> Join(string clinicId, PatientJoinInput input, CancellationToken ct) => patients.JoinAsync(Token, clinicId, ct, input.Phone);
 }

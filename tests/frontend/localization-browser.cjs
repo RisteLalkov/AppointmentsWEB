@@ -68,11 +68,13 @@ async function selectedIcons(page,label){
   await page.locator('#close-dialog').click();
   await page.goto(base+'/Workspace#appointments');await page.locator('#appointment-results').waitFor();
   check((await page.locator('.chip-tabs').first().innerText()).includes('Upcoming'),'Appointment period filters are English');
-  await page.locator(`[data-detail="${bookedId}"]`).first().click();await page.locator('[data-move]').click();
+  await page.locator('#list-doctor').selectOption('d01');
+  for(const id of ['list-from','list-to'])await page.locator('#'+id).evaluate((e,value)=>{e.value=value;e.dispatchEvent(new Event('change',{bubbles:true}));},monday.toISOString().slice(0,10));
+  await page.locator(`#appointment-results [data-detail="${bookedId}"]`).click();await page.locator('[data-move]').click();
   check(await page.locator('#booking-date').inputValue()===monday.toISOString().slice(0,10),'English rescheduling retains the original future date');
   await page.locator('.slot').last().click();await page.locator('#review-booking').click();await page.locator('#submit-booking').click();await page.locator('.success-view').waitFor();
   check((await page.locator('.success-view').innerText()).includes('confirmed'),'English rescheduling completes');
-  await page.locator('#close-dialog').click();await page.locator(`[data-detail="${bookedId}"]`).first().click();await page.locator('[data-status=Cancelled]').click();
+  await page.locator('#close-dialog').click();await page.locator(`#appointment-results [data-detail="${bookedId}"]`).click();await page.locator('[data-status=Cancelled]').click();
   check(await page.locator('#confirm-no').innerText()==='Keep current state','Cancellation confirmation is English');
   await page.locator('#confirm-yes').click();await page.locator('#dialog-content .badge.Cancelled').waitFor();await page.locator('#close-dialog').click();
   for(const [hash,selector,label] of [['calendar','.fc','Calendar'],['patients','#patient-results','Patients'],['catalogue/specialties','#catalogue-search','Specialties'],['catalogue/services','#catalogue-search','Services'],['reports','#report-form','Reports'],['availability','#schedule-form','Weekly working hours']]){

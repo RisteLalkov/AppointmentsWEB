@@ -40,7 +40,7 @@ try {
   for (const file of ["js/localization.js","js/icons.js","vendor/fullcalendar.min.js","js/app.js","js/validation-mk.js"])
     w.eval(await readFile(resolve(root,"src/Appointments.Web/wwwroot",file),"utf8"));
   await until(() => $(".page-heading"));
-  check($(".clinic-badge").textContent.includes("Нова клиника"),"Workspace displays active clinic name");
+  check($(".workspace-context").textContent.includes("Нова клиника"),"Workspace displays active clinic name");
   check($("#zone-label").textContent.includes("UTC"),"Workspace uses clinic timezone");
   for (const page of ["calendar","appointments","patients","doctors","availability","catalogue","reports"]) {
     w.location.hash = page;

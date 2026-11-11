@@ -98,9 +98,10 @@ with tempfile.TemporaryDirectory(prefix='medtermin-round2-') as temporary:
         main_doctors,main_service=doctors,service
         admin_token=token
         today=dt.date.fromisoformat(request('/api/bootstrap')['today']);day=(today+dt.timedelta(days=5)).isoformat()
-        check(status('/api/patients',dict(name='No telephone',email=''))[0]==400,'New clinic contacts require a phone')
-        person=request('/api/patients',dict(name='Пациент без е-пошта',email='',phone='070123456'))
-        check(person['email']=='' and person['phone']=='070123456','Valid phone permits an empty contact email')
+        check(status('/api/patients',dict(name='No telephone',email='missing-phone@round2.test'))[0]==400,'New clinic contacts require a phone')
+        check(status('/api/patients',dict(name='No email',email='',phone='070123456'))[0]==400,'New clinic contacts require email as well as phone')
+        person=request('/api/patients',dict(name='Пациент со контакт',email='contact@round2.test',phone='070123456'))
+        check(person['email']=='contact@round2.test' and person['phone']=='070123456','A new contact retains both required email and phone')
         check(status('/api/patients/'+person['id'],dict(name=person['name'],email='',phone='',version=person['version']))[0]==400,'Editing a contact cannot remove its required phone')
         # Actual weekly replacement, inclusive boundaries, stale versions and no partial writes.
         begin=today+dt.timedelta(days=(7-today.weekday())%7 or 7);finish=begin+dt.timedelta(days=6)
@@ -140,6 +141,8 @@ with tempfile.TemporaryDirectory(prefix='medtermin-round2-') as temporary:
         check(code==200,'Non-overlapping appointments in a second clinic remain available')
         home=request('/api/patient/home')
         check({v['clinicId'] for v in home['appointments']}=={'main','east'},'Patient home aggregates appointments with explicit clinic identifiers')
+        choices=request('/api/patient/clinics')
+        check({c['clinic']['id'] for c in choices if c['joined']}=={'main','east'} and all('appointments' not in c and 'history' not in c for c in choices),'The lightweight switcher endpoint returns only this patient’s clinic choices')
         selected_clinic='main';request('/api/appointments/'+main_visit['id']+'/status',dict(status='Cancelled',version=main_visit['version']))
         home=request('/api/patient/home')
         check(len(home['appointments'])==1 and home['appointments'][0]['clinicId']=='east' and home['history'][0]['clinicId']=='main','Upcoming and history views retain the correct clinic context')
@@ -156,12 +159,31 @@ with tempfile.TemporaryDirectory(prefix='medtermin-round2-') as temporary:
         request('/api/schedule/'+main_doctors[1]['id'],dict(version=2,durationMinutes=30,periods=[dict(day='Monday',start='09:00',end='09:20')]))
         brief=request(f'/api/slots?doctorId={main_doctors[1]["id"]}&date={begin.isoformat()}&serviceId={short["id"]}')
         check(len(brief)==1,'A twenty-minute service fits twenty-minute hours despite the thirty-minute fallback')
-        start('Appointments.Web',web,dict(env,Backend__Mode='Api',Backend__ApiBaseUrl=api+'/'))
-        subprocess.run(['node','tests/frontend/tester-round2-browser.cjs'],cwd=root,env=dict(env,TEST_WEB_URL=web,TEST_PASSWORD=password,TEST_ROUND2_FIXTURE=json.dumps(dict(doctors=main_doctors,service=main_service,eastDoctors=east_doctors,eastService=east_service,day=day,begin=begin.isoformat(),finish=finish.isoformat(),shortService=short))),check=True,timeout=240)
-        # More than one page of another clinic's cancelled history must not hide this clinic.
+        for i in range(25):
+            request('/api/patients',dict(name=f'Пациент страници {i:02}',email=f'pages-{i}@round2.test',phone='070123456'))
+            request('/api/catalogue/doctors',dict(name=f'Лекар страници {i:02}',specialtyId=main_service['specialtyId'],subspecialty='',enabled=True,requiresConfirmation=False))
+        for i in range(13):
+            request('/api/catalogue/specialties',dict(name=f'Специјалност страници {i:02}'))
+            request('/api/catalogue/services',dict(name=f'Услуга страници {i:02}',specialtyId=main_service['specialtyId'],durationMinutes=30,enabled=True,doctorIds=[]))
+        agreement=request('/api/catalogue/doctors',dict(name='По договор тест',specialtyId=main_service['specialtyId'],subspecialty='',enabled=True,requiresConfirmation=False))
+        request('/api/exceptions/'+agreement['id'],dict(date=day,start='13:00',end='14:00',isAvailable=True,reason='Договорено со лекар'))
+        token=alice_token
+        check(request(f'/api/slots?doctorId={agreement["id"]}&date={day}')==[],'Patients receive no self-bookable slots for agreement-only doctors')
+        command=dict(doctorId=agreement['id'],patientId=main_pid,date=day,time='13:00',durationMinutes=30,requestId=uuid.uuid4().hex)
+        check(status('/api/appointments',command)[0]==403,'A direct patient request cannot bypass the disabled agreement-only booking button')
+        token=admin_token
+        command.update(patientId=person['id'],agreedTime=True,requestId=uuid.uuid4().hex)
+        check(request('/api/appointments',command)['status']=='Confirmed','Reception can still book an explicitly agreed time')
+        public=request(f'/api/public/clinics/main/doctors/{agreement["id"]}')
+        check(public['byAgreement'] and request(f'/api/public/clinics/main/doctors/{agreement["id"]}/availability')['slots']==[],'Public doctor profiles consistently identify agreement-only booking')
         def sql(index,command):
             result=subprocess.run([dotnet,str(fixture_dll),'--tenant-query',fixture],input=json.dumps(dict(database=index,sql=command)),env=dict(os.environ,ConnectionStrings__Appointments=parent),capture_output=True,text=True,check=True,timeout=30)
             return json.loads(result.stdout)
+        sql(0,f"""INSERT INTO public.\"Appointments\" (\"Id\",\"DoctorId\",\"PatientId\",\"Start\",\"End\",\"Status\",\"Version\",\"CreatedBy\",\"UpdatedAt\",\"RequestId\")
+            SELECT 'paged-history-'||g,'{main_doctors[0]['id']}','{person['id']}',now()-interval '40 days'+g*interval '1 hour',now()-interval '40 days'+g*interval '1 hour'+interval '30 minutes','Cancelled',1,'review3',now(),md5('review3-'||g::text) FROM generate_series(1,26) g;SELECT 1""")
+        start('Appointments.Web',web,dict(env,Backend__Mode='Api',Backend__ApiBaseUrl=api+'/'))
+        subprocess.run(['node','tests/frontend/tester-round2-browser.cjs'],cwd=root,env=dict(env,TEST_WEB_URL=web,TEST_PASSWORD=password,TEST_ROUND2_FIXTURE=json.dumps(dict(doctors=main_doctors,service=main_service,eastDoctors=east_doctors,eastService=east_service,day=day,begin=begin.isoformat(),finish=finish.isoformat(),shortService=short,agreement=agreement))),check=True,timeout=240)
+        # More than one page of another clinic's cancelled history must not hide this clinic.
         sql(0,f"""INSERT INTO public.\"Appointments\" (\"Id\",\"DoctorId\",\"PatientId\",\"Start\",\"End\",\"Status\",\"Version\",\"CreatedBy\",\"UpdatedAt\",\"RequestId\")
             SELECT 'history-round2-'||g,'{main_doctors[1]['id']}','{main_pid}',now()+interval '20 days'+g*interval '1 hour',now()+interval '20 days'+g*interval '1 hour'+interval '30 minutes','Cancelled',1,'round2',now(),md5(g::text) FROM generate_series(1,101) g;
             INSERT INTO clinic_east.\"Appointments\" (\"Id\",\"DoctorId\",\"PatientId\",\"Start\",\"End\",\"Status\",\"Version\",\"CreatedBy\",\"UpdatedAt\",\"RequestId\")

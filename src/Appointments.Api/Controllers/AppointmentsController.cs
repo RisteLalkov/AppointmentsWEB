@@ -39,7 +39,7 @@ public sealed class AppointmentsController(PostgresAppointments service) : ApiCo
     [HttpPost("appointments/{id}/status")] public Task<Appointment> Status(string id, StatusInput input, CancellationToken ct) => service.StatusAsync(Actor, id, input, ct);
     [HttpGet("patients/{id}")] public Task<PatientDetailsResult> PatientDetails(string id, CancellationToken ct) => service.PatientDetailsAsync(Actor, id, ct);
     [HttpPost("patients/{id}")] public Task<Patient> UpdatePatient(string id, PatientUpdateCommand input, CancellationToken ct) => service.UpdatePatientAsync(Actor, id, input, ct);
-    [HttpPost("patients")] public Task<Patient> Patient(PatientInput input, CancellationToken ct) => service.PatientAsync(Actor, input, IsDemo, ct);
+    [HttpPost("patients"), Authorize(Roles = "Administrator,Doctor")] public Task<Patient> Patient(PatientInput input, CancellationToken ct) => service.PatientAsync(Actor, input, IsDemo, ct);
     [HttpPost("schedule/{doctorId}")] public async Task<object> Schedule(string doctorId, ScheduleInput input, CancellationToken ct) { await service.ScheduleAsync(Actor, doctorId, input, ct); return new { saved = true }; }
     [HttpPost("exceptions/{doctorId}")] public Task<AvailabilityException> Exception(string doctorId, ExceptionInput input, CancellationToken ct) => service.AddExceptionAsync(Actor, doctorId, input, ct);
     [HttpPost("exceptions/{id}/remove")] public async Task<object> Remove(string id, CancellationToken ct) { await service.RemoveExceptionAsync(Actor, id, ct); return new { saved = true }; }

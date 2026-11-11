@@ -1141,5 +1141,18 @@
   "Да се отстрани овој датиран распоред? Повторно ќе важи редовната недела.": "Remove this date-limited schedule? The regular week will apply again.",
   "Додајте најмалку еден работен период и изберете важечки датуми.": "Add at least one working period and choose valid dates.",
   "Ажурирана достапност · Изберете време означено како достапно или кликнете Нов термин.": "Availability updated · Choose a time marked as available or click New appointment.",
-  "Неработно време": "Outside working hours"
+  "Неработно време": "Outside working hours",
+  "Внесете е-пошта за контакт на пациентот.": "Enter the patient’s contact email.",
+  "Контактирајте го лекарот или рецепцијата.": "Contact the doctor or reception.",
+  "Прикажани {0}–{1} од {2}": "Showing {0}–{1} of {2}",
+  "Страница {0}": "Page {0}",
+  "По страница": "Per page",
+  "Промени клиника": "Switch clinic",
+  "Тековна локација": "Current location",
+  "Тековна клиника": "Current clinic",
+  "Привремено недостапна": "Temporarily unavailable",
+  "Сите мои клиники": "All my clinics",
+  "Изберете во која клиника сакате да продолжите.": "Choose the clinic you would like to open.",
+  "Клиниките не може да се вчитаат. Обидете се повторно.": "Clinics could not be loaded. Please try again.",
+  "Промената на клиника ќе ги отфрли незачуваните податоци. Продолжи?": "Switching clinics will discard unsaved changes. Continue?"
 }

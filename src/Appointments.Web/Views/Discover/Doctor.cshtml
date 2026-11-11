@@ -42,7 +42,7 @@
                 else { <p class="inline-note" role="status">@(ViewData["AvailabilityError"] as string ?? T("Достапноста моментално не може да се прикаже. Обидете се повторно подоцна.")) <a asp-action="Doctor" asp-route-id="@Model.Id" asp-route-clinicId="@Model.Clinic.Id" asp-fragment="availability">@T("Обиди се повторно")</a></p> }
             </section>
             <div class="doctor-profile-booking">
-            @if (Model.StaffOnly) { <p class="inline-note">@T("За овој лекар закажувањето е преку рецепција.")</p> @if (!string.IsNullOrWhiteSpace(Model.Clinic.Phone)) { <p>@T("Телефон:") @Model.Clinic.Phone</p> } }
+            @if (Model.StaffOnly || Model.ByAgreement) { <button type="button" class="btn primary" disabled>@T("Пронајди термин")</button><p class="inline-note">@T("За овој лекар закажувањето е преку рецепција.")</p> @if (!string.IsNullOrWhiteSpace(Model.Clinic.Phone)) { <p>@T("Телефон:") @Model.Clinic.Phone</p> } }
             else { <p class="availability-booking-intro">@T("Пронајдовте време што ви одговара? Продолжете за да го закажете вашиот преглед.")</p><a class="btn primary" asp-action="Book" asp-route-clinicId="@Model.Clinic.Id" asp-route-doctorId="@Model.Id">@T("Продолжи кон закажување") <svg class="discovery-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 18 18 6M6 6h12v12" /></svg></a> }
             </div>
         </section>

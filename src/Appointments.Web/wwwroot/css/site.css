@@ -2784,3 +2784,34 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 .fc .fc-event.Completed { border-color:var(--theme-muted,#4e647c); }
 .fc .fc-event.Cancelled { border-color:var(--theme-muted,#805551); }
 .fc .fc-event.NoShow { border-color:var(--theme-muted,#7c4c5b); }
+
+/* Compact clinic context replaces the separate sidebar card. */
+.topbar-left,.workspace-context { min-width:0; }
+.workspace-context { display:flex;align-items:center;gap:12px; }
+.workspace-context > span { margin:0; }
+.workspace-context .workspace-root { color:var(--muted); }
+.clinic-context-button,.clinic-context-name { display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:270px;color:var(--ink);font:inherit;font-weight:650; }
+.clinic-context-button { padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--mint);cursor:pointer; }
+.workspace-context .clinic-context-button > span,.workspace-context .clinic-context-name > span { margin:0;color:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+.clinic-context-button .ui-icon,.clinic-context-name .ui-icon { flex-shrink:0; }
+.clinic-context-button:hover { border-color:var(--green); }
+.clinic-switch-dialog { width:min(540px,calc(100vw - 28px));padding:28px;max-height:85dvh;overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--theme-surface,#fff);color:var(--ink); }
+.clinic-switch-dialog::backdrop { background:#102e2b66;backdrop-filter:blur(5px); }
+.clinic-switch-dialog .dialog-header { padding:0; }
+.clinic-switch-options { display:grid;gap:10px;margin:22px 0; }
+.clinic-switch-option { display:flex;align-items:center;gap:14px;width:100%;padding:16px;text-align:start;border:1px solid var(--line);border-radius:14px;background:var(--theme-surface,#fff);color:var(--ink);cursor:pointer;font:inherit; }
+.clinic-switch-option > span:nth-child(2) { flex:1;min-width:0;overflow-wrap:anywhere; }
+.clinic-switch-option strong,.clinic-switch-option small { display:block; }
+.clinic-switch-option small { margin-top:4px;color:var(--muted); }
+.clinic-switch-icon { display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--mint);flex-shrink:0; }
+.clinic-switch-option.selected { background:var(--mint);border-color:var(--green);opacity:1;cursor:default; }
+.clinic-switch-option:disabled:not(.selected) { opacity:.6;cursor:not-allowed; }
+.clinic-switch-option:not(:disabled):hover { border-color:var(--green);background:var(--theme-surface-soft,#f3f8f7); }
+.record-action:disabled,.btn:disabled { opacity:.55;cursor:not-allowed;box-shadow:none;filter:saturate(.35); }
+.records-pagination { display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:22px 0;color:var(--muted); }
+.records-page-buttons { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+.records-page-buttons [aria-current=page] { background:var(--action,#087b6e);color:#fff;border-color:var(--action,#087b6e); }
+.records-pagination label { display:flex;align-items:center;gap:8px;margin:0;font-size:.875rem; }
+.records-pagination select { width:auto;min-width:70px; }
+@media(max-width:1100px) { .workspace-context .workspace-root { display:none; } .clinic-context-button,.clinic-context-name { max-width:210px; } }
+@media(max-width:650px) { .topbar-left { flex:1;gap:8px; } .workspace-context { display:flex;gap:6px;font-size:.8rem;flex:1; } .clinic-context-button,.clinic-context-name { max-width:145px;gap:5px; } .clinic-context-button { padding:7px 6px; } .clinic-context-button > .ui-icon:first-child,.clinic-context-name > .ui-icon { display:none; } #page-label { max-width:85px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; } .clinic-switch-dialog { padding:22px 18px; } .records-pagination { align-items:flex-start; } .records-page-buttons { order:3;width:100%; } }

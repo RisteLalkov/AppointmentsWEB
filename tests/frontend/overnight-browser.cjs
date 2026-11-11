@@ -40,13 +40,13 @@ function check(ok,label){count++;console.log((ok?'PASS':'FAIL')+' overnight brow
   await c.route('**/data/catalogue/doctors',async route=>{catArrive();await catGate;await route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({error:'Old catalogue conflict'})});});
   await c.locator('#catalogue-form button[type=submit]').click();await catStarted;await c.locator('#close-dialog').click();await c.goto(base+'/Workspace#patients');await c.locator('[data-action=add-patient]').click();catRelease();await c.waitForTimeout(200);
   check(formErrors.length===0&&await c.locator('#patient-form').isVisible(),'Late catalogue errors cannot throw or replace a new patient form');
-  await c.locator('#close-dialog').click();await c.locator('[data-action=add-patient]').click();await c.locator('#patient-name').fill('Одложен пациент');await c.locator('#patient-phone').fill('070123456');
+  await c.locator('#close-dialog').click();await c.locator('[data-action=add-patient]').click();await c.locator('#patient-name').fill('Одложен пациент');await c.locator('#patient-email').fill('delayed@overnight.test');await c.locator('#patient-phone').fill('070123456');
   let patientArrive,patientRelease;const patientStarted=new Promise(r=>patientArrive=r),patientGate=new Promise(r=>patientRelease=r);
   await c.route('**/data/patients',async route=>{const response=await route.fetch();patientArrive();await patientGate;await route.fulfill({response});});
   await c.locator('#patient-form button[type=submit]').click();await patientStarted;await c.locator('#close-dialog').click();await c.goto(base+'/Workspace#doctors');await c.locator(`[data-book="${fixture.doctors[1].id}"]`).click();patientRelease();await c.waitForTimeout(300);
   check(formErrors.length===0&&await c.locator('#booking-doctor-input').isVisible(),'Late patient creation cannot close a different booking form');
   await fourth.context.close();
-  const fifth=await login(),v=fifth.page;await v.goto(base+'/Workspace#patients');await v.locator('[data-action=add-patient]').click();await v.locator('#patient-name').fill('Пациент зачуван без освежување');await v.locator('#patient-phone').fill('070123456');
+  const fifth=await login(),v=fifth.page;await v.goto(base+'/Workspace#patients');await v.locator('[data-action=add-patient]').click();await v.locator('#patient-name').fill('Пациент зачуван без освежување');await v.locator('#patient-email').fill('saved@overnight.test');await v.locator('#patient-phone').fill('070123456');
   await v.route('**/data/bootstrap',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'Read unavailable'})}));
   await v.locator('#patient-form button[type=submit]').click();await v.locator('#main-dialog').waitFor({state:'hidden'});
   check((await v.locator('#patient-results').innerText()).includes('Пациент зачуван без освежување'),'Patient creation remains acknowledged when the following refresh fails');await fifth.context.close();

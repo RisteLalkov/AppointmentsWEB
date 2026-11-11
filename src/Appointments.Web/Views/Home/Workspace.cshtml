@@ -7,7 +7,6 @@
     <aside class="sidebar" id="sidebar" tabindex="0" aria-label="@T("Навигација и корисничка сметка")">
         <button type="button" class="icon-button sidebar-close" id="close-navigation" aria-label="@T("Затвори навигација")">@Icon("x")</button>
         <a class="brand" href="/"><partial name="_BrandMark" /> МедТермин<span class="brand-dot">.</span></a>
-        @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">@(Model.Role == DemoRole.Patient ? T("Избрана клиника") : T("КЛИНИКА"))</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? T("РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА") : Model.Role == DemoRole.Doctor ? T("РАБОТЕН ПРОСТОР ЗА ЛЕКАР") : T("РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ"))</div>
         <nav aria-label="@T("Главна навигација")" id="navigation">
             <button class="nav-item active" data-page="overview"><span aria-hidden="true">@Icon("layout-dashboard")</span> @T("Преглед")</button>
@@ -43,7 +42,13 @@
     </aside>
     <button type="button" class="navigation-backdrop" id="navigation-backdrop" aria-label="@T("Затвори навигација")" tabindex="-1" hidden></button>
     <div class="main-shell">
-        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="@T("Отвори или затвори навигација")" aria-expanded="false">@Icon("menu")</button><span class="breadcrumb">@T("Работен простор") <span>/</span> <strong id="page-label">@T("Преглед")</strong></span></div><div class="topbar-right">
+        <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" id="menu-toggle" aria-label="@T("Отвори или затвори навигација")" aria-expanded="false">@Icon("menu")</button><nav class="breadcrumb workspace-context" aria-label="@T("Тековна локација")"><span class="workspace-root">@T("Работен простор")</span>
+            @if (Backend.UseApi) {
+                <span class="workspace-root" aria-hidden="true">/</span>
+                @if (User.HasClaim("globalPatient", "true")) { <button type="button" id="clinic-switch-button" class="clinic-context-button" aria-haspopup="dialog" aria-controls="clinic-switch-dialog" aria-expanded="false" title="@T("Промени клиника")">@Icon("building-2")<span>@User.FindFirst("clinicName")?.Value</span>@Icon("chevron-down")</button> }
+                else { <span class="clinic-context-name" title="@User.FindFirst("clinicName")?.Value">@Icon("building-2")<span>@User.FindFirst("clinicName")?.Value</span></span> }
+            }
+            <span aria-hidden="true">/</span><strong id="page-label">@T("Преглед")</strong></nav></div><div class="topbar-right">
             <button type="button" class="account-trigger" id="account-menu-button" aria-haspopup="dialog" aria-controls="account-settings-dialog" aria-expanded="false" aria-label="@T("Поставки на сметката за {0}", Model.Name)">
                 <span class="avatar small" aria-hidden="true">@(string.IsNullOrWhiteSpace(Model.Name) ? "?" : StringInfo.GetNextTextElement(Model.Name.Trim()))</span>
                 <span class="user-info"><strong>@Model.Name</strong><small>@(Model.Role == DemoRole.Administrator ? T("Рецепционер") : Model.Role.RoleLabel())@(isDemo ? T(" · Демо") : "")</small></span>
@@ -53,12 +58,18 @@
         <main id="main-content" tabindex="-1"><div id="app"><div class="loading-state" role="status"><span class="spinner"></span> @T("Се подготвува вашиот работен простор…")</div></div></main>
         <footer class="app-footer">
             <span>МедТермин
-                @if (Model.Role == DemoRole.Patient) { <span class="muted"> / @T("Повеќе спокој во секојдневието.")</span> }
             </span>
             <div class="footer-preferences"><span>@(isDemo ? T("Демо-податоци") : Model.Role == DemoRole.Patient ? T("Вашите термини, на едно место.") : T("Термини и распоред"))</span></div>
         </footer>
     </div>
 </div>
+@if (User.HasClaim("globalPatient", "true")) {
+<dialog id="clinic-switch-dialog" class="clinic-switch-dialog" aria-labelledby="clinic-switch-title">
+    <header class="dialog-header"><div><span class="eyebrow">@T("Вашата сметка")</span><h2 id="clinic-switch-title">@T("Промени клиника")</h2></div><button type="button" class="icon-button" id="clinic-switch-close" aria-label="@T("Затвори прозорец")">@Icon("x")</button></header>
+    <p class="muted">@T("Изберете во која клиника сакате да продолжите.")</p>
+    <div id="clinic-switch-content" aria-live="polite"></div>
+</dialog>
+}
 <partial name="_AccountSettings" model="Model" />
 <dialog id="main-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><span class="eyebrow" id="dialog-eyebrow">@T("МЕДТЕРМИН")</span><h2 id="dialog-title">@T("Термин")</h2></div><button class="icon-button" id="close-dialog" aria-label="@T("Затвори прозорец")">@Icon("x")</button></div><div id="dialog-content"></div></dialog>
 <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-header"><h2 id="confirm-title">@T("Потврдете ја постапката")</h2></div><p id="confirm-message"></p><div class="dialog-actions"><button class="btn secondary" id="confirm-no">@T("Задржи ја тековната состојба")</button><button class="btn primary" id="confirm-yes">@T("Потврди")</button></div></dialog>
@@ -67,6 +78,7 @@
 @section Styles { <link rel="stylesheet" href="~/css/account-settings.css" asp-append-version="true" /> }
 @section Scripts {
     <script src="~/js/account-settings.js" asp-append-version="true"></script>
+    <script src="~/js/clinic-switcher.js" asp-append-version="true"></script>
     <script src="~/js/navigation-drawer.js" asp-append-version="true"></script>
     <script src="~/vendor/fullcalendar.min.js" asp-append-version="true"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>

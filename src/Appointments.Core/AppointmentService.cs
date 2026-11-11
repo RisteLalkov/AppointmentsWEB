@@ -36,7 +36,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     {
         var doctor = FindDoctor(s, doctorId);
         if (actor.Role == DemoRole.Doctor) Staff(actor, doctorId);
-        if (actor.Role == DemoRole.Patient && doctor.StaffOnly) return [];
+        if (actor.Role == DemoRole.Patient && (doctor.StaffOnly || doctor.WorkingPeriods.Count == 0)) return [];
         if (excludeId != null)
         {
             var existing = FindAppointment(s, excludeId); CheckAccess(actor, existing); Editable(existing);
@@ -55,7 +55,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
         if (command.AgreedTime && actor.Role != DemoRole.Administrator)
             throw new RuleException("Само рецепцијата може да внесе термин договорен со лекар.", 403);
         if (actor.Role == DemoRole.Doctor) Staff(actor, doctor.Id);
-        if (actor.Role == DemoRole.Patient && (actor.PatientId != command.PatientId || doctor.StaffOnly)) throw new RuleException("Овој термин се закажува преку рецепција или му припаѓа на друг пациент.", 403);
+        if (actor.Role == DemoRole.Patient && (actor.PatientId != command.PatientId || doctor.StaffOnly || doctor.WorkingPeriods.Count == 0)) throw new RuleException("Овој термин се закажува преку рецепција или му припаѓа на друг пациент.", 403);
         if (!s.Patients.Any(p => p.Id == command.PatientId)) throw new RuleException("Изберете важечки пациент.");
         if (!Guid.TryParse(command.RequestId, out _)) throw new RuleException("Потребен е важечки идентификатор на барањето. Повторно отворете го формуларот за закажување.");
         var duplicate = s.Appointments.FirstOrDefault(a => a.RequestId == command.RequestId && a.CreatedBy == actor.Id);
@@ -102,7 +102,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     {
         var a = FindAppointment(s, id); CheckAccess(actor, a); Version(a, command.Version); Editable(a);
         var doctor = CatalogueService.ForBooking(s, FindDoctor(s, a.DoctorId), a.ServiceId, a);
-        if (actor.Role == DemoRole.Patient && doctor.StaffOnly) throw new RuleException("Контактирајте ја рецепцијата за презакажување на овој термин.", 403);
+        if (actor.Role == DemoRole.Patient && (doctor.StaffOnly || doctor.WorkingPeriods.Count == 0)) throw new RuleException("Контактирајте ја рецепцијата за презакажување на овој термин.", 403);
         var slot = SchedulingRules.Slots(s, doctor, command.Date, clock, id).FirstOrDefault(x => x.Time == command.Time)
             ?? throw new RuleException("Тој термин е недостапен. Вашиот првичен термин е задржан.", 409);
         CheckPatientConflict(s, a.PatientId, slot, id);
@@ -144,6 +144,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     {
         Staff(actor);
         (name, email, phone) = NormalizeContact(name, email, phone);
+        if (email.Length == 0) throw new RuleException("Внесете е-пошта за контакт на пациентот.");
         return store.Write(s =>
         {
             UniquePatientEmail(s, email);

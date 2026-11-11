@@ -38,7 +38,7 @@ public sealed class PublicDiscovery(ClinicRegistry registry, ClinicConnections c
         PublicAvailability Result(string? message, IReadOnlyList<PublicFreeSlot>? slots = null)
             => new(day, clock.Today, clock.Today.AddDays(180), serviceId, message, slots ?? []);
         if (doctor.StaffOnly) return Result(UiText.T("За овој лекар закажувањето е по договор со рецепцијата. Контактирајте ја клиниката за достапност."));
-        if (doctor.WorkingPeriods.Count == 0 && !await db.Exceptions.AnyAsync(e => e.DoctorId == doctorId && e.IsAvailable && e.Date >= clock.Today && e.Date <= clock.Today.AddDays(180), ct))
+        if (doctor.WorkingPeriods.Count == 0)
             return Result(UiText.T("Лекарот нема објавено работно време. Контактирајте ја клиниката за да договорите термин."));
         if (state.DoctorServices.Count > 0 && state.Services.Count == 0)
             return Result(UiText.T("Во моментов нема услуги достапни за онлајн закажување. Контактирајте ја клиниката."));
@@ -79,11 +79,11 @@ public sealed class PublicDiscovery(ClinicRegistry registry, ClinicConnections c
             if (skip >= count) { skip -= count; continue; }
             if (rows.Count == q.PageSize) continue;
             var page = await doctors.OrderBy(d => d.Name).ThenBy(d => d.Id).Skip(skip).Take(q.PageSize - rows.Count)
-                .Select(d => new { d.Id, d.Name, d.Specialty, d.Subspecialty, d.StaffOnly }).ToListAsync(ct);
+                .Select(d => new { d.Id, d.Name, d.Specialty, d.Subspecialty, d.StaffOnly, ByAgreement = !d.WorkingPeriods.Any() }).ToListAsync(ct);
             skip = 0;
             var ids = page.Select(d => d.Id).ToArray();
             var services = await (from a in db.DoctorServices join s in db.Services on a.ServiceId equals s.Id where ids.Contains(a.DoctorId) && s.Enabled orderby s.Name select new { a.DoctorId, s.Id, s.Name, s.DurationMinutes }).ToListAsync(ct);
-            rows.AddRange(page.Select(d => new PublicDoctor(d.Id, d.Name, d.Specialty, d.Subspecialty, Describe(c), services.Where(s => s.DoctorId == d.Id).Select(s => new PublicService(s.Id, s.Name, s.DurationMinutes)).ToArray(), d.StaffOnly)));
+            rows.AddRange(page.Select(d => new PublicDoctor(d.Id, d.Name, d.Specialty, d.Subspecialty, Describe(c), services.Where(s => s.DoctorId == d.Id).Select(s => new PublicService(s.Id, s.Name, s.DurationMinutes)).ToArray(), d.StaffOnly, d.ByAgreement)));
         }
         return new(rows, total, q.Page, q.PageSize);
     }

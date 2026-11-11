@@ -394,7 +394,7 @@ Test("Patient numbers backfill legacy demo records and remain unique across conc
     using var f=New();
     var original=f.Service.Patients(admin).ToDictionary(p=>p.Id,p=>p.Number);
     True(original.Values.All(n=>n>0));Equal(original.Count,original.Values.Distinct().Count());
-    Parallel.For(0,12,i=>f.Service.AddPatient(admin,"Same name","", "070123456"));
+    Parallel.For(0,12,i=>f.Service.AddPatient(admin,"Same name",$"same-{i}@example.test", "070123456"));
     var all=f.Service.Patients(admin);Equal(all.Count,all.Select(p=>p.Number).Distinct().Count());
     var p=all.First();var updated=f.Service.UpdatePatient(admin,p.Id,new("Renamed patient",p.Email,"070123456",p.Version));
     Equal(p.Number,updated.Number);Equal(p.Id,updated.Id);
@@ -456,11 +456,12 @@ Test("Empty optional services are saved and replayed as null",()=>{
     var visit=f.Service.Book(admin,input);True(visit.ServiceId==null);
     Equal(visit.Id,f.Service.Book(admin,input with{ServiceId=null}).Id);
 });
-Test("Phone is required for contact creation and editing while email stays optional",()=>{
+Test("Phone and contact email are required for new contacts",()=>{
     using var f=New();Reject(()=>f.Service.AddPatient(admin,"No phone","",""),400);
     Reject(()=>f.Service.UpdatePatient(admin,"p1",new("Name","",null,1)),400);
     foreach(var value in new[]{"-------","123","+389+70123456","phone1234567"}) Reject(()=>PatientContact.RequirePhone(value),400);
-    var p=f.Service.AddPatient(admin,"Patient without email","","+389 70 123 456");Equal("",p.Email);Equal("+389 70 123 456",p.Phone);
+    Reject(()=>f.Service.AddPatient(admin,"No email","","+389 70 123 456"),400);
+    var p=f.Service.AddPatient(admin,"Patient with contacts","contact@example.test","+389 70 123 456");Equal("contact@example.test",p.Email);Equal("+389 70 123 456",p.Phone);
 });
 Test("Dated working weeks replace regular hours only within their inclusive date range",()=>{
     using var f=New();var from=monday.AddDays(7);var to=from.AddDays(6);
@@ -483,6 +484,15 @@ Test("Overlapping dated schedule ranges are rejected and existing bookings remai
 Test("Working-hour validation does not confuse fallback duration with service duration",()=>{
     using var f=New();f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new(9,0),new(9,20))],30);
     Equal(0,f.Service.Availability(admin,"d1",monday).Count);
+});
+Test("Patients cannot self-book or reschedule agreement-only doctors even with one-off availability",()=>{
+    using var f=New();f.Service.Book(admin,Cmd());
+    f.Store.Write(s=>{s.Doctors[0]=s.Doctors[0] with {WorkingPeriods=[]};return true;});
+    f.Service.AddException(admin,"d1",monday,new(9,0),new(12,0),true,"Available by agreement");
+    Equal(0,f.Service.Availability(pat,"d1",monday).Count);
+    Reject(()=>f.Service.Book(pat,Cmd("10:00")),403);
+    var visit=f.Service.Appointments(admin).Single();Reject(()=>f.Service.Move(pat,visit.Id,new(monday,new(10,0),visit.Version)),403);
+    True(f.Service.Book(admin,Cmd("10:00") with {AgreedTime=true}).Id.Length>0);
 });
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}

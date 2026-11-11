@@ -11,6 +11,7 @@
   // Only clear a saved form if the user has not edited it while its request was in flight.
   window.MedTerminFormState = Object.freeze({
     revision: form => revisions.get(form) || 0,
+    isDirty: form => dirty.has(form),
     saved(form, revision) { if ((revisions.get(form) || 0) === revision) dirty.delete(form); }
   });
   document.addEventListener("submit", event => {

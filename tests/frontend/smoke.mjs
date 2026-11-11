@@ -170,8 +170,8 @@ try {
   assert(pat.$("#navigation").textContent.includes("Термини") && !pat.$("#navigation").textContent.includes("Appointments"), "Navigation is Macedonian");
   await pat.page("doctors");
   assert(
-    pat.w.document.querySelectorAll(".doctor-card").length === 40,
-    "Directory renders all source providers",
+    pat.w.document.querySelectorAll(".doctor-card").length === 12,
+    "Directory paginates source providers",
   );
   pat.$("#doctor-search").value = "Ивица";
   pat

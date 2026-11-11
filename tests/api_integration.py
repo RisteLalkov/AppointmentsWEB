@@ -305,7 +305,7 @@ with tempfile.TemporaryDirectory(prefix='careline-api-') as temporary:
         slot_path = '/api/slots?' + urllib.parse.urlencode({'doctorId': d['id'], 'date': day, 'serviceId': sv['id']})
         service_slots = admin.ok(slot_path)
         check(len(service_slots) == 10, '45-minute service fits ten complete appointments into eight hours')
-        p = admin.ok('/api/patients', {'name': 'Catalogue patient', 'email': '', 'phone': '070123456'})
+        p = admin.ok('/api/patients', {'name': 'Catalogue patient', 'email': 'catalogue@integration.test', 'phone': '070123456'})
         cmd = {'doctorId': d['id'], 'patientId': p['id'], 'date': day, 'time': service_slots[0]['time'], 'durationMinutes': 45, 'serviceId': sv['id'], 'requestId': str(uuid.uuid4())}
         check(admin.request('/api/appointments', dict(cmd, durationMinutes=30))[0] == 409, 'API validates service duration')
         visit = admin.ok('/api/appointments', cmd)

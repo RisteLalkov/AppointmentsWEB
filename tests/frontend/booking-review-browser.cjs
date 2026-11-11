@@ -13,7 +13,7 @@ let checks=0;function check(ok,label){if(!ok)throw Error(label);checks++;console
   check(!(await page.locator('#app').innerText()).includes('ВАШАТА ГРИЖА') && !(await page.locator('.app-footer').innerText()).includes('спокој'),'Reception overview and footer use practical language');
   await page.goto(base+'/Workspace#doctors');await page.locator(`[data-next-doctor="${fixture.doctors[0].id}"] button`).waitFor();
   check(await page.locator('.next-slot-button').count()===3,'Scheduled doctors show clickable first availability in card view');
-  check((await page.locator(`[data-next-doctor="${fixture.doctors[3].id}"]`).innerText()).includes('Нема слободни термини'),'Unscheduled doctor has an accurate no-slots message');
+  check((await page.locator(`[data-next-doctor="${fixture.doctors[3].id}"]`).innerText()).includes('Контактирајте го лекарот или рецепцијата'),'Unscheduled doctor has an accurate no-slots message');
   await shot('doctor-first-slots');
   const first=page.locator(`[data-next-doctor="${fixture.doctors[0].id}"] button`),firstText=await first.innerText(),time=firstText.match(/\d{2}:\d{2}/)[0];await first.click();await page.locator('.slot.selected').waitFor();const firstDate=await page.locator('#booking-date').inputValue();
   check((await page.locator('#dialog-title').innerText())==='Нов термин' && (await page.locator('.slot.selected').innerText())===time,'First-slot action opens neutral booking dialog with that time selected');
