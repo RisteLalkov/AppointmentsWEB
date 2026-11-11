@@ -849,14 +849,15 @@ input[type="time"] {
   max-width: 420px;
   margin-bottom: 13px;
 }
+.hero-banner .eyebrow { color: var(--green-dark); }
 .hero-banner h2 em {
   font-family: Georgia, serif;
-  color: var(--theme-muted, #7c8e65);
+  color: var(--green-dark);
   font-weight: 400;
 }
 .hero-banner p {
   font-size: 0.9375rem;
-  color: var(--theme-muted, #7f8c70);
+  color: var(--muted);
   max-width: 370px;
 }
 .hero-banner .btn {
@@ -903,7 +904,7 @@ input[type="time"] {
   left: -15px;
   box-shadow: 0 8px 20px #4f683710;
   transform: rotate(-5deg);
-  color: var(--theme-muted, #738661);
+  color: var(--green-dark);
 }
 .stats-grid {
   display: grid;
@@ -1871,7 +1872,7 @@ dialog::backdrop {
     display: none;
   }
   .overview-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2038,6 +2039,12 @@ dialog::backdrop {
   .hero-banner p {
     max-width: none;
   }
+  .page-heading:has(.overview-day-note) { flex-direction: column; align-items: flex-start; }
+  .page-heading:has(.overview-day-note) > div { width: 100%; min-width: 0; overflow-wrap: anywhere; }
+  .overview-grid > * { min-width: 0; }
+  .overview-grid .card-head { flex-wrap: wrap; }
+  .overview-grid .week-chart { gap: 8px; padding-inline: 0; }
+  .overview-grid .chart-col { min-width: 0; }
   .stat-card {
     padding: 16px;
   }
@@ -2729,13 +2736,9 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 .doctor-next-slot > span { display:block; }
 .next-slot-button { display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:0;border:0;background:transparent;color:var(--green-dark);font-weight:700;cursor:pointer;text-align:left; }
 .next-slot-button .ui-icon { width:15px;height:15px; }
-.patient-booking-prompt { display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 26px;margin-bottom:24px;border:1px solid var(--line);border-radius:16px;background:var(--theme-success-soft,#eef7f2); }
-.patient-booking-prompt h2 { font-size:1.2rem;margin:0 0 6px; }
-.patient-booking-prompt p { margin:0;color:var(--muted); }
 .calendar-range > label { margin:0; }
 .calendar-range > button { height:52px;margin:0;align-self:flex-end; }
 .calendar-range .localized-date-display { height:52px; }
-@media(max-width:650px) { .patient-booking-prompt { align-items:flex-start;flex-direction:column;padding:20px; } }
 @media(max-width:650px) {
   #main-dialog .form-row:has(#booking-date) { grid-template-columns:minmax(0,1fr); }
   .has-availability-calendar .availability-calendar-open { height:38px; }

@@ -163,7 +163,7 @@ try {
   }
   const pat = await workspace("p01");
   assert(
-    pat.$(".patient-booking-prompt")?.textContent.includes("Закажете преглед"),
+    pat.$(".hero-banner")?.textContent.includes("Одвојте време за себе."),
     "Patient overview renders",
   );
   assert(pat.w.document.documentElement.lang === "mk", "HTML defaults to Macedonian");
