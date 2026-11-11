@@ -7,7 +7,7 @@
     <aside class="sidebar" id="sidebar" tabindex="0" aria-label="@T("Навигација и корисничка сметка")">
         <button type="button" class="icon-button sidebar-close" id="close-navigation" aria-label="@T("Затвори навигација")">@Icon("x")</button>
         <a class="brand" href="/"><partial name="_BrandMark" /> МедТермин<span class="brand-dot">.</span></a>
-        @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">@T("КЛИНИКА")</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
+        @if (Backend.UseApi) { <div class="clinic-badge"><span class="eyebrow">@(Model.Role == DemoRole.Patient ? T("Избрана клиника") : T("КЛИНИКА"))</span><strong>@User.FindFirst("clinicName")?.Value</strong></div> }
         <div class="workspace-label">@(Model.Role == DemoRole.Administrator ? T("РАБОТЕН ПРОСТОР ЗА РЕЦЕПЦИЈА") : Model.Role == DemoRole.Doctor ? T("РАБОТЕН ПРОСТОР ЗА ЛЕКАР") : T("РАБОТЕН ПРОСТОР ЗА ПАЦИЕНТ"))</div>
         <nav aria-label="@T("Главна навигација")" id="navigation">
             <button class="nav-item active" data-page="overview"><span aria-hidden="true">@Icon("layout-dashboard")</span> @T("Преглед")</button>

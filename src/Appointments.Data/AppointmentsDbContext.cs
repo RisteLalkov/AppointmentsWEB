@@ -53,6 +53,7 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
             p.ToTable("WorkingPeriods", t => t.HasCheckConstraint("CK_WorkingPeriod_Range", "\"Start\" < \"End\" AND \"Day\" BETWEEN 0 AND 6"));
             p.WithOwner().HasForeignKey("DoctorId"); p.Property<long>("Id").ValueGeneratedOnAdd(); p.HasKey("Id");
             p.HasIndex("DoctorId", nameof(WorkingPeriod.Day));
+            p.ToTable("WorkingPeriods", t => t.HasCheckConstraint("CK_WorkingPeriod_Dates", "(\"ValidFrom\" IS NULL AND \"ValidTo\" IS NULL) OR (\"ValidFrom\" IS NOT NULL AND \"ValidTo\" IS NOT NULL AND \"ValidFrom\" <= \"ValidTo\")"));
         });
         doctor.OwnsMany(d => d.SourceSchedules, p =>
         { p.ToTable("SourceSchedules"); p.WithOwner().HasForeignKey("DoctorId"); p.Property<long>("Id").ValueGeneratedOnAdd(); p.HasKey("Id"); });
@@ -122,6 +123,7 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
         b.Entity<PatientAccount>(x => {
             x.ToTable("PatientAccounts", "careline_identity", t => t.ExcludeFromMigrations()); x.HasKey(a => a.Id);
             x.Property(a => a.Id).HasMaxLength(64); x.Property(a => a.Email).HasMaxLength(120); x.Property(a => a.Name).HasMaxLength(80);
+            x.Property(a => a.Phone).HasMaxLength(30);
             x.HasIndex(a => a.Email).IsUnique();
         });
         b.Entity<PatientAccountSession>(x => {

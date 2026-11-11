@@ -147,9 +147,9 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(Client(second,'main',a.token).ok('/api/auth/me')['clinic']['id']=='main', 'Clinic session works on second API instance')
         fresh = c.ok('/api/bootstrap')
         check(not any(fresh[x] for x in ['doctors','patients','appointments','services','specialties']) and fresh['timeZone']=='UTC', 'New clinic starts empty with its own timezone')
-        check(Client(first,'empty').request('/api/auth/register', {'name':'Patient Test','email':'new@test.test','password':password})[0]==403, 'Registration policy belongs to clinic')
+        check(Client(first,'empty').request('/api/auth/register', {'name':'Patient Test','email':'new@test.test','password':password,"phone":"070123456"})[0]==403, 'Registration policy belongs to clinic')
         check(Client(first,'empty').request('/api/auth/demo-login',{'userId':'admin'})[0]==404,'Demo login disabled for unseeded clinic')
-        registration = {'name':'Same Person','email':'same@tenancy.test','password':password}
+        registration = {'name':'Same Person','email':'same@tenancy.test','password':password,"phone":"070123456"}
         ra = Client(first,'main').ok('/api/auth/register',registration)
         check(Client(first,'east').request('/api/auth/register',registration)[0] == 409, 'Duplicate global sign-in email is rejected safely')
         rb = Client(first,'east').ok('/api/auth/register',dict(registration,email='east-same@tenancy.test'))
@@ -189,7 +189,7 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         periods = [{'day':d,'start':'09:00:00','end':'12:00:00'} for d in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']]
         c.ok('/api/schedule/'+doctor['id'],{'version':1,'durationMinutes':30,'periods':periods})
         service = c.ok('/api/catalogue/services',{'name':'Нов преглед','specialtyId':specialty['id'],'durationMinutes':30,'enabled':True,'doctorIds':[doctor['id']]})
-        patient = c.ok('/api/patients',{'name':'Измислен пациент','email':'fixture@tenancy.test','phone':''})
+        patient = c.ok('/api/patients',{'name':'Измислен пациент','email':'fixture@tenancy.test','phone':'070123456'})
         visit = c.ok('/api/appointments',{'doctorId':doctor['id'],'patientId':patient['id'],'serviceId':service['id'],'date':day,'time':'09:00:00','durationMinutes':30,'requestId':str(uuid.uuid4())})
         check(visit['start'].endswith('+00:00') or visit['start'].endswith('Z'),'New clinic booking uses configured UTC timezone')
         check(not any(d['id']==doctor['id'] for d in a.ok('/api/bootstrap')['doctors']), 'Catalogues and newly created patients stay in owning clinic')
@@ -200,9 +200,9 @@ with tempfile.TemporaryDirectory(prefix='careline-tenancy-') as temporary:
         check(not any(x['time']=='10:00:00' for x in c.ok('/api/slots?'+urllib.parse.urlencode({'doctorId':doctor['id'],'date':day,'serviceId':service['id']}))), 'Availability exceptions apply in owning clinic')
         private_profile = '/api/patients/' + patient['id']
         check(b.request(private_profile)[0] == 404 and a.request(private_profile)[0] == 404, 'Patient details cannot cross clinic schemas')
-        check(b.request(private_profile, {'name':'Cross clinic','email':'','phone':'','version':1})[0] == 404, 'Patient contact edits cannot cross clinic schemas')
+        check(b.request(private_profile, {'name':'Cross clinic','email':'','phone':'070123456','version':1})[0] == 404, 'Patient contact edits cannot cross clinic schemas')
         before = c.ok(private_profile)['patient']
-        check(c.ok(private_profile, {'name':'Clinic-local update','email':'','phone':'','version':before['version']})['version'] == before['version'] + 1, 'Patient contact update stays in selected clinic')
+        check(c.ok(private_profile, {'name':'Clinic-local update','email':'','phone':'070123456','version':before['version']})['version'] == before['version'] + 1, 'Patient contact update stays in selected clinic')
         report_path = '/api/reports?'+urllib.parse.urlencode({'from':day,'to':day,'groupBy':'day'})
         check(c.ok(report_path)['summary']['total']==1 and a.ok(report_path)['summary']['total']==1 and b.ok(report_path)['summary']['total']==1,'Reports aggregate each clinic independently')
         with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:

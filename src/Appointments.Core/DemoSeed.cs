@@ -16,7 +16,7 @@ public static class DemoSeed
         {
             TimeZoneId = clock.Zone.Id,
             Doctors = JsonSerializer.Deserialize<List<Doctor>>(doctorJson, JsonDemoStore.JsonOptions)!,
-            Patients = names.Select((name, i) => new Patient($"p{i+1:00}", name, $"patient{i+1:00}@example.test", "") { Number = i + 1 }).ToList()
+            Patients = names.Select((name, i) => new Patient($"p{i+1:00}", name, $"patient{i+1:00}@example.test", $"070{i+1:000000}") { Number = i + 1 }).ToList()
         };
         var totals = state.Patients.ToDictionary(p => p.Id, _ => 0);
         var futureCounts = state.Patients.ToDictionary(p => p.Id, _ => 0);

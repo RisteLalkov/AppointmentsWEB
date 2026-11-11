@@ -94,6 +94,7 @@ jobs:
           python tests/booking_review_integration.py
           python tests/high_severity_integration.py
           python tests/tester_feedback_integration.py
+          python tests/tester_round2_integration.py
           python tests/overnight_integration.py
           python tests/discovery_web_smoke.py
           node tests/frontend/accessibility-browser.cjs

@@ -14,7 +14,7 @@ echo The API uses its existing server database settings.
 set "Preview__AllowSeed=true"
 set "Database__ApplyMigrations=false"
 dotnet .\Appointments.Api.dll --seed-preview --clinic "%sample_clinic%"
-if errorlevel 1 (
+if not "%ERRORLEVEL%"=="0" (
   echo.
   echo SAMPLE DATA FAILED. Keep the full error message above.
   pause

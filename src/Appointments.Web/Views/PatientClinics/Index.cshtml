@@ -1,16 +1,19 @@
 @model Appointments.Contracts.PatientHome
-@{ ViewData["Title"] = T("Мои клиники"); }
+@{ ViewData["Title"] = T("Мои клиники"); ViewData["WorkspaceThemeSelector"] = true; var history = ViewData["Period"] as string == "history"; var selectedClinic = ViewData["ClinicFilter"] as string; }
 <main class="patient-home account-admin">
-    <header class="patient-home-header"><a class="brand" href="/Discover"><partial name="_BrandMark" /> МедТермин.</a><nav><a href="/Discover">@T("Лекари и клиники")</a><a href="/Account/Password">@T("Промени лозинка")</a><form asp-controller="Account" asp-action="Logout" method="post"><button class="btn secondary small" type="submit">@T("Одјави се")</button></form></nav></header>
+    <header class="patient-home-header"><a class="brand" href="/Discover"><partial name="_BrandMark" /> МедТермин.</a><nav><a href="/Discover">@T("Лекари и клиники")</a><button type="button" class="account-trigger" id="account-menu-button" aria-haspopup="dialog" aria-controls="account-settings-dialog" aria-expanded="false"><span class="avatar small" aria-hidden="true">@Icon("user-round")</span><span class="user-info"><strong>@Model?.Name</strong><small>@T("Пациент")</small></span><span class="account-trigger-chevron" aria-hidden="true">@Icon("chevron-down")</span></button></nav></header>
     @if (ViewData["Error"] is string || TempData["Error"] is string) { <p class="inline-error" role="alert">@(ViewData["Error"] ?? TempData["Error"])</p> }
     @if (Model != null) {
         <div class="page-heading"><div><h1>@T("Мои клиники")</h1><p class="muted">@Model.Name · @Model.Email</p><p>@T("Изберете клиника. Вашата најава важи за сите, а секоја клиника има свој пациентски профил и историја.")</p></div></div>
-        <section aria-labelledby="patient-visits-title" class="patient-home-section"><h2 id="patient-visits-title">@T("Претстојни термини во сите клиники")</h2>
-        @if (Model.Appointments.Count == 0) { <p class="inline-note">@T("Немате претстојни термини. Изберете клиника или пронајдете лекар за да закажете.")</p> }
-        <div class="patient-home-grid">@foreach (var visit in Model.Appointments) {
-            <article class="card patient-visit" data-patient-visit="@visit.AppointmentId"><span class="eyebrow">@visit.ClinicName</span><h3>@visit.DoctorName</h3><p><strong>@visit.LocalStart</strong></p><p class="muted">@visit.ServiceName</p><span class="badge @(visit.Status)">@(visit.Status == AppointmentStatus.Scheduled ? T("Чека потврда") : T("Потврден"))</span>
-            <form asp-action="Select" method="post"><input type="hidden" name="clinicId" value="@visit.ClinicId"><input type="hidden" name="returnUrl" value="@($"/Workspace?appointment={Uri.EscapeDataString(visit.AppointmentId)}#appointments")"><button class="btn secondary" type="submit">@T("Види термин") @Icon("arrow-up-right")</button></form></article>
-        }</div></section>
+        <section class="hero-banner"><div><span class="eyebrow">@T("ДОБРОТО ЗДРАВЈЕ ЗАПОЧНУВА ТУКА")</span><h2>@T("Одвојте време за себе.")<br /><em>@T("Чекор кон подобро здравје.")</em></h2><p>@T("Пронајдете го соодветниот специјалист и термин што ви одговара. Сите детали ќе бидат на едно место.")</p><a class="btn primary" href="/Discover#directory">@T("Пронајди лекар") @Icon("arrow-up-right")</a></div><div class="hero-visual" aria-hidden="true"><span class="hero-plus"><img src="/images/company-mark.svg" width="100" height="100" alt="" /></span><span class="hero-tag">@T("Вашето здравје. Вашето темпо.")</span></div></section>
+        <section aria-labelledby="patient-visits-title" class="patient-home-section">
+            <h2 id="patient-visits-title">@(history ? T("Историја на термини") : T("Претстојни термини во сите клиники"))</h2>
+            <form method="get" class="patient-home-filters"><label for="home-clinic">@T("Клиника")<select id="home-clinic" name="clinicId"><option value="">@T("Сите клиники")</option>@foreach(var option in Model.Clinics.Where(c => c.Joined)) { <option value="@option.Clinic.Id" selected="@(selectedClinic == option.Clinic.Id)">@option.Clinic.Name</option> }</select></label><label for="home-period">@T("Период")<select id="home-period" name="period"><option value="upcoming" selected="@(!history)">@T("Претстојни")</option><option value="history" selected="@history">@T("Претходни")</option></select></label><button class="btn secondary" type="submit">@T("Прикажи")</button></form>
+            @{ var visits = history ? Model.History ?? [] : Model.Appointments; }
+            @if (visits.Count == 0) { <p class="inline-note">@T("Нема термини за избраниот приказ.")</p> }
+            <div class="patient-home-grid">@foreach(var visit in visits) { <partial name="_Visit" model="visit" /> }</div>
+            @if (visits.Count >= 100) { <p class="field-help">@T("Прикажани се најмногу 100 термини. За целосната историја отворете ја соодветната клиника.")</p> }
+        </section>
         <section class="patient-home-section" aria-labelledby="patient-clinics-title"><h2 id="patient-clinics-title">@T("Клиники")</h2><div class="patient-home-grid">@foreach (var option in Model.Clinics) {
             <article class="card patient-clinic" data-patient-clinic="@option.Clinic.Id"><span class="patient-clinic-icon" aria-hidden="true">@Icon("building-2")</span><h3>@option.Clinic.Name</h3>
             @if (option.Joined) { <p class="patient-number">@T("Број на пациент"): @option.PatientNumber</p> } else { <p class="muted">@T("Не е потребна нова сметка или лозинка.")</p> }
@@ -22,3 +25,7 @@
         }</div></section>
     }
 </main>
+
+@if (Model != null) { <partial name="_AccountSettings" model="new DemoActor(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty, Model.Name, DemoRole.Patient)" /> }
+@section Styles { <link rel="stylesheet" href="~/css/account-settings.css" asp-append-version="true" /> }
+@section Scripts { <script src="~/js/account-settings.js" asp-append-version="true"></script> }

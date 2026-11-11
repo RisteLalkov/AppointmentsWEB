@@ -11,16 +11,17 @@ public record PatientInput([Required, StringLength(80, MinimumLength = 2)] strin
 public record ScheduleInput([Required] List<WorkingPeriod> Periods, int DurationMinutes, int? Version = null);
 public record ExceptionInput(DateOnly Date, TimeOnly Start, TimeOnly End, bool IsAvailable, [Required, StringLength(120, MinimumLength = 2)] string Reason);
 public record LoginInput([Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(128)] string Password, string? ClinicId = null);
-public record RegisterInput([Required, StringLength(80, MinimumLength = 2)] string Name, [Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(128)] string Password);
+public record RegisterInput([Required, StringLength(80, MinimumLength = 2)] string Name, [Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(128)] string Password, string? Phone = null);
+public record PatientJoinInput(string? Phone = null);
 public record ChangePasswordInput([Required] string CurrentPassword, [Required] string NewPassword);
 public record ClinicSummary(string Id, string Name, string TimeZone, bool AllowRegistration);
-public record SessionResponse(string AccessToken, DateTimeOffset ExpiresAt, DemoActor Actor, bool DemoMode, ClinicSummary? Clinic = null, bool GlobalPatient = false);
+public record SessionResponse(string AccessToken, DateTimeOffset ExpiresAt, DemoActor Actor, bool DemoMode, ClinicSummary? Clinic = null, bool GlobalPatient = false, string? PatientIdentityId = null);
 public record AccountInput([Required, EmailAddress, StringLength(120)] string Email, [Required, StringLength(80, MinimumLength = 2)] string Name, DemoRole Role,
     string? DoctorId, string? PatientId, [Required, StringLength(128)] string Password);
 public record AccountSummary(string Id, string Email, string Name, DemoRole Role, string? DoctorId, string? PatientId, bool Enabled);
 public record AccountAccessInput(bool Enabled);
 public record PatientClinicOption(ClinicSummary Clinic, bool Joined, bool Available, string? PatientNumber);
 public record PatientVisit(string ClinicId, string ClinicName, string AppointmentId, string DoctorName, string? ServiceName, DateTimeOffset Start, DateTimeOffset End, string LocalStart, AppointmentStatus Status);
-public record PatientHome(string Name, string Email, IReadOnlyList<PatientClinicOption> Clinics, IReadOnlyList<PatientVisit> Appointments);
+public record PatientHome(string Name, string Email, IReadOnlyList<PatientClinicOption> Clinics, IReadOnlyList<PatientVisit> Appointments, string Phone = "", IReadOnlyList<PatientVisit>? History = null);
 public record PatientIdentitySummary(string Id, string Name, string Email);
 public record PatientPasswordReset([Required, StringLength(128, MinimumLength = 12)] string NewPassword);

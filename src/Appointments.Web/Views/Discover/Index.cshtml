@@ -74,9 +74,14 @@
             <nav class="chip-tabs discovery-tabs" aria-label="@T("Вид на пребарување")"><a class="@(view == "doctors" ? "active" : "")" href="/Discover?view=doctors#directory" aria-current="@(view == "doctors" ? "page" : "false")">@T("Лекари")</a><a class="@(view == "clinics" ? "active" : "")" href="/Discover?view=clinics#directory" aria-current="@(view == "clinics" ? "page" : "false")">@T("Клиники")</a></nav>
         </div>
         <div class="card discovery-search-panel">
-            @* A new broad search deliberately omits ALL previous refinements, including ClinicId. *@
+            @* Keep explicitly selected scope until the visitor clears it. *@
             <form method="get" action="/Discover#directory" class="discovery-search" id="discovery-search" role="search">
                 <input type="hidden" name="view" value="@view" />
+                @if (!string.IsNullOrWhiteSpace(q.ClinicId)) { <input type="hidden" name="ClinicId" value="@q.ClinicId" /> }
+                @if (!string.IsNullOrWhiteSpace(q.Clinic)) { <input type="hidden" name="Clinic" value="@q.Clinic" /> }
+                @if (!string.IsNullOrWhiteSpace(q.Specialty)) { <input type="hidden" name="Specialty" value="@q.Specialty" /> }
+                @if (!string.IsNullOrWhiteSpace(q.Service)) { <input type="hidden" name="Service" value="@q.Service" /> }
+
                 <div class="field"><label for="search">@(view == "clinics" ? T("Која клиника ја барате?") : T("Кого или што барате?"))</label>
                     <div class="discovery-input"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg><input type="search" id="search" name="Search" value="@q.Search" maxlength="100" placeholder="@(view == "clinics" ? T("Внесете цело име или дел од името…") : T("Име на лекар, клиника, специјалност или услуга…"))" aria-describedby="@(view == "clinics" ? "search-help" : null)" /></div>
                 </div>

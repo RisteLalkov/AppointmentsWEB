@@ -98,7 +98,7 @@ with tempfile.TemporaryDirectory(prefix='medtermin-global-') as folder:
    for key,value in dict(Id=cid,Name='Клиника '+cid,TimeZone='Europe/Skopje',ImportSourceDoctors='false',SeedDemoData='false',BootstrapEmail=cid+'@global.test',BootstrapPassword=password,AllowRegistration='false' if cid=='closed' else 'true').items():env[f'Tenancy__Clinics__{i}__{key}']=value
   api,api2,web=address(),address(),address();first=start('Appointments.Api',api,env);second=start('Appointments.Api',api2,env)
   legacy=Client(api);old_session=legacy.login('legacy@global.test')
-  check(old_session['globalPatient'] and old_session['actor']['id']=='legacy-account' and old_session['actor']['patientId']=='legacy-patient','An existing patient retains its password and clinic profile after the upgrade')
+  check(old_session['globalPatient'] and old_session['clinic'] is None and legacy.ok('/api/bootstrap')['actor']['patientId']=='legacy-patient','An existing patient retains its password and clinic profile after the upgrade')
   check(Client(api,legacy_token).request('/api/bootstrap')[0]==401,'The upgrade revokes old clinic-only patient sessions')
   check(sql('SELECT count(*) FROM public."Accounts" WHERE "Id"=\'legacy-account\' AND "PasswordHash"=\'\' AND "GlobalPatientId" IS NOT NULL')==1,'Legacy credentials move centrally rather than creating a second local password')
   staff=Client(api);staff_session=staff.login('main@global.test');east=Client(api,clinic='east');east.login('east@global.test')
@@ -112,8 +112,8 @@ with tempfile.TemporaryDirectory(prefix='medtermin-global-') as folder:
    admin.ok('/api/schedule/'+d['id'],dict(version=1,durationMinutes=30,periods=[dict(day=day,start='09:00',end='17:00') for day in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']]))
    svc=admin.ok('/api/catalogue/services',dict(name='Преглед '+cid,specialtyId=spec['id'],durationMinutes=30,enabled=True,doctorIds=[d['id']]))
    doctors[cid]=d;services[cid]=svc
-  check(Client(api).request('/api/auth/register',dict(name='  ',email='spaces@global.test',password=password))[0]==400,'Whitespace-only patient names remain invalid')
-  visitor=Client(api,clinic='main');registration=visitor.ok('/api/auth/register',dict(name='Ана Петрова',email='ana@global.test',password=password,role='Administrator'))
+  check(Client(api).request('/api/auth/register',dict(name='  ',email='spaces@global.test',password=password,phone="070123456"))[0]==400,'Whitespace-only patient names remain invalid')
+  visitor=Client(api,clinic='main');registration=visitor.ok('/api/auth/register',dict(name='Ана Петрова',email='ana@global.test',password=password,role='Administrator',phone="070123456"))
   patient=Client(api,clinic='main');session=patient.login('ANA@global.test')
   check(session.get('globalPatient') is True and patient.token.startswith('u1.') and session['actor']['role']=='Patient','Self-registration creates a shared patient login without privilege escalation')
   check(sql('SELECT count(*) FROM careline_identity."PatientAccounts"')==2,'One canonical account is stored for the patient')
@@ -125,7 +125,7 @@ with tempfile.TemporaryDirectory(prefix='medtermin-global-') as folder:
   before=sql('SELECT count(*) FROM clinic_east."Patients"')
   home=Client(api,patient.token,None).ok('/api/patient/home')
   check(any(c['clinic']['id']=='east' and not c['joined'] for c in home['clinics']) and sql('SELECT count(*) FROM clinic_east."Patients"')==before,'Browsing clinics never creates memberships or clinical records')
-  for body in [dict(name='Duplicate',email='ana@global.test',password=password),dict(name='Staff takeover',email='main@global.test',password=password)]:
+  for body in [dict(name='Duplicate',email='ana@global.test',password=password,phone="070123456"),dict(name='Staff takeover',email='main@global.test',password=password,phone="070123456")]:
    check(Client(api,clinic='east').request('/api/auth/register',body)[0]==409,'A second clinic cannot register an existing patient/staff email again')
   check(east.request('/api/accounts',dict(name='Forged staff',email='ana@global.test',password=password,role='Administrator'))[0]==409,'A global patient email cannot be used for another clinic staff account')
   with concurrent.futures.ThreadPoolExecutor() as pool:
@@ -165,17 +165,17 @@ with tempfile.TemporaryDirectory(prefix='medtermin-global-') as folder:
   check(patient.request('/api/bootstrap')[0]==403 and b.request('/api/bootstrap')[0]==200,'Disabling clinic A access does not disable clinic B or the shared account')
   check(Client(api,patient.token,None).request('/api/patient/clinics/main',{})[0]==403,'Joining again cannot reactivate a disabled membership')
   check(Client(api,patient.token,None).request('/api/patient/clinics/closed',{})[0]==403,'Closed registration still prevents new clinic memberships')
-  check(Client(api,clinic='closed').request('/api/auth/register',dict(name='Closed clinic',email='closed-patient@global.test',password=password))[0]==403,'Initial registration still respects clinic policy')
+  check(Client(api,clinic='closed').request('/api/auth/register',dict(name='Closed clinic',email='closed-patient@global.test',password=password,phone="070123456"))[0]==403,'Initial registration still respects clinic policy')
   check(sql('SELECT count(*) FROM careline_identity."PatientAccounts"')==2,'Rejected joins/registration do not leave extra identities')
   staff.ok('/api/accounts/'+a['actor']['id']+'/access',dict(enabled=True))
   # A public email alone must never claim a phone-created contact or reveal its history.
   old=staff.ok('/api/patients',dict(name='Private old contact',email='unclaimed@global.test',phone='+38970123456'))
-  new=Client(api).ok('/api/auth/register',dict(name='Independent patient',email='unclaimed@global.test',password=password))
+  new=Client(api).ok('/api/auth/register',dict(name='Independent patient',email='unclaimed@global.test',password=password,phone="070123456"))
   safe=Client(api);safe.login('unclaimed@global.test')
   check(new['patientId']!=old['id'] and safe.request('/api/patients/'+old['id'])[0]==404,'Matching contact email never unlocks or merges somebody’s clinic record')
   check(len(safe.ok('/api/bootstrap')['patients'])==1,'A newly registered patient sees only the new owned profile')
   # Registration races use one shared identity namespace, including across different clinics.
-  def signup(cid):return Client(api if cid=='main' else api2,clinic=cid).request('/api/auth/register',dict(name='Concurrent patient',email='race@global.test',password=password))[0]
+  def signup(cid):return Client(api if cid=='main' else api2,clinic=cid).request('/api/auth/register',dict(name='Concurrent patient',email='race@global.test',password=password,phone="070123456"))[0]
   with concurrent.futures.ThreadPoolExecutor() as pool:results=list(pool.map(signup,['main','east']))
   check(sorted(results)==[200,409] and sql('SELECT count(*) FROM careline_identity."PatientAccounts" WHERE "Email"=\'race@global.test\'')==1,'Concurrent cross-clinic signups create one account')
   company=Client(api,clinic=None);company.token=company.ok('/api/platform/login',dict(email='company@global.test',password=password))['accessToken']
@@ -206,14 +206,14 @@ with tempfile.TemporaryDirectory(prefix='medtermin-global-') as folder:
   check(patient.request('/api/bootstrap')[0]==401 and other.request('/api/bootstrap')[0]==401,'A patient password change revokes sessions in every clinic and API instance')
   check(Client(api).request('/api/auth/login',dict(email='ana@global.test',password=password))[0]==401,'The old patient password stops working everywhere')
   refreshed=Client(api2,clinic=None);again=refreshed.login('ana@global.test',password+'-changed')
-  check(again['globalPatient'] and again['clinic']['id']=='east','The same new password signs in to the last selected clinic')
+  check(again['globalPatient'] and again['clinic'] is None,'The same new password opens the all-clinic patient identity without a silent clinic selection')
   refreshed.ok('/api/auth/logout',{})
   check(refreshed.request('/api/auth/me')[0]==401,'Global sign-out revokes the patient token')
   # An unchanged staff identity remains assigned to exactly one clinic after the redesign.
   check(Client(api,staff.token,'main').request('/api/bootstrap')[0]==200 and Client(api,staff.token,'east').request('/api/bootstrap')[0]==401,'Patient changes cannot broaden receptionist permissions')
   start('Appointments.Api',address(),env,['--migrate'])
   check(sql('SELECT count(*) FROM careline_identity."PatientMemberships" WHERE "PatientAccountId"=(SELECT "Id" FROM careline_identity."PatientAccounts" WHERE "Email"=\'ana@global.test\')')==2,'Repeated maintenance preserves the one-account/two-membership model')
-  quota_registration=Client(api).ok('/api/auth/register',dict(name='Пациент со повеќе клиники',email='quota@global.test',password=password))
+  quota_registration=Client(api).ok('/api/auth/register',dict(name='Пациент со повеќе клиники',email='quota@global.test',password=password,phone="070123456"))
   qa=Client(api);qa.login('quota@global.test');qb=Client(api2,qa.token,'east')
   Client(api,qa.token,None).ok('/api/patient/clinics/east',{})
   qb_state=qb.ok('/api/bootstrap');quota_date=(dt.date.fromisoformat(date)+dt.timedelta(days=40)).isoformat()

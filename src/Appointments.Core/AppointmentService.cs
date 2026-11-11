@@ -182,15 +182,20 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
         name = (name ?? "").Trim(); email = (email ?? "").Trim().ToLowerInvariant(); phone = (phone ?? "").Trim();
         if (name.Length is < 2 or > 80) throw new RuleException("Внесете име со должина од 2 до 80 знаци.");
         if (email.Length > 120 || (email.Length > 0 && (!MailAddress.TryCreate(email, out var address) || address.Address != email))) throw new RuleException("Внесете важечка е-пошта или оставете го полето празно.");
-        if (phone.Length > 30 || phone.Any(c => !char.IsAsciiDigit(c) && !"+ -()".Contains(c))) throw new RuleException("Внесете важечки телефонски број или оставете го полето празно.");
+        phone = PatientContact.RequirePhone(phone);
         return (name, email, phone);
     }
     public void ReplaceSchedule(DemoActor actor, string doctorId, List<WorkingPeriod> periods, int durationMinutes, int? version = null)
     {
         Staff(actor, doctorId);
         if (durationMinutes is < 10 or > 120 || durationMinutes % 5 != 0) throw new RuleException("Изберете времетраење од 10 до 120 минути, во чекори од 5 минути.");
-        if (periods.Count > 21 || periods.Any(p => p == null || !Enum.IsDefined(p.Day) || p.Start >= p.End || !SchedulingRules.MinuteAligned(p.Start) || !SchedulingRules.MinuteAligned(p.End) || (p.End - p.Start).TotalMinutes < durationMinutes)) throw new RuleException("Секој работен период мора да овозможува цел преглед и да завршува истиот ден.");
-        if (periods.Any(p => periods.Any(q => !ReferenceEquals(p, q) && p.Day == q.Day && p.Start < q.End && q.Start < p.End))) throw new RuleException("Работните периоди не смеат да се преклопуваат.");
+        if (periods.Count > 210 || periods.Any(p => p == null || !Enum.IsDefined(p.Day) || p.Start >= p.End || !SchedulingRules.MinuteAligned(p.Start) || !SchedulingRules.MinuteAligned(p.End))) throw new RuleException("Секој работен период мора да завршува истиот ден и да користи цели минути.");
+        if (periods.Any(p => p.ValidFrom.HasValue != p.ValidTo.HasValue || p.ValidFrom > p.ValidTo || p.ValidFrom?.Year < 2000 || p.ValidTo?.Year > 2100))
+            throw new RuleException("Внесете важечки почетен и краен датум за распоредот.");
+        var ranges = periods.Where(p => p.ValidFrom != null).Select(p => (p.ValidFrom, p.ValidTo)).Distinct().ToList();
+        if (ranges.Count > 20 || ranges.Any(a => ranges.Any(b => a != b && a.ValidFrom <= b.ValidTo && b.ValidFrom <= a.ValidTo)))
+            throw new RuleException("Датираните распореди не смеат да се преклопуваат.");
+        if (periods.Any(p => periods.Any(q => !ReferenceEquals(p, q) && p.ValidFrom == q.ValidFrom && p.ValidTo == q.ValidTo && p.Day == q.Day && p.Start < q.End && q.Start < p.End))) throw new RuleException("Работните периоди не смеат да се преклопуваат.");
         store.Write(s =>
         {
             var doctor = FindDoctor(s, doctorId);

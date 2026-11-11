@@ -10,8 +10,8 @@ public static class WebSession
     public static Task SignInAsync(HttpContext context, SessionResponse session)
     {
         var actor = session.Actor;
-        var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, actor.Id), new(ClaimTypes.Name, actor.Name), new(ClaimTypes.Role, actor.Role.ToString()), new("demo", session.DemoMode.ToString()) };
-        if (session.GlobalPatient) claims.Add(new("globalPatient", "true"));
+        var claims = new List<Claim> { new(ClaimTypes.NameIdentifier, session.GlobalPatient ? session.PatientIdentityId ?? actor.Id : actor.Id), new(ClaimTypes.Name, actor.Name), new(ClaimTypes.Role, actor.Role.ToString()), new("demo", session.DemoMode.ToString()) };
+        if (session.GlobalPatient) { claims.Add(new("globalPatient", "true")); claims.Add(new("patientIdentityId", session.PatientIdentityId ?? actor.Id)); claims.Add(new("clinicAccountId", actor.Id)); }
         if (session.Clinic != null)
         {
             claims.Add(new("clinicId", session.Clinic.Id));

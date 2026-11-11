@@ -56,6 +56,7 @@ public sealed class PatientAccount
     public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public string Email { get; set; } = "";
     public string Name { get; set; } = "";
+    public string Phone { get; set; } = "";
     public string PasswordHash { get; set; } = "";
     public bool Enabled { get; set; } = true;
     public int FailedAttempts { get; set; }

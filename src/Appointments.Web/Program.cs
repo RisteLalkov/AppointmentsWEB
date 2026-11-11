@@ -48,6 +48,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     o.Cookie.HttpOnly = true; o.Cookie.SameSite = SameSiteMode.Strict; o.ExpireTimeSpan = TimeSpan.FromHours(8);
     o.Events.OnValidatePrincipal = async context =>
     {
+        if (settings.UseApi && context.Principal?.HasClaim("globalPatient", "true") == true
+            && !context.Principal.HasClaim(c => c.Type == "patientIdentityId"))
+        {
+            // Older cookies identified the same patient differently in each clinic.
+            // Renew through sign-in rather than mixing those antiforgery identities.
+            context.RejectPrincipal();
+            await Microsoft.AspNetCore.Authentication.AuthenticationHttpContextExtensions.SignOutAsync(context.HttpContext, CookieAuthenticationDefaults.AuthenticationScheme);
+            return;
+        }
         if (settings.UseApi && string.IsNullOrEmpty(context.Principal?.FindFirst("clinicId")?.Value)
             && context.Principal?.HasClaim("globalPatient", "true") != true)
         {

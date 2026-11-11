@@ -34,7 +34,7 @@ function check(ok,label){if(!ok)throw Error(label);checks++;console.log('PASS gl
   await other.locator('[data-patient-clinic=closed]').waitFor();
   check(await other.locator('[data-patient-clinic=closed] button, [data-patient-clinic=closed] a').count()===0,'Closed registration has no misleading join button');
   if(screens)await other.screenshot({path:resolve(screens,'patient-home.png'),fullPage:true});
-  await other.locator('[data-language-form] button[value="en-GB"]').click();await other.locator('html[lang=en]').waitFor();
+  await other.locator('#account-menu-button').click();await other.locator('[data-language-form] button[value="en-GB"]').click();await other.locator('html[lang=en]').waitFor();
   check((await other.locator('h1').innerText())==='My clinics' && (await other.locator('#patient-visits-title').innerText()).startsWith('Upcoming'),'Personal patient pages are translated into English');
   await other.setViewportSize({width:320,height:740});
   check(await other.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Patient home fits a 320px phone');
@@ -44,7 +44,7 @@ function check(ok,label){if(!ok)throw Error(label);checks++;console.log('PASS gl
   // Start with an actual self-registration, then book at a second clinic without signing up again.
   const fresh=await browser.newContext({viewport:{width:1360,height:950},locale:'en-US'});const p=await fresh.newPage();p.setDefaultTimeout(12000);p.on('pageerror',e=>errors.push(e.message));
   await p.goto(base+'/Account/Register?clinicId=main&returnUrl=%2FPatientClinics');
-  await p.locator('#clinic-id').selectOption('main');await p.locator('[name=Name]').fill('Елена Стојанова');await p.locator('[name=Email]').fill('browser@global.test');await p.locator('[name=Password]').fill(secret);
+  await p.locator('#clinic-id').selectOption('main');await p.locator('[name=Phone]').fill('070123456');await p.locator('[name=Name]').fill('Елена Стојанова');await p.locator('[name=Email]').fill('browser@global.test');await p.locator('[name=Password]').fill(secret);
   await Promise.all([p.waitForURL(url=>url.pathname==='/Account/Login'),p.locator('form[action="/Account/Register"] button[type=submit]').click()]);
   await p.locator('[name=Email]').fill('browser@global.test');await p.locator('[name=Password]').fill(secret);await p.locator('form[action="/Account/Login"] button[type=submit]').click();await p.waitForURL(url=>url.pathname==='/PatientClinics');
   check(await p.locator('[data-patient-clinic=main] button').count()===1 && await p.locator('[data-patient-clinic=east] a').count()===1,'One self-registration gives a personal account with one initial clinic');

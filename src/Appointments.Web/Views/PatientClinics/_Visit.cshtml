@@ -1,0 +1,7 @@
+@model Appointments.Contracts.PatientVisit
+@{ var label = Model.Status switch { AppointmentStatus.Scheduled => T("Чека потврда"), AppointmentStatus.Confirmed => T("Потврден"), AppointmentStatus.Completed => T("Завршен"), AppointmentStatus.Cancelled => T("Откажан"), _ => T("Не се појави") }; }
+<article class="card patient-visit" data-patient-visit="@Model.AppointmentId" data-visit-clinic="@Model.ClinicId">
+    <span class="patient-visit-clinic">@Icon("building-2") @Model.ClinicName</span>
+    <h3>@Model.DoctorName</h3><p><strong>@Model.LocalStart</strong></p><p class="muted">@Model.ServiceName</p><span class="badge @Model.Status">@label</span>
+    <form asp-action="Select" method="post"><input type="hidden" name="clinicId" value="@Model.ClinicId"><input type="hidden" name="returnUrl" value="@($"/Workspace?appointment={Uri.EscapeDataString(Model.AppointmentId)}#appointments")"><button class="btn secondary" type="submit">@T("Види термин") @Icon("arrow-up-right")</button></form>
+</article>

@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS careline_identity."PatientSessions" (
     "PatientAccountId" varchar(64) NOT NULL REFERENCES careline_identity."PatientAccounts"("Id") ON DELETE CASCADE,
     "ExpiresAt" timestamptz NOT NULL
 );
+-- Existing identities are retained; new registrations and new memberships require a phone.
+ALTER TABLE careline_identity."PatientAccounts" ADD COLUMN IF NOT EXISTS "Phone" varchar(30) NOT NULL DEFAULT '';
 CREATE INDEX IF NOT EXISTS ix_patient_sessions_account ON careline_identity."PatientSessions"("PatientAccountId");
 CREATE TABLE IF NOT EXISTS careline_identity."PatientEvents" (
     "Id" bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

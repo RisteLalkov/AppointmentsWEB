@@ -80,6 +80,7 @@ public sealed class IdentityDirectory(IConfiguration configuration)
               AND to_regclass('careline_identity."PatientMemberships"') IS NOT NULL
               AND to_regclass('careline_identity."PatientEvents"') IS NOT NULL
               AND to_regclass('careline_identity."PatientBookings"') IS NOT NULL
+              AND EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='careline_identity' AND table_name='PatientAccounts' AND column_name='Phone')
             """, c);
         if (!Equals(await cmd.ExecuteScalarAsync(ct), true))
             throw new InvalidOperationException("Global patient account upgrade required. Stop all hosts and run --migrate before starting this version.");

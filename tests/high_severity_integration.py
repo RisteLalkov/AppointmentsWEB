@@ -125,7 +125,7 @@ with tempfile.TemporaryDirectory(prefix='careline-high-') as directory:
         check(east.request('/api/bootstrap')[0]==503, 'Misbound clinic itself fails closed')
         sql('UPDATE clinic_east."Settings" SET "Value"=\'east\' WHERE "Key"=\'ClinicId\'')
         # Global identity uniqueness is checked at both service and SQL boundaries.
-        check(Client(api,clinic='east').request('/api/auth/register',dict(name='Duplicate',email='main@high.test',password=password))[0]==409,'Global identity uniqueness survives indexed login')
+        check(Client(api,clinic='east').request('/api/auth/register',dict(name='Duplicate',email='main@high.test',password=password,phone="070123456"))[0]==409,'Global identity uniqueness survives indexed login')
         target=admin.ok('/api/accounts',dict(name='Target Reception',email='target@high.test',password=password,role='Administrator'))
         old_target=Client(api,identity='203.0.113.4').login('target@high.test')
         if os.environ.get('TEST_BROWSER_EXECUTABLE'):
@@ -147,7 +147,7 @@ with tempfile.TemporaryDirectory(prefix='careline-high-') as directory:
             d=admin.ok('/api/catalogue/doctors',dict(name='Д-р Тест '+str(i),specialtyId=spec['id'],subspecialty='',enabled=True,requiresConfirmation=True))
             admin.ok('/api/schedule/'+d['id'],dict(version=1,durationMinutes=30,periods=[dict(day=x,start='09:00',end='17:00') for x in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']]))
             doctors.append(d)
-        profile=Client(api,identity='203.0.113.7').ok('/api/auth/register',dict(name='Ана Петрова',email='patient@high.test',password=password))
+        profile=Client(api,identity='203.0.113.7').ok('/api/auth/register',dict(name='Ана Петрова',email='patient@high.test',password=password,phone="070123456"))
         patient=Client(api,identity='203.0.113.8').login('patient@high.test')
         # Request-scoped language changes must not alter authorization, data or protocol values.
         status,value,_=patient.request('/api/schedule/'+doctors[0]['id'],dict(version=1,durationMinutes=30,periods=[]),headers={'Accept-Language':'en-GB'})

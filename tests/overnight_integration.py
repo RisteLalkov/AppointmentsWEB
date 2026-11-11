@@ -94,7 +94,7 @@ with tempfile.TemporaryDirectory(prefix='medtermin-overnight-') as temporary:
                 doctors.append(d)
             service=request('/api/catalogue/services',dict(name='Преглед',specialtyId=sp['id'],durationMinutes=30,enabled=True,doctorIds=[d['id'] for d in doctors]))
             return doctors,service
-        doctors,service=catalogue();people=[request('/api/patients',dict(name='Пациент '+str(i),email=f'overnight-{i}@example.test',phone='')) for i in range(2)]
+        doctors,service=catalogue();people=[request('/api/patients',dict(name='Пациент '+str(i),email=f'overnight-{i}@example.test',phone='070123456')) for i in range(2)]
         today=dt.date.fromisoformat(request('/api/bootstrap')['today']);day=(today+dt.timedelta(days=5)).isoformat()
         check(status('/api/reports?from=9999-12-31&to=9999-12-31&groupBy=day')[0]==400,'Maximum-date reports produce validation rather than HTTP 500')
         check(status('/api/schedule/'+doctors[0]['id'],dict(version=2,durationMinutes=30,periods=[dict(day='Monday',start='09:00:00.0000001',end='17:00')]))[0]==400,'Fractional-minute working hours are rejected before PostgreSQL can round them')

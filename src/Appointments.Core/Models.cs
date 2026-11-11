@@ -3,7 +3,7 @@ namespace Appointments.Core;
 public enum DemoRole { Patient, Administrator, Doctor }
 public enum AppointmentStatus { Scheduled, Confirmed, Completed, Cancelled, NoShow }
 public record DemoActor(string Id, string Name, DemoRole Role, string? DoctorId = null, string? PatientId = null);
-public record WorkingPeriod(DayOfWeek Day, TimeOnly Start, TimeOnly End);
+public record WorkingPeriod(DayOfWeek Day, TimeOnly Start, TimeOnly End, DateOnly? ValidFrom = null, DateOnly? ValidTo = null);
 public record SourceSchedule(int Row, string Days, string Start, string End, string Type, string Note);
 public record Doctor
 {

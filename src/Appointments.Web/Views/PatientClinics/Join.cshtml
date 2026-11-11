@@ -8,7 +8,7 @@
         <p>@(Model.Joined ? T("Ќе се отвори вашиот работен простор во избраната клиника.") : T("Продолжувањето создава ваш пациентски профил во оваа клиника. Не е потребна нова сметка или лозинка."))</p>
         @if (!Model.Joined) { <p class="inline-note">@T("Постоечки контактни записи и историја не се поврзуваат автоматски само според е-пошта.")</p> }
         @if (Model.Available && (Model.Joined || Model.Clinic.AllowRegistration)) {
-            <form asp-action="Select" method="post"><input type="hidden" name="clinicId" value="@Model.Clinic.Id"><input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"><button class="btn primary" type="submit">@T("Продолжи во клиниката") @Icon("arrow-up-right")</button></form>
+            <form asp-action="Select" method="post"><input type="hidden" name="clinicId" value="@Model.Clinic.Id"><input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]">@if (!Model.Joined) { <div class="field"><label for="join-phone">@T("Телефон")</label><input id="join-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" value="@ViewData["Phone"]" required></div> }<button class="btn primary" type="submit">@T("Продолжи во клиниката") @Icon("arrow-up-right")</button></form>
         } else { <p class="inline-note warning">@T("Клиниката не прифаќа нови онлајн пациенти или пристапот е недостапен.")</p> }
     }
     <a class="patient-home-back" href="/PatientClinics">@Icon("arrow-left") @T("Мои клиники")</a></section>

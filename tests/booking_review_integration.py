@@ -87,7 +87,7 @@ with tempfile.TemporaryDirectory(prefix='medtermin-booking-review-') as temporar
             doctors.append(d)
         sa=request('/api/catalogue/services',dict(name='Кардиолошки преглед',specialtyId=spec['id'],durationMinutes=30,enabled=True,doctorIds=[doctors[0]['id']]))
         sb=request('/api/catalogue/services',dict(name='Невролошки преглед',specialtyId=neuro['id'],durationMinutes=20,enabled=True,doctorIds=[doctors[1]['id'],doctors[2]['id']]))
-        people=[request('/api/patients',dict(name='Ана Петрова',email=f'patient-{i}@review.test',phone='')) for i in range(2)]
+        people=[request('/api/patients',dict(name='Ана Петрова',email=f'patient-{i}@review.test',phone='070123456')) for i in range(2)]
         state=request('/api/bootstrap');date=(dt.date.fromisoformat(state['today'])+dt.timedelta(days=2)).isoformat();green=(dt.date.fromisoformat(date)+dt.timedelta(days=2)).isoformat()
         for i in range(2):request('/api/appointments',dict(doctorId=doctors[0]['id'],patientId=people[i]['id'],serviceId=sa['id'],date=date,time=['09:00','09:30'][i],durationMinutes=30,requestId=uuid.uuid4().hex))
         blocked=(dt.date.fromisoformat(date)+dt.timedelta(days=1)).isoformat()
@@ -108,7 +108,7 @@ with tempfile.TemporaryDirectory(prefix='medtermin-booking-review-') as temporar
         staff_token=token;token=request('/api/auth/login',dict(email='doctor@review.test',password=password))['accessToken']
         reject(f'/api/availability/next?doctorIds={doctors[1]["id"]}&from={date}',expected=403)
         token=staff_token
-        patient=request('/api/auth/register',dict(name='Марија Стојанова',email='patient@review.test',password=password))
+        patient=request('/api/auth/register',dict(name='Марија Стојанова',email='patient@review.test',password=password,phone="070123456"))
         token=request('/api/auth/login',dict(email='patient@review.test',password=password))['accessToken']
         reject(f'/api/availability/days?doctorId={doctors[0]["id"]}&from={date}&to={green}&serviceId={sa["id"]}&patientId={people[0]["id"]}',expected=403)
         token=staff_token

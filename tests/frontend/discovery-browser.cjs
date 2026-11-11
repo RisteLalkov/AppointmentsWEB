@@ -102,11 +102,11 @@ async function noOverflow(page, label) { check(await page.evaluate(() => documen
   check(!new URL(page.url()).searchParams.has('Specialty') && new URL(page.url()).searchParams.get('Clinic')==='Клиника','A filter chip clears only its own criterion');
   await page.locator('#search').fill('Горан');
   await page.locator('#search').press('Enter');
-  check(new URL(page.url()).searchParams.get('Search')==='Горан' && !new URL(page.url()).searchParams.has('Clinic'),'New name search clears old refinements');
+  check(new URL(page.url()).searchParams.get('Search')==='Горан' && new URL(page.url()).searchParams.get('Clinic')==='Клиника','New name search preserves the explicitly chosen clinic filter');
   await page.goto(publicUrl+'/Discover/Clinic/main');
   await page.locator('#search').fill('Горан');
   await page.getByRole('button',{name:/Пребарај/}).click();
-  check(!new URL(page.url()).searchParams.has('ClinicId'),'Global search escapes a previously selected clinic');
+  check(new URL(page.url()).searchParams.get('ClinicId')==='main','Search from a clinic stays scoped to that clinic');
   for(const width of [768,390,320]) {
    await page.setViewportSize({width,height:900}); await noOverflow(page,`Public directory at ${width}px`);
   }

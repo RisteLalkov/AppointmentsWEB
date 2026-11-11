@@ -608,6 +608,11 @@ namespace Appointments.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -785,12 +790,20 @@ namespace Appointments.Data.Migrations
                             b1.Property<TimeOnly>("Start")
                                 .HasColumnType("time without time zone");
 
+                            b1.Property<DateOnly?>("ValidFrom")
+                                .HasColumnType("date");
+
+                            b1.Property<DateOnly?>("ValidTo")
+                                .HasColumnType("date");
+
                             b1.HasKey("Id");
 
                             b1.HasIndex("DoctorId", "Day");
 
                             b1.ToTable("WorkingPeriods", null, t =>
                                 {
+                                    t.HasCheckConstraint("CK_WorkingPeriod_Dates", "(\"ValidFrom\" IS NULL AND \"ValidTo\" IS NULL) OR (\"ValidFrom\" IS NOT NULL AND \"ValidTo\" IS NOT NULL AND \"ValidFrom\" <= \"ValidTo\")");
+
                                     t.HasCheckConstraint("CK_WorkingPeriod_Range", "\"Start\" < \"End\" AND \"Day\" BETWEEN 0 AND 6");
                                 });
 

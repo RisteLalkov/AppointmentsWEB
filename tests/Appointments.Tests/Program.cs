@@ -104,7 +104,7 @@ Test("Concurrent booking: exactly one succeeds", () => {using var f=New();var su
 Test("JSON restart retains appointments", () => {var f=New();var a=f.Service.Book(pat,Cmd());f.Store.Dispose();using(var reopened=new JsonDemoStore(f.Path,f.Seed)){Equal(a.Id,reopened.Read(s=>s.Appointments.Single().Id));}f.Dispose();});
 Test("Second process cannot open the same demo file", () => {using var f=New();try{using var second=new JsonDemoStore(f.Path,f.Seed);}catch(IOException){return;}throw new Exception("Expected exclusive lock.");});
 Test("Reset is administrator-only and restores seed", () => {using var f=New();f.Service.Book(pat,Cmd());Reject(()=>f.Service.Reset(doc),403);f.Service.Reset(admin);Equal(0,f.Service.Appointments(admin).Count);});
-Test("Patient validation and duplicate email", () => {using var f=New();Reject(()=>f.Service.AddPatient(pat,"Jane Demo","",""),403);Reject(()=>f.Service.AddPatient(admin,"","",""));Reject(()=>f.Service.AddPatient(admin,"Jane Demo","bad-email",""));f.Service.AddPatient(admin,"Jane Demo","jane@example.test","");Reject(()=>f.Service.AddPatient(admin,"Jane Two","jane@example.test",""),409);});
+Test("Patient validation and duplicate email", () => {using var f=New();Reject(()=>f.Service.AddPatient(pat,"Jane Demo","",""),403);Reject(()=>f.Service.AddPatient(admin,"","",""));Reject(()=>f.Service.AddPatient(admin,"Jane Demo","bad-email",""));f.Service.AddPatient(admin,"Jane Demo","jane@example.test","070123456");Reject(()=>f.Service.AddPatient(admin,"Jane Two","jane@example.test","070123456"),409);});
 Test("Imported Tuesday preference never blocks independent Wednesday availability", () => {using var f=New();f.Store.Write(s=>{s.Doctors[0]=s.Doctors[0] with{TuesdayFirst=true,WorkingPeriods=[new(DayOfWeek.Tuesday,new(14,30),new(15,0)),new(DayOfWeek.Wednesday,new(16,0),new(17,0))]};return true;});Equal(2,f.Service.Availability(pat,"d1",monday.AddDays(2)).Count);f.Service.Book(pat,Cmd("14:30",date:monday.AddDays(1)));Equal(2,f.Service.Availability(pat,"d1",monday.AddDays(2)).Count);});
 Test("Spring DST nonexistent times are excluded", () => {using var f=New();var date=new DateOnly(2027,3,28);f.Time.Now=new DateTimeOffset(2027,3,27,0,0,0,TimeSpan.Zero);Equal<DateTimeOffset?>(null,f.Clock.ToInstant(date,new(2,30)));f.Service.AddException(admin,"d1",date,new(1,0),new(4,0),true,"DST test");True(f.Service.Availability(pat,"d1",date).All(s=>s.Time.Hour!=2));});
 Test("Autumn DST ambiguous times are excluded", () => {using var f=New();var date=new DateOnly(2026,10,25);Equal<DateTimeOffset?>(null,f.Clock.ToInstant(date,new(2,30)));f.Service.AddException(admin,"d1",date,new(1,0),new(4,0),true,"DST test");True(f.Service.Availability(pat,"d1",date).All(s=>s.Time.Hour!=2));});
@@ -257,25 +257,25 @@ Test("Staff edit normalized patient contacts without changing identity or appoin
     Equal("Updated Name",updated.Name);Equal("new@example.test",updated.Email);Equal("+389 70 123",updated.Phone);Equal(2,updated.Version);Equal(true,updated.IsDemonstration);
     Equal(a.Id,f.Service.PatientDetails(pat,"p1").Appointments.Single().Id);Equal("Patient",pat.Name);
     Reject(()=>f.Service.UpdatePatient(pat,"p1",new("Forbidden","","",2)),403);
-    Reject(()=>f.Service.UpdatePatient(admin,"missing",new("Name","","",1)),404);
+    Reject(()=>f.Service.UpdatePatient(admin,"missing",new("Name","","070123456",1)),404);
 });
 Test("Patient contact updates validate fields and prevent duplicates", () => {
     using var f=New();
     foreach(var command in new PatientUpdateCommand[]{new(" ","","",1),new(new string('x',81),"","",1),new("Name","bad email","",1),new("Name","", "phone!",1),new("Name","",new string('1',31),1)})
         Reject(()=>f.Service.UpdatePatient(admin,"p1",command));
-    Reject(()=>f.Service.UpdatePatient(admin,"p1",new("Name","TWO@EXAMPLE.TEST","",1)),409);
+    Reject(()=>f.Service.UpdatePatient(admin,"p1",new("Name","TWO@EXAMPLE.TEST","070123456",1)),409);
     Equal(1,f.Service.PatientDetails(admin,"p1").Patient.Version);
-    var a=f.Service.UpdatePatient(admin,"p1",new("Name",null,null,1));Equal("",a.Email);Equal("",a.Phone);
-    var b=f.Service.UpdatePatient(admin,"p2",new("Name",null,null,1));Equal("",b.Email);
+    var a=f.Service.UpdatePatient(admin,"p1",new("Name",null,"070123456",1));Equal("",a.Email);Equal("070123456",a.Phone);
+    var b=f.Service.UpdatePatient(admin,"p2",new("Name",null,"070123456",1));Equal("",b.Email);
 });
 Test("Concurrent patient edits save exactly once and survive JSON restart", () => {
     using var f=New();var results=new ConcurrentBag<int>();
-    Parallel.For(0,8,i=>{try{f.Service.UpdatePatient(admin,"p1",new("Editor "+i,"","",1));results.Add(200);}catch(RuleException e){results.Add(e.StatusCode);}});
+    Parallel.For(0,8,i=>{try{f.Service.UpdatePatient(admin,"p1",new("Editor "+i,"","070123456",1));results.Add(200);}catch(RuleException e){results.Add(e.StatusCode);}});
     Equal(1,results.Count(x=>x==200));Equal(7,results.Count(x=>x==409));
     var saved=f.Service.PatientDetails(admin,"p1").Patient;
     f.Store.Dispose();using var restored=new JsonDemoStore(f.Path,f.Seed);var service=new AppointmentService(restored,f.Clock);
     Equal(saved,service.PatientDetails(admin,"p1").Patient);
-    Reject(()=>service.UpdatePatient(admin,"p1",new("Stale","","",1)),409);
+    Reject(()=>service.UpdatePatient(admin,"p1",new("Stale","","070123456",1)),409);
 });
 
 
@@ -394,9 +394,9 @@ Test("Patient numbers backfill legacy demo records and remain unique across conc
     using var f=New();
     var original=f.Service.Patients(admin).ToDictionary(p=>p.Id,p=>p.Number);
     True(original.Values.All(n=>n>0));Equal(original.Count,original.Values.Distinct().Count());
-    Parallel.For(0,12,i=>f.Service.AddPatient(admin,"Same name","", ""));
+    Parallel.For(0,12,i=>f.Service.AddPatient(admin,"Same name","", "070123456"));
     var all=f.Service.Patients(admin);Equal(all.Count,all.Select(p=>p.Number).Distinct().Count());
-    var p=all.First();var updated=f.Service.UpdatePatient(admin,p.Id,new("Renamed patient",p.Email,p.Phone,p.Version));
+    var p=all.First();var updated=f.Service.UpdatePatient(admin,p.Id,new("Renamed patient",p.Email,"070123456",p.Version));
     Equal(p.Number,updated.Number);Equal(p.Id,updated.Id);
     foreach(var item in original)Equal(item.Value,all.Single(p=>p.Id==item.Key).Number);
     f.Store.Dispose();using var reopened=new JsonDemoStore(f.Path,f.Seed);
@@ -455,6 +455,34 @@ Test("Empty optional services are saved and replayed as null",()=>{
     var input=new BookingCommand("d1","p1",monday,new(10,0),30,Guid.NewGuid().ToString(),"");
     var visit=f.Service.Book(admin,input);True(visit.ServiceId==null);
     Equal(visit.Id,f.Service.Book(admin,input with{ServiceId=null}).Id);
+});
+Test("Phone is required for contact creation and editing while email stays optional",()=>{
+    using var f=New();Reject(()=>f.Service.AddPatient(admin,"No phone","",""),400);
+    Reject(()=>f.Service.UpdatePatient(admin,"p1",new("Name","",null,1)),400);
+    foreach(var value in new[]{"-------","123","+389+70123456","phone1234567"}) Reject(()=>PatientContact.RequirePhone(value),400);
+    var p=f.Service.AddPatient(admin,"Patient without email","","+389 70 123 456");Equal("",p.Email);Equal("+389 70 123 456",p.Phone);
+});
+Test("Dated working weeks replace regular hours only within their inclusive date range",()=>{
+    using var f=New();var from=monday.AddDays(7);var to=from.AddDays(6);
+    var periods=Enumerable.Range(1,5).Select(day=>new WorkingPeriod((DayOfWeek)day,new(8,0),new(12,0))).ToList();
+    periods.Add(new(DayOfWeek.Monday,new(14,0),new(17,0),from,to));
+    f.Service.ReplaceSchedule(admin,"d1",periods,30);
+    True(f.Service.Availability(admin,"d1",monday).Any(x=>x.Time==new TimeOnly(8,0)));
+    var dated=f.Service.Availability(admin,"d1",from);True(dated.Count>0&&dated.All(x=>x.Time>=new TimeOnly(14,0)));
+    Equal(0,f.Service.Availability(admin,"d1",from.AddDays(1)).Count);
+    True(f.Service.Availability(admin,"d1",to.AddDays(1)).Any(x=>x.Time==new TimeOnly(8,0)));
+});
+Test("Overlapping dated schedule ranges are rejected and existing bookings remain protected",()=>{
+    using var f=New();var from=monday.AddDays(7);var to=from.AddDays(6);
+    Reject(()=>f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new(8,0),new(10,0),from,to),new(DayOfWeek.Tuesday,new(12,0),new(15,0),from.AddDays(1),to.AddDays(1))],30),400);
+    Reject(()=>f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new(8,0),new(10,0),from,null)],30),400);
+    f.Service.Book(admin,Cmd("09:00",date:from));
+    Reject(()=>f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new(14,0),new(17,0),from,to)],30),409);
+    True(f.Service.Availability(admin,"d1",from).Any(x=>x.Time==new TimeOnly(8,0)));
+});
+Test("Working-hour validation does not confuse fallback duration with service duration",()=>{
+    using var f=New();f.Service.ReplaceSchedule(admin,"d1",[new(DayOfWeek.Monday,new(9,0),new(9,20))],30);
+    Equal(0,f.Service.Availability(admin,"d1",monday).Count);
 });
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}

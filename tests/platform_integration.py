@@ -61,7 +61,7 @@ class Client:
     def login(self, email, platform=False, secret=password):
         s = self.ok('/api/platform/login' if platform else '/api/auth/login', {'email':email,'password':secret})
         self.token = s['accessToken']
-        if not platform: self.clinic = s['clinic']['id']
+        if not platform: self.clinic = s['clinic']['id'] if s['clinic'] else None
         return self
 
 def start(base, env, temporary):
@@ -179,7 +179,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(anon.request(preview_path+'?date=2000-01-01')[0]==400 and anon.request(preview_path+'?date=bad')[0]==400, 'Public date validation rejects past and malformed dates')
         check(anon.request(preview_path+'?date=2999-01-01')[0]==400, 'Public preview respects booking horizon')
         check(anon.request(preview_path+'?serviceId=unknown')[0]==409, 'Public preview rejects unassigned services')
-        preview_patient=admin.ok('/api/patients',dict(name='Availability test',email='',phone=''))
+        preview_patient=admin.ok('/api/patients',dict(name='Availability test',email='',phone='070123456'))
         visit=admin.ok('/api/appointments',dict(doctorId=doctor['id'],patientId=preview_patient['id'],serviceId=service['id'],date=preview_date,time='09:00',durationMinutes=30,requestId=uuid.uuid4().hex))
         check(len(anon.ok(preview_path+'?date='+preview_date)['slots'])==3, 'Occupied appointment is absent from public slots')
         admin.ok('/api/appointments/'+visit['id']+'/status',dict(status='Cancelled',version=visit['version']))
@@ -196,7 +196,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         agreed_spec=owner.ok('/api/catalogue/specialties',{'id':None,'name':'Agreed booking'})
         agreed_doc=owner.ok('/api/catalogue/doctors',{'id':None,'name':'Doctor without schedule','specialtyId':agreed_spec['id'],'subspecialty':'','enabled':True,'requiresConfirmation':True})
         check(agreed_doc['requiresConfirmation'], 'Confirmation flag persists for new doctor')
-        agreed_patient=owner.ok('/api/patients',{'name':'Agreed Patient','email':'agreed@platform.test','phone':''})
+        agreed_patient=owner.ok('/api/patients',{'name':'Agreed Patient','email':'agreed@platform.test','phone':'070123456'})
         agreed_date=(dt.date.fromisoformat(owner.ok('/api/bootstrap')['today'])+dt.timedelta(days=3)).isoformat()
         agreed_command=dict(doctorId=agreed_doc['id'],patientId=agreed_patient['id'],date=agreed_date,time='14:00',durationMinutes=30,requestId=uuid.uuid4().hex,agreedTime=True)
         check(owner.request('/api/appointments',dict(agreed_command,agreedTime=False))[0]==409, 'No-hours doctor rejects ordinary booking')
@@ -217,10 +217,10 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(sum(e['date']==agreed_date and e['start'].startswith('18:00') for e in saved_exceptions)==1,'Only one repeated exception is persisted across API instances')
         agreed_doc=owner.ok('/api/catalogue/doctors',dict(id=agreed_doc['id'],name=agreed_doc['name'],specialtyId=agreed_spec['id'],subspecialty='',enabled=True,version=agreed_doc['catalogVersion'],requiresConfirmation=False))
         check(not agreed_doc['requiresConfirmation'], 'Confirmation flag can be disabled on an existing doctor')
-        registration={'name':'Test Patient','email':'patient@platform.test','password':password}
+        registration={'name':'Test Patient','email':'patient@platform.test','password':password,"phone":"070123456"}
         ra=Client(first,clinic='main').ok('/api/auth/register',registration)
         check(Client(second,clinic='new-clinic').request('/api/auth/register',registration)[0]==409,'Registration enforces global identity uniqueness')
-        check(Client(first,clinic='new-clinic').login('patient@platform.test').clinic=='main','Forged clinic hint cannot move a patient identity')
+        check(Client(first,clinic='new-clinic').login('patient@platform.test').clinic is None,'Forged clinic hints cannot silently select a clinic for a shared patient')
         sql('--tenant-duplicate')
         check(Client(first).login('owner@platform.test').clinic=='main', 'Rejected SQL identity collision preserves original main login')
         check(Client(first).login('new-owner@platform.test',secret=password+'-new').clinic=='new-clinic','Rejected SQL collision preserves new-clinic login')
@@ -252,7 +252,7 @@ with tempfile.TemporaryDirectory(prefix='careline-platform-') as temporary:
         check(public['name']==details['name'] and public['address']==details['address'] and not public['allowRegistration'], 'Another API instance uses platform metadata without configuration edits')
         check(company2.request('/api/platform/clinics/main/details',dict(details,name='Stale overwrite'))[0]==409, 'Stale platform clinic edits cannot overwrite newer values')
         check(owner.request('/api/platform/clinics/main/details',dict(details,version=updated['version']))[0]==401, 'Clinic administrator cannot edit company-managed metadata')
-        check(Client(first,clinic='main').request('/api/auth/register',dict(name='Blocked registration',email='blocked@platform.test',password=password))[0]==403, 'Platform registration policy is enforced by the clinic API')
+        check(Client(first,clinic='main').request('/api/auth/register',dict(name='Blocked registration',email='blocked@platform.test',password=password,phone="070123456"))[0]==403, 'Platform registration policy is enforced by the clinic API')
         check(company.request('/api/platform/clinics/main/details',dict(details,name=' ',version=updated['version']))[0]==400, 'Whitespace-only clinic name is rejected')
         hidden_details=dict(details,version=updated['version'],discoverable=False)
         company.ok('/api/platform/clinics/main/details',hidden_details)

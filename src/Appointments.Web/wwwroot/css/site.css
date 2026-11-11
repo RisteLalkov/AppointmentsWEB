@@ -2747,3 +2747,40 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 }
 
 .doctor-next-slot > small { display:block;margin-top:5px;line-height:1.5;font-size:.825rem;overflow-wrap:anywhere; }
+
+/* Clinic context is always labelled; color supports the text rather than replacing it. */
+.patient-visit-clinic { display:inline-flex; align-items:center; gap:8px; padding:7px 10px; border:1px solid var(--line); border-radius:9px; background:var(--theme-info-soft,#e8f3f7); color:var(--ink); font-weight:650; font-size:.9rem; overflow-wrap:anywhere; }
+.patient-home-filters { display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap; margin:22px 0; }
+.patient-home-filters label { flex:1; min-width:180px; margin:0; }
+.patient-home-filters select { margin-top:8px; }
+.patient-home-filters .btn { min-height:52px; }
+.patient-home-header .account-trigger { max-width:100%; }
+.patient-home .page-heading > div { min-width:0; overflow-wrap:anywhere; }
+.patient-home .patient-home-header { gap:18px; flex-wrap:wrap; }
+.toolbar > .booking-combobox { flex:1; min-width:190px; max-width:330px; }
+.schedule-period-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+.schedule-period-actions label { display:flex; align-items:center; gap:8px; margin:0; }
+.schedule-period-actions input { width:auto; }
+#schedule-range-dates[hidden],#schedule-range-help[hidden],#copy-schedule-week[hidden],#remove-schedule-range-label[hidden] { display:none; }
+:root { --calendar-available-bg:#d4eddf; --calendar-available-edge:#39816a; --calendar-unavailable-bg:#f4d8d4; --calendar-unavailable-edge:#ad514d; --calendar-off-bg:#eef1f4; }
+:root[data-theme=dark] { --calendar-available-bg:#244f42; --calendar-available-edge:#9cebcf; --calendar-unavailable-bg:#5c373c; --calendar-unavailable-edge:#ffc5be; --calendar-off-bg:#304247; }
+:root[data-theme=vibrant] { --calendar-available-bg:#c9efdc; --calendar-available-edge:#1c805a; --calendar-unavailable-bg:#f8d5c9; --calendar-unavailable-edge:#a53b35; --calendar-off-bg:#f0ece5; }
+.fc .calendar-available { background:repeating-linear-gradient(135deg,transparent,transparent 7px,#08796916 7px,#08796916 9px),var(--calendar-available-bg); border-inline:2px solid var(--calendar-available-edge); }
+.fc .calendar-unavailable { background:repeating-linear-gradient(135deg,transparent,transparent 8px,#a53b3520 8px,#a53b3520 10px),var(--calendar-unavailable-bg); border-inline:2px solid var(--calendar-unavailable-edge); }
+.fc .calendar-off-hours { background:var(--calendar-off-bg); }
+.calendar-legend .legend-available { background:repeating-linear-gradient(135deg,transparent,transparent 7px,#08796916 7px,#08796916 9px),var(--calendar-available-bg); border:1px solid var(--calendar-available-edge); }
+.calendar-legend .legend-unavailable { background:var(--calendar-unavailable-bg); border:1px solid var(--calendar-unavailable-edge); }
+@media(max-width:650px) { .patient-home-filters { align-items:stretch; flex-direction:column; } .patient-home-filters label,.toolbar>.booking-combobox { min-width:0; max-width:100%; width:100%; } }
+.fc .fc-bg-event.calendar-available, .fc .fc-bg-event.calendar-unavailable, .fc .fc-bg-event.calendar-off-hours { opacity:1 !important; }
+.fc .fc-event.Confirmed { background:var(--theme-success-soft,#e4f0e5); border-color:var(--theme-success,#287759); }
+.fc .fc-event.Scheduled { background:var(--theme-warning-soft,#faf0db); border-color:var(--theme-warning,#80531d); }
+.calendar-legend .legend-confirmed { background:var(--theme-success-soft,#e4f0e5); border:2px solid var(--theme-success,#287759); }
+.calendar-legend .legend-pending { background:var(--theme-warning-soft,#faf0db); border:2px solid var(--theme-warning,#80531d); }
+.calendar-legend .legend-completed { background:var(--theme-info-soft,#e9eef4); border:2px solid var(--theme-muted,#4e647c); }
+.calendar-legend .legend-cancelled { background:var(--theme-danger-soft,#f4e8e6); border:2px solid var(--theme-muted,#805551); }
+.calendar-legend .legend-noshow { background:var(--theme-accent-soft,#f0e4ea); border:2px solid var(--theme-muted,#7c4c5b); }
+.calendar-legend .legend-off-hours { background:var(--calendar-off-bg); border:1px solid var(--line); }
+.calendar-legend i { width:12px; height:12px; }
+.fc .fc-event.Completed { border-color:var(--theme-muted,#4e647c); }
+.fc .fc-event.Cancelled { border-color:var(--theme-muted,#805551); }
+.fc .fc-event.NoShow { border-color:var(--theme-muted,#7c4c5b); }

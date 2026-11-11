@@ -2,6 +2,12 @@ namespace Appointments.Core;
 
 public static class SchedulingRules
 {
+    public static IReadOnlyList<WorkingPeriod> PeriodsOn(Doctor doctor, DateOnly date)
+    {
+        var dated = doctor.WorkingPeriods.Where(p => p.ValidFrom <= date && p.ValidTo >= date).ToList();
+        return (dated.Count > 0 ? dated : doctor.WorkingPeriods.Where(p => p.ValidFrom == null && p.ValidTo == null))
+            .Where(p => p.Day == date.DayOfWeek).ToList();
+    }
     public static bool Active(Appointment a) => a.Status != AppointmentStatus.Cancelled;
     public static bool Overlaps(DateTimeOffset a, DateTimeOffset b, DateTimeOffset c, DateTimeOffset d) => a < d && c < b;
     public static bool MinuteAligned(TimeOnly time) => time.Ticks % TimeSpan.TicksPerMinute == 0;
@@ -11,7 +17,7 @@ public static class SchedulingRules
     public static List<Slot> Slots(DemoState state, Doctor doctor, DateOnly date, SchedulingClock clock, string? excludeId = null, bool includePast = false)
     {
         if (!includePast && (date < clock.Today || date > clock.Today.AddDays(180))) return [];
-        var periods = doctor.WorkingPeriods.Where(p => p.Day == date.DayOfWeek).Select(p => (p.Start, p.End)).ToList();
+        var periods = PeriodsOn(doctor, date).Select(p => (p.Start, p.End)).ToList();
         periods.AddRange(state.Exceptions.Where(e => e.DoctorId == doctor.Id && e.Date == date && e.IsAvailable).Select(e => (e.Start, e.End)));
         var blocked = state.Exceptions.Where(e => e.DoctorId == doctor.Id && e.Date == date && !e.IsAvailable).ToList();
         var results = new List<Slot>();
@@ -38,7 +44,7 @@ public static class SchedulingRules
         var localStart = clock.Local(a.Start); var localEnd = clock.Local(a.End);
         if (localStart.Date != localEnd.Date) return false;
         var day = DateOnly.FromDateTime(localStart); var start = TimeOnly.FromDateTime(localStart); var end = TimeOnly.FromDateTime(localEnd);
-        var fits = doctor.WorkingPeriods.Any(p => p.Day == day.DayOfWeek && p.Start <= start && p.End >= end)
+        var fits = PeriodsOn(doctor, day).Any(p => p.Start <= start && p.End >= end)
             || state.Exceptions.Any(e => e.DoctorId == doctor.Id && e.Date == day && e.IsAvailable && e.Start <= start && e.End >= end);
         return fits && !state.Exceptions.Any(e => e.DoctorId == doctor.Id && e.Date == day && !e.IsAvailable && start < e.End && e.Start < end);
     }

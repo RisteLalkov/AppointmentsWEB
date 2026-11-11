@@ -328,6 +328,7 @@ try {
   admin.$("#patient-name").dispatchEvent(new admin.w.Event("input", { bubbles: true }));
   assert(admin.$("#patient-name").checkValidity(), "Editing clears localized validation error");
   admin.$("#patient-email").value = "dom@example.test";
+  admin.$("#patient-phone").value = "070123456";
   admin
     .$("#patient-form")
     .dispatchEvent(
