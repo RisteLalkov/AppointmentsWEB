@@ -8,7 +8,7 @@ Base URL in local Development: `http://localhost:5181`. Swagger UI: `/swagger`; 
 
 | Method / route | Access / purpose |
 | --- | --- |
-| POST `/api/auth/register` | Anonymous; `name`, `email`, `password` (12–128 characters), creates new patient only |
+| POST `/api/auth/register` | Anonymous; `name`, `email`, `phone`, `password` (12–128 characters), creates new patient only |
 | POST `/api/auth/login` | Anonymous password sign-in; generic failure and lockout feedback |
 | GET `/api/auth/me` | Current authenticated actor |
 | POST `/api/auth/logout` | Revoke current session; body `{}` |
@@ -22,13 +22,13 @@ All routes below require a session. Patient reads contain only that patient's ap
 
 | Method / route | Request / behavior |
 | --- | --- |
-| GET `/api/bootstrap` | Actor, providers, role-visible patients/appointments, clinic date/time, mode/capabilities |
+| GET `/api/bootstrap` | Actor, provider metadata, bounded initial patients/appointments, SQL overview totals, clinic date/time and mode/capabilities; `windowed: true` in PostgreSQL mode |
 | GET `/api/appointments?from=…&to=…&skip=0&take=100` | Authorized date-window query; `items` and `total`; take 1–500; timestamps must include offset |
 | GET `/api/slots?doctorId=d01&date=2026-10-01` | Computed available slots; optional `excludeId` for an accessible appointment being rescheduled |
 | POST `/api/appointments` | Create booking (example below) |
 | POST `/api/appointments/{id}/move` | `date`, `time`, current `version` |
 | POST `/api/appointments/{id}/status` | `status`, current `version` |
-| POST `/api/patients` | Staff only: `name`, optional `email`/`phone`; demo flag derives from session |
+| POST `/api/patients` | Staff only: `name`, valid `email` and `phone` are required; demo flag derives from session |
 | POST `/api/schedule/{doctorId}` | Staff scope; `periods`, `durationMinutes`, current doctor `version` |
 | GET `/api/exceptions?doctorId=d01` | Staff scope; dated blocks/additional sessions |
 | POST `/api/exceptions/{doctorId}` | Staff scope; `date`, `start`, `end`, `isAvailable`, `reason` |
@@ -69,7 +69,40 @@ Administrator only. Do not create Doctor accounts for unnamed service providers.
 
 Errors normally have `{"error":"Useful explanation"}`. Authentication/authorization middleware can return an empty 401/403; clients must check HTTP status before decoding. 400 = invalid fields/transition; 401 = missing/expired/revoked session or failed login; 403 = role denied; 404 = missing/inaccessible record or disabled demo endpoint; 409 = conflict, stale version or duplicate; 429 = auth rate limit; 503 = unavailable database. A network timeout does not prove a write failed: refresh, or retry the exact booking with its original request ID.
 
-`GET /health` is anonymous process liveness after startup; it does not continuously check PostgreSQL. `GET /health/database` requires authentication and checks connectivity. API request bodies are limited to 64 KiB. Swagger/OpenAPI documentation is public; operation authorization remains enforced. No CORS wildcard or public database reset is enabled. Existing clinic migrations remain explicit outside Development; company onboarding explicitly migrates its reserved clinic schema in the shared database.
+`GET /health/live` is anonymous process liveness. `GET /health` is readiness: it checks registry initialization, shared PostgreSQL connectivity and the required identity/security store; failures return 503. `GET /health/database` requires clinic authentication and checks that clinic’s connectivity. API request bodies are limited to 64 KiB. Swagger/OpenAPI documentation is public; operation authorization remains enforced. No CORS wildcard or public database reset is enabled. Existing clinic migrations remain explicit outside Development; company onboarding explicitly migrates its reserved clinic schema in the shared database.
+
+## Bounded workspace reads (12 November 2026)
+
+PostgreSQL `/api/bootstrap` now returns `windowed: true`, up to 50 next active
+appointments plus 50 recent/other appointments, and the first 50 patients plus
+contacts needed for those visits (at most 150 patients). It is **not a history
+export**. `overview` contains complete role-scoped database counts and seven
+Monday–Sunday counts; `calendarDoctorServices` preserves historical service
+filter choices. Demo/JSON mode retains its existing complete collections and
+`windowed: false`.
+
+| Method / route | Response / purpose |
+| --- | --- |
+| GET `/api/workspace/patients` | `{ items, total, locatedSkip }`; staff directory or patient’s own record |
+| GET `/api/workspace/appointments` | `{ items, patients, total }`; role-scoped appointment page and its contacts |
+| GET `/api/workspace/appointments/{id}` | `{ appointment, patient }`; accessible current details, including visits outside bootstrap |
+| GET `/api/workspace/patients/{id}` | Patient, one page of role-scoped `appointments`, `total`, `canEdit`, complete `counts` |
+
+All require a bearer and the matching `X-Clinic`. Query fields: `skip` (>=0),
+`take` (1–500, default 12), `search` (<=200 chars), `doctorId`, `patientId`,
+`serviceId`, `status`, inclusive local `from`/`to` (`yyyy-MM-dd`), and `period`
+(`all`, `upcoming`, `previous`, `past`). Patient directory search covers name,
+email, phone and permanent PT number, including Cyrillic under C-locale databases.
+Its optional `doctorId` limits contacts to that doctor’s accessible appointments;
+`locateId` returns the page containing a matching contact and its `locatedSkip`.
+Appointment search covers patient identifiers/contacts and doctor name.
+`overlap=true` includes visits ending after `from`, for calendar windows that
+start during an overnight appointment; the default list filter uses start dates.
+`previous` means everything outside active future visits; `past` means ended
+visits. Patient-history pages default to newest first; upcoming pages oldest first.
+The browser uses these endpoints for complete search, paging, old details and
+calendar windows; it retains a bounded record cache. A calendar window above
+5,000 appointments asks the user to narrow filters.
 
 ## Appointment history and combined filters
 
@@ -98,6 +131,7 @@ patient/doctor/service/status filters on the appointment list endpoint.
 | POST `/api/platform/clinics` | Platform token only; validated `ProvisionClinicInput`, resumable clinic + admin provisioning |
 | POST `/api/platform/password` | Platform token only; `currentPassword`, `newPassword`; revoke all operator sessions |
 | POST `/api/platform/logout` | Platform token only; revoke current session; body `{}` |
+| GET `/api/platform/audit?take=100` | Platform token only; most recent operational events, capped at 500 |
 
 Public pages are limited to 24 rows/page and pages 1–100; query text is bounded.
 Company tokens use the separate `PlatformSession` authentication policy and do not
@@ -143,3 +177,16 @@ profile. Its response and `SessionResponse` include `globalPatient`.
 Personal identity routes do not require X-Clinic. Staff cannot join another clinic
 or use these patient endpoints. Local account access toggles apply only to the
 selected clinic. See [design and migration](GLOBAL_PATIENT_ACCOUNTS.md).
+
+## Operational audit records
+
+Clinical `AuditEvents` include failed staff logins, lockouts and individual
+appointment/history reads. Shared `careline_identity.SecurityEvents` records
+patient login failures/lockouts and anonymous unknown-identity failures. Company
+`PlatformAuditEvents` records login/lockout, session/password and clinic
+provisioning/adoption/edit actions. Failed authentication uses actor `anonymous`,
+never the unverified identity as the actor. Entries contain action/target IDs and
+times; passwords, tokens and submitted contact values are excluded. Failure
+counters and lockout events commit together. These are operational records;
+retention, external tamper-resistant storage, legal policy and MFA/verification
+providers still require deployment-owner decisions.

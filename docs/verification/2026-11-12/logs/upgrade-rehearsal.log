@@ -1,0 +1,3 @@
+{"id": "X0001", "name": "old offline migration succeeds", "status": "PASS"}
+{"id": "X0002", "name": "Upgrade rehearsal completes", "status": "FAIL", "error": "/api/catalogue/doctors returned 400 {'error': 'Невалидни податоци. Проверете ги задолжителните полиња, е-поштата, датумите, времињата и должината на текстот.'}"}
+{"id": "X0003", "name": "Generated upgrade databases and roles removed", "status": "PASS"}

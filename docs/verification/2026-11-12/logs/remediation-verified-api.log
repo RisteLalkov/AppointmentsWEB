@@ -1,0 +1,72 @@
+{"id": "X0001", "name": "API bootstrap explicitly advertises windowed collections", "status": "PASS"}
+{"id": "X0002", "name": "Authorized paged read reception /api/workspace/patients?take=2", "status": "PASS"}
+{"id": "X0003", "name": "Anonymous denial /api/workspace/patients?take=2 reception", "status": "PASS"}
+{"id": "X0004", "name": "Authorized paged read reception /api/workspace/appointments?take=2", "status": "PASS"}
+{"id": "X0005", "name": "Anonymous denial /api/workspace/appointments?take=2 reception", "status": "PASS"}
+{"id": "X0006", "name": "Authorized paged read reception /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24", "status": "PASS"}
+{"id": "X0007", "name": "Anonymous denial /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24 reception", "status": "PASS"}
+{"id": "X0008", "name": "Authorized paged read reception /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545?take=2", "status": "PASS"}
+{"id": "X0009", "name": "Anonymous denial /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545?take=2 reception", "status": "PASS"}
+{"id": "X0010", "name": "Authorized paged read doctor /api/workspace/patients?take=2", "status": "PASS"}
+{"id": "X0011", "name": "Anonymous denial /api/workspace/patients?take=2 doctor", "status": "PASS"}
+{"id": "X0012", "name": "Authorized paged read doctor /api/workspace/appointments?take=2", "status": "PASS"}
+{"id": "X0013", "name": "Anonymous denial /api/workspace/appointments?take=2 doctor", "status": "PASS"}
+{"id": "X0014", "name": "Authorized paged read doctor /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24", "status": "PASS"}
+{"id": "X0015", "name": "Anonymous denial /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24 doctor", "status": "PASS"}
+{"id": "X0016", "name": "Authorized paged read doctor /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545?take=2", "status": "PASS"}
+{"id": "X0017", "name": "Anonymous denial /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545?take=2 doctor", "status": "PASS"}
+{"id": "X0018", "name": "Authorized paged read patient /api/workspace/patients?take=2", "status": "PASS"}
+{"id": "X0019", "name": "Anonymous denial /api/workspace/patients?take=2 patient", "status": "PASS"}
+{"id": "X0020", "name": "Authorized paged read patient /api/workspace/appointments?take=2", "status": "PASS"}
+{"id": "X0021", "name": "Anonymous denial /api/workspace/appointments?take=2 patient", "status": "PASS"}
+{"id": "X0022", "name": "Authorized paged read patient /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24", "status": "PASS"}
+{"id": "X0023", "name": "Anonymous denial /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24 patient", "status": "PASS"}
+{"id": "X0024", "name": "Authorized paged read patient /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545?take=2", "status": "PASS"}
+{"id": "X0025", "name": "Anonymous denial /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545?take=2 patient", "status": "PASS"}
+{"id": "X0026", "name": "Unrelated patient cannot read /api/workspace/appointments/a812d9ce4ef74bddba5614a967a26f24", "status": "PASS"}
+{"id": "X0027", "name": "Unrelated patient cannot read /api/workspace/patients/f2d28ba3aade49e48ad9eb742e1fa545", "status": "PASS"}
+{"id": "X0028", "name": "Patient directory search returns only own contact", "status": "PASS"}
+{"id": "X0029", "name": "Staff token cannot select another clinic for workspace pages", "status": "PASS"}
+{"id": "X0030", "name": "Invalid page query take=0", "status": "PASS"}
+{"id": "X0031", "name": "Invalid page query take=501", "status": "PASS"}
+{"id": "X0032", "name": "Invalid page query skip=-1", "status": "PASS"}
+{"id": "X0033", "name": "Invalid page query period=invalid", "status": "PASS"}
+{"id": "X0034", "name": "Invalid page query status=999", "status": "PASS"}
+{"id": "X0035", "name": "Invalid page query from=2027-01-01&to=2026-01-01", "status": "PASS"}
+{"id": "X0036", "name": "Invalid page query to=9999-12-31", "status": "PASS"}
+{"id": "X0037", "name": "Invalid page query from=not-a-date", "status": "PASS"}
+{"id": "X0038", "name": "Invalid page query search=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "status": "PASS"}
+{"id": "X0039", "name": "Patient search literal ' OR 1=1 --", "status": "PASS"}
+{"id": "X0040", "name": "Patient search literal <script>alert(1)</script>", "status": "PASS"}
+{"id": "X0041", "name": "Cyrillic appointment search ЈОВАН", "status": "PASS"}
+{"id": "X0042", "name": "Cyrillic appointment search Нешковски", "status": "PASS"}
+{"id": "X0043", "name": "Cyrillic appointment search Јован Нешковски", "status": "PASS"}
+{"id": "X0044", "name": "Full-directory search reaches records outside bootstrap paging-069@fix.test", "status": "PASS"}
+{"id": "X0045", "name": "Full-directory search reaches records outside bootstrap QA Paging 069", "status": "PASS"}
+{"id": "X0046", "name": "Full-directory search reaches records outside bootstrap PT-000078", "status": "PASS"}
+{"id": "X0047", "name": "Full-directory search reaches records outside bootstrap 070123456", "status": "PASS"}
+{"id": "X0048", "name": "Patient pages have stable totals and disjoint records", "status": "PASS"}
+{"id": "X0049", "name": "Locate a new patient on its actual server page", "status": "PASS"}
+{"id": "X0050", "name": "A doctor cannot use another doctor scope to enumerate linked patients", "status": "PASS"}
+{"id": "X0051", "name": "Calendar range includes an overnight visit beginning before the first local day", "status": "PASS"}
+{"id": "X0052", "name": "Default list date filter retains start-date semantics", "status": "PASS"}
+{"id": "X0053", "name": "Patient profile includes all history in count, only requested page in response", "status": "PASS"}
+{"id": "X0054", "name": "Details outside initial window remain accessible to staff", "status": "PASS"}
+{"id": "X0055", "name": "Old details remain private from other patients", "status": "PASS"}
+{"id": "X0056", "name": "Bootstrap remains bounded after history growth", "status": "PASS"}
+{"id": "X0057", "name": "Overview totals include history outside bootstrap", "status": "PASS"}
+{"id": "X0058", "name": "Swagger requires clinic post /api/patients", "status": "PASS"}
+{"id": "X0059", "name": "Swagger requires clinic get /api/patients/{id}", "status": "PASS"}
+{"id": "X0060", "name": "Swagger requires clinic post /api/patients/{id}", "status": "PASS"}
+{"id": "X0061", "name": "Swagger requires clinic get /api/workspace/patients", "status": "PASS"}
+{"id": "X0062", "name": "Swagger requires clinic get /api/workspace/appointments", "status": "PASS"}
+{"id": "X0063", "name": "Swagger requires clinic get /api/workspace/appointments/{id}", "status": "PASS"}
+{"id": "X0064", "name": "Swagger requires clinic get /api/workspace/patients/{id}", "status": "PASS"}
+{"id": "X0065", "name": "Distributed failure/lockout audit patient", "status": "PASS"}
+{"id": "X0066", "name": "Distributed failure/lockout audit staff", "status": "PASS"}
+{"id": "X0067", "name": "Distributed failure/lockout audit company", "status": "PASS"}
+{"id": "X0068", "name": "Unknown identity rejected without storing its email", "status": "PASS"}
+{"id": "X0069", "name": "Company adoption and metadata edit record operator and clinic", "status": "PASS"}
+{"id": "X0070", "name": "Reception cannot read company audit", "status": "PASS"}
+{"id": "X0071", "name": "Patient cannot read company audit", "status": "PASS"}
+{"id": "X0072", "name": "Clinical detail/history reads are auditable without contact payloads", "status": "PASS"}

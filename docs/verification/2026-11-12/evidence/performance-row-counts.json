@@ -1,0 +1,6 @@
+{
+  "patients": 5082,
+  "appointments": 32003,
+  "fixture_bulk_patients": 5000,
+  "fixture_bulk_appointments": 30000
+}

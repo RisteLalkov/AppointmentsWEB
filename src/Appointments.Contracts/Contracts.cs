@@ -5,7 +5,8 @@ namespace Appointments.Contracts;
 
 public record BootstrapResponse(DemoActor Actor, IReadOnlyList<Doctor> Doctors, IReadOnlyList<Patient> Patients,
     IReadOnlyList<Appointment> Appointments, string Today, string LocalNow, string TimeZone, DateTimeOffset UtcNow,
-    bool DemoMode = false, bool CanReset = false, string Backend = "Api", IReadOnlyList<Specialty>? Specialties = null, IReadOnlyList<MedicalService>? Services = null, IReadOnlyList<DoctorService>? DoctorServices = null);
+    bool DemoMode = false, bool CanReset = false, string Backend = "Api", IReadOnlyList<Specialty>? Specialties = null, IReadOnlyList<MedicalService>? Services = null, IReadOnlyList<DoctorService>? DoctorServices = null,
+    bool Windowed = false, WorkspaceOverview? Overview = null, IReadOnlyList<DoctorService>? CalendarDoctorServices = null);
 public record StatusInput(AppointmentStatus Status, int Version);
 public record PatientInput([Required, StringLength(80, MinimumLength = 2)] string Name, [Required, EmailAddress, StringLength(120)] string? Email, [Required, StringLength(30)] string? Phone);
 public record ScheduleInput([Required] List<WorkingPeriod> Periods, int DurationMinutes, int? Version = null);

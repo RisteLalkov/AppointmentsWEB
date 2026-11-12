@@ -41,11 +41,19 @@ public sealed class GlobalPatients(ClinicConnections connections, ClinicRegistry
         await using var tx = await db.Database.BeginTransactionAsync(ct);
         await LockAsync(db, id, ct);
         var account = await db.PatientAccounts.SingleAsync(a => a.Id == id, ct);
-        if (!account.Enabled || account.LockedUntil > Now) throw Failure();
+        if (!account.Enabled || account.LockedUntil > Now)
+        {
+            await SecurityAudit.PatientAsync(db, "auth.login.blocked", id, Now, ct);
+            await tx.CommitAsync(ct); throw Failure();
+        }
         var verification = hasher.VerifyHashedPassword(account, account.PasswordHash, input.Password);
         if (verification == PasswordVerificationResult.Failed)
         {
-            if (++account.FailedAttempts >= 5) { account.FailedAttempts = 0; account.LockedUntil = Now.AddMinutes(15); }
+            await SecurityAudit.PatientAsync(db, "auth.login.failed", id, Now, ct);
+            if (++account.FailedAttempts >= 5) {
+                account.FailedAttempts = 0; account.LockedUntil = Now.AddMinutes(15);
+                await SecurityAudit.PatientAsync(db, "auth.account.locked", id, Now, ct);
+            }
             await db.SaveChangesAsync(ct); await tx.CommitAsync(ct); throw Failure();
         }
         if (verification == PasswordVerificationResult.SuccessRehashNeeded) account.PasswordHash = hasher.HashPassword(account, input.Password);
@@ -73,6 +81,11 @@ public sealed class GlobalPatients(ClinicConnections connections, ClinicRegistry
             catch (NpgsqlException) { }
         }
         return new(token, expires, new(id, account.Name, DemoRole.Patient), false, null, true, account.Id);
+    }
+    public async Task UnknownLoginAsync(CancellationToken ct)
+    {
+        await using var db = Open();
+        await SecurityAudit.PatientAsync(db, "auth.login.failed", null, Now, ct, "Identity");
     }
     public async Task<AccountSummary> RegisterAsync(RegisterInput input, ClinicDefinition clinic, CancellationToken ct)
     {

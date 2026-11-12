@@ -1,0 +1,746 @@
+{
+  "original": [
+    [
+      {
+        "schema": "careline_identity",
+        "table": "PatientAccounts",
+        "rows": 4,
+        "hash": "94563207b1816ae4cd7c526ec98e2116"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientBookings",
+        "rows": 1,
+        "hash": "18ccad1089ef3dc9fbe6096e4a27531b"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientEvents",
+        "rows": 16,
+        "hash": "27a25debef3b118f837756d5d4a690b2"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientMemberships",
+        "rows": 6,
+        "hash": "4117edcafd7b144de52d959688d48182"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientSessions",
+        "rows": 8,
+        "hash": "a864d3d016945d0e5027ff4b5d7f70c1"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "SecurityEvents",
+        "rows": 10,
+        "hash": "6afe8e4ff132f0b8d9ce1025dd4b4534"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "accounts",
+        "rows": 6,
+        "hash": "2e195803379770773e7d35beb1bb45d2"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "clinics",
+        "rows": 3,
+        "hash": "388fa644345d0381aa39eb2cb8c88d82"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Accounts",
+        "rows": 1,
+        "hash": "48842e228c3c46940aee817c0a329cbf"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "AppointmentHistory",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Appointments",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "AuditEvents",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "AvailabilityExceptions",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "DoctorServices",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Doctors",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "IdempotencyRequests",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Patients",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Services",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Sessions",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Settings",
+        "rows": 2,
+        "hash": "9016bc487d2b852ca1a57187830fb141"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "SourceSchedules",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Specialties",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "WorkingPeriods",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "__EFMigrationsHistory",
+        "rows": 8,
+        "hash": "61d6befe5586b1e52545e6f24452858c"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Accounts",
+        "rows": 3,
+        "hash": "edd3fb1263c5c860484e6ab6399bb173"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "AppointmentHistory",
+        "rows": 3,
+        "hash": "b792a4bace4bf5547fe7daecf77495e5"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Appointments",
+        "rows": 1,
+        "hash": "763212a60cd7799734dcd6f37ca4be47"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "AuditEvents",
+        "rows": 30,
+        "hash": "f54ef9a5971fb705507342ebe0023d84"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "AvailabilityExceptions",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "DoctorServices",
+        "rows": 5,
+        "hash": "16c001d9303f207e6b57da064970d79e"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Doctors",
+        "rows": 4,
+        "hash": "19f745d16d8fff133b8aeaa68a7f3fa3"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "IdempotencyRequests",
+        "rows": 1,
+        "hash": "a8d6e6571bcd24613ac287fa97c098c5"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Patients",
+        "rows": 8,
+        "hash": "21d8b37fd3c69f8a57d20450465e4c6d"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Services",
+        "rows": 2,
+        "hash": "6919b06e58742b593ea2ce6c0ef2b6ec"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Sessions",
+        "rows": 3,
+        "hash": "dc1670bda6dbd5c1adfbaaefffc156bf"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Settings",
+        "rows": 2,
+        "hash": "a48f1e50605724bff3b0d1f19c15a637"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "SourceSchedules",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Specialties",
+        "rows": 1,
+        "hash": "9549cfd8b35a5333d8d5926093116c4c"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "WorkingPeriods",
+        "rows": 21,
+        "hash": "7c5e1e1db71edcc8b59a96ad5f075eb1"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "__EFMigrationsHistory",
+        "rows": 8,
+        "hash": "61d6befe5586b1e52545e6f24452858c"
+      },
+      {
+        "schema": "public",
+        "table": "Accounts",
+        "rows": 8,
+        "hash": "f7ad0ba9deb82166e4e78291a5dffb12"
+      },
+      {
+        "schema": "public",
+        "table": "AppointmentHistory",
+        "rows": 4,
+        "hash": "ffd18e8f0dd93b33bbe6d85834ad8616"
+      },
+      {
+        "schema": "public",
+        "table": "Appointments",
+        "rows": 32004,
+        "hash": "0c4edc8d9250da4e521ce270a753001c"
+      },
+      {
+        "schema": "public",
+        "table": "AuditEvents",
+        "rows": 170,
+        "hash": "082ef5b5a91ed439b5a179190b19ad0d"
+      },
+      {
+        "schema": "public",
+        "table": "AvailabilityExceptions",
+        "rows": 1,
+        "hash": "42f4daaaef48a5fadab440ae49400f7e"
+      },
+      {
+        "schema": "public",
+        "table": "DoctorServices",
+        "rows": 5,
+        "hash": "379d2061093fcbcfc30dad826f9ea312"
+      },
+      {
+        "schema": "public",
+        "table": "Doctors",
+        "rows": 4,
+        "hash": "eabe375f5581781a2f692bbac3134d09"
+      },
+      {
+        "schema": "public",
+        "table": "IdempotencyRequests",
+        "rows": 3,
+        "hash": "593dc121fabefe42246b8cb6fb70042a"
+      },
+      {
+        "schema": "public",
+        "table": "Patients",
+        "rows": 5084,
+        "hash": "4a6f757dac6962b9570c30f0c4344ae5"
+      },
+      {
+        "schema": "public",
+        "table": "Services",
+        "rows": 2,
+        "hash": "ea07904378f860ccae11fdc68d7a4534"
+      },
+      {
+        "schema": "public",
+        "table": "Sessions",
+        "rows": 16,
+        "hash": "893658a51bf259477a58ce2e1877d9e3"
+      },
+      {
+        "schema": "public",
+        "table": "Settings",
+        "rows": 2,
+        "hash": "0b2497cdf54b1dd78942bed578b36e05"
+      },
+      {
+        "schema": "public",
+        "table": "SourceSchedules",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "public",
+        "table": "Specialties",
+        "rows": 1,
+        "hash": "61e4ec1b2b86574bb3b7fe033015a570"
+      },
+      {
+        "schema": "public",
+        "table": "WorkingPeriods",
+        "rows": 21,
+        "hash": "6b5247c68a38a7a4b4f1ba66d99f5c27"
+      },
+      {
+        "schema": "public",
+        "table": "__EFMigrationsHistory",
+        "rows": 8,
+        "hash": "61d6befe5586b1e52545e6f24452858c"
+      }
+    ],
+    [
+      {
+        "schema": "public",
+        "table": "PlatformAuditEvents",
+        "rows": 15,
+        "hash": "5dd20cc8bc339e55f2843ae537dd3fd3"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformClinics",
+        "rows": 1,
+        "hash": "945747d75565b2252d4974c369fa7a1f"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformOperators",
+        "rows": 2,
+        "hash": "33672d7adeaadf157b79daec82dc364f"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformSchemaVersions",
+        "rows": 4,
+        "hash": "8345e7347a4c41f43fc5d49e5cd793f5"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformSessions",
+        "rows": 2,
+        "hash": "c76e813a29405a5b3a350d8625c77f19"
+      }
+    ]
+  ],
+  "restored": [
+    [
+      {
+        "schema": "careline_identity",
+        "table": "PatientAccounts",
+        "rows": 4,
+        "hash": "94563207b1816ae4cd7c526ec98e2116"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientBookings",
+        "rows": 1,
+        "hash": "18ccad1089ef3dc9fbe6096e4a27531b"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientEvents",
+        "rows": 16,
+        "hash": "27a25debef3b118f837756d5d4a690b2"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientMemberships",
+        "rows": 6,
+        "hash": "4117edcafd7b144de52d959688d48182"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "PatientSessions",
+        "rows": 8,
+        "hash": "a864d3d016945d0e5027ff4b5d7f70c1"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "SecurityEvents",
+        "rows": 10,
+        "hash": "6afe8e4ff132f0b8d9ce1025dd4b4534"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "accounts",
+        "rows": 6,
+        "hash": "2e195803379770773e7d35beb1bb45d2"
+      },
+      {
+        "schema": "careline_identity",
+        "table": "clinics",
+        "rows": 3,
+        "hash": "388fa644345d0381aa39eb2cb8c88d82"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Accounts",
+        "rows": 1,
+        "hash": "48842e228c3c46940aee817c0a329cbf"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "AppointmentHistory",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Appointments",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "AuditEvents",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "AvailabilityExceptions",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "DoctorServices",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Doctors",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "IdempotencyRequests",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Patients",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Services",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Sessions",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Settings",
+        "rows": 2,
+        "hash": "9016bc487d2b852ca1a57187830fb141"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "SourceSchedules",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "Specialties",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "WorkingPeriods",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_closed",
+        "table": "__EFMigrationsHistory",
+        "rows": 8,
+        "hash": "61d6befe5586b1e52545e6f24452858c"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Accounts",
+        "rows": 3,
+        "hash": "edd3fb1263c5c860484e6ab6399bb173"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "AppointmentHistory",
+        "rows": 3,
+        "hash": "b792a4bace4bf5547fe7daecf77495e5"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Appointments",
+        "rows": 1,
+        "hash": "763212a60cd7799734dcd6f37ca4be47"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "AuditEvents",
+        "rows": 30,
+        "hash": "f54ef9a5971fb705507342ebe0023d84"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "AvailabilityExceptions",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "DoctorServices",
+        "rows": 5,
+        "hash": "16c001d9303f207e6b57da064970d79e"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Doctors",
+        "rows": 4,
+        "hash": "19f745d16d8fff133b8aeaa68a7f3fa3"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "IdempotencyRequests",
+        "rows": 1,
+        "hash": "a8d6e6571bcd24613ac287fa97c098c5"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Patients",
+        "rows": 8,
+        "hash": "21d8b37fd3c69f8a57d20450465e4c6d"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Services",
+        "rows": 2,
+        "hash": "6919b06e58742b593ea2ce6c0ef2b6ec"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Sessions",
+        "rows": 3,
+        "hash": "dc1670bda6dbd5c1adfbaaefffc156bf"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Settings",
+        "rows": 2,
+        "hash": "a48f1e50605724bff3b0d1f19c15a637"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "SourceSchedules",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "Specialties",
+        "rows": 1,
+        "hash": "9549cfd8b35a5333d8d5926093116c4c"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "WorkingPeriods",
+        "rows": 21,
+        "hash": "7c5e1e1db71edcc8b59a96ad5f075eb1"
+      },
+      {
+        "schema": "clinic_east",
+        "table": "__EFMigrationsHistory",
+        "rows": 8,
+        "hash": "61d6befe5586b1e52545e6f24452858c"
+      },
+      {
+        "schema": "public",
+        "table": "Accounts",
+        "rows": 8,
+        "hash": "f7ad0ba9deb82166e4e78291a5dffb12"
+      },
+      {
+        "schema": "public",
+        "table": "AppointmentHistory",
+        "rows": 4,
+        "hash": "ffd18e8f0dd93b33bbe6d85834ad8616"
+      },
+      {
+        "schema": "public",
+        "table": "Appointments",
+        "rows": 32004,
+        "hash": "0c4edc8d9250da4e521ce270a753001c"
+      },
+      {
+        "schema": "public",
+        "table": "AuditEvents",
+        "rows": 170,
+        "hash": "082ef5b5a91ed439b5a179190b19ad0d"
+      },
+      {
+        "schema": "public",
+        "table": "AvailabilityExceptions",
+        "rows": 1,
+        "hash": "42f4daaaef48a5fadab440ae49400f7e"
+      },
+      {
+        "schema": "public",
+        "table": "DoctorServices",
+        "rows": 5,
+        "hash": "379d2061093fcbcfc30dad826f9ea312"
+      },
+      {
+        "schema": "public",
+        "table": "Doctors",
+        "rows": 4,
+        "hash": "eabe375f5581781a2f692bbac3134d09"
+      },
+      {
+        "schema": "public",
+        "table": "IdempotencyRequests",
+        "rows": 3,
+        "hash": "593dc121fabefe42246b8cb6fb70042a"
+      },
+      {
+        "schema": "public",
+        "table": "Patients",
+        "rows": 5084,
+        "hash": "4a6f757dac6962b9570c30f0c4344ae5"
+      },
+      {
+        "schema": "public",
+        "table": "Services",
+        "rows": 2,
+        "hash": "ea07904378f860ccae11fdc68d7a4534"
+      },
+      {
+        "schema": "public",
+        "table": "Sessions",
+        "rows": 16,
+        "hash": "893658a51bf259477a58ce2e1877d9e3"
+      },
+      {
+        "schema": "public",
+        "table": "Settings",
+        "rows": 2,
+        "hash": "0b2497cdf54b1dd78942bed578b36e05"
+      },
+      {
+        "schema": "public",
+        "table": "SourceSchedules",
+        "rows": 0,
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "schema": "public",
+        "table": "Specialties",
+        "rows": 1,
+        "hash": "61e4ec1b2b86574bb3b7fe033015a570"
+      },
+      {
+        "schema": "public",
+        "table": "WorkingPeriods",
+        "rows": 21,
+        "hash": "6b5247c68a38a7a4b4f1ba66d99f5c27"
+      },
+      {
+        "schema": "public",
+        "table": "__EFMigrationsHistory",
+        "rows": 8,
+        "hash": "61d6befe5586b1e52545e6f24452858c"
+      }
+    ],
+    [
+      {
+        "schema": "public",
+        "table": "PlatformAuditEvents",
+        "rows": 15,
+        "hash": "5dd20cc8bc339e55f2843ae537dd3fd3"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformClinics",
+        "rows": 1,
+        "hash": "945747d75565b2252d4974c369fa7a1f"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformOperators",
+        "rows": 2,
+        "hash": "33672d7adeaadf157b79daec82dc364f"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformSchemaVersions",
+        "rows": 4,
+        "hash": "8345e7347a4c41f43fc5d49e5cd793f5"
+      },
+      {
+        "schema": "public",
+        "table": "PlatformSessions",
+        "rows": 2,
+        "hash": "c76e813a29405a5b3a350d8625c77f19"
+      }
+    ]
+  ]
+}

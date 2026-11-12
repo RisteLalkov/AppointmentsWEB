@@ -103,20 +103,21 @@ let count=0;const check=(ok,label)=>{if(!ok)throw Error(label);count++;console.l
   check(await p.locator('.doctor-card').count()===1 && (await p.locator('.doctor-card').innerText()).includes('Контактирајте го лекарот или рецепцијата.'),'Doctor search resets pagination and uses the short contact message');
   check(await p.locator('.doctor-card [data-book]').isEnabled(),'Reception retains its booking action for agreement-only doctors');
   await p.goto(base+'/Workspace#patients');
+  await p.waitForFunction(()=>document.querySelectorAll('.patient-card').length===12);
   check(await p.locator('.patient-card').count()===12,'Patients are paginated in card view');
-  await p.locator('[data-pagination=patients][data-page-number="2"]').first().click();await p.locator('[data-records-kind=patients][data-records-view=list]').click();
+  await p.locator('[data-pagination=patients][data-page-number="2"]').first().click();await p.locator('[data-records-kind=patients][data-records-view=list]').click();await p.waitForFunction(()=>document.querySelectorAll('#patient-results tbody tr').length===12 && !document.querySelector('#patient-results[aria-busy]'));
   check(await p.locator('#patient-results tbody tr').count()===12 && await p.locator('[data-pagination=patients][aria-current=page]').innerText()==='2','Switching to list view preserves the selected patient page');
-  await p.locator('[data-page-size=patients]').selectOption('24');
+  await p.locator('[data-page-size=patients]').selectOption('24');await p.waitForFunction(()=>document.querySelectorAll('#patient-results tbody tr').length===24 && !document.querySelector('#patient-results[aria-busy]'));
   check(await p.locator('#patient-results tbody tr').count()===24 && await p.locator('[data-pagination=patients][aria-current=page]').innerText()==='1','Changing page size resets to the first page');
-  await p.locator('#patient-search').fill('pages-24@round2.test');
+  await p.locator('#patient-search').fill('pages-24@round2.test');await p.waitForFunction(()=>document.querySelectorAll('#patient-results tbody tr').length===1 && !document.querySelector('#patient-results[aria-busy]'));
   check(await p.locator('#patient-results tbody tr').count()===1,'Patient search considers all records beyond the current page');
-  await p.goto(base+'/Workspace#appointments');await p.locator('[data-list-tab=all]').click();await p.locator('#list-doctor').selectOption('');
+  await p.goto(base+'/Workspace#appointments');await p.locator('[data-list-tab=all]').click();await p.locator('#list-doctor').selectOption('');await p.waitForFunction(()=>document.querySelectorAll('#appointment-results tbody tr').length===12 && !document.querySelector('#appointment-results[aria-busy]'));
   check(await p.locator('#appointment-results tbody tr').count()===12,'Appointment lists paginate after filtering');
-  await p.locator('[data-pagination=appointments][data-page-number="2"]').first().click();
+  await p.locator('[data-pagination=appointments][data-page-number="2"]').first().click();await p.waitForFunction(()=>document.querySelector('[data-pagination=appointments][aria-current=page]')?.textContent==='2' && !document.querySelector('#appointment-results[aria-busy]'));
   check(await p.locator('#appointment-results tbody tr').count()===12,'Appointment next page remains usable');
   await p.goto(base+'/Workspace#patients');await p.locator('#patient-search').fill('contact@round2.test');await p.locator('[data-patient-profile]').click();await p.locator('#profile-appointments tbody tr').first().waitFor();
   check(await p.locator('#profile-appointments tbody tr').count()===12,'Individual patient history is also paginated');
-  await p.locator('[data-pagination=patient-history][data-page-number="2"]').first().click();await p.locator('#profile-status').selectOption('Completed');
+  await p.locator('[data-pagination=patient-history][data-page-number="2"]').first().click();await p.locator('#profile-status').selectOption('Completed');await p.waitForFunction(()=>document.querySelectorAll('#profile-appointments tbody tr').length===0 && !document.querySelector('#profile-appointments[aria-busy]'));
   check(await p.locator('#profile-appointments tbody tr').count()===0,'History filters apply to all records and reset the page');
   for(const kind of ['specialties','services']){
    await p.goto(base+'/Workspace#catalogue/'+kind);await p.locator('[data-page-size="catalogue-'+kind+'"]').waitFor();

@@ -1,8 +1,8 @@
 """Disposable QA fixture host. Uses ONLY a loopback test coordinator and generated fixture databases."""
 import datetime as dt,json,os,pathlib,re,socket,subprocess,time,urllib.request,uuid
 ROOT=pathlib.Path(__file__).resolve().parents[2]
-WORK=pathlib.Path('/workspace/.setup/qa20261112');WORK.mkdir(parents=True,exist_ok=True)
-OUT=ROOT/'docs/audit/2026-11-12';OUT.mkdir(parents=True,exist_ok=True)
+WORK=pathlib.Path(os.environ.get('QA_WORK','/workspace/.setup/qa20261112'));WORK.mkdir(parents=True,exist_ok=True)
+OUT=ROOT/os.environ.get('QA_OUTPUT','docs/audit/2026-11-12');OUT.mkdir(parents=True,exist_ok=True)
 PARENT=os.environ.get('CARELINE_TEST_CONNECTION','Host=127.0.0.1;Port=55432;Database=medtermin_qa_20261112_test;Username=postgres')
 if not re.search(r'Host=(?:127\.0\.0\.1|localhost)(?:;|$)',PARENT,re.I) or not re.search(r'Database=[^;]*(?:test|integration)',PARENT,re.I):raise SystemExit('A loopback test coordinator is required.')
 DOTNET=os.environ.get('TEST_DOTNET','dotnet');FIXTURE_DLL=ROOT/'tests/Appointments.DatabaseTests/bin/Release/net10.0/Appointments.DatabaseTests.dll'
@@ -33,11 +33,11 @@ try:
  for i,cid in enumerate(['main','east','closed']):
   values=dict(Id=cid,Name={'main':'Главна QA клиника','east':'Источна QA клиника','closed':'Затворена QA клиника'}[cid],TimeZone='Europe/Skopje',ImportSourceDoctors='false',SeedDemoData='false',AllowRegistration='false' if cid=='closed' else 'true',BootstrapEmail=cid+'@audit.test',BootstrapPassword=password)
   for k,v in values.items():env[f'Tenancy__Clinics__{i}__{k}']=v
- api_dll=pathlib.Path('/workspace/.setup/qa-20261112-publish/api/Appointments.Api.dll');web_dll=pathlib.Path('/workspace/.setup/qa-20261112-publish/web/Appointments.Web.dll')
+ api_dll=pathlib.Path(os.environ.get('TEST_API_DLL','/workspace/.setup/qa-20261112-publish/api/Appointments.Api.dll'));web_dll=pathlib.Path(os.environ.get('TEST_WEB_DLL','/workspace/.setup/qa-20261112-publish/web/Appointments.Web.dll'))
  with (OUT/'logs/fixture-migrate.log').open('w') as f:subprocess.run([DOTNET,str(api_dll),'--migrate'],cwd=api_dll.parent,env=env,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=120)
  start('api',api_dll,api,env,'/health/live');start('api2',api_dll,address2,env,'/health/live')
  start('web',web_dll,web,dict(env,Backend__Mode='Api',Backend__ApiBaseUrl=api+'/'),'/Account/Login')
- runtime=dict(api=api,api2=address2,web=web,password=password,key=key,dsn=dsn,fixture=str(FIXTURE),container='medtermin-qa-20261112',pids=[p.pid for p in procs],started_utc=dt.datetime.now(dt.timezone.utc).isoformat())
+ runtime=dict(api=api,api2=address2,web=web,password=password,key=key,dsn=dsn,fixture=str(FIXTURE),container=os.environ.get('QA_CONTAINER','medtermin-qa-20261112'),pids=[p.pid for p in procs],started_utc=dt.datetime.now(dt.timezone.utc).isoformat())
  RUNTIME.write_text(json.dumps(runtime));os.chmod(RUNTIME,0o600)
  (OUT/'evidence/fixture.json').write_text(json.dumps({k:runtime[k] for k in ['api','api2','web','started_utc']},indent=2))
  print('QA fixture ready; credentials stay in a private runtime file.',flush=True)

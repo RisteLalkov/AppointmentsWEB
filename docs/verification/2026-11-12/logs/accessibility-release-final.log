@@ -1,0 +1,60 @@
+{"id":"B001","name":"Stale clinic tab reads fail closed","status":"PASS","actual":409}
+{"id":"B002","name":"Logout works from a tab opened before switching clinic","status":"PASS","actual":302,"reproduction":"Patient main workspace in tab A; select east in tab B; logout in A"}
+{"id":"B003","name":"Language works from a tab opened before switching clinic","status":"PASS","actual":302}
+{"id":"B004","name":"Automated WCAG registration","status":"PASS","violations":[]}
+{"id":"B005","name":"Browser registration creates one global identity and first clinic membership","status":"PASS"}
+{"id":"B006","name":"Automated WCAG patient personal home","status":"PASS","violations":[]}
+{"id":"B007","name":"Automated WCAG public doctor availability","status":"PASS","violations":[]}
+{"id":"B008","name":"Automated WCAG explicit second clinic consent","status":"PASS","violations":[]}
+{"id":"B009","name":"Joining another clinic never asks for a new password","status":"PASS"}
+{"id":"B010","name":"Chosen public slot reaches booking","status":"PASS"}
+{"id":"B011","name":"Automated WCAG booking review","status":"PASS","violations":[]}
+{"id":"B012","name":"Pending booking persists in east with two memberships and shared busy time","status":"PASS","database":{"status":"Scheduled","id":"13202a58a866492aa83b0b3740b3ba1d","memberships":2,"busy":1}}
+{"id":"B013","name":"Cross-clinic personal home shows only own new appointment","status":"PASS"}
+{"id":"B014","name":"Reception confirmation writes status/version/history","status":"PASS"}
+{"id":"B015","name":"Patient cancellation releases global busy row and appends history","status":"PASS"}
+{"id":"B016","name":"Automated WCAG platform overview","status":"PASS","violations":[]}
+{"id":"B017","name":"Automated WCAG platform clinic metadata","status":"PASS","violations":[]}
+{"id":"B018","name":"Automated WCAG company patient recovery","status":"PASS","violations":[]}
+{"id":"B019","name":"Company recovery records event and revokes patient sessions","status":"PASS"}
+{"id":"B020","name":"Platform logout preserves separate clinic staff session","status":"PASS"}
+{"id":"B021","name":"Automated WCAG reception doctors","status":"PASS","violations":[]}
+{"id":"B022","name":"No viewport overflow reception doctors 320","status":"PASS"}
+{"id":"B023","name":"No viewport overflow reception doctors 768","status":"PASS"}
+{"id":"B024","name":"No viewport overflow reception doctors 1360","status":"PASS"}
+{"id":"B025","name":"Automated WCAG reception patients","status":"PASS","violations":[]}
+{"id":"B026","name":"No viewport overflow reception patients 320","status":"PASS"}
+{"id":"B027","name":"No viewport overflow reception patients 768","status":"PASS"}
+{"id":"B028","name":"No viewport overflow reception patients 1360","status":"PASS"}
+{"id":"B029","name":"Automated WCAG reception calendar","status":"PASS","violations":[]}
+{"id":"B030","name":"No viewport overflow reception calendar 320","status":"PASS"}
+{"id":"B031","name":"No viewport overflow reception calendar 768","status":"PASS"}
+{"id":"B032","name":"No viewport overflow reception calendar 1360","status":"PASS"}
+{"id":"B033","name":"Automated WCAG reception reports","status":"PASS","violations":[]}
+{"id":"B034","name":"No viewport overflow reception reports 320","status":"PASS"}
+{"id":"B035","name":"No viewport overflow reception reports 768","status":"PASS"}
+{"id":"B036","name":"No viewport overflow reception reports 1360","status":"PASS"}
+{"id":"B037","name":"Automated WCAG reception account dialog","status":"PASS","violations":[]}
+{"id":"B038","name":"Automated WCAG clinic accounts","status":"PASS","violations":[]}
+{"id":"B039","name":"Automated WCAG real database doctors dark","status":"PASS","violations":[]}
+{"id":"B040","name":"Automated WCAG real database doctors vibrant","status":"PASS","violations":[]}
+{"id":"B041","name":"Automated WCAG doctor appointments","status":"PASS","violations":[]}
+{"id":"B042","name":"No viewport overflow doctor appointments 320","status":"PASS"}
+{"id":"B043","name":"No viewport overflow doctor appointments 768","status":"PASS"}
+{"id":"B044","name":"No viewport overflow doctor appointments 1360","status":"PASS"}
+{"id":"B045","name":"Automated WCAG doctor availability","status":"PASS","violations":[]}
+{"id":"B046","name":"No viewport overflow doctor availability 320","status":"PASS"}
+{"id":"B047","name":"No viewport overflow doctor availability 768","status":"PASS"}
+{"id":"B048","name":"No viewport overflow doctor availability 1360","status":"PASS"}
+{"id":"B049","name":"Automated WCAG doctor account dialog","status":"PASS","violations":[]}
+{"id":"B050","name":"Automated WCAG patient doctors","status":"PASS","violations":[]}
+{"id":"B051","name":"No viewport overflow patient doctors 320","status":"PASS"}
+{"id":"B052","name":"No viewport overflow patient doctors 768","status":"PASS"}
+{"id":"B053","name":"No viewport overflow patient doctors 1360","status":"PASS"}
+{"id":"B054","name":"Automated WCAG patient appointments","status":"PASS","violations":[]}
+{"id":"B055","name":"No viewport overflow patient appointments 320","status":"PASS"}
+{"id":"B056","name":"No viewport overflow patient appointments 768","status":"PASS"}
+{"id":"B057","name":"No viewport overflow patient appointments 1360","status":"PASS"}
+{"id":"B058","name":"Automated WCAG patient account dialog","status":"PASS","violations":[]}
+{"id":"B059","name":"Authenticated workspace rejects unrelated-origin framing","status":"PASS","observation":"locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('iframe').contentFrame().locator('.overview-grid') to be visible\u001b[22m\n","reason":"Frame either blocked by an observed framing policy or verification remained blocked; a generic timeout is not a pass."}
+{"id":"B060","name":"No uncaught JavaScript exceptions in targeted flows","status":"PASS","errors":[]}

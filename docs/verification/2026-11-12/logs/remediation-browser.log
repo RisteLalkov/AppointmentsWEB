@@ -1,0 +1,20 @@
+PASS Browser receives bounded bootstrap with complete SQL overview
+PASS Remote patient pages contain distinct records
+PASS Permanent-number search reaches a contact beyond the initial cache
+PASS Late directory response cannot overwrite the newer search
+PASS Remote directory failure shows an explicit retry action
+PASS Directory retry recovers without reloading the whole app
+PASS Long patient history displays complete counts and a twelve-row page
+PASS The last history page contains the remaining eight old visits
+PASS Appointment outside bootstrap and cache opens via authorized detail read
+PASS Adding a patient reveals its actual sorted page beyond the initial directory
+locator.waitFor: Timeout 15000ms exceeded.
+Call log:
+[2m  - waiting for locator('#booking-patient-list [role=option]') to be visible[22m
+
+    at /workspace/AppointmentsWEB/tests/frontend/remediation-browser.cjs:27:214 {
+  log: [
+    "  - waiting for locator('#booking-patient-list [role=option]') to be visible"
+  ],
+  name: 'TimeoutError'
+}

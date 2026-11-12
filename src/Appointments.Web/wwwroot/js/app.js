@@ -51,14 +51,17 @@ const icon = window.MedTerminIcons.icon;
     slotRequest = 0,
     refreshInFlight = false;
   let toastTimer, lastFocus;
+  let patientFocusId = "";
   let patientRequest = 0, patientProfile, patientProfileId = "", patientFilters;
   let doctorService = "", nextSlotRequest = 0, nextSlotTimer;
+  const workspaceRequests = new Map();
+  let calendarRequest = 0;
   let calendarSpecialty = "", calendarService = "", calendarRange, reportRequest = 0, reportFilters;
   const serviceOptions = selected => html`<option value="">Сите услуги / прегледи</option><option value="unassigned" ${selected === "unassigned" ? "selected" : ""}>Без заведена услуга</option>${[...state.services, ...state.doctors.filter(d => d.isService)].map(d => `<option value="${d.id}" ${selected === d.id ? "selected" : ""}>${escape(d.name)}</option>`).join("")}`;
   const specialtyOptions = selected => html`<option value="">Сите специјалности</option>${[...new Set(state.doctors.map(d => d.specialty))].sort().map(v => `<option value="${escape(v)}" ${selected === v ? "selected" : ""}>${escape(v)}</option>`).join("")}`;
   const serviceKey = a => a.serviceId || (doctor(a.doctorId)?.isService ? a.doctorId : "unassigned");
   const servicesFor = id => state.services.filter(s => s.enabled && state.doctorServices.some(x => x.doctorId === id && x.serviceId === s.id));
-  const calendarDoctors = () => ownDoctors().filter(d => (!calendarSpecialty || d.specialty === calendarSpecialty) && (!calendarService || (calendarService === "unassigned" && !d.isService) || d.id === calendarService || state.doctorServices.some(x => x.doctorId === d.id && x.serviceId === calendarService) || state.appointments.some(a => a.doctorId === d.id && serviceKey(a) === calendarService)));
+  const calendarDoctors = () => ownDoctors().filter(d => (!calendarSpecialty || d.specialty === calendarSpecialty) && (!calendarService || (calendarService === "unassigned" && !d.isService) || d.id === calendarService || state.doctorServices.some(x => x.doctorId === d.id && x.serviceId === calendarService) || state.calendarDoctorServices?.some(x => x.doctorId === d.id && x.serviceId === calendarService) || state.appointments.some(a => a.doctorId === d.id && serviceKey(a) === calendarService)));
   const bookingDuration = b => b.moveId ? Math.round((new Date(state.appointments.find(a => a.id === b.moveId).end) - new Date(state.appointments.find(a => a.id === b.moveId).start)) / 60000) : state.services.find(s => s.id === b.serviceId)?.durationMinutes || doctor(b.doctorId).durationMinutes;
 
   // randomUUID is absent on HTTP intranet origins; getRandomValues remains available.
@@ -94,8 +97,11 @@ const icon = window.MedTerminIcons.icon;
     `<span class="badge ${escape(status)}">${escape(statusLabel(status))}</span>`;
   const empty = (title, text) =>
     html`<div class="empty-state"><span class="empty-icon" aria-hidden="true">${icon("clock")}</span><h3>${escape(title)}</h3><p>${escape(text)}</p></div>`;
+  let wallFormatter, wallZone;
   const wall = (instant) => {
-    const parts = new Intl.DateTimeFormat("sv-SE", {
+    if (!wallFormatter || wallZone !== state.timeZone) {
+      wallZone = state.timeZone;
+      wallFormatter = new Intl.DateTimeFormat("sv-SE", {
       timeZone: state.timeZone,
       year: "numeric",
       month: "2-digit",
@@ -104,7 +110,9 @@ const icon = window.MedTerminIcons.icon;
       minute: "2-digit",
       second: "2-digit",
       hourCycle: "h23",
-    }).formatToParts(new Date(instant));
+      });
+    }
+    const parts = wallFormatter.formatToParts(new Date(instant));
     const p = Object.fromEntries(parts.map((p) => [p.type, p.value]));
     return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
   };
@@ -197,12 +205,57 @@ const icon = window.MedTerminIcons.icon;
     const index = state[collection].findIndex(item => item.id === record.id);
     if (index >= 0) state[collection][index] = record; else state[collection].push(record);
   }
+  // Bounded caches support selected records without retaining every visited history page.
+  function mergeRecords(current, incoming) {
+    const entries = new Map(current.map(item => [item.id, item]));
+    for (const item of incoming) { entries.delete(item.id); entries.set(item.id,item); }
+    return [...entries.values()].slice(-1500);
+  }
+  function rememberPage(result) {
+    if (result.patients) state.patients = mergeRecords(state.patients,result.patients);
+    if (result.items) state.appointments = mergeRecords(state.appointments,result.items);
+  }
+  function pagingState(kind, filter) {
+    let paging = recordPages.get(kind);
+    if (!paging) { paging = {page:1,size:12,filter};recordPages.set(kind,paging); }
+    if (paging.filter !== filter) { paging.page=1;paging.filter=filter; }
+    return paging;
+  }
+  function workspaceQuery(kind, filter, values = {}) {
+    const paging=pagingState(kind,filter), query=new URLSearchParams();
+    query.set("skip",String((paging.page-1)*paging.size));query.set("take",String(paging.size));
+    for (const [key,value] of Object.entries(values)) if(value !== "" && value != null) query.set(key,String(value));
+    return query.toString();
+  }
+  async function workspacePage(kind, container, path, filter, values) {
+    const request=(workspaceRequests.get(kind)||0)+1;workspaceRequests.set(kind,request);
+    container.setAttribute("aria-busy","true");
+    try {
+      const result=await api(path+"?"+workspaceQuery(kind,filter,values));
+      if(workspaceRequests.get(kind)!==request || !container.isConnected) return null;
+      const paging=recordPages.get(kind),pages=Math.max(1,Math.ceil(result.total/paging.size));
+      if(paging.page>pages) { paging.page=pages;return workspacePage(kind,container,path,filter,values); }
+      return result;
+    } catch(error) {
+      if(workspaceRequests.get(kind)===request && container.isConnected) container.innerHTML=`<div class="inline-error" role="alert">${escape(error.message)}</div><button class="btn secondary" data-retry-page="${kind}">${escape(tr("Обиди се повторно"))}</button>`;
+      return null;
+    } finally {
+      if(workspaceRequests.get(kind)===request && container.isConnected) container.removeAttribute("aria-busy");
+    }
+  }
+  document.addEventListener("click",event=>{
+    const retry=event.target.closest("[data-retry-page]");if(retry)renderRecordPage(retry.dataset.retryPage);
+  });
   async function refreshAfterSave() {
     try { await load(false); return true; }
     catch { toast(tr("Промените се зачувани, но освежувањето не успеа. Освежете подоцна."), true); return false; }
   }
   async function load(render = true) {
-    state = await api("bootstrap");
+    const next = await api("bootstrap");
+    if (next.windowed && state?.actor.id === next.actor.id) {
+      for (const collection of ["patients", "appointments"]) next[collection] = mergeRecords(state[collection], next[collection]);
+    }
+    state = next;
     state.specialties ||= []; state.services ||= []; state.doctorServices ||= [];
     // Database collection order is undefined; show a conventional Monday–Sunday week.
     state.doctors.forEach(d => d.workingPeriods.sort((a,b) =>
@@ -213,7 +266,7 @@ const icon = window.MedTerminIcons.icon;
       const url = new URL(location.href), selected = url.searchParams.get("book"), appointment = url.searchParams.get("appointment");
       if (appointment && !selected) {
         url.searchParams.delete("appointment"); history.replaceState(null, "", url.pathname + url.search + url.hash);
-        if (state.appointments.some(a => a.id === appointment)) details(appointment);
+        if (state.windowed || state.appointments.some(a => a.id === appointment)) details(appointment);
       }
       if (selected) {
         const date = url.searchParams.get("date"), time = url.searchParams.get("time"), service = url.searchParams.get("serviceId");
@@ -233,8 +286,10 @@ const icon = window.MedTerminIcons.icon;
     if (page === next) renderPage();
   }
   function renderPage() {
+    detailRequest++;
     reportRequest++;
     patientRequest++;
+    calendarRequest++;
     if (calendar) {
       calendar.destroy();
       calendar = null;
@@ -302,7 +357,7 @@ const icon = window.MedTerminIcons.icon;
     return html`<button class="appointment-row" data-detail="${a.id}">${avatar(name, Number(d.id.slice(1)))}<span class="row-info"><strong>${escape(name)}</strong><small>${escape(isPatient() ? d.specialty : patientCode(p) + " · " + d.name)}</small></span><span class="row-time">${timeOf(a.start)}<small>${formatDate(dayOf(a.start), { day: "numeric", month: "short" })}</small></span>${badge(a.status)}<span class="muted" aria-hidden="true">${icon("arrow-up-right")}</span></button>`;
   }
   function renderOverview() {
-    const future = state.appointments.filter(upcoming);
+    const future = state.appointments.filter(upcoming).sort((a,b)=>new Date(a.start)-new Date(b.start));
     const today = state.appointments.filter(
       (a) => dayOf(a.start) === state.today && a.status !== "Cancelled",
     );
@@ -312,7 +367,7 @@ const icon = window.MedTerminIcons.icon;
       ? [
           [
             tr("Претстојни прегледи"),
-            future.length,
+            state.overview?.upcomingCount ?? future.length,
             tr("Добро планирање за поголем спокој"),
             "clock",
           ],
@@ -324,13 +379,13 @@ const icon = window.MedTerminIcons.icon;
           ],
           [
             tr("Чека потврда"),
-            pending.length,
+            state.overview?.pendingCount ?? pending.length,
             tr("Терминот е резервиран и чека потврда"),
             "circle-help",
           ],
           [
             tr("Претходни прегледи"),
-            state.appointments.filter((a) =>
+            state.overview?.closedCount ?? state.appointments.filter((a) =>
               ["Completed", "NoShow"].includes(a.status),
             ).length,
             tr("Историја на вашите термини"),
@@ -340,19 +395,19 @@ const icon = window.MedTerminIcons.icon;
       : [
           [
             tr("Денешни термини"),
-            today.length,
+            state.overview?.todayCount ?? today.length,
             tr("Вашиот ден, добро организиран"),
             "clock",
           ],
           [
             tr("Претстојни прегледи"),
-            future.length,
+            state.overview?.upcomingCount ?? future.length,
             tr("Следните закажани прегледи"),
             "calendar-days",
           ],
           [
             tr("Чека потврда"),
-            pending.length,
+            state.overview?.pendingCount ?? pending.length,
             tr("Подготвено за ваша проверка"),
             "circle-help",
           ],
@@ -379,7 +434,7 @@ const icon = window.MedTerminIcons.icon;
           ],
         ];
     const week = monday(state.today);
-    const counts = Array.from(
+    const counts = state.overview?.weekCounts || Array.from(
       { length: 7 },
       (_, i) =>
         state.appointments.filter(
@@ -424,20 +479,18 @@ const icon = window.MedTerminIcons.icon;
     return html`<div class="view-switch" role="group" aria-label="Приказ">${[["list", tr("Листа"), "list"], ["cards", tr("Картички"), "layout-grid"]].map(([value, label, iconName]) => `<button type="button" data-records-view="${value}" data-records-kind="${kind}" aria-pressed="${selected === value}" class="${selected === value ? "active" : ""}">${icon(iconName)}${label}</button>`).join("")}</div>`;
   }
   const recordPages = new Map();
-  function paged(kind, rows, filter = "") {
-    let paging = recordPages.get(kind);
-    if (!paging) { paging = {page:1,size:12,filter}; recordPages.set(kind,paging); }
-    if (paging.filter !== filter) { paging.page = 1; paging.filter = filter; }
-    const pages = Math.max(1,Math.ceil(rows.length/paging.size));
+  function paged(kind, rows, filter = "", total = null) {
+    const paging = pagingState(kind,filter), count = total ?? rows.length;
+    const pages = Math.max(1,Math.ceil(count/paging.size));
     paging.page = Math.max(1,Math.min(paging.page,pages));
     const start = (paging.page-1)*paging.size;
     const button = (number,label,disabled=false) => `<button type="button" class="btn secondary small" data-pagination="${kind}" data-page-number="${number}" ${disabled ? "disabled" : ""} aria-label="${escape(label)}">${escape(label)}</button>`;
     let controls = "";
-    if (rows.length > 12 || paging.size !== 12) {
+    if (count > 12 || paging.size !== 12) {
       const numbers = [...new Set([1,pages,...Array.from({length:5},(_,i)=>paging.page+i-2).filter(n=>n>=1&&n<=pages)])].sort((a,b)=>a-b);
-      controls = `<nav class="records-pagination" data-pagination-nav="${kind}" aria-label="${escape(tr("Страници со резултати"))}" tabindex="-1"><span role="status">${escape(tr("Прикажани {0}–{1} од {2}",rows.length ? start+1 : 0,Math.min(start+paging.size,rows.length),rows.length))}</span><div class="records-page-buttons">${button(paging.page-1,tr("Претходна"),paging.page===1)}${numbers.map((n,i)=>(i && n>numbers[i-1]+1 ? '<span aria-hidden="true">…</span>' : '')+`<button type="button" class="btn secondary small" data-pagination="${kind}" data-page-number="${n}" aria-label="${escape(tr("Страница {0}",n))}" ${n===paging.page ? 'aria-current="page"' : ''}>${n}</button>`).join("")}${button(paging.page+1,tr("Следна"),paging.page===pages)}</div><label>${escape(tr("По страница"))}<select data-page-size="${kind}">${[12,24,48].map(n=>`<option ${n===paging.size ? 'selected' : ''}>${n}</option>`).join("")}</select></label></nav>`;
+      controls = `<nav class="records-pagination" data-pagination-nav="${kind}" aria-label="${escape(tr("Страници со резултати"))}" tabindex="-1"><span role="status">${escape(tr("Прикажани {0}–{1} од {2}",count ? start+1 : 0,Math.min(start+paging.size,count),count))}</span><div class="records-page-buttons">${button(paging.page-1,tr("Претходна"),paging.page===1)}${numbers.map((n,i)=>(i && n>numbers[i-1]+1 ? '<span aria-hidden="true">…</span>' : '')+`<button type="button" class="btn secondary small" data-pagination="${kind}" data-page-number="${n}" aria-label="${escape(tr("Страница {0}",n))}" ${n===paging.page ? 'aria-current="page"' : ''}>${n}</button>`).join("")}${button(paging.page+1,tr("Следна"),paging.page===pages)}</div><label>${escape(tr("По страница"))}<select data-page-size="${kind}">${[12,24,48].map(n=>`<option ${n===paging.size ? 'selected' : ''}>${n}</option>`).join("")}</select></label></nav>`;
     }
-    return {items:rows.slice(start,start+paging.size),controls};
+    return {items:total === null ? rows.slice(start,start+paging.size) : rows,controls};
   }
   const doctorPage = () => paged("doctors",filteredDoctors(),JSON.stringify([search,specialty,doctorService]));
   const currentDoctorPage = () => doctorPage().items;
@@ -446,16 +499,16 @@ const icon = window.MedTerminIcons.icon;
     recordPages.set(kind,{page:Math.floor(Math.max(0,rows.findIndex(item => item.id === id))/size)+1,size,filter});
   }
   function renderRecordPage(kind) {
-    if (kind === "doctors") doctorResults();
-    else if (kind === "patients") patientResults();
-    else if (kind === "appointments") appointmentResults();
-    else if (kind === "patient-history") patientAppointmentResults();
-    else renderCatalogue();
+    if (kind === "doctors") return doctorResults();
+    if (kind === "patients") return patientResults();
+    if (kind === "appointments") return appointmentResults();
+    if (kind === "patient-history") return patientAppointmentResults();
+    return renderCatalogue();
   }
-  document.addEventListener("change", e => {
+  document.addEventListener("change", async e => {
     const kind=e.target.dataset.pageSize, paging=recordPages.get(kind);
     if (!paging || ![12,24,48].includes(Number(e.target.value))) return;
-    paging.size=Number(e.target.value);paging.page=1;renderRecordPage(kind);
+    paging.size=Number(e.target.value);paging.page=1;await renderRecordPage(kind);
     document.querySelector(`[data-page-size="${kind}"]`)?.focus();
   });
   const recordActionIcons = { profile: "user-round", book: "calendar-check", hours: "clock", edit: "pencil" };
@@ -570,6 +623,7 @@ const icon = window.MedTerminIcons.icon;
       : html`<div class="inline-note warning">Не е наведено точно работно време. Рецепцијата или лекарот треба да договорат термин и да додадат период на достапност.</div>`;
   }
   function openDialog(title, content, eyebrow = tr("МЕДТЕРМИН")) {
+    detailRequest++;
     lastFocus = document.activeElement;
     $("#dialog-title").textContent = title;
     $("#dialog-eyebrow").textContent = eyebrow;
@@ -578,6 +632,7 @@ const icon = window.MedTerminIcons.icon;
     if (!dialog.open) dialog.showModal();
   }
   function closeDialog() {
+    detailRequest++;
     dialog.close();
     booking = null;
     slotRequest++;
@@ -620,13 +675,21 @@ const icon = window.MedTerminIcons.icon;
       doctorFilter = e.target.value;
       appointmentResults();
     });
+    if(state.windowed)searchableBookingSelect($("#list-patient"),tr("Пребарајте пациент…"));
     appointmentResults();
   }
-  function appointmentResults() {
+  async function appointmentResults() {
     const invalid = listFrom && listTo && listFrom > listTo;
     $("#appointment-filter-error").textContent = invalid ? tr("Почетниот датум не смее да биде по крајниот датум.") : "";
     if (invalid) { $("#appointment-results").innerHTML = ""; return; }
-    const list = state.appointments
+    const filter = JSON.stringify([listTab,listService,listPatient,listFrom,listTo,statusFilter,search,doctorFilter]);
+    let total = null, list;
+    if (state.windowed) {
+      const result = await workspacePage("appointments",$("#appointment-results"),"workspace/appointments",filter,
+        {period:listTab,serviceId:listService,patientId:listPatient,from:listFrom,to:listTo,status:statusFilter,search,doctorId:doctorFilter});
+      if (!result) return;
+      rememberPage(result);list=result.items;total=result.total;
+    } else list = state.appointments
       .filter(
         (a) =>
           (listTab === "all" ||
@@ -647,9 +710,9 @@ const icon = window.MedTerminIcons.icon;
           ? new Date(b.start) - new Date(a.start) || a.id.localeCompare(b.id)
           : new Date(a.start) - new Date(b.start) || a.id.localeCompare(b.id),
       );
-    const {items,controls} = paged("appointments",list,JSON.stringify([listTab,listService,listPatient,listFrom,listTo,statusFilter,search,doctorFilter]));
+    const {items,controls} = paged("appointments",list,filter,total);
     $("#appointment-results").innerHTML =
-      html`<p class="results-count">${list.length} термини</p><section class="card table-wrap">${
+      html`<p class="results-count">${total ?? list.length} термини</p><section class="card table-wrap">${
         list.length
           ? html`<table><thead><tr><th>${isPatient() ? tr("Лекар") : tr("Пациент")}</th>${isPatient() ? "" : html("<th>Лекар</th>")}<th>Датум и време</th><th>Статус</th><th><span class="visually-hidden">Постапки</span></th></tr></thead><tbody>${items
               .map((a) => {
@@ -665,7 +728,17 @@ const icon = window.MedTerminIcons.icon;
             )
       }</section>` + controls;
   }
-  function details(id) {
+  let detailRequest = 0;
+  async function details(id, committed = false) {
+    if (state.windowed && !committed) {
+      const request = ++detailRequest;
+      try {
+        const result=await api("workspace/appointments/"+encodeURIComponent(id));
+        if(request!==detailRequest) return;
+        state.appointments=mergeRecords(state.appointments,[result.appointment]);
+        state.patients=mergeRecords(state.patients,[result.patient]);
+      } catch(error) { if(request===detailRequest)toast(error.message,true);return; }
+    }
     const a = state.appointments.find((a) => a.id === id);
     if (!a) {
       toast(tr("Овој термин повеќе не е достапен."), true);
@@ -746,8 +819,8 @@ const icon = window.MedTerminIcons.icon;
       const saved = await api(`appointments/${id}/status`, { status, version: a.version }); rememberSaved("appointments", saved);
       const refreshed = await refreshAfterSave();
       if (!origin?.isConnected || !dialog.open) return;
-      details(id);
       renderPage();
+      details(id, true);
       if (refreshed) toast(
         status === "Cancelled"
           ? tr("Прегледот е откажан. Терминот е повторно достапен.")
@@ -834,7 +907,8 @@ const icon = window.MedTerminIcons.icon;
     select.before(wrapper);
     wrapper.append(input, toggle, list, status);
     select.hidden = true;
-    let matches = [], active = -1;
+    let matches = [], active = -1, searchRequest = 0, searchTimer, remoteMatches = new Set();
+    const remotePatients = state.windowed && ["booking-patient","list-patient"].includes(select.id) && !select.disabled;
     const selectedText = () => select.selectedOptions[0]?.textContent || "";
     const normalize = text => text.normalize("NFKC").toLocaleLowerCase("mk-MK").trim();
     function sync() {
@@ -844,6 +918,7 @@ const icon = window.MedTerminIcons.icon;
       delete input.dataset.selectionPending;
     }
     function close() {
+      searchRequest++;clearTimeout(searchTimer);
       list.hidden = true;
       input.setAttribute("aria-expanded", "false");
       input.removeAttribute("aria-activedescendant");
@@ -857,9 +932,33 @@ const icon = window.MedTerminIcons.icon;
         option.scrollIntoView?.({ block: "nearest" });
       } else input.removeAttribute("aria-activedescendant");
     }
-    function render(query = "") {
+    function render(query = "", loaded = false) {
       if (input.disabled) return;
-      matches = [...select.options].filter(option => !option.disabled && normalize(option.textContent).includes(normalize(query)));
+      if (remotePatients && !loaded) {
+        const request=++searchRequest;clearTimeout(searchTimer);matches=[];active=-1;
+        list.replaceChildren();list.hidden=false;input.setAttribute("aria-expanded","true");
+        list.setAttribute("aria-busy","true");
+        searchTimer=setTimeout(async()=>{
+          try {
+            const scopedDoctor=select.id==="list-patient" && isDoctor() ? state.actor.doctorId : "";
+            const result=await api("workspace/patients?take=30&search="+encodeURIComponent(query)+"&doctorId="+encodeURIComponent(scopedDoctor));
+            if(request!==searchRequest || !input.isConnected)return;
+            state.patients=mergeRecords(state.patients,result.items);
+            remoteMatches=new Set(result.items.map(p=>p.id));
+            const value=select.value,old=select.selectedOptions[0]?.cloneNode(true),empty=select.options[0]?.cloneNode(true);
+            select.replaceChildren();if(empty?.value==="")select.append(empty);
+            for(const p of result.items)select.add(new Option([p.name,patientCode(p)].join(" · "),p.id));
+            if(value && ![...select.options].some(o=>o.value===value) && old)select.append(old);
+            select.value=value;render(query,true);
+          } catch(error) {
+            if(request!==searchRequest || !input.isConnected)return;
+            const note=document.createElement("div");note.className="booking-combobox-empty";note.textContent=error.message;
+            list.replaceChildren(note);status.textContent=error.message;
+          } finally { if(request===searchRequest)list.removeAttribute("aria-busy"); }
+        },120);
+        return;
+      }
+      matches = [...select.options].filter(option => !option.disabled && (remotePatients && loaded ? remoteMatches.has(option.value) || !query && !option.value : normalize(option.textContent).includes(normalize(query))));
       list.replaceChildren();
       matches.forEach((option, index) => {
         const item = document.createElement("div");
@@ -1160,7 +1259,7 @@ const icon = window.MedTerminIcons.icon;
         )
         .join(
           "",
-        )}</div></div><div id="calendar-loading" class="calendar-load" aria-live="polite"></div><div class="calendar-scroll"><div id="calendar"></div></div><div class="calendar-legend"><span><i class="legend-available"></i>Достапно</span><span><i class="legend-confirmed"></i>Потврден</span><span><i class="legend-pending"></i>Чека потврда</span><span><i class="legend-unavailable"></i>Недостапно</span><span><i class="legend-completed"></i>Завршен</span><span><i class="legend-cancelled"></i>Откажан</span><span><i class="legend-noshow"></i>Не се појави</span><span><i class="legend-off-hours"></i>Неработно време</span></div><p class="mobile-calendar-note">Користете дневен приказ за повеќе простор. Секој термин е достапен и преку тастатура во списокот со термини.</p></section><details class="card calendar-context"><summary><span class="schedule-icon" aria-hidden="true">${icon("clock")}</span><span><strong>Работно време и информации за избраниот лекар</strong><small>Неделен распоред и управување со достапноста</small></span><span class="disclosure-chevron" aria-hidden="true">${icon("chevron-down")}</span></summary><aside class="calendar-aside" id="calendar-aside"></aside></details></div>`;
+        )}</div></div><div id="calendar-loading" class="calendar-load" aria-live="polite"></div><div class="calendar-scroll" tabindex="0" role="region" aria-label="Термини и достапност по датуми."><div id="calendar"></div></div><div class="calendar-legend"><span><i class="legend-available"></i>Достапно</span><span><i class="legend-confirmed"></i>Потврден</span><span><i class="legend-pending"></i>Чека потврда</span><span><i class="legend-unavailable"></i>Недостапно</span><span><i class="legend-completed"></i>Завршен</span><span><i class="legend-cancelled"></i>Откажан</span><span><i class="legend-noshow"></i>Не се појави</span><span><i class="legend-off-hours"></i>Неработно време</span></div><p class="mobile-calendar-note">Користете дневен приказ за повеќе простор. Секој термин е достапен и преку тастатура во списокот со термини.</p></section><details class="card calendar-context"><summary><span class="schedule-icon" aria-hidden="true">${icon("clock")}</span><span><strong>Работно време и информации за избраниот лекар</strong><small>Неделен распоред и управување со достапноста</small></span><span class="disclosure-chevron" aria-hidden="true">${icon("chevron-down")}</span></summary><aside class="calendar-aside" id="calendar-aside"></aside></details></div>`;
     $("#calendar-doctor")?.addEventListener("change", (e) => {
       doctorFilter = e.target.value;
       calendarDate = calendar.getDate().toISOString().slice(0, 10);
@@ -1255,6 +1354,11 @@ const icon = window.MedTerminIcons.icon;
       eventStartEditable: true,
       eventResizableFromStart: false,
       datesSet(info) {
+        requestAnimationFrame(() => {
+          $$("#calendar .fc-timegrid-col[role=gridcell]").forEach(el=>{
+            el.tabIndex=0;
+          });
+        });
         $("#calendar-title").textContent = info.view.title;
         calendarDate = info.view.currentStart.toISOString().slice(0, 10);
         const hours = $("#calendar-work-hours"); if (hours && doctorFilter) hours.innerHTML = scheduleList(doctor(doctorFilter), calendarDate);
@@ -1273,7 +1377,7 @@ const icon = window.MedTerminIcons.icon;
           details(info.event.extendedProps.appointmentId);
       },
       eventDrop: async (info) => {
-        const a = state.appointments.find((a) => a.id === info.event.id);
+        const a = state.appointments.find((a) => a.id === info.event.id) || {id:info.event.id,version:info.event.extendedProps.version};
         const moved = info.event.start.toISOString();
         if (
           !(await confirmAction(
@@ -1303,7 +1407,24 @@ const icon = window.MedTerminIcons.icon;
         $("#calendar-loading").textContent =
           tr("Се освежуваат закажаните и слободните термини…");
         try {
-          let events = state.appointments
+          const request=++calendarRequest;
+          let visits=state.appointments;
+          const calendarPatients=new Map(state.patients.map(p=>[p.id,p]));
+          if(state.windowed) {
+            visits=[];
+            const query=new URLSearchParams({from:info.startStr.slice(0,10),to:addDays(info.endStr.slice(0,10),-1),take:"500",overlap:"true"});
+            if(doctorFilter)query.set("doctorId",doctorFilter);if(calendarService)query.set("serviceId",calendarService);if(statusFilter)query.set("status",statusFilter);
+            for(let skip=0;;skip+=500) {
+              query.set("skip",String(skip));const result=await api("workspace/appointments?"+query);
+              if(request!==calendarRequest || page!=="calendar") { success([]);return; }
+              rememberPage(result);visits.push(...result.items);
+              for(const p of result.patients)calendarPatients.set(p.id,p);
+              if(visits.length>=result.total || !result.items.length)break;
+              // Ask the user to narrow exceptionally large calendar views instead of hanging the browser.
+              if(visits.length>=5000)throw new Error(tr("Изберете лекар и прегледајте ги термините што ви се потребни."));
+            }
+          }
+          let events = visits
             .filter(
               (a) =>
                 matchingDoctors.some(d => d.id === a.doctorId) &&
@@ -1313,12 +1434,12 @@ const icon = window.MedTerminIcons.icon;
             )
             .map((a) => ({
               id: a.id,
-              title: `${patient(a.patientId)?.name || tr("Пациент")}${!doctorFilter ? " · " + doctor(a.doctorId).name : ""}`,
+              title: `${calendarPatients.get(a.patientId)?.name || tr("Пациент")}${!doctorFilter ? " · " + doctor(a.doctorId).name : ""}`,
               start: wall(a.start),
               end: wall(a.end),
               classNames: [a.status],
               editable: upcoming(a),
-              extendedProps: { appointmentId: a.id },
+              extendedProps: { appointmentId: a.id, version:a.version },
             }));
           if (doctorFilter) {
             const exceptions = await api("exceptions?doctorId=" + doctorFilter);
@@ -1371,6 +1492,7 @@ const icon = window.MedTerminIcons.icon;
                 })),
             );
           }
+          if(request!==calendarRequest || page!=="calendar") { success([]);return; }
           success(events);
           if ($("#calendar-loading"))
             $("#calendar-loading").textContent = doctorFilter
@@ -1545,16 +1667,24 @@ const icon = window.MedTerminIcons.icon;
     };
     patientResults();
   }
-  function patientResults() {
-    const all = state.patients.filter(p => `${p.name} ${patientCode(p)} ${p.email} ${p.phone}`.toLowerCase().includes(search.toLowerCase())).sort(compareRecords);
-    const {items:list,controls} = paged("patients",all,search);
+  async function patientResults() {
+    let total=null, all;
+    if(state.windowed) {
+      const result=await workspacePage("patients",$("#patient-results"),"workspace/patients",search,{search,locateId:patientFocusId});
+      if(!result)return;
+      state.patients=mergeRecords(state.patients,result.items);all=result.items;total=result.total;
+      if(result.locatedSkip!=null)recordPages.get("patients").page=Math.floor(result.locatedSkip/recordPages.get("patients").size)+1;
+      patientFocusId="";
+    } else all = state.patients.filter(p => `${p.name} ${patientCode(p)} ${p.email} ${p.phone}`.toLowerCase().includes(search.toLowerCase())).sort(compareRecords);
+    const {items:list,controls} = paged("patients",all,search,total);
     const actions = p => recordAction("patient-profile", p.id, tr("Види профил"), "profile") + recordAction("patient-book", p.id, tr("Закажи"), "book", "primary");
     const cards = `<div class="patient-card-list">${list.map((p,i) => `<article class="card patient-card">${avatar(p.name,i)}<h3>${escape(p.name)}</h3>${patientNumber(p)}<p>${escape(p.email || tr("Не е наведена е-пошта"))}</p><p>${escape(p.phone || tr("Не е наведен телефон"))}</p><span class="badge">${tr("Пациент")}</span><div class="patient-card-actions patient-actions">${actions(p)}</div></article>`).join("")}</div>`;
     const table = html`<section class="card table-wrap records-table" tabindex="0" aria-label="Листа со постапки"><table><thead><tr><th>Број на пациент</th><th>Пациент</th><th>Е-пошта</th><th>Телефон</th><th>Постапки</th></tr></thead><tbody>${list.map(p => `<tr><td><span class="patient-code">${escape(patientCode(p))}</span></td><td><strong>${escape(p.name)}</strong></td><td>${escape(p.email || tr("Не е наведена"))}</td><td>${escape(p.phone || tr("Не е наведен"))}</td><td><div class="record-actions patient-actions">${actions(p)}</div></td></tr>`).join("")}</tbody></table></section>`;
-    $("#patient-results").innerHTML = html`<div class="records-heading"><p class="results-count">${all.length} пациенти</p>${viewSwitch("patients")}</div>` + (list.length ? recordView("patients") === "list" ? table : cards : empty(tr("Нема соодветни пациенти"), tr("Обидете се со друго пребарување или додајте пациент."))) + controls;
+    $("#patient-results").innerHTML = html`<div class="records-heading"><p class="results-count">${total ?? all.length} пациенти</p>${viewSwitch("patients")}</div>` + (list.length ? recordView("patients") === "list" ? table : cards : empty(tr("Нема соодветни пациенти"), tr("Обидете се со друго пребарување или додајте пациент."))) + controls;
   }
   const defaultPatientFilters = () => ({ period: "all", status: "", doctor: "", service: "", from: "", to: "" });
   async function renderPatientProfile(quiet = false) {
+    if(quiet===true && state.windowed && patientProfile) { await patientAppointmentResults();return; }
     const request = ++patientRequest;
     patientProfile = null;
     let id;
@@ -1565,14 +1695,15 @@ const icon = window.MedTerminIcons.icon;
     if (quiet !== true) app.innerHTML = heading(tr("Профил на пациент"), tr("Контактни податоци и преглед на термините."), back) + html("<div class=\"loading-state\" role=\"status\"><span class=\"spinner\"></span> Се вчитува профилот…</div>");
     try {
       if (!id) throw new Error(tr("Изберете пациент од списокот."));
-      const result = await api("patients/" + encodeURIComponent(id));
+      const result = await api(state.windowed ? "workspace/patients/"+encodeURIComponent(id)+"?"+workspaceQuery("patient-history",JSON.stringify([id,patientFilters]),
+        {period:patientFilters.period,status:patientFilters.status,doctorId:patientFilters.doctor,serviceId:patientFilters.service,from:patientFilters.from,to:patientFilters.to}) : "patients/" + encodeURIComponent(id));
       if (request !== patientRequest || page !== "profile") return;
       patientProfile = result;
       const p = result.patient;
       state.patients = [...state.patients.filter(x => x.id !== p.id), p];
-      state.appointments = [...state.appointments.filter(a => a.patientId !== p.id), ...result.appointments];
+      state.appointments = state.windowed ? mergeRecords(state.appointments,result.appointments) : [...state.appointments.filter(a => a.patientId !== p.id), ...result.appointments];
       const count = status => result.appointments.filter(a => a.status === status).length;
-      const stats = [[tr("Претстојни"), result.appointments.filter(upcoming).length], [tr("Завршени"), count("Completed")], [tr("Откажани"), count("Cancelled")], [tr("Недоаѓања"), count("NoShow")]];
+      const stats = [[tr("Претстојни"), result.counts?.upcoming ?? result.appointments.filter(upcoming).length], [tr("Завршени"), result.counts?.completed ?? count("Completed")], [tr("Откажани"), result.counts?.cancelled ?? count("Cancelled")], [tr("Недоаѓања"), result.counts?.noShow ?? count("NoShow")]];
       app.innerHTML = heading(tr("Профил на пациент"), tr("Контактни податоци и историја на термини."), back, tr("ПРОФИЛ НА ПАЦИЕНТ")) +
         html`<section class="card patient-summary"><div class="patient-summary-main">${avatar(p.name, 0, "lg")}<div><h2>${escape(p.name)}</h2>${patientNumber(p)}<span class="badge">${tr("Пациент")}</span></div><div class="patient-summary-actions">${result.canEdit ? html("<button class=\"btn secondary\" id=\"edit-patient\">Уреди податоци</button>") : ""}<button class="btn primary" data-patient-book="${escape(p.id)}">${icon("plus")} Закажи термин</button></div></div><dl class="patient-contacts"><div><dt>Е-пошта за контакт</dt><dd>${escape(p.email || tr("Не е наведена"))}</dd></div><div><dt>Телефон</dt><dd>${escape(p.phone || tr("Не е наведен"))}</dd></div></dl><p class="filter-description">Контактните податоци се користат за закажување. ${result.canEdit ? tr("Нивното уредување не ја менува сметката или е-поштата за најава.") : tr("За промена на контактните податоци обратете се во рецепција.")}</p></section>` +
         `<p class="results-count">${isDoctor() ? tr("Прикажани се само термините со вас. Контактите се споделени со тимот во оваа клиника.") : tr("Прикажани се термините на пациентот во оваа клиника.")}</p><div class="stats-grid patient-stats">${stats.map(([label, value]) => `<div class="stat-card"><span class="stat-label">${label}</span><strong class="stat-value">${value}</strong></div>`).join("")}</div>` +
@@ -1587,25 +1718,34 @@ const icon = window.MedTerminIcons.icon;
         patientAppointmentResults();
       });
       $("#clear-patient-filters").onclick = () => { patientFilters = defaultPatientFilters(); renderPatientProfile(); };
-      patientAppointmentResults();
+      patientAppointmentResults(state.windowed ? result : null);
     } catch (error) {
       if (request !== patientRequest || page !== "profile") return;
       app.innerHTML = heading(tr("Профилот не е достапен."), tr("Проверете го изборот на пациент и обидете се повторно."), back) + html`<div class="inline-error" role="alert">${escape(error.message)}</div><button class="btn secondary" id="retry-patient">Обиди се повторно</button>`;
       $("#retry-patient").onclick = renderPatientProfile;
     }
   }
-  function patientAppointmentResults() {
+  async function patientAppointmentResults(prefetched = null) {
     if (!patientProfile || !$("#profile-appointments")) return;
     const f = patientFilters, invalid = f.from && f.to && f.from > f.to;
     $("#profile-filter-error").textContent = invalid ? tr("Почетниот датум не смее да биде по крајниот датум.") : "";
     if (invalid) { $("#profile-appointments").innerHTML = ""; return; }
-    const list = patientProfile.appointments.filter(a =>
+    const filter=JSON.stringify([patientProfile.patient.id,f]);
+    let total=null,list;
+    if(state.windowed) {
+      const result=prefetched || await workspacePage("patient-history",$("#profile-appointments"),"workspace/patients/"+encodeURIComponent(patientProfile.patient.id),filter,
+        {period:f.period,status:f.status,doctorId:f.doctor,serviceId:f.service,from:f.from,to:f.to});
+      if(!result)return;
+      patientProfile.appointments=result.appointments;state.appointments=mergeRecords(state.appointments,result.appointments);
+      if(result.counts) $$(".patient-stats .stat-value").forEach((el,i)=>{el.textContent=[result.counts.upcoming,result.counts.completed,result.counts.cancelled,result.counts.noShow][i];});
+      list=result.appointments;total=result.total;
+    } else list = patientProfile.appointments.filter(a =>
       (f.period === "all" || (f.period === "upcoming" ? upcoming(a) : new Date(a.end) <= new Date())) &&
       (!f.status || a.status === f.status) && (!f.doctor || a.doctorId === f.doctor) &&
       (!f.service || serviceKey(a) === f.service) && (!f.from || dayOf(a.start) >= f.from) && (!f.to || dayOf(a.start) <= f.to)
     ).sort((a, b) => (f.period === "upcoming" ? new Date(a.start) - new Date(b.start) : new Date(b.start) - new Date(a.start)) || a.id.localeCompare(b.id));
-    const {items,controls} = paged("patient-history",list,JSON.stringify([patientProfile.patient.id,f]));
-    $("#profile-appointments").innerHTML = html`<p class="results-count">${list.length} термини</p><section class="card table-wrap">${list.length ? html`<table><thead><tr><th>Лекар / услуга</th><th>Датум и време</th><th>Статус</th><th><span class="visually-hidden">Постапки</span></th></tr></thead><tbody>${items.map(a => html`<tr><td><div class="table-person">${avatar(doctor(a.doctorId)?.name || tr("Лекар"), 0)}<span><strong>${escape(doctor(a.doctorId)?.name || tr("Лекар"))}</strong><small>${escape(a.serviceName || tr("Без заведена услуга"))}</small></span></div></td><td class="table-date"><strong>${formatDate(dayOf(a.start))}</strong><small>${timeOf(a.start)} – ${timeOf(a.end)}</small></td><td>${badge(a.status)}</td><td><button class="table-action" data-detail="${escape(a.id)}" aria-label="Детали за термин на ${escape(formatDate(dayOf(a.start)))} во ${timeOf(a.start)}">Детали ${icon("arrow-up-right")}</button></td></tr>`).join("")}</tbody></table>` : empty(tr("Нема термини во овој приказ"), tr("Променете ги филтрите или закажете нов термин за пациентот."))}</section>` + controls;
+    const {items,controls} = paged("patient-history",list,filter,total);
+    $("#profile-appointments").innerHTML = html`<p class="results-count">${total ?? list.length} термини</p><section class="card table-wrap">${list.length ? html`<table><thead><tr><th>Лекар / услуга</th><th>Датум и време</th><th>Статус</th><th><span class="visually-hidden">Постапки</span></th></tr></thead><tbody>${items.map(a => html`<tr><td><div class="table-person">${avatar(doctor(a.doctorId)?.name || tr("Лекар"), 0)}<span><strong>${escape(doctor(a.doctorId)?.name || tr("Лекар"))}</strong><small>${escape(a.serviceName || tr("Без заведена услуга"))}</small></span></div></td><td class="table-date"><strong>${formatDate(dayOf(a.start))}</strong><small>${timeOf(a.start)} – ${timeOf(a.end)}</small></td><td>${badge(a.status)}</td><td><button class="table-action" data-detail="${escape(a.id)}" aria-label="Детали за термин на ${escape(formatDate(dayOf(a.start)))} во ${timeOf(a.start)}">Детали ${icon("arrow-up-right")}</button></td></tr>`).join("")}</tbody></table>` : empty(tr("Нема термини во овој приказ"), tr("Променете ги филтрите или закажете нов термин за пациентот."))}</section>` + controls;
   }
   function editPatientForm() {
     if (!patientProfile?.canEdit) return;
@@ -1663,7 +1803,8 @@ const icon = window.MedTerminIcons.icon;
           closeDialog();
           if (page === "patients") {
             search = "";
-            revealRecord("patients",[...state.patients].sort(compareRecords),p.id);
+            if(state.windowed)patientFocusId=p.id;
+            else revealRecord("patients",[...state.patients].sort(compareRecords),p.id);
           }
           renderPage();
         }
@@ -1881,7 +2022,7 @@ const icon = window.MedTerminIcons.icon;
           `<div class="inline-error">${escape(e.message)}</div>`;
     }
   }
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", async (e) => {
     document.querySelectorAll(".doctor-menu[open]").forEach(menu => {
       if (!menu.contains(e.target) || e.target.closest("button")) menu.open = false;
     });
@@ -1889,7 +2030,7 @@ const icon = window.MedTerminIcons.icon;
     if (!target || !state || target.disabled) return;
     if (target.dataset.pagination) {
       const kind=target.dataset.pagination,paging=recordPages.get(kind);
-      if (paging) { paging.page=Number(target.dataset.pageNumber);renderRecordPage(kind);document.querySelector(`[data-pagination-nav="${kind}"]`)?.focus({preventScroll:true}); }
+      if (paging) { paging.page=Number(target.dataset.pageNumber);await renderRecordPage(kind);document.querySelector(`[data-pagination-nav="${kind}"]`)?.focus({preventScroll:true}); }
     }
     if (target.dataset.nav) {
       closeDialogIfOpen();

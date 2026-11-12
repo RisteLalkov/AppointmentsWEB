@@ -1,0 +1,5 @@
+{
+  "assumption": "20 staff users, one bootstrap every 20 seconds; uncompressed response bytes; excludes TLS, browser work, intermediary compression and additional reads",
+  "uncompressed_bytes_per_second": 40048,
+  "requests_per_minute": 60
+}

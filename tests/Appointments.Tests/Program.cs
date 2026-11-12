@@ -494,6 +494,26 @@ Test("Patients cannot self-book or reschedule agreement-only doctors even with o
     var visit=f.Service.Appointments(admin).Single();Reject(()=>f.Service.Move(pat,visit.Id,new(monday,new(10,0),visit.Version)),403);
     True(f.Service.Book(admin,Cmd("10:00") with {AgreedTime=true}).Id.Length>0);
 });
+Test("Demo idempotency rejects a changed agreed-time flag in either direction", () => {
+    using var f=New();f.Store.Write(s=>{s.Doctors[0].RequiresConfirmation=true;return true;});
+    var normal=Cmd("09:00");Equal(AppointmentStatus.Scheduled,f.Service.Book(admin,normal).Status);
+    Reject(()=>f.Service.Book(admin,normal with {AgreedTime=true}),409);
+    var agreed=Cmd("10:00") with {AgreedTime=true};Equal(AppointmentStatus.Confirmed,f.Service.Book(admin,agreed).Status);
+    Reject(()=>f.Service.Book(admin,agreed with {AgreedTime=false}),409);
+});
+Test("Demo booking receipts survive cancellation and restart without changing replay", () => {
+    using var f=New();var command=Cmd("18:00") with {AgreedTime=true};var original=f.Service.Book(admin,command);
+    f.Service.ChangeStatus(admin,original.Id,AppointmentStatus.Cancelled,1);Equal(0,f.Store.Read(s=>s.Exceptions.Count));
+    f.Store.Dispose();
+    using var reopened=new JsonDemoStore(f.Path,f.Seed);var service=new AppointmentService(reopened,f.Clock);
+    var replay=service.Book(admin,command);Equal(original.Id,replay.Id);Equal(1,replay.Version);Equal(AppointmentStatus.Confirmed,replay.Status);
+    Equal(AppointmentStatus.Cancelled,service.Appointments(admin).Single().Status);Equal(2,service.History(admin,original.Id).Entries.Count);
+});
+Test("Demo idempotency normalizes UUID formatting and preserves pre-move response", () => {
+    using var f=New();var key=Guid.NewGuid();var command=Cmd(key:key.ToString("D"));var original=f.Service.Book(admin,command);
+    f.Service.Move(admin,original.Id,new(monday,new(10,0),1));var replay=f.Service.Book(admin,command with {RequestId=key.ToString("N").ToUpperInvariant()});
+    Equal(original.Start,replay.Start);Equal(1,replay.Version);Equal(2,f.Service.Appointments(admin).Single().Version);
+});
 var failed=0;
 foreach(var (name,run) in tests){try{run();Console.WriteLine("PASS "+name);}catch(Exception e){failed++;Console.WriteLine("FAIL "+name+" :: "+e.Message);}}
 Console.WriteLine($"\n{tests.Count-failed}/{tests.Count} tests passed; {failed} failed.");

@@ -1,0 +1,108 @@
+PASS Anonymous onboarding denied
+PASS Clinic administrator cannot enter platform boundary
+PASS Platform token is not a clinical session
+PASS Private bootstrap remains protected
+PASS Public query limits: page=0
+PASS Public query limits: page=101
+PASS Public query limits: pageSize=25
+PASS Public query limits: search=xxxxxxxxxxxxxxxxxx
+PASS Public doctors are paginated on server
+PASS Public DTOs exclude clinical and account metadata
+PASS Adjacent public pages do not repeat doctors
+PASS Clinic-name filter runs on server
+PASS Unknown public clinic is not disclosed
+PASS Both anonymous and clinical POST onboarding rejected
+PASS Invalid clinic identity rejected before provisioning
+PASS Existing global login email cannot become a new clinic admin
+PASS Provisioning refuses nonempty unbound schema in shared database
+PASS Failure is durably recorded for retry
+PASS Incomplete clinic is not publicly discoverable
+PASS Concurrent identical retries converge on one ready clinic
+PASS Provisioning is idempotent across API instances
+PASS Retry cannot overwrite clinic metadata
+PASS New administrator automatically resolves to new clinic
+PASS Provisioned clinic starts empty with correct administrator role
+PASS New clinic token cannot access existing clinic
+PASS Existing clinic token cannot access new clinic
+PASS New clinic doctor and active services enter public search
+PASS Partial Cyrillic name search spans clinics and specialties, ignores case/outer spaces
+PASS Explicit clinic scope still narrows broad search
+PASS Explicit specialty combines with broad name search
+PASS Broad clinic-name search returns its enabled doctors
+PASS Broad search matches specialty
+PASS Broad search matches Cyrillic subspecialty
+PASS Broad search matches enabled assigned service
+PASS Service and specialty filters work alone
+PASS Broad cross-clinic search retains stable server pagination
+PASS Macedonian doctor search matches: Јован
+PASS Macedonian doctor search matches: Нешковски
+PASS Macedonian doctor search matches: Јован Нешковски
+PASS Macedonian doctor search matches: јован
+PASS Macedonian doctor search matches: НЕШКОВСКИ
+PASS Macedonian doctor search matches:   јОвАн нЕшКоВсКи  
+PASS Macedonian field casing: search=ѓинекологија
+PASS Macedonian field casing: specialty=ЃИНЕКОЛОГИЈА
+PASS Macedonian field casing: search=љубљана
+PASS Macedonian field casing: specialty=ЉУБЉАНА
+PASS Macedonian field casing: search=ќирилична
+PASS Macedonian field casing: service=ЌИРИЛИЧНА
+PASS No-hours public doctor has a useful message
+PASS Public free times match real booking availability and service duration
+PASS Anonymous availability exposes no patient, appointment or account metadata
+PASS Public date validation rejects past and malformed dates
+PASS Public preview respects booking horizon
+PASS Public preview rejects unassigned services
+PASS Occupied appointment is absent from public slots
+PASS Cancellation reopens the public free slot
+PASS Full absence produces an empty date message
+PASS Disabled doctor disappears from public results
+PASS Disabled doctor cannot disclose public availability
+PASS Confirmation flag persists for new doctor
+PASS No-hours doctor rejects ordinary booking
+PASS Doctor-agreed appointment is immediately confirmed
+PASS Agreed booking replay is idempotent across API instances
+PASS One-off availability is persisted with appointment
+PASS Overlapping agreed booking is rejected
+PASS Cancellation atomically removes agreed availability
+PASS Cancelled agreement does not leave public bookable hours
+PASS Concurrent duplicate exception submissions create only one record
+PASS Only one repeated exception is persisted across API instances
+PASS Confirmation flag can be disabled on an existing doctor
+PASS Registration enforces global identity uniqueness
+PASS Forged clinic hints cannot silently select a clinic for a shared patient
+PASS Shared identity trigger rejects cross-clinic duplicate at the database boundary
+PASS Rejected SQL identity collision preserves original main login
+PASS Rejected SQL collision preserves new-clinic login
+PASS Another clinic provisions without a database pool or additional connection string
+PASS Additional clinic remains empty and isolated in shared database
+PASS Two platform registrations use the same Appointments connection
+PASS Provisioning creates schemas in one database without CREATEDB, CREATEROLE or superuser privileges
+PASS Only company operators can adopt a configured clinic
+PASS Adoption refuses an unknown clinic instead of creating data
+PASS Concurrent adoption is idempotent across API instances
+PASS Adopted clinic appears once as platform-managed
+PASS Adoption preserves existing clinical records and old sessions
+PASS Existing administrator password works after adoption
+PASS Platform operator edits clinic metadata with a revision token
+PASS Another API instance uses platform metadata without configuration edits
+PASS Stale platform clinic edits cannot overwrite newer values
+PASS Clinic administrator cannot edit company-managed metadata
+PASS Platform registration policy is enforced by the clinic API
+PASS Whitespace-only clinic name is rejected
+PASS Platform visibility edit propagates within the routing refresh interval
+PASS Future clinics still provision entirely through the platform
+PASS Platform password change revokes sessions across instances
+PASS Platform logout revokes its opaque token
+PASS Company incorrect password rejected
+PASS Company incorrect password rejected
+PASS Company incorrect password rejected
+PASS Company incorrect password rejected
+PASS Company incorrect password rejected
+PASS Company lockout remains active for a correct password
+PASS Hidden adopted clinic survives API restart
+PASS Hidden clinic cannot disclose availability
+PASS Hidden clinic still supports secure login
+PASS Restart retains platform name instead of restoring configured metadata
+PASS Managed clinic survives API restart in shared database
+
+103/103 PostgreSQL platform/discovery checks passed.

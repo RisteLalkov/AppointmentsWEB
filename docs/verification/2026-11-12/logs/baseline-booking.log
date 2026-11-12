@@ -1,0 +1,45 @@
+PASS review Calendar days reflect full bookings, absence and remaining capacity
+PASS review Month counts agree with authoritative single-day slots
+PASS review First available skips fully booked days and absences chronologically
+PASS review First available retains the actual service and its duration
+PASS review No schedule does not invent free slots
+PASS review /api/availability/days?doctorId=7de5edb3255140a896a2a9b5862a9fe8&from=2026-11-14&to=2026-12-15 rejects invalid/unauthorized input
+PASS review /api/availability/days?doctorId=7de5edb3255140a896a2a9b5862a9fe8&from=2000-01-01&to=2000-01-02 rejects invalid/unauthorized input
+PASS review /api/availability/next?doctorIds=missing&from=2026-11-14 rejects invalid/unauthorized input
+PASS review Reception’s patient context excludes that patient’s overlapping appointments
+PASS review /api/availability/next?doctorIds=a4f11460ad63457c93b24e045e254a58&from=2026-11-14 rejects invalid/unauthorized input
+PASS review /api/availability/days?doctorId=7de5edb3255140a896a2a9b5862a9fe8&from=2026-11-14&to=2026-11-16&serviceId=ca7c1aae0fd84f23aced04501eb8f893&patientId=592a0b54bcf2451aaf210779ec2e3b84 rejects invalid/unauthorized input
+PASS booking browser Reception overview and footer use practical language
+PASS booking browser Scheduled doctors show clickable first availability in card view
+PASS booking browser Unscheduled doctor has an accurate no-slots message
+PASS booking browser First-slot action opens neutral booking dialog with that time selected
+PASS booking browser Patient dropdown contains names and identifiers without email
+PASS booking browser Selecting a patient keeps an already chosen time when it is still free
+PASS booking browser Fully booked date is red
+PASS booking browser Date with free slots is green
+PASS booking browser Availability is conveyed by accessible text as well as color
+PASS booking browser Month navigation retains keyboard focus; Escape closes only the date calendar
+PASS booking browser Calendar selection retains ISO dates and loads actual slots
+PASS booking browser Booking a suggested time refreshes the doctor card to the next free slot
+PASS booking browser Choosing service before doctor filters to exactly its assigned doctors
+PASS booking browser Service selection is preserved when an eligible doctor is selected automatically
+PASS booking browser Choosing another matching doctor keeps the selected service
+PASS booking browser Explicitly choosing the preselected service also filters eligible doctors
+PASS booking browser Doctor service filter applies to results and first-slot lookup
+PASS booking browser Calendar period action aligns with both date fields
+PASS booking browser Availability calendar fits a 320px phone
+PASS booking browser Phone users can scroll to the final calendar row and legend
+PASS booking browser Booking calendar is translated into English
+PASS booking browser No uncaught browser errors: 
+22/22 booking-review browser checks passed.
+PASS review Complete API publish contains the sample-data launcher
+PASS review Sample seed adds twelve named doctors
+PASS review Sample seed adds 160 named patients
+PASS review Sample seed adds specialties, services and assignments
+PASS review Seeded service names respect the existing database length limit
+PASS review Sample seed does not reactivate an existing disabled service
+PASS review Sample seed adds substantial past and upcoming appointment data
+PASS review Sample seeding preserves existing bookings and creates no login credentials
+PASS review Every sample appointment retains matching status history
+PASS review Running the sample seed twice does not duplicate doctors or appointments
+21/21 booking-review API/database checks passed.

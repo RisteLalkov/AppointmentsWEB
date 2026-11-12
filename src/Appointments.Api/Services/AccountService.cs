@@ -26,12 +26,20 @@ public sealed class AccountService(AppointmentsDbContext db, PostgresAppointment
         {
             await operations.LockAsync("account:" + id, ct);
             var account = await db.Accounts.SingleAsync(a => a.Id == id, ct);
-            if (!account.Enabled || account.PasswordHash.Length == 0 || account.LockedUntil > clock.UtcNow) return null;
+            if (!account.Enabled || account.PasswordHash.Length == 0 || account.LockedUntil > clock.UtcNow)
+            {
+                SecurityAudit.Staff(db, "auth.login.blocked", id, clock.UtcNow);
+                await db.SaveChangesAsync(ct); return null;
+            }
             var verified = hasher.VerifyHashedPassword(account, account.PasswordHash, input.Password);
             if (verified == PasswordVerificationResult.Failed)
             {
                 account.FailedAttempts++;
-                if (account.FailedAttempts >= 5) { account.LockedUntil = clock.UtcNow.AddMinutes(15); account.FailedAttempts = 0; }
+                SecurityAudit.Staff(db, "auth.login.failed", id, clock.UtcNow);
+                if (account.FailedAttempts >= 5) {
+                    account.LockedUntil = clock.UtcNow.AddMinutes(15); account.FailedAttempts = 0;
+                    SecurityAudit.Staff(db, "auth.account.locked", id, clock.UtcNow);
+                }
                 await db.SaveChangesAsync(ct); return null;
             }
             if (verified == PasswordVerificationResult.SuccessRehashNeeded) account.PasswordHash = hasher.HashPassword(account, input.Password);

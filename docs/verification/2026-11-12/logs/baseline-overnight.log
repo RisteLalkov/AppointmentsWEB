@@ -1,0 +1,21 @@
+PASS overnight Maximum-date reports produce validation rather than HTTP 500
+PASS overnight Fractional-minute working hours are rejected before PostgreSQL can round them
+PASS overnight Sub-minute availability exceptions receive a controlled validation response
+PASS overnight An oversized request is reported as HTTP 413 rather than a server error
+PASS overnight An empty optional service is normalized before database writes
+PASS overnight Empty and null optional services have the same idempotent booking identity
+PASS overnight Public availability works on a timezone day whose midnight does not exist
+PASS overnight Clinic reporting supports a midnight DST change
+PASS overnight browser Closing a pending booking cannot cause an uncaught late-response error
+PASS overnight browser An old failure cannot overwrite another booking dialog
+PASS overnight browser A committed booking remains a success if the following refresh fails
+PASS overnight browser The interrupted-refresh scenario really committed one appointment
+PASS overnight browser A second staff edit changes the appointment during review
+PASS overnight browser A stale reschedule offers an in-dialog reload action
+PASS overnight browser Reloaded rescheduling starts from the saved current time
+PASS overnight browser A recovered stale reschedule can be saved without closing and restarting
+PASS overnight browser Late catalogue errors cannot throw or replace a new patient form
+PASS overnight browser Late patient creation cannot close a different booking form
+PASS overnight browser Patient creation remains acknowledged when the following refresh fails
+11/11 overnight browser checks passed.
+8/8 overnight API/database checks passed.

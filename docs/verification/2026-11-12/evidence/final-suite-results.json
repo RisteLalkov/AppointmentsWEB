@@ -1,0 +1,92 @@
+[
+  {
+    "suite": "core",
+    "status": "PASS",
+    "log": "logs/baseline-core.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "dom",
+    "status": "PASS",
+    "log": "logs/dom-release-final.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "api",
+    "status": "PASS",
+    "log": "logs/api-verified-final4.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "tenancy",
+    "status": "PASS",
+    "log": "logs/baseline-tenancy.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "platform",
+    "status": "PASS",
+    "log": "logs/baseline-platform.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "global",
+    "status": "PASS",
+    "log": "logs/baseline-global.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "booking",
+    "status": "PASS",
+    "log": "logs/baseline-booking.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "high",
+    "status": "PASS",
+    "log": "logs/baseline-high.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "feedback",
+    "status": "PASS",
+    "log": "logs/feedback-verified-final.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "round2",
+    "status": "PASS",
+    "log": "logs/baseline-round2.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "overnight",
+    "status": "PASS",
+    "log": "logs/baseline-overnight.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "discovery",
+    "status": "PASS",
+    "log": "logs/baseline-discovery.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "accessibility",
+    "status": "PASS",
+    "log": "logs/baseline-accessibility.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "http",
+    "status": "PASS",
+    "log": "logs/baseline-http.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  },
+  {
+    "suite": "bounded-workspace-browser",
+    "status": "PASS",
+    "log": "logs/calendar-cache-verified.log",
+    "adjudication": "Successful final invocation; earlier logs retained separately"
+  }
+]

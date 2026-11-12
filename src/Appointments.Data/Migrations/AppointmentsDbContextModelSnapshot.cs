@@ -72,14 +72,18 @@ namespace Appointments.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceId");
-
                     b.HasIndex("CreatedBy", "RequestId")
                         .IsUnique();
 
                     b.HasIndex("DoctorId", "Start");
 
                     b.HasIndex("PatientId", "Start");
+
+                    b.HasIndex("ServiceId", "DoctorId");
+
+                    b.HasIndex("Start", "Id");
+
+                    b.HasIndex("Status", "Start", "Id");
 
                     b.ToTable("Appointments", null, t =>
                         {
@@ -370,6 +374,8 @@ namespace Appointments.Data.Migrations
 
                     b.HasIndex("Number")
                         .IsUnique();
+
+                    b.HasIndex("Name", "Id");
 
                     b.ToTable("Patients", null, t =>
                         {

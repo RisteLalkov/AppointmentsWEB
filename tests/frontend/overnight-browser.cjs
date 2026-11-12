@@ -49,6 +49,7 @@ function check(ok,label){count++;console.log((ok?'PASS':'FAIL')+' overnight brow
   const fifth=await login(),v=fifth.page;await v.goto(base+'/Workspace#patients');await v.locator('[data-action=add-patient]').click();await v.locator('#patient-name').fill('Пациент зачуван без освежување');await v.locator('#patient-email').fill('saved@overnight.test');await v.locator('#patient-phone').fill('070123456');
   await v.route('**/data/bootstrap',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'Read unavailable'})}));
   await v.locator('#patient-form button[type=submit]').click();await v.locator('#main-dialog').waitFor({state:'hidden'});
+  await v.waitForFunction(()=>document.querySelector('#patient-results')?.textContent.includes('Пациент зачуван без освежување'));
   check((await v.locator('#patient-results').innerText()).includes('Пациент зачуван без освежување'),'Patient creation remains acknowledged when the following refresh fails');await fifth.context.close();
   if(failures.length)throw Error(failures.join('; '));console.log(`${count}/${count} overnight browser checks passed.`);
  }finally{await browser.close();}

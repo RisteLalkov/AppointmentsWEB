@@ -1,0 +1,10 @@
+[
+  {
+    "path": "src/Appointments.Web/wwwroot/vendor/fullcalendar.min.js",
+    "name": "FullCalendar Standard",
+    "version": "6.1.20",
+    "source": "https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js",
+    "license": "src/Appointments.Web/wwwroot/vendor/FullCalendar.LICENSE.md",
+    "sha256": "b101204ba23e14478e957e284d58bba96fc7311021d0eeaf89fa5e65720c46c8"
+  }
+]

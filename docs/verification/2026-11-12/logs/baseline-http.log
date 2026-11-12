@@ -1,0 +1,40 @@
+PASS Macedonian is the default document language
+PASS Error page is Macedonian
+PASS Anonymous data access denied
+PASS Role switch requires antiforgery token
+PASS Razor workspace renders for admin
+PASS Reception navigation exposes doctors without standalone availability
+PASS Razor workspace renders for p01
+PASS Patient navigation is role-specific
+PASS Razor workspace renders for p02
+PASS Razor workspace renders for user-d01
+PASS Bootstrap provides complete workbook directory
+PASS Patient HTTP payload excludes other patients
+PASS Patient cannot create patient through direct HTTP
+PASS Doctor cannot edit another schedule through HTTP
+PASS Invalid fields rejected with Macedonian feedback
+PASS Write endpoints reject missing antiforgery token
+PASS Reception creates a fictional patient
+PASS Server returns real future availability
+PASS Patient booking succeeds through MVC endpoint
+PASS HTTP duplicate submission is idempotent
+PASS Conflict returns 409 with Macedonian feedback
+PASS Patient booking immediately visible to doctor
+PASS Patient booking immediately visible to reception
+PASS Other patient cannot mutate appointment by ID
+PASS Patient reschedules through HTTP
+PASS HTTP optimistic concurrency rejects stale revision
+PASS Patient cancels through HTTP
+PASS Reception books for a newly created patient
+PASS Doctor books on own schedule
+PASS Doctor-created booking appears in patient workspace
+PASS Doctor adds unavailable period
+PASS Unavailable period changes patient availability
+PASS Doctor removes exception
+PASS Locally bundled asset /css/site.css
+PASS Locally bundled asset /js/app.js
+PASS Locally bundled asset /js/demo.js
+PASS Locally bundled asset /vendor/fullcalendar.min.js
+PASS Locally bundled asset /favicon.svg
+
+38/38 HTTP integration checks passed.

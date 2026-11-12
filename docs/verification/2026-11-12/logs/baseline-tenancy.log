@@ -1,0 +1,95 @@
+PASS Session identifies selected clinic main
+PASS Administrator extension preparation is repeatable on existing clinic data
+PASS Operator can migrate and initialize one selected clinic with CLI
+PASS Session identifies selected clinic east
+PASS Session identifies selected clinic empty
+PASS Public clinic directory contains only intended public metadata
+PASS Existing clinic appointments and session survive adoption
+PASS Multi-clinic API refuses missing clinic
+PASS Login resolves credentials and ignores untrusted clinic hints
+PASS Malformed/case-changed clinic cannot select a different schema
+PASS Ambiguous combined clinic header rejected
+PASS Client cannot choose a login tenant with X-Clinic
+PASS Cross-clinic bearer rejected for east
+PASS Cross-clinic bearer rejected for main
+PASS Cross-clinic bearer rejected for empty
+PASS Editing token clinic prefix cannot transfer a session
+PASS Clinic session works on second API instance
+PASS New clinic starts empty with its own timezone
+PASS Registration policy belongs to clinic
+PASS Demo login disabled for unseeded clinic
+PASS Duplicate global sign-in email is rejected safely
+PASS Separate clinic identities remain isolated
+PASS Same slot, doctor/patient IDs and request ID book independently in two clinics
+PASS Idempotency is clinic-local across instances
+PASS Appointment lists and patient filters cannot expose other clinic
+PASS Other clinic history is inaccessible to c1.east.
+PASS Other clinic rescheduling rejected
+PASS Other clinic cancellation rejected
+PASS Other clinic history is inaccessible to c1.east.
+PASS Other clinic rescheduling rejected
+PASS Other clinic cancellation rejected
+PASS Other clinic history is inaccessible to c1.east.
+PASS Other clinic rescheduling rejected
+PASS Other clinic cancellation rejected
+PASS Rescheduling updates only owning clinic history
+PASS Cancellation in one clinic leaves other booking confirmed
+PASS Other clinic account cannot be disabled
+PASS Other clinic credentials cannot be changed
+PASS Account lists are isolated
+PASS Audit events are isolated
+PASS Workspace displays active clinic name
+PASS Workspace uses clinic timezone
+PASS Empty clinic renders calendar
+PASS Empty clinic renders appointments
+PASS Empty clinic renders patients
+PASS Empty clinic renders doctors
+PASS Empty clinic renders availability
+PASS Empty clinic renders catalogue
+PASS Empty clinic renders reports
+PASS Empty-clinic calendar booking gives useful feedback
+PASS Empty-clinic overview booking gives useful feedback
+PASS No JavaScript errors in empty-clinic workflows
+12/12 tenant DOM checks passed. No visual/layout assertions.
+PASS Foreign clinic specialty cannot be assigned
+PASS New clinic booking uses configured UTC timezone
+PASS Catalogues and newly created patients stay in owning clinic
+PASS Foreign clinic schedule cannot be changed
+PASS Foreign doctor cannot be booked
+PASS Foreign clinic exception cannot be deleted
+PASS Availability exceptions apply in owning clinic
+PASS Patient details cannot cross clinic schemas
+PASS Patient contact edits cannot cross clinic schemas
+PASS Patient contact update stays in selected clinic
+PASS Reports aggregate each clinic independently
+PASS Concurrent mixed-clinic requests do not leak scoped DbContext state
+PASS Login asks for credentials without a clinic selector
+PASS MVC signs into main and labels workspace
+PASS MVC uses clinic from protected session
+PASS Client-supplied API clinic header cannot override MVC session
+PASS Signed-in clinic login preserves current membership
+PASS User logs out before signing into another clinic
+PASS MVC signs into east and labels workspace
+PASS Stale tab cannot read new clinic data
+PASS Stale tab cannot write to new clinic
+PASS Old clinic anti-forgery token fails even with current clinic header
+PASS Razor forms are also bound to original clinic
+PASS After explicit login switch MVC sees only new clinic
+PASS Demo workspace selected in main
+PASS Demo workspace selected in east
+PASS Clinic-bound CSRF rejects old form when both account IDs are identical
+PASS Three clinic schemas are bound inside the same PostgreSQL database
+PASS Existing extension relocates while original appointments and constraints remain usable
+PASS SQL foreign key cannot link a main-clinic account to another clinic's doctor
+PASS Missing tenant table cannot fall back to the main clinic schema
+PASS Disabled clinic rejects existing sessions and disappears from directory
+PASS Other clinic remains available after disabling tenant
+PASS Invalid tenant configuration fails startup
+PASS Startup rejection identifies the tenant configuration error
+PASS Invalid tenant configuration fails startup
+PASS Startup rejection identifies the tenant configuration error
+PASS Running API fails closed when a schema binding is changed
+PASS Invalid tenant configuration fails startup
+PASS Startup rejection identifies the tenant configuration error
+
+75/75 multi-tenant API/MVC isolation checks passed.

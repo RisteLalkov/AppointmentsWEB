@@ -1,0 +1,22 @@
+PASS Browser receives bounded bootstrap with complete SQL overview
+PASS Remote patient pages contain distinct records
+PASS Permanent-number search reaches a contact beyond the initial cache
+PASS Late directory response cannot overwrite the newer search
+PASS Remote directory failure shows an explicit retry action
+PASS Directory retry recovers without reloading the whole app
+PASS Long patient history displays complete counts and a twelve-row page
+PASS The last history page contains the remaining eight old visits
+PASS Appointment outside bootstrap and cache opens via authorized detail read
+PASS Adding a patient reveals its actual sorted page beyond the initial directory
+PASS Remote booking picker resolves a full-directory contact while displaying only name and identifier
+PASS Late appointment detail cannot replace a newly opened booking dialog
+PASS Empty calendar time grid scrolls with keyboard focus on a valid grid cell
+PASS Calendar regression creates a real appointment through the protected Web proxy
+locator.waitFor: Timeout 15000ms exceeded.
+Call log:
+[2m  - waiting for locator('#confirm-dialog[open]') to be visible[22m
+
+    at /workspace/AppointmentsWEB/tests/frontend/remediation-browser.cjs:33:890 {
+  log: [ "  - waiting for locator('#confirm-dialog[open]') to be visible" ],
+  name: 'TimeoutError'
+}

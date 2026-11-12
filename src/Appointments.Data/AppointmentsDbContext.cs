@@ -67,6 +67,7 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
         patient.Property(p => p.Version).HasDefaultValue(1).IsConcurrencyToken();
         patient.Property(p => p.Number).UseIdentityByDefaultColumn();
         patient.HasIndex(p => p.Number).IsUnique();
+        patient.HasIndex(p => new { p.Name, p.Id });
         patient.HasIndex(p => p.Email).IsUnique().HasFilter("\"Email\" <> ''");
 
         var appointment = b.Entity<Appointment>();
@@ -84,6 +85,9 @@ public sealed class AppointmentsDbContext(DbContextOptions<AppointmentsDbContext
         appointment.HasOne<Doctor>().WithMany().HasForeignKey(a => a.DoctorId).OnDelete(DeleteBehavior.Restrict);
         appointment.HasOne<Patient>().WithMany().HasForeignKey(a => a.PatientId).OnDelete(DeleteBehavior.Restrict);
         appointment.HasIndex(a => new { a.DoctorId, a.Start }); appointment.HasIndex(a => new { a.PatientId, a.Start });
+        appointment.HasIndex(a => new { a.Start, a.Id });
+        appointment.HasIndex(a => new { a.Status, a.Start, a.Id });
+        appointment.HasIndex(a => new { a.ServiceId, a.DoctorId });
         appointment.HasIndex(a => new { a.CreatedBy, a.RequestId }).IsUnique();
 
         b.Entity<AppointmentHistoryEntry>(h =>

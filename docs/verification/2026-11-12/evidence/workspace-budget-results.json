@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Large Reception bootstrap remains bounded",
+    "status": "PASS",
+    "bytes": 40048
+  },
+  {
+    "name": "Large Doctor bootstrap remains bounded",
+    "status": "PASS",
+    "bytes": 40034
+  },
+  {
+    "name": "Large Patient bootstrap remains bounded",
+    "status": "PASS",
+    "bytes": 6324
+  },
+  {
+    "name": "Large Reception bootstrap concurrent remains bounded",
+    "status": "PASS",
+    "bytes": 40172
+  },
+  {
+    "name": "reception meets broad browser regression budget",
+    "status": "PASS",
+    "interactive_ms": 985,
+    "longest_task_ms": 0
+  },
+  {
+    "name": "patient meets broad browser regression budget",
+    "status": "PASS",
+    "interactive_ms": 756,
+    "longest_task_ms": 0
+  }
+]

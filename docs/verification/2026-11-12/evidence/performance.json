@@ -1,0 +1,816 @@
+{
+  "fixture_started_utc": "2026-11-12T13:01:28.128214+00:00",
+  "summary": {
+    "Small receptionist bootstrap": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 88.05,
+      "p95_ms": 192.66,
+      "max_ms": 192.66,
+      "response_bytes": 34081,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    },
+    "Large Reception bootstrap": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 115.8,
+      "p95_ms": 381.91,
+      "max_ms": 381.91,
+      "response_bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    },
+    "Large Doctor bootstrap": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 99.57,
+      "p95_ms": 124.04,
+      "max_ms": 124.04,
+      "response_bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    },
+    "Large Patient bootstrap": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 119.62,
+      "p95_ms": 319.98,
+      "max_ms": 319.98,
+      "response_bytes": 6324,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    },
+    "Large paged appointments take=12": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 73.62,
+      "p95_ms": 116.74,
+      "max_ms": 116.74,
+      "response_bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12,
+      "statuses": {
+        "200": 10
+      }
+    },
+    "Large Reception bootstrap concurrent": {
+      "samples": 24,
+      "concurrency": 8,
+      "p50_ms": 330.31,
+      "p95_ms": 543.1,
+      "max_ms": 552.85,
+      "response_bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0,
+      "statuses": {
+        "200": 24
+      }
+    },
+    "Large next-slot summary": {
+      "samples": 5,
+      "concurrency": 1,
+      "p50_ms": 79.49,
+      "p95_ms": 99.75,
+      "max_ms": 99.75,
+      "response_bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0,
+      "statuses": {
+        "200": 5
+      }
+    }
+  },
+  "samples": [
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 71.65,
+      "bytes": 34081,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 69.37,
+      "bytes": 34081,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 58.11,
+      "bytes": 34070,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 73.49,
+      "bytes": 34070,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 92.23,
+      "bytes": 34482,
+      "patients": 51,
+      "appointments": 52,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 83.87,
+      "bytes": 34482,
+      "patients": 51,
+      "appointments": 52,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 192.66,
+      "bytes": 34482,
+      "patients": 51,
+      "appointments": 52,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 94.33,
+      "bytes": 34482,
+      "patients": 51,
+      "appointments": 52,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 115.19,
+      "bytes": 34070,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Small receptionist bootstrap",
+      "status": 200,
+      "ms": 123.2,
+      "bytes": 34081,
+      "patients": 51,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 111.21,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 168.35,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 111.79,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 92.0,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 381.91,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 197.71,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 161.41,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 116.94,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 114.65,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap",
+      "status": 200,
+      "ms": 105.48,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 124.04,
+      "bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 98.12,
+      "bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 110.24,
+      "bytes": 40158,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 89.0,
+      "bytes": 40158,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 78.24,
+      "bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 105.49,
+      "bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 94.43,
+      "bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 118.39,
+      "bytes": 40158,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 82.76,
+      "bytes": 40158,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Doctor bootstrap",
+      "status": 200,
+      "ms": 101.02,
+      "bytes": 40034,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 114.14,
+      "bytes": 6324,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 107.97,
+      "bytes": 5912,
+      "patients": 1,
+      "appointments": 1,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 127.35,
+      "bytes": 5912,
+      "patients": 1,
+      "appointments": 1,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 319.98,
+      "bytes": 6324,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 142.46,
+      "bytes": 6324,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 184.05,
+      "bytes": 6324,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 83.57,
+      "bytes": 5912,
+      "patients": 1,
+      "appointments": 1,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 125.11,
+      "bytes": 5912,
+      "patients": 1,
+      "appointments": 1,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 97.7,
+      "bytes": 6324,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0
+    },
+    {
+      "label": "Large Patient bootstrap",
+      "status": 200,
+      "ms": 95.72,
+      "bytes": 6323,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 59.44,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 64.3,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 79.83,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 78.01,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 72.06,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 62.95,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 101.99,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 75.03,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 116.74,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large paged appointments take=12",
+      "status": 200,
+      "ms": 72.21,
+      "bytes": 4758,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 341.98,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 313.56,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 317.98,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 361.43,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 298.52,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 302.89,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 342.92,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 316.37,
+      "bytes": 40172,
+      "patients": 100,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 521.14,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 529.19,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 543.1,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 552.85,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 532.66,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 517.39,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 455.69,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 512.13,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 323.6,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 337.03,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 229.01,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 282.74,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 294.55,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 309.68,
+      "bytes": 40047,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 260.68,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large Reception bootstrap concurrent",
+      "status": 200,
+      "ms": 277.36,
+      "bytes": 40048,
+      "patients": 99,
+      "appointments": 51,
+      "items": 0
+    },
+    {
+      "label": "Large next-slot summary",
+      "status": 200,
+      "ms": 99.75,
+      "bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0
+    },
+    {
+      "label": "Large next-slot summary",
+      "status": 200,
+      "ms": 79.49,
+      "bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0
+    },
+    {
+      "label": "Large next-slot summary",
+      "status": 200,
+      "ms": 70.62,
+      "bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0
+    },
+    {
+      "label": "Large next-slot summary",
+      "status": 200,
+      "ms": 67.73,
+      "bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0
+    },
+    {
+      "label": "Large next-slot summary",
+      "status": 200,
+      "ms": 92.04,
+      "bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0
+    }
+  ]
+}

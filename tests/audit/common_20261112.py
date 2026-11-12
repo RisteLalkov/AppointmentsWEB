@@ -1,6 +1,6 @@
 """Audit-only helpers. No application imports/mutations; safe generated local fixture only."""
 import datetime as dt,hashlib,hmac,json,os,pathlib,re,subprocess,time,urllib.request,urllib.error,urllib.parse,uuid
-ROOT=pathlib.Path(__file__).resolve().parents[2];OUT=ROOT/'docs/audit/2026-11-12';WORK=pathlib.Path('/workspace/.setup/qa20261112')
+ROOT=pathlib.Path(__file__).resolve().parents[2];OUT=ROOT/os.environ.get('QA_OUTPUT','docs/audit/2026-11-12');WORK=pathlib.Path(os.environ.get('QA_WORK','/workspace/.setup/qa20261112'))
 R=json.loads((WORK/'runtime.json').read_text());RESULTS=[];SERIAL=0
 for value in R['dsn']:
  if not re.search(r'Host=(?:127\.0\.0\.1|localhost)(?:;|$)',value,re.I) or not re.search(r'Database=careline_test_[a-f0-9]{12}_[01](?:;|$)',value,re.I):raise RuntimeError('Invalid QA fixture database.')

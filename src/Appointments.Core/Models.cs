@@ -53,6 +53,8 @@ public record Appointment
 public record Slot(DateOnly Date, TimeOnly Time, DateTimeOffset Start, DateTimeOffset End);
 public record BookingCommand(string DoctorId, string PatientId, DateOnly Date, TimeOnly Time, int DurationMinutes, string RequestId, string? ServiceId = null, [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)] bool AgreedTime = false);
 public record MoveCommand(DateOnly Date, TimeOnly Time, int Version);
+// Development JSON persistence only; production uses transactional IdempotencyRequests.
+public record BookingReceipt(string AccountId, BookingCommand Command, Appointment Response);
 public record PatientBusyPeriod(string PatientId, DateTimeOffset Start, DateTimeOffset End);
 public sealed class DemoState
 {
@@ -65,6 +67,7 @@ public sealed class DemoState
     public List<DoctorService> DoctorServices { get; set; } = [];
     public List<AvailabilityException> Exceptions { get; set; } = [];
     public List<Appointment> Appointments { get; set; } = [];
+    public List<BookingReceipt> BookingReceipts { get; set; } = [];
     // Private rule inputs from other clinics, never persisted as visits or counted in local quotas.
     [System.Text.Json.Serialization.JsonIgnore]
     public List<PatientBusyPeriod> PatientBusyPeriods { get; set; } = [];

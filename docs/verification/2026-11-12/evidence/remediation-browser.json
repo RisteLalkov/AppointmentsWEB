@@ -1,0 +1,104 @@
+{
+  "results": [
+    {
+      "name": "Browser receives bounded bootstrap with complete SQL overview",
+      "status": "PASS",
+      "appointments": 51,
+      "patients": 96,
+      "closedCount": 32001
+    },
+    {
+      "name": "Remote patient pages contain distinct records",
+      "status": "PASS"
+    },
+    {
+      "name": "Permanent-number search reaches a contact beyond the initial cache",
+      "status": "PASS"
+    },
+    {
+      "name": "Late directory response cannot overwrite the newer search",
+      "status": "PASS"
+    },
+    {
+      "name": "Remote directory failure shows an explicit retry action",
+      "status": "PASS"
+    },
+    {
+      "name": "Directory retry recovers without reloading the whole app",
+      "status": "PASS"
+    },
+    {
+      "name": "Long patient history displays complete counts and a twelve-row page",
+      "status": "PASS"
+    },
+    {
+      "name": "The last history page contains the remaining eight old visits",
+      "status": "PASS"
+    },
+    {
+      "name": "Appointment outside bootstrap and cache opens via authorized detail read",
+      "status": "PASS"
+    },
+    {
+      "name": "Adding a patient reveals its actual sorted page beyond the initial directory",
+      "status": "PASS"
+    },
+    {
+      "name": "Remote booking picker resolves a full-directory contact while displaying only name and identifier",
+      "status": "PASS"
+    },
+    {
+      "name": "Late appointment detail cannot replace a newly opened booking dialog",
+      "status": "PASS"
+    },
+    {
+      "name": "Empty calendar time grid scrolls with keyboard focus on a valid grid cell",
+      "status": "PASS"
+    },
+    {
+      "name": "Calendar regression creates a real appointment through the protected Web proxy",
+      "status": "PASS"
+    },
+    {
+      "name": "Physical calendar drag saves through confirmation, Web proxy, API and database",
+      "status": "PASS",
+      "http": 200,
+      "version": 2,
+      "request": {
+        "date": "2026-11-22",
+        "time": "14:30",
+        "version": 1
+      },
+      "result": {
+        "id": "cce3361270624047b9d8b973bba30519",
+        "doctorId": "f471a502c0b24ce485ac7b5deac9034b",
+        "patientId": "799e1689d7814c07a1f6819aae0d836a",
+        "serviceId": "4620ec7dba7e42199c7c249bdbd721dc",
+        "serviceName": "QA Преглед",
+        "start": "2026-11-22T13:30:00+00:00",
+        "end": "2026-11-22T14:00:00+00:00",
+        "status": "Confirmed",
+        "version": 2,
+        "createdBy": "9844c085ce1940e99e08b0b493c3411b",
+        "updatedAt": "2026-11-12T13:11:24.3670394+00:00",
+        "requestId": "ccc171bd1fb44859b0c5d4f15ce4e6f6"
+      }
+    },
+    {
+      "name": "Calendar move persists when read through the new appointment detail endpoint",
+      "status": "PASS"
+    },
+    {
+      "name": "Calendar page-local contacts retain names beyond the global record-cache limit",
+      "status": "PASS",
+      "scope": "UI-only paged-response fixture",
+      "events": 1600
+    },
+    {
+      "name": "No uncaught JavaScript exceptions during bounded-workspace regressions",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "errors": []
+}

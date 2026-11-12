@@ -18,7 +18,7 @@ The application targets the .NET 10 shared framework and uses the packages liste
 
 ## Other assets
 
-App CSS, favicon and interface illustrations are authored in source. Typography uses system fonts. Unicode interface symbols are text, not an external icon/font package. There are no paid components, remote images, external account requirements or API keys.
+App CSS, favicon and interface illustrations are authored in source. Typography uses system fonts. Interface icons use locally served SVG symbols; Lucide attribution is included at `src/Appointments.Web/wwwroot/icons/Lucide.LICENSE.txt`. There are no paid components, remote images, external account requirements or API keys.
 
 Optional development-only DOM checks use jsdom (MIT) and formatting uses Prettier (MIT); neither is required to run the site or bundled in its browser assets. No telemetry has been added by the application. Public clinic profiles now embed Google Maps when a public clinic address is configured; see the Google Maps section below.
 
@@ -59,3 +59,16 @@ notices remain in the package assets.
 
 - https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 - https://github.com/swagger-api/swagger-ui (Apache-2.0)
+
+## Dependency verification
+
+The vendored FullCalendar bundle has a version, upstream URL, license path and
+SHA-256 in `deployment/vendored-assets.json`. CI runs
+`python scripts/check-vendored-assets.py`; deliberate updates must review upstream
+release notes/advisories and refresh that inventory after browser regressions.
+A matching hash establishes integrity against the reviewed repository copy,
+not absence of vulnerabilities. Vendored files remain outside npm’s advisory graph.
+CI separately checks transitive NuGet advisories and the frontend test package’s
+npm advisories. Real PostgreSQL accessibility and bounded-workspace/growth checks
+run in the workspace regression job. No external advisory service can certify
+that every application or bundled-library vulnerability is absent.

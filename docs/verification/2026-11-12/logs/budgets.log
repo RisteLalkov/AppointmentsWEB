@@ -1,0 +1,6 @@
+PASS Large Reception bootstrap remains bounded
+PASS Large Doctor bootstrap remains bounded
+PASS Large Patient bootstrap remains bounded
+PASS Large Reception bootstrap concurrent remains bounded
+PASS reception meets broad browser regression budget
+PASS patient meets broad browser regression budget

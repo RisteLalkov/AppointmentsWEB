@@ -35,7 +35,7 @@ public static class ApiDocumentation
                 if ((path.Equals("/health/database", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
                     && !path.StartsWith("/api/public", StringComparison.OrdinalIgnoreCase)
                     && !path.StartsWith("/api/platform", StringComparison.OrdinalIgnoreCase)
-                    && !path.StartsWith("/api/patient", StringComparison.OrdinalIgnoreCase)
+                    && !path.StartsWith("/api/patient/", StringComparison.OrdinalIgnoreCase)
                     && !path.Equals("/api/clinics", StringComparison.OrdinalIgnoreCase)
                     && !path.Equals("/api/auth/login", StringComparison.OrdinalIgnoreCase))
                 {

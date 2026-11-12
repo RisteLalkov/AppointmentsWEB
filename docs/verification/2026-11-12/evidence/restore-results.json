@@ -1,0 +1,65 @@
+[
+  {
+    "id": "X0001",
+    "name": "Backup restores every clinical table with identical row fingerprint",
+    "status": "PASS",
+    "tables": 56,
+    "dump_bytes": 653856,
+    "dump_sha256": "734bfe32bbb141c7ed3a781ef2007bffe2be691c869604179cb31333c7c6b4a4"
+  },
+  {
+    "id": "X0002",
+    "name": "Backup restores every platform table with identical row fingerprint",
+    "status": "PASS",
+    "tables": 5,
+    "dump_bytes": 10809,
+    "dump_sha256": "390663f8cb5472cfa7dd224b59017f5b5378a164bdbd07ff45bd90396095b3a7"
+  },
+  {
+    "id": "X0003",
+    "name": "Both source databases remained unchanged across paired backup window",
+    "status": "PASS"
+  },
+  {
+    "id": "X0004",
+    "name": "Restored pair passes complete offline migration/identity validation",
+    "status": "PASS",
+    "exit": 0
+  },
+  {
+    "id": "X0005",
+    "name": "Restored pair authenticates and reads main",
+    "status": "PASS"
+  },
+  {
+    "id": "X0006",
+    "name": "Restored pair authenticates and reads east",
+    "status": "PASS"
+  },
+  {
+    "id": "X0007",
+    "name": "Restored pair authenticates and reads global patient",
+    "status": "PASS"
+  },
+  {
+    "id": "X0008",
+    "name": "Restored platform login and clinic registry work",
+    "status": "PASS"
+  },
+  {
+    "id": "X0009",
+    "name": "Restored pair creates a new appointment",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0010",
+    "name": "Restored booking has one history row and never touched source",
+    "status": "PASS"
+  },
+  {
+    "id": "X0011",
+    "name": "Temporary restore databases and raw dumps removed",
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "fixture_hosts_stopped": true,
+  "generated_databases_and_roles_dropped": true,
+  "dedicated_postgres_container_and_anonymous_volume_removed": true,
+  "raw_restore_dumps_removed": true,
+  "production_touched": false
+}

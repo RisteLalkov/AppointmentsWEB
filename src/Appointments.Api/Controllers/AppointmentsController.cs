@@ -15,6 +15,10 @@ public sealed class AppointmentsController(PostgresAppointments service) : ApiCo
     [Authorize(Roles = "Administrator"), HttpPost("catalogue/specialties")] public Task<object> Specialty(SpecialtyInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "specialties", input, ct);
     [Authorize(Roles = "Administrator"), HttpPost("catalogue/services")] public Task<object> MedicalService(ServiceInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, "services", input, ct);
     [HttpGet("bootstrap")] public Task<BootstrapResponse> Bootstrap(CancellationToken ct) => service.BootstrapAsync(Actor, IsDemo, ct);
+    [HttpGet("workspace/patients")] public Task<WorkspacePatientPage> WorkspacePatients([FromQuery] WorkspaceQuery query, CancellationToken ct) => service.WorkspacePatientsAsync(Actor, query, ct);
+    [HttpGet("workspace/appointments")] public Task<WorkspaceAppointmentPage> WorkspaceAppointments([FromQuery] WorkspaceQuery query, CancellationToken ct) => service.WorkspaceAppointmentsAsync(Actor, query, ct);
+    [HttpGet("workspace/appointments/{id}")] public Task<WorkspaceAppointmentDetails> WorkspaceAppointment(string id, CancellationToken ct) => service.WorkspaceAppointmentAsync(Actor, id, ct);
+    [HttpGet("workspace/patients/{id}")] public Task<WorkspacePatientDetails> WorkspacePatient(string id, [FromQuery] WorkspaceQuery query, CancellationToken ct) => service.WorkspacePatientAsync(Actor, id, query, ct);
     [HttpGet("appointments")] public async Task<IActionResult> List([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, int skip = 0, int take = 100, CancellationToken ct = default, string? doctorId = null, string? patientId = null, string? serviceId = null, AppointmentStatus? status = null)
     {
         if (skip < 0 || take is < 1 or > 500) return BadRequest(new { error = "Use skip >= 0 and take between 1 and 500." });

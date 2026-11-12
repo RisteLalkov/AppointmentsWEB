@@ -107,7 +107,14 @@ if (!allowHttp)
         await next();
     });
 }
-app.Use(async (context, next) => { context.Response.Headers["X-Content-Type-Options"] = "nosniff"; context.Response.Headers["Referrer-Policy"] = "same-origin"; await next(); });
+app.Use(async (context, next) => {
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["Referrer-Policy"] = "same-origin";
+    // The application is not an embeddable widget. Child Maps frames still work.
+    context.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    await next();
+});
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();

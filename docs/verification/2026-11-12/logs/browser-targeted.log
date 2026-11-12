@@ -1,0 +1,56 @@
+{"id":"B001","name":"Stale clinic tab reads fail closed","status":"PASS","actual":409}
+{"id":"B002","name":"Logout works from a tab opened before switching clinic","status":"PASS","actual":302,"reproduction":"Patient main workspace in tab A; select east in tab B; logout in A"}
+{"id":"B003","name":"Language works from a tab opened before switching clinic","status":"PASS","actual":302}
+{"id":"B004","name":"Automated WCAG registration","status":"PASS","violations":[]}
+{"id":"B005","name":"Browser registration creates one global identity and first clinic membership","status":"PASS"}
+{"id":"B006","name":"Automated WCAG patient personal home","status":"PASS","violations":[]}
+{"id":"B007","name":"Automated WCAG public doctor availability","status":"PASS","violations":[]}
+{"id":"B008","name":"Automated WCAG explicit second clinic consent","status":"PASS","violations":[]}
+{"id":"B009","name":"Joining another clinic never asks for a new password","status":"PASS"}
+{"id":"B010","name":"Chosen public slot reaches booking","status":"PASS"}
+{"id":"B011","name":"Automated WCAG booking review","status":"PASS","violations":[]}
+{"id":"B012","name":"Pending booking persists in east with two memberships and shared busy time","status":"PASS","database":{"status":"Scheduled","id":"b95344b6f90644828e3404082015d201","memberships":2,"busy":1}}
+{"id":"B013","name":"Cross-clinic personal home shows only own new appointment","status":"PASS"}
+{"id":"B014","name":"Reception confirms, patient cancels, database audit is atomic","status":"FAIL","error":"page.waitForFunction: Timeout 15000ms exceeded."}
+{"id":"B015","name":"Automated WCAG platform overview","status":"PASS","violations":[]}
+{"id":"B016","name":"Company support and separate clinical session","status":"FAIL","error":"page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://127.0.0.1:48115/Platform/Edit/main\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:48115/Platform/Edit/main\", waiting until \"load\"\u001b[22m\n"}
+{"id":"B017","name":"Automated WCAG reception doctors","status":"PASS","violations":[]}
+{"id":"B018","name":"No viewport overflow reception doctors 320","status":"PASS"}
+{"id":"B019","name":"No viewport overflow reception doctors 768","status":"PASS"}
+{"id":"B020","name":"No viewport overflow reception doctors 1360","status":"PASS"}
+{"id":"B021","name":"Automated WCAG reception patients","status":"PASS","violations":[]}
+{"id":"B022","name":"No viewport overflow reception patients 320","status":"PASS"}
+{"id":"B023","name":"No viewport overflow reception patients 768","status":"PASS"}
+{"id":"B024","name":"No viewport overflow reception patients 1360","status":"PASS"}
+{"id":"B025","name":"Automated WCAG reception calendar","status":"FAIL","violations":[{"id":"aria-required-children","impact":"critical","targets":[{"selector":[".fc-scrollgrid"],"summary":"Fix any of the following:\n  Element has children which are not allowed: [role=region]"},{"selector":["tbody[role=\"rowgroup\"]"],"summary":"Fix any of the following:\n  Element has children which are not allowed: [role=region]"}]},{"id":"aria-required-parent","impact":"critical","targets":[{"selector":["tbody > tr[role=\"row\"]"],"summary":"Fix any of the following:\n  Required ARIA parents role not present: grid, rowgroup, table, treegrid"}]}]}
+{"id":"B026","name":"No viewport overflow reception calendar 320","status":"PASS"}
+{"id":"B027","name":"No viewport overflow reception calendar 768","status":"PASS"}
+{"id":"B028","name":"No viewport overflow reception calendar 1360","status":"PASS"}
+{"id":"B029","name":"Automated WCAG reception reports","status":"PASS","violations":[]}
+{"id":"B030","name":"No viewport overflow reception reports 320","status":"PASS"}
+{"id":"B031","name":"No viewport overflow reception reports 768","status":"PASS"}
+{"id":"B032","name":"No viewport overflow reception reports 1360","status":"PASS"}
+{"id":"B033","name":"Automated WCAG reception account dialog","status":"PASS","violations":[]}
+{"id":"B034","name":"Automated WCAG clinic accounts","status":"PASS","violations":[]}
+{"id":"B035","name":"Automated WCAG real database doctors dark","status":"PASS","violations":[]}
+{"id":"B036","name":"Automated WCAG real database doctors vibrant","status":"PASS","violations":[]}
+{"id":"B037","name":"Automated WCAG doctor appointments","status":"PASS","violations":[]}
+{"id":"B038","name":"No viewport overflow doctor appointments 320","status":"PASS"}
+{"id":"B039","name":"No viewport overflow doctor appointments 768","status":"PASS"}
+{"id":"B040","name":"No viewport overflow doctor appointments 1360","status":"PASS"}
+{"id":"B041","name":"Automated WCAG doctor availability","status":"PASS","violations":[]}
+{"id":"B042","name":"No viewport overflow doctor availability 320","status":"PASS"}
+{"id":"B043","name":"No viewport overflow doctor availability 768","status":"PASS"}
+{"id":"B044","name":"No viewport overflow doctor availability 1360","status":"PASS"}
+{"id":"B045","name":"Automated WCAG doctor account dialog","status":"PASS","violations":[]}
+{"id":"B046","name":"Automated WCAG patient doctors","status":"PASS","violations":[]}
+{"id":"B047","name":"No viewport overflow patient doctors 320","status":"PASS"}
+{"id":"B048","name":"No viewport overflow patient doctors 768","status":"PASS"}
+{"id":"B049","name":"No viewport overflow patient doctors 1360","status":"PASS"}
+{"id":"B050","name":"Automated WCAG patient appointments","status":"PASS","violations":[]}
+{"id":"B051","name":"No viewport overflow patient appointments 320","status":"PASS"}
+{"id":"B052","name":"No viewport overflow patient appointments 768","status":"PASS"}
+{"id":"B053","name":"No viewport overflow patient appointments 1360","status":"PASS"}
+{"id":"B054","name":"Automated WCAG patient account dialog","status":"PASS","violations":[]}
+{"id":"B055","name":"Authenticated workspace rejects unrelated-origin framing","status":"PASS","observation":"locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('iframe').contentFrame().locator('.overview-grid') to be visible\u001b[22m\n","reason":"Frame either blocked by an observed framing policy or verification remained blocked; a generic timeout is not a pass."}
+{"id":"B056","name":"No uncaught JavaScript exceptions in targeted flows","status":"PASS","errors":[]}

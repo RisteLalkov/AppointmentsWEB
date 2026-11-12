@@ -17,6 +17,9 @@ public sealed class IdentityDirectory(IConfiguration configuration)
         await using var patients = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory,
             "database", "009-global-patients.sql"), ct), c);
         await patients.ExecuteNonQueryAsync(ct);
+        await using var security = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory,
+            "database", "010-security-audit.sql"), ct), c);
+        await security.ExecuteNonQueryAsync(ct);
     }
     public async Task AttachAsync(ClinicDefinition clinic, CancellationToken ct)
     {
@@ -80,6 +83,7 @@ public sealed class IdentityDirectory(IConfiguration configuration)
               AND to_regclass('careline_identity."PatientMemberships"') IS NOT NULL
               AND to_regclass('careline_identity."PatientEvents"') IS NOT NULL
               AND to_regclass('careline_identity."PatientBookings"') IS NOT NULL
+              AND to_regclass('careline_identity."SecurityEvents"') IS NOT NULL
               AND EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='careline_identity' AND table_name='PatientAccounts' AND column_name='Phone')
             """, c);
         if (!Equals(await cmd.ExecuteScalarAsync(ct), true))

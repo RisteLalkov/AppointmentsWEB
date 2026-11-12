@@ -1,0 +1,178 @@
+[
+  {
+    "suite": "core",
+    "command": [
+      "dotnet",
+      "run",
+      "--project",
+      "tests/Appointments.Tests",
+      "-c",
+      "Release",
+      "--no-build"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:50:28.543832+00:00",
+    "duration_seconds": 1.52,
+    "log": "docs/verification/2026-11-12/logs/baseline-core.log"
+  },
+  {
+    "suite": "dom",
+    "command": [
+      "npm",
+      "test",
+      "--prefix",
+      "tests/frontend"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:50:30.065164+00:00",
+    "duration_seconds": 14.07,
+    "log": "docs/verification/2026-11-12/logs/baseline-dom.log"
+  },
+  {
+    "suite": "api",
+    "command": [
+      "python",
+      "tests/api_integration.py",
+      "--dom"
+    ],
+    "status": "FAIL",
+    "exit_code": 1,
+    "started_utc": "2026-11-12T12:50:44.139035+00:00",
+    "duration_seconds": 6.55,
+    "log": "docs/verification/2026-11-12/logs/baseline-api.log"
+  },
+  {
+    "suite": "tenancy",
+    "command": [
+      "python",
+      "tests/tenancy_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:50:50.694191+00:00",
+    "duration_seconds": 46.2,
+    "log": "docs/verification/2026-11-12/logs/baseline-tenancy.log"
+  },
+  {
+    "suite": "platform",
+    "command": [
+      "python",
+      "tests/platform_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:51:36.897774+00:00",
+    "duration_seconds": 66.11,
+    "log": "docs/verification/2026-11-12/logs/baseline-platform.log"
+  },
+  {
+    "suite": "global",
+    "command": [
+      "python",
+      "tests/global_patients_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:52:43.009056+00:00",
+    "duration_seconds": 61.37,
+    "log": "docs/verification/2026-11-12/logs/baseline-global.log"
+  },
+  {
+    "suite": "booking",
+    "command": [
+      "python",
+      "tests/booking_review_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:53:44.378652+00:00",
+    "duration_seconds": 39.78,
+    "log": "docs/verification/2026-11-12/logs/baseline-booking.log"
+  },
+  {
+    "suite": "high",
+    "command": [
+      "python",
+      "tests/high_severity_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:54:24.165100+00:00",
+    "duration_seconds": 113.58,
+    "log": "docs/verification/2026-11-12/logs/baseline-high.log"
+  },
+  {
+    "suite": "feedback",
+    "command": [
+      "python",
+      "tests/tester_feedback_integration.py"
+    ],
+    "status": "FAIL",
+    "exit_code": 1,
+    "started_utc": "2026-11-12T12:56:17.749944+00:00",
+    "duration_seconds": 36.93,
+    "log": "docs/verification/2026-11-12/logs/baseline-feedback.log"
+  },
+  {
+    "suite": "round2",
+    "command": [
+      "python",
+      "tests/tester_round2_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:56:54.681953+00:00",
+    "duration_seconds": 74.23,
+    "log": "docs/verification/2026-11-12/logs/baseline-round2.log"
+  },
+  {
+    "suite": "overnight",
+    "command": [
+      "python",
+      "tests/overnight_integration.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:58:08.915230+00:00",
+    "duration_seconds": 33.86,
+    "log": "docs/verification/2026-11-12/logs/baseline-overnight.log"
+  },
+  {
+    "suite": "discovery",
+    "command": [
+      "python",
+      "tests/discovery_web_smoke.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T12:58:42.779946+00:00",
+    "duration_seconds": 254.68,
+    "log": "docs/verification/2026-11-12/logs/baseline-discovery.log"
+  },
+  {
+    "suite": "accessibility",
+    "command": [
+      "node",
+      "tests/frontend/accessibility-browser.cjs"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T13:02:57.462833+00:00",
+    "duration_seconds": 21.37,
+    "log": "docs/verification/2026-11-12/logs/baseline-accessibility.log"
+  },
+  {
+    "suite": "http",
+    "command": [
+      "python",
+      "tests/http_smoke.py"
+    ],
+    "status": "PASS",
+    "exit_code": 0,
+    "started_utc": "2026-11-12T13:03:18.835092+00:00",
+    "duration_seconds": 6.86,
+    "log": "docs/verification/2026-11-12/logs/baseline-http.log"
+  }
+]

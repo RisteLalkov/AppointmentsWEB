@@ -1,0 +1,47 @@
+[
+  {
+    "file": "api/Appointments.Api.dll",
+    "sha256": "46f16dcff51d865f6e755605497d42a48e5933d8cf384a56643977443d2e1f54",
+    "matches_tested": true
+  },
+  {
+    "file": "api/Appointments.Data.dll",
+    "sha256": "8783332ff5d585c4604d84daf812af66cba54d09c94fd267c841a3acb1af56fc",
+    "matches_tested": true
+  },
+  {
+    "file": "api/Appointments.Contracts.dll",
+    "sha256": "d257069d045811a9a01ac66bc0725060c7b45eb260532ae1f4dca591e2c21342",
+    "matches_tested": true
+  },
+  {
+    "file": "api/Appointments.Core.dll",
+    "sha256": "c2251850ef6e31974d17256a375e1b5f54ad9259818c1f21b4c4d2e66cfe2233",
+    "matches_tested": true
+  },
+  {
+    "file": "api/database/010-security-audit.sql",
+    "sha256": "ceafd23c10a35412a0bfb0ea599cbf2eb0aa66d4259f57af1923e528dda749a1",
+    "matches_tested": true
+  },
+  {
+    "file": "api/database/011-platform-audit.sql",
+    "sha256": "0e5ae3be66c0798a09ee44001eb1966d21b637cfe1818e29cb2b454a46e2c0e7",
+    "matches_tested": true
+  },
+  {
+    "file": "web/Appointments.Web.dll",
+    "sha256": "99f7d597a1efb5f086280987b0f6fe62086b9c3ae65e43bba93988d5728b436f",
+    "matches_tested": true
+  },
+  {
+    "file": "web/wwwroot/js/app.js",
+    "sha256": "8166fa85c8dc2cc9087670e1bcba975bda81661cfe099d05f468512a97691a5b",
+    "matches_tested": true
+  },
+  {
+    "file": "web/wwwroot/css/site.css",
+    "sha256": "ee78bd30043cf386d5723c50868f7a0bfa2a12914ed2b96e5a0d09664c68c882",
+    "matches_tested": true
+  }
+]

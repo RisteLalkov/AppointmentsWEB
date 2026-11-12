@@ -50,7 +50,14 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
     });
     public Appointment Book(DemoActor actor, BookingCommand command) => store.Write(s =>
     {
-        command = command with { ServiceId = string.IsNullOrEmpty(command.ServiceId) ? null : command.ServiceId };
+        if (!Guid.TryParse(command.RequestId, out var requestKey)) throw new RuleException("Потребен е важечки идентификатор на барањето. Повторно отворете го формуларот за закажување.");
+        command = command with { RequestId = requestKey.ToString("N"), ServiceId = string.IsNullOrEmpty(command.ServiceId) ? null : command.ServiceId };
+        var receipt = s.BookingReceipts.SingleOrDefault(r => r.AccountId == actor.Id && r.Command.RequestId == command.RequestId);
+        if (receipt != null)
+        {
+            if (receipt.Command != command) throw new RuleException("Ова барање веќе е употребено за друг термин. Повторно отворете го формуларот.", 409);
+            return receipt.Response with { };
+        }
         var doctor = FindDoctor(s, command.DoctorId);
         if (command.AgreedTime && actor.Role != DemoRole.Administrator)
             throw new RuleException("Само рецепцијата може да внесе термин договорен со лекар.", 403);
@@ -61,7 +68,9 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
         var duplicate = s.Appointments.FirstOrDefault(a => a.RequestId == command.RequestId && a.CreatedBy == actor.Id);
         if (duplicate != null)
         {
-            if (duplicate.DoctorId != command.DoctorId || duplicate.PatientId != command.PatientId || duplicate.ServiceId != command.ServiceId || (duplicate.End - duplicate.Start).TotalMinutes != command.DurationMinutes || clock.Local(duplicate.Start) != command.Date.ToDateTime(command.Time))
+            // Compatibility for legacy demo records without a durable request receipt.
+            // An agreement cannot be inferred safely after its exception was removed.
+            if (duplicate.DoctorId != command.DoctorId || duplicate.PatientId != command.PatientId || duplicate.ServiceId != command.ServiceId || (duplicate.End - duplicate.Start).TotalMinutes != command.DurationMinutes || clock.Local(duplicate.Start) != command.Date.ToDateTime(command.Time) || command.AgreedTime)
                 throw new RuleException("Ова барање веќе е употребено. Повторно отворете го формуларот за закажување.", 409);
             return duplicate;
         }
@@ -91,6 +100,7 @@ public sealed class AppointmentService(IDemoStore store, SchedulingClock clock, 
             CreatedBy = actor.Id, RequestId = command.RequestId, UpdatedAt = clock.UtcNow };
         s.Appointments.Add(appointment);
         s.AppointmentHistory.Add(AppointmentHistoryEntry.Capture(actor, appointment, null, AppointmentChangeKind.Created, clock.UtcNow));
+        s.BookingReceipts.Add(new(actor.Id, command, appointment with { }));
         return appointment;
     });
     private static void CheckPatientConflict(DemoState s, string patientId, Slot slot, string? excludeId = null)

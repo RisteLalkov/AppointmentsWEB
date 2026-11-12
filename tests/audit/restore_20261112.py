@@ -27,7 +27,7 @@ try:
  env.update(ASPNETCORE_ENVIRONMENT='Production',Hosting__AllowHttpForTesting='true',Hosting__WebProxyKey=R['key'],ConnectionStrings__Appointments=newdsn[0],ConnectionStrings__Platform=newdsn[1],Database__ApplyMigrations='false',Demo__Enabled='false',Logging__LogLevel__Default='Warning',AllowedHosts='localhost;127.0.0.1')
  for i,cid in enumerate(['main','east','closed']):
   for k,v in dict(Id=cid,Name={'main':'Главна QA клиника','east':'Источна QA клиника','closed':'Затворена QA клиника'}[cid],TimeZone='Europe/Skopje',ImportSourceDoctors='false',SeedDemoData='false',AllowRegistration='false' if cid=='closed' else 'true').items():env[f'Tenancy__Clinics__{i}__{k}']=v
- dll=pathlib.Path('/workspace/.setup/qa-20261112-publish/api/Appointments.Api.dll')
+ dll=pathlib.Path(os.environ.get('TEST_API_DLL','/workspace/.setup/qa-20261112-publish/api/Appointments.Api.dll'))
  with (OUT/'logs/restore-migrate.log').open('w') as log:p=subprocess.run(['dotnet',str(dll),'--migrate'],cwd=dll.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=180)
  record('Restored pair passes complete offline migration/identity validation',p.returncode==0,exit=p.returncode)
  with socket.socket() as sock:sock.bind(('127.0.0.1',0));base='http://127.0.0.1:'+str(sock.getsockname()[1])
@@ -41,7 +41,7 @@ try:
  admin=Client('restored-reception',base=base).login('main@audit.test');east=Client('restored-east',base=base,clinic='east').login('east@audit.test');patient=Client('restored-patient',base=base).login('patient@audit.test')
  for label,client in [('main',admin),('east',east),('global patient',patient)]:record('Restored pair authenticates and reads '+label,client.req('/api/bootstrap')[0]==200)
  company=Client('restored-company',base=base);company.token=company.ok('/api/platform/login',dict(email='platform@audit.test',password=R['password']))['accessToken'];record('Restored platform login and clinic registry work',company.req('/api/platform/clinics')[0]==200)
- S=seed();day=(dt.date.fromisoformat(S['today'])+dt.timedelta(days=48)).isoformat();contact=next(p for p in admin.ok('/api/bootstrap')['patients'] if p['email']=='main-contact-5@audit.test');cat=S['catalogs']['main'];code,visit,*_=admin.req('/api/appointments',dict(doctorId=cat['doctors'][0]['id'],patientId=contact['id'],serviceId=cat['service']['id'],date=day,time='14:00',durationMinutes=30,requestId=uuid.uuid4().hex));record('Restored pair creates a new appointment',code==200,actual=code)
+ S=seed();day=(dt.date.fromisoformat(S['today'])+dt.timedelta(days=48)).isoformat();contact=next(p for p in admin.ok('/api/workspace/patients?search=main-contact-5%40audit.test')['items'] if p['email']=='main-contact-5@audit.test');cat=S['catalogs']['main'];code,visit,*_=admin.req('/api/appointments',dict(doctorId=cat['doctors'][0]['id'],patientId=contact['id'],serviceId=cat['service']['id'],date=day,time='14:00',durationMinutes=30,requestId=uuid.uuid4().hex));record('Restored pair creates a new appointment',code==200,actual=code)
  if code==200:record('Restored booking has one history row and never touched source',psql(f'''SELECT count(*) FROM "AppointmentHistory" WHERE "AppointmentId"='{visit['id']}' ''',created[0])=='1' and psql(f'''SELECT count(*) FROM "Appointments" WHERE "Id"='{visit['id']}' ''',original[0])=='0')
 except Exception as e:record('Backup/restore rehearsal completed',False,error=str(e))
 finally:

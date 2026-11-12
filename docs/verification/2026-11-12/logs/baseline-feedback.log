@@ -1,0 +1,46 @@
+PASS feedback Technical connected badge is absent
+PASS feedback Same-name patients show distinct permanent numbers in card view
+PASS feedback List view has a patient-number column
+PASS feedback Patient-number search distinguishes identical names
+PASS feedback Patient profile displays its assigned number
+PASS feedback Typing a patient-history date preserves its field and focus
+PASS feedback Completed patient-history date is committed exactly once
+PASS feedback Searchable booking choice displays name and number without email, retaining the internal ID
+PASS feedback US browser displays DD.MM.YYYY while booking uses ISO
+PASS feedback Calendar icon opens the availability calendar
+PASS feedback Dismissing the availability calendar keeps booking open
+PASS feedback Invalid typed date clears the previously selected date
+PASS feedback A partial or invalid entry does not prevent opening the calendar
+PASS feedback Review identifies the selected same-name patient unambiguously
+PASS feedback Final booking request sends the unchanged ISO date
+PASS feedback Saved appointment details retain patient identification
+Error: Committed patient-history date filters out earlier appointments
+    at check (/workspace/AppointmentsWEB/tests/frontend/tester-feedback-browser.cjs:8:46)
+    at /workspace/AppointmentsWEB/tests/frontend/tester-feedback-browser.cjs:60:3
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "MigrationId", "ProductVersion"
+      FROM "__EFMigrationsHistory"
+      ORDER BY "MigrationId";
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {75cd97ba-0504-4792-b983-9b86d7efb283} may be persisted to storage in unencrypted form.
+
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {84ba4e69-0d90-442c-b723-c373a19fe3de} may be persisted to storage in unencrypted form.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+
+Traceback (most recent call last):
+  File "/workspace/AppointmentsWEB/tests/tester_feedback_integration.py", line 89, in <module>
+    subprocess.run(['node', 'tests/frontend/tester-feedback-browser.cjs'], cwd=root, env=browser_env, check=True, timeout=120)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['node', 'tests/frontend/tester-feedback-browser.cjs']' returned non-zero exit status 1.

@@ -1,0 +1,2 @@
+{"role":"reception","status":"PASS","interactive_ms":985,"bootstrap":{"status":200,"headers_received_ms":911},"longTasks":[],"heap":{"used":4940156,"total":7473500}}
+{"role":"patient","status":"PASS","interactive_ms":756,"bootstrap":{"status":200,"headers_received_ms":712},"longTasks":[],"heap":{"used":4818157,"total":7438741}}

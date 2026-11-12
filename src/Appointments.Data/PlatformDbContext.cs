@@ -39,15 +39,27 @@ public sealed class PlatformAccessSession
     public DateTimeOffset ExpiresAt { get; set; }
     public PlatformOperator Operator { get; set; } = null!;
 }
+public sealed class PlatformAuditEvent
+{
+    public long Id { get; set; }
+    public string ActorId { get; set; } = "";
+    public string Action { get; set; } = "";
+    public string? TargetId { get; set; }
+    public DateTimeOffset OccurredAt { get; set; }
+}
 public sealed class PlatformDbContext(DbContextOptions<PlatformDbContext> options) : DbContext(options)
 {
     public DbSet<PlatformClinic> Clinics => Set<PlatformClinic>();
     public DbSet<PlatformOperator> Operators => Set<PlatformOperator>();
     public DbSet<PlatformAccessSession> Sessions => Set<PlatformAccessSession>();
+    public DbSet<PlatformAuditEvent> AuditEvents => Set<PlatformAuditEvent>();
     protected override void OnModelCreating(ModelBuilder b)
     {
         b.Entity<PlatformClinic>(x => { x.ToTable("PlatformClinics"); x.HasKey(c => c.Id); x.Property(c => c.Version).IsConcurrencyToken(); });
         b.Entity<PlatformOperator>(x => { x.ToTable("PlatformOperators"); x.HasKey(c => c.Id); x.HasIndex(c => c.Email).IsUnique(); });
         b.Entity<PlatformAccessSession>(x => { x.ToTable("PlatformSessions"); x.HasKey(c => c.TokenHash); x.HasOne(c => c.Operator).WithMany().HasForeignKey(c => c.OperatorId); });
+        b.Entity<PlatformAuditEvent>(x => { x.ToTable("PlatformAuditEvents"); x.HasKey(e => e.Id);
+            x.Property(e => e.ActorId).HasMaxLength(64); x.Property(e => e.Action).HasMaxLength(80); x.Property(e => e.TargetId).HasMaxLength(64);
+            x.HasIndex(e => e.OccurredAt).HasDatabaseName("ix_platform_audit_time"); });
     }
 }

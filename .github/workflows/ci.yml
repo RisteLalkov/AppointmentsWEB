@@ -35,6 +35,14 @@ jobs:
         run: npm ci --prefix tests/frontend --ignore-scripts --no-audit --no-fund
       - name: DOM workflow checks
         run: npm test --prefix tests/frontend
+      - name: Dependency advisory checks
+        shell: bash
+        run: |
+          mkdir -p TestResults
+          dotnet list Appointments.sln package --vulnerable --include-transitive --format json > TestResults/nuget-advisories.json
+          python -c "import json; d=json.load(open('TestResults/nuget-advisories.json',encoding='utf-8-sig')); assert not d.get('problems'), d.get('problems'); assert not any(p.get('vulnerabilities') for j in d.get('projects',[]) for f in j.get('frameworks',[]) for k in ('topLevelPackages','transitivePackages') for p in f.get(k,[])), 'Vulnerable NuGet dependencies found'"
+          npm audit --prefix tests/frontend --audit-level=moderate
+          python scripts/check-vendored-assets.py
   postgres-integration:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -98,3 +106,64 @@ jobs:
           python tests/overnight_integration.py
           python tests/discovery_web_smoke.py
           node tests/frontend/accessibility-browser.cjs
+  workspace-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: medtermin_workspace_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d medtermin_workspace_test"
+          --health-interval 3s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: dotnet build Appointments.sln -c Release
+      - name: Publish and install browser tools
+        run: |
+          dotnet publish src/Appointments.Api -c Release --no-build -o "$RUNNER_TEMP/api"
+          dotnet publish src/Appointments.Web -c Release --no-build -o "$RUNNER_TEMP/web"
+          npm install --prefix "$RUNNER_TEMP/browser" playwright@1.64.1 axe-core@4.14.0 --no-audit --no-fund
+          "$RUNNER_TEMP/browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Bounded workspace, multi-clinic security and real-data accessibility
+        env:
+          CARELINE_TEST_CONNECTION: Host=127.0.0.1;Port=5432;Database=medtermin_workspace_test;Username=postgres
+          QA_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          export QA_WORK="$RUNNER_TEMP/fixture"
+          export QA_OUTPUT="$RUNNER_TEMP/results"
+          export TEST_API_DLL="$RUNNER_TEMP/api/Appointments.Api.dll"
+          export TEST_WEB_DLL="$RUNNER_TEMP/web/Appointments.Web.dll"
+          export NODE_PATH="$RUNNER_TEMP/browser/node_modules"
+          export TEST_BROWSER_EXECUTABLE="$(node -p 'require("playwright").chromium.executablePath()')"
+          mkdir -p "$QA_OUTPUT"/{logs,evidence,screenshots}
+          python tests/audit/fixture_20261112.py > "$QA_OUTPUT/logs/fixture.log" 2>&1 &
+          fixture_pid=$!
+          trap 'touch "$QA_WORK/stop"; wait "$fixture_pid"' EXIT
+          for attempt in {1..120}; do
+            [ -f "$QA_WORK/runtime.json" ] && break
+            kill -0 "$fixture_pid" || { cat "$QA_OUTPUT/logs/fixture.log"; exit 1; }
+            sleep 1
+          done
+          test -f "$QA_WORK/runtime.json"
+          python tests/remediation_20261112.py
+          node tests/frontend/remediation-browser.cjs
+          node tests/audit/browser_20261112.cjs
+          python tests/audit/performance_20261112.py
+          node tests/audit/browser_performance_20261112.cjs
+          python tests/assert_workspace_budget.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workspace-regression-evidence
+          path: ${{ runner.temp }}/results

@@ -1,7 +1,7 @@
 // Audit-only real Browser -> Web -> API -> disposable PostgreSQL scenarios.
 const fs=require('node:fs'),path=require('node:path'),{spawnSync}=require('node:child_process'),http=require('node:http');
 const {chromium}=require('playwright');
-const root=path.resolve(__dirname,'../..'),out=path.join(root,'docs/audit/2026-11-12'),work='/workspace/.setup/qa20261112';
+const root=path.resolve(__dirname,'../..'),out=path.resolve(root,process.env.QA_OUTPUT||'docs/audit/2026-11-12'),work=process.env.QA_WORK||'/workspace/.setup/qa20261112';
 const R=JSON.parse(fs.readFileSync(work+'/runtime.json')),S=JSON.parse(fs.readFileSync(work+'/seed.json'));
 const results=[],errors=[],actions=[],axeResults=[];let browser;
 const save=()=>{fs.writeFileSync(out+'/evidence/browser-targeted.json',JSON.stringify({results,errors,actions,axeResults},null,2));};
@@ -14,7 +14,7 @@ function sql(query,index=0){const dsn=R.dsn[index],db=/Database=([^;]+)/i.exec(d
 async function axe(p,label){await p.addScriptTag({path:require.resolve('axe-core/axe.min.js')});const scan=await p.evaluate(async()=>{const r=await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});return{violations:r.violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.map(n=>({selector:n.target,summary:n.failureSummary}))})),incomplete:r.incomplete.map(v=>v.id)};});axeResults.push({label,...scan});check('Automated WCAG '+label,scan.violations.length===0,{violations:scan.violations});}
 async function snap(p,name){await p.screenshot({path:out+'/screenshots/'+name+'.png',fullPage:true});}
 (async()=>{
- browser=await chromium.launch({headless:true,executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+ browser=await chromium.launch({headless:true,executablePath:process.env.TEST_BROWSER_EXECUTABLE||'/usr/bin/chromium',args:['--no-sandbox']});
  await scenario('Cross-tab personal controls',async()=>{
   const c=await context(),a=await c.newPage(),b=await c.newPage();await login(a,'patient@audit.test');await b.goto(R.web+'/PatientClinics');await b.locator('[data-patient-clinic=east] button').click();await b.waitForURL(u=>u.pathname==='/Workspace');await b.locator('.overview-grid').waitFor();
   const clinical=await a.request.get(R.web+'/data/bootstrap',{headers:{'X-Workspace-Clinic':'main'}});check('Stale clinic tab reads fail closed',clinical.status()===409,{actual:clinical.status()});

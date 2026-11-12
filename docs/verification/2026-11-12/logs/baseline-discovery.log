@@ -1,0 +1,439 @@
+PASS Anonymous root opens public discovery
+PASS Domain entry point: medtermin.mk
+PASS Domain entry point: app.medtermin.mk
+PASS Domain entry point: admin.medtermin.mk
+PASS Host filtering rejects unrelated domains
+PASS Anonymous doctor directory renders public DTOs
+PASS Directory exposes pagination and clinic filter
+PASS Search and page parameters reach the API
+PASS Search preserves explicit clinic/refinement scope while resetting pagination
+PASS Active scope and refinements are visible and removable
+PASS Removing one chip preserves other criteria and resets pagination
+PASS Clinic restriction is explicit and active refinements open automatically
+PASS Unrestricted Cyrillic search reaches API without refinements
+PASS Empty search offers a complete reset
+PASS API outage renders a retryable public error
+PASS Clinic directory removes irrelevant hidden doctor restrictions
+PASS Search page omits removed instructional copy and directory wording
+PASS Invalid public page size rejected by MVC
+PASS Clinic route validates internally constructed query
+PASS Clinic profile renders real public description and doctors
+PASS Clinic profile has address and callable phone in an info card
+PASS Clinic profile lazily embeds an address map and supplies external Maps link
+PASS Clinic map replaces generic landing illustration on clinic profiles
+PASS Clinic without address does not invent a map location
+PASS Doctor profile renders active services
+PASS Doctor profile emphasizes specialty and uses concise booking copy
+PASS Doctor profile uses the new search terminology
+PASS Public doctor profile shows anonymous availability
+PASS Availability offers date/service filters and read-only times
+PASS Reception-only doctors retain their booking boundary and notice
+PASS Anonymous booking preserves a protected return action
+PASS Normal login has credentials only
+PASS Login offers registration while preserving selected doctor
+PASS Login POST requires CSRF
+PASS Successful authentication returns to selected booking action
+PASS Web sends a patient clinic preference without forcing staff credential routing
+PASS Matching clinic continues to selected doctor in workspace
+PASS Selected public time and service reach workspace continuation
+PASS Cross-clinic booking does not switch membership
+PASS Clinical cookie cannot enter company workspace
+PASS /Account/Login redirects signed-in users while preserving selected booking
+PASS /Account/Register redirects signed-in users while preserving selected booking
+PASS Signed-in continuation avoids auth loops/external URLs: /Account/Login
+PASS Signed-in continuation avoids auth loops/external URLs: /Account/Register
+PASS Signed-in continuation avoids auth loops/external URLs: /%41ccount/Login?ReturnUrl=%2FAccounts
+PASS Signed-in continuation avoids auth loops/external URLs: /unused/../Account/Login
+PASS Signed-in continuation avoids auth loops/external URLs: https://evil.example/
+PASS Wrong role is sent to access denied instead of login
+PASS Access denied page terminates with HTTP 403
+PASS Clinic session does not bypass company sign-in
+PASS Revoked API session renders login instead of redirecting in a loop
+PASS Login works again after revocation, including antiforgery
+PASS API 401 removes stale clinic web cookie
+PASS Login remains accessible after API session rejection
+PASS External login return URL rejected
+PASS Account creation offers only unlinked patient and real doctor profiles, including disabled-account links
+PASS Registration retains doctor through subsequent login
+PASS Anonymous company POST denied
+PASS Company credentials use separate sign-in flow
+PASS Signed-in company operator bypasses company login
+PASS Company session does not bypass clinic sign-in
+PASS Company onboarding screen renders
+PASS Company API calls do not carry clinical routing headers
+PASS Company cookie does not authenticate clinical workspace
+PASS Company onboarding POST requires CSRF
+PASS Clinic ID containing an underscore reports identifier rules instead of blaming a valid password
+PASS Validation preserves nonsecret input without rendering administrator password
+PASS Short administrator password reports its own length requirement
+PASS Provisioning error preserves form without exposing password
+PASS Company checkbox values bind correctly
+PASS Unchecked company policies are sent as false
+PASS Platform adoption requires antiforgery protection
+PASS Configured clinic cannot edit platform metadata before adoption
+PASS Platform adoption redirects to clinic details
+PASS Clinic details form edits metadata without recreating credentials
+PASS Clinic metadata edits require antiforgery protection
+PASS Platform metadata form saves successfully
+PASS Metadata conflict preserves entered values and offers explicit reload
+PASS Revoked company session returns to login without a loop
+PASS Macedonian stays default even for an English browser
+PASS Language switch saves a cookie and retains the return location
+PASS English landing page translates labels while preserving doctor records
+PASS English availability preserves service data named like an interface label
+PASS Web forwards the selected interface language to the API
+PASS Sign-in form renders English on the server
+PASS Language preference requires CSRF protection
+PASS Unsupported language values are rejected
+PASS Language return URL cannot redirect off-site
+PASS Switching back restores the original Macedonian interface
+PASS browser Public header loads the supplied company symbol
+PASS browser МедТермин wordmark is displayed
+PASS browser Footer credits the supplied CODEX company website
+PASS browser Public footer keeps company administration private
+PASS browser Hero heading has a gentle entrance
+PASS browser Hero illustration joins the opening entrance
+PASS browser Desktop public directory fits viewport
+PASS browser Clinic profile shows its contact information card
+PASS browser Clinic phone is callable
+PASS browser Map uses the saved address with correct Cyrillic encoding
+PASS browser External Maps link uses the saved location and safe new-window attributes
+PASS browser Map has lazy loading and an accessible title
+PASS browser Clinic profile with map at 768px fits viewport
+PASS browser Clinic profile with map at 390px fits viewport
+PASS browser Clinic profile with map at 320px fits viewport
+PASS browser Missing-address clinic shows a useful empty state without an iframe
+PASS browser Clinic without address at 320px fits viewport
+PASS browser /Account/Login loads the company symbol
+PASS browser /Account/Login reveals its password without changing it
+PASS browser /Account/Login supports keyboard masking
+PASS browser /Account/Register loads the company symbol
+PASS browser /Account/Register reveals its password without changing it
+PASS browser /Account/Register supports keyboard masking
+PASS browser /Platform/Login loads the company symbol
+PASS browser /Platform/Login reveals its password without changing it
+PASS browser /Platform/Login supports keyboard masking
+PASS browser Result cards have a subtle entrance when scrolled into view
+PASS browser Decorative line actually moves when motion is enabled
+PASS browser Page ribbon draws as the visitor scrolls
+PASS browser Closing section reveals on scroll
+PASS browser Motion can be paused
+PASS browser Pause stops the floating gradients and care symbol too
+PASS browser Pause freezes the scroll ribbon too
+PASS browser Motion pause preference survives navigation
+PASS browser Pause preference also stops opening entrances
+PASS browser Reduced-motion preference disables decorative animation
+PASS browser Reduced motion disables card entrances too
+PASS browser Reduced motion disables all opening and section entrances
+PASS browser Optional filters combine explicitly
+PASS browser A filter chip clears only its own criterion
+PASS browser New name search preserves the explicitly chosen clinic filter
+PASS browser Search from a clinic stays scoped to that clinic
+PASS browser Public directory at 768px fits viewport
+PASS browser Public directory at 390px fits viewport
+PASS browser Public directory at 320px fits viewport
+PASS browser Empty-state reset restores unfiltered directory
+PASS browser Search works without JavaScript
+PASS browser Decorative art stays still without JavaScript
+PASS browser Doctor specialty uses a compact readable size
+PASS browser Anonymous profile renders free times
+PASS browser Each public free time is a booking link
+PASS browser Date navigation retains the selected doctor and service
+PASS browser Availability filter works as a normal read-only form
+PASS browser Profile removes redundant copy and directory terminology
+PASS browser Doctor profile at 390px fits viewport
+PASS browser Doctor profile at 320px fits viewport
+PASS browser Public slot enters login with date, time and service continuation
+PASS browser Login has no clinic selector
+PASS browser Mobile login fits viewport
+PASS browser Browser Back after sign-in cannot leave the login form visible
+PASS browser Signed-in user cannot accidentally open registration
+PASS browser Wrong-role navigation shows access denied without a login loop
+PASS browser Browser Back after logout cannot restore an authenticated workspace
+PASS browser Restored history documents revalidate their current session
+PASS browser Staff account creation cannot link or create a personal patient account
+PASS browser Doctor role requires an existing doctor profile
+PASS browser Administrator requires no profile and clears the doctor selection
+PASS browser Doctor form submits only its applicable staff profile
+PASS browser Administrator form submits only its applicable staff profile
+PASS browser Account creation at 390px fits viewport
+PASS browser Account creation at 320px fits viewport
+PASS browser Company dashboard loads the company symbol
+PASS browser Company onboarding and both password-change fields have toggles
+PASS browser Company field visibility is independent
+PASS browser Desktop company onboarding fits viewport
+PASS browser Mobile company onboarding fits viewport
+PASS browser Confirmation cancel text fits at 1440px
+PASS browser Confirmation cancel text fits at 768px
+PASS browser Confirmation cancel text fits at 390px
+PASS browser Confirmation cancel text fits at 320px
+PASS browser Workspace loads the company symbol
+PASS browser Sidebar text is larger and more legible
+PASS browser Availability is absent from sidebar
+PASS browser Patients and doctors group expands with keyboard
+PASS browser Patient navigation opens and highlights its parent group
+PASS browser Management has one doctor entry and one patient entry
+PASS browser Patients support list view
+PASS browser List preference survives reload
+PASS browser Patients switch back to cards
+PASS browser Specialties use only list view
+PASS browser Specialty list preserves editing
+PASS browser Management submenu collapses with keyboard
+PASS browser Catalogue submenu opens with keyboard
+PASS browser Deep section marks active navigation
+PASS browser Management uses sidebar navigation without duplicate section tabs
+PASS browser Services have no view selector
+PASS browser Sidebar calendar uses a calendar SVG icon
+PASS browser Doctor list keeps management actions in a closed menu
+PASS browser Doctor list menu reveals editing
+PASS browser Doctor actions fit the desktop list without horizontal clipping
+PASS browser Availability does not show spreadsheet source instructions
+PASS browser Schedule editor orders weekdays Monday to Sunday
+PASS browser Doctor card opens selected availability
+PASS browser Exception save button is disabled while saving
+PASS browser Repeated submit events issue only one request
+PASS browser Repeated saved interval gets a clear error without a duplicate
+PASS browser Doctor deep link expands its group and uses the shorter title
+PASS browser Booking continuation opens dialog and consumes query parameter
+PASS browser Booking continuation preselects its date and service
+PASS browser Booking continuation retains the selected available time
+PASS browser Doctor label targets searchable control
+PASS browser Separate patient search is removed
+PASS browser Doctor can be found by Cyrillic name and selected with Enter
+PASS browser Service search changes the actual service and visit duration
+PASS browser Patient search commits the selected patient ID
+PASS browser Unselected search text blocks confirmation instead of silently reusing an old choice
+PASS browser Escape closes the dropdown without dismissing the booking dialog
+PASS browser Timezone is only in closed account settings after booking
+PASS browser Rescheduling retains locked doctor and patient selections
+PASS browser Reception reviews the explicit doctor agreement
+PASS browser Agreed time books successfully without regular schedule
+PASS browser Doctor edit form loads the confirmation checkbox
+PASS browser Confirmation checkbox saves and reloads
+PASS browser Personal password-change form has a toggle for both fields
+PASS browser Changing a personal password reveals only the chosen field
+PASS browser Touch navigation selects patients from the new group
+PASS browser Mobile grouped navigation fits viewport
+PASS browser Mobile patient list fits viewport
+PASS browser Touch submenu opens and selects specialties
+PASS browser Mobile catalogue fits viewport
+PASS browser Account dialog logout action is reachable on mobile
+PASS browser Doctor dropdown selection works by touch
+PASS browser Patient dropdown selection works by touch
+PASS browser Mobile searchable booking dialog fits viewport
+PASS browser Password reveal works by touch
+PASS browser Password masking works by touch
+PASS browser Mobile password visibility control fits viewport
+PASS browser No uncaught browser JavaScript errors in exercised pages
+
+138/138 Chromium UI checks passed (stub public API, JSON demo workspace).
+PASS account settings Patient starts with settings closed
+PASS account settings Patient sidebar has no password/sign-out controls
+PASS account settings Patient preferences and timezone have moved out of header/footer
+PASS account settings Patient has no duplicated preferences or timezone
+PASS account settings Patient account button opens a native modal
+PASS account settings Patient modal displays the actual account identity
+PASS account settings Patient modal shows the clinic timezone
+PASS account settings Patient demo does not expose a nonfunctional password action
+PASS account settings Patient Tab stays inside the modal
+PASS account settings Patient Escape closes and restores focus
+PASS account settings Patient backdrop click dismisses
+PASS account settings Patient clicking inside keeps settings open
+PASS account settings Doctor starts with settings closed
+PASS account settings Doctor sidebar has no password/sign-out controls
+PASS account settings Doctor preferences and timezone have moved out of header/footer
+PASS account settings Doctor has no duplicated preferences or timezone
+PASS account settings Doctor account button opens a native modal
+PASS account settings Doctor modal displays the actual account identity
+PASS account settings Doctor modal shows the clinic timezone
+PASS account settings Doctor demo does not expose a nonfunctional password action
+PASS account settings Doctor Tab stays inside the modal
+PASS account settings Doctor Escape closes and restores focus
+PASS account settings Doctor backdrop click dismisses
+PASS account settings Doctor clicking inside keeps settings open
+PASS account settings Administrator starts with settings closed
+PASS account settings Administrator sidebar has no password/sign-out controls
+PASS account settings Administrator preferences and timezone have moved out of header/footer
+PASS account settings Administrator has no duplicated preferences or timezone
+PASS account settings Administrator account button opens a native modal
+PASS account settings Administrator modal displays the actual account identity
+PASS account settings Administrator modal shows the clinic timezone
+PASS account settings Administrator demo does not expose a nonfunctional password action
+PASS account settings Administrator Tab stays inside the modal
+PASS account settings Administrator Escape closes and restores focus
+PASS account settings Administrator backdrop click dismisses
+PASS account settings Administrator clicking inside keeps settings open
+PASS account settings Opening settings pauses background workspace refresh
+PASS account settings default change preserves the underlying schedule draft
+PASS account settings default fits 1440×1000
+PASS account settings default sign-out remains reachable at 1440
+PASS account settings default fits 768×1000
+PASS account settings default sign-out remains reachable at 768
+PASS account settings default fits 390×850
+PASS account settings default sign-out remains reachable at 390
+PASS account settings default fits 320×568
+PASS account settings default sign-out remains reachable at 320
+PASS account settings dark change preserves the underlying schedule draft
+PASS account settings dark fits 1440×1000
+PASS account settings dark sign-out remains reachable at 1440
+PASS account settings dark fits 768×1000
+PASS account settings dark sign-out remains reachable at 768
+PASS account settings dark fits 390×850
+PASS account settings dark sign-out remains reachable at 390
+PASS account settings dark fits 320×568
+PASS account settings dark sign-out remains reachable at 320
+PASS account settings vibrant change preserves the underlying schedule draft
+PASS account settings vibrant fits 1440×1000
+PASS account settings vibrant sign-out remains reachable at 1440
+PASS account settings vibrant fits 768×1000
+PASS account settings vibrant sign-out remains reachable at 768
+PASS account settings vibrant fits 390×850
+PASS account settings vibrant sign-out remains reachable at 390
+PASS account settings vibrant fits 320×568
+PASS account settings vibrant sign-out remains reachable at 320
+PASS account settings Declining language reload keeps settings and unsaved schedule intact
+PASS account settings Language switch renders translated account settings
+PASS account settings Language switch keeps current workspace section and theme
+PASS account settings Timezone label is translated
+PASS account settings English settings fit 1440
+PASS account settings English settings fit 390
+PASS account settings English settings fit 320
+PASS account settings Reduced motion disables entrance animation
+PASS account settings Printing hides account settings
+PASS account settings Sign-out from settings invalidates the clinical session
+PASS account settings accounts-admin@test.test has one real password action inside settings
+PASS account settings accounts-admin@test.test modal retains clinic identity
+PASS account settings accounts-admin@test.test password action opens the existing secure form
+PASS account settings accounts-admin@test.test sign-out still requires CSRF protection
+PASS account settings Settings sign-out form includes an antiforgery token
+PASS account settings accounts-admin@test.test sign-out denies further workspace data access
+PASS account settings patient@test.test has one real password action inside settings
+PASS account settings patient@test.test modal retains clinic identity
+PASS account settings patient@test.test password action opens the existing secure form
+PASS account settings patient@test.test sign-out still requires CSRF protection
+PASS account settings Settings sign-out form includes an antiforgery token
+PASS account settings patient@test.test sign-out denies further workspace data access
+PASS account settings No uncaught JavaScript errors
+87/87 account settings browser checks passed.
+PASS language browser English browser preference still starts in Macedonian
+PASS language browser Default Macedonian does not download English catalogue
+PASS language browser Saved language renders on the server: en-GB
+PASS language browser Demo sign-in is translated
+PASS language browser Changing language preserves theme
+PASS language browser Language cookie is a bounded non-authentication preference
+PASS language browser Bundled icon and flag sprite is served locally
+PASS language browser Reception navigation is English
+PASS language browser Language selector sits beside theme control in account settings
+PASS language browser Doctor record names retain Cyrillic
+PASS language browser Legacy empty funding metadata gets an English presentation label
+PASS language browser Booking labels and searchable controls are English
+PASS language browser English review step shows confirmation action
+PASS language browser English booking completes against the real demo service
+PASS language browser Appointment period filters are English
+PASS language browser English rescheduling retains the original future date
+PASS language browser English rescheduling completes
+PASS language browser Cancellation confirmation is English
+PASS language browser English screen: calendar
+PASS language browser English screen: patients
+PASS language browser English screen: catalogue/specialties
+PASS language browser English screen: catalogue/services
+PASS language browser English screen: reports
+PASS language browser English screen: availability
+PASS language browser Calendar buttons and date headings are English
+PASS language browser default English 390 fits viewport
+PASS language browser default language selector is reachable at 390
+PASS language browser default mobile SVG icons have stable dimensions
+PASS language browser default English 320 fits viewport
+PASS language browser default language selector is reachable at 320
+PASS language browser default mobile SVG icons have stable dimensions
+PASS language browser dark English 390 fits viewport
+PASS language browser dark language selector is reachable at 390
+PASS language browser dark mobile SVG icons have stable dimensions
+PASS language browser dark English 320 fits viewport
+PASS language browser dark language selector is reachable at 320
+PASS language browser dark mobile SVG icons have stable dimensions
+PASS language browser vibrant English 390 fits viewport
+PASS language browser vibrant language selector is reachable at 390
+PASS language browser vibrant mobile SVG icons have stable dimensions
+PASS language browser vibrant English 320 fits viewport
+PASS language browser vibrant language selector is reachable at 320
+PASS language browser vibrant mobile SVG icons have stable dimensions
+PASS language browser Saved language renders on the server: mk-MK
+PASS language browser Changing language preserves the selected workspace section
+PASS language browser Switching back restores Macedonian navigation
+PASS language browser Saved language renders on the server: en-GB
+PASS language browser Patient role label is English
+PASS language browser Patient appointment workflow renders in English
+PASS language browser Doctor role label is English
+PASS language browser Doctor appointment workflow renders in English
+PASS language browser Language action rejects missing CSRF
+PASS language browser Language action rejects unsupported cultures
+PASS language browser Language action cannot redirect off-site
+PASS language browser Saved language renders on the server: en-GB
+PASS language browser Public switch keeps Cyrillic search and fragment
+PASS language browser Public doctor name remains clinic data
+PASS language browser Landing hero is fully English
+PASS language browser Doctor availability heading is English
+PASS language browser Service data named like a UI phrase is not translated
+PASS language browser Public availability dates are English
+PASS language browser Slot redirects to English login
+PASS language browser Public registration is English
+PASS language browser Declining language reload keeps unsaved registration
+PASS language browser Clinic info labels are English
+PASS language browser Company dashboard is English
+PASS language browser Saved language renders on the server: mk-MK
+PASS language browser Company language CSRF works with independent clinical and platform cookies
+PASS language browser Saved language renders on the server: en-GB
+PASS language browser English company 390 fits viewport
+PASS language browser English company 320 fits viewport
+PASS language browser No uncaught JavaScript errors across translated workflows
+72/72 language browser checks passed.
+PASS theme browser First visit retains standard theme
+PASS theme browser One selector is in account settings
+PASS theme browser Default cards keep original white
+PASS theme browser Switch dark preserves workspace DOM
+PASS theme browser dark synchronizes across tabs
+PASS theme browser dark survives reload without resetting
+PASS theme browser dark primary action contrast is readable
+PASS theme browser dark doctor dialog has a themed surface
+PASS theme browser dark selected booking time retains readable contrast
+PASS theme browser dark calendar has palette borders
+PASS theme browser dark fits 390px
+PASS theme browser dark selector remains reachable on 390px
+PASS theme browser dark fits 320px
+PASS theme browser dark selector remains reachable on 320px
+PASS theme browser Switch vibrant preserves workspace DOM
+PASS theme browser vibrant synchronizes across tabs
+PASS theme browser vibrant survives reload without resetting
+PASS theme browser vibrant primary action contrast is readable
+PASS theme browser vibrant doctor dialog has a themed surface
+PASS theme browser vibrant selected booking time retains readable contrast
+PASS theme browser vibrant calendar has palette borders
+PASS theme browser vibrant fits 390px
+PASS theme browser vibrant selector remains reachable on 390px
+PASS theme browser vibrant fits 320px
+PASS theme browser vibrant selector remains reachable on 320px
+PASS theme browser Switch default preserves workspace DOM
+PASS theme browser default synchronizes across tabs
+PASS theme browser default survives reload without resetting
+PASS theme browser default primary action contrast is readable
+PASS theme browser default doctor dialog has a themed surface
+PASS theme browser default selected booking time retains readable contrast
+PASS theme browser default calendar has palette borders
+PASS theme browser default fits 390px
+PASS theme browser default selector remains reachable on 390px
+PASS theme browser default fits 320px
+PASS theme browser default selector remains reachable on 320px
+PASS theme browser Printing hides the selector
+PASS theme browser Dark preference does not print a dark canvas
+PASS theme browser dark applies on public directory
+PASS theme browser dark follows public visitor to login
+PASS theme browser dark applies on company login
+PASS theme browser vibrant applies on public directory
+PASS theme browser vibrant follows public visitor to login
+PASS theme browser vibrant applies on company login
+PASS theme browser Switching still works with storage blocked
+PASS theme browser No uncaught theme/workspace JavaScript errors
+46/46 theme browser checks passed.
+
+89/89 MVC discovery/company contract checks passed (stub API).

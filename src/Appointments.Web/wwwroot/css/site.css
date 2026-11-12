@@ -381,7 +381,7 @@ input[type="time"] {
 }
 .inline-note.warning {
   background: var(--theme-warning-soft, #fcf5e7);
-  color: var(--theme-warning, #8c6e3f);
+  color: var(--theme-warning, #79572b);
 }
 .inline-error {
   color: var(--theme-danger, #a33a31);
@@ -1538,7 +1538,7 @@ tr:last-child td {
 }
 .exception-row small {
   display: block;
-  color: var(--theme-muted, #90a080);
+  color: var(--theme-muted, #566d72);
 }
 .reset-panel {
   margin-top: 24px;
@@ -1615,7 +1615,7 @@ dialog::backdrop {
 }
 .step.active {
   border-color: #7e9d6b;
-  color: var(--theme-muted, #5f804c);
+  color: var(--theme-muted, #4f713d);
 }
 .slots {
   display: grid;
@@ -1661,7 +1661,7 @@ dialog::backdrop {
 .booking-context small {
   display: block;
   font-size: 0.875rem;
-  color: var(--theme-muted, #6b795f);
+  color: var(--theme-muted, #52684d);
 }
 .detail-list {
   display: grid;
@@ -2129,7 +2129,7 @@ dialog::backdrop {
   }
   .mobile-calendar-note {
     display: block;
-    color: var(--theme-muted, #98a38d);
+    color: var(--theme-muted, #566d72);
     font-size: 0.875rem;
     padding: 10px 5px 0;
   }
@@ -2287,6 +2287,7 @@ dialog::backdrop {
 }
 
 .calendar-scroll { overflow-x: auto; }
+.fc .fc-timegrid-col[tabindex]:focus-visible { outline:3px solid var(--focus);outline-offset:-3px; }
 .custom-range #calendar { min-width: var(--range-width); }
 
 .report-table-card .table-wrap { max-height: 620px; }
@@ -2790,6 +2791,7 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 .workspace-context { display:flex;align-items:center;gap:12px; }
 .workspace-context > span { margin:0; }
 .workspace-context .workspace-root { color:var(--muted); }
+.workspace-context > .clinic-context-name { color:var(--ink); }
 .clinic-context-button,.clinic-context-name { display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:270px;color:var(--ink);font:inherit;font-weight:650; }
 .clinic-context-button { padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--mint);cursor:pointer; }
 .workspace-context .clinic-context-button > span,.workspace-context .clinic-context-name > span { margin:0;color:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }

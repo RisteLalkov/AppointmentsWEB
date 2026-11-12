@@ -151,6 +151,8 @@ async function workspace(user) {
       await until(() =>
         $(`#navigation [data-page="${name === "availability" ? "doctors" : name}"]`)?.classList.contains("active") || name === "catalogue" && !!$("#catalogue-nav .nav-item.active"),
       );
+      const results = {appointments:"#appointment-results",patients:"#patient-results"}[name];
+      if (results) await until(() => $(results)?.children.length && !$(results).hasAttribute("aria-busy"));
     },
   };
 }
@@ -227,6 +229,7 @@ try {
   );
   assert(!pat.$('.success-view').textContent.includes('Europe/Skopje'), "Booking confirmation has no repeated timezone");
   pat.click("[data-detail]");
+  await until(() => pat.$("#dialog-content .badge.Confirmed"));
   assert(pat.$("#dialog-content .badge.Confirmed").textContent === "Потврден", "Status label translated while CSS/protocol status stays stable");
   await until(() => pat.$(".history-timeline li"));
   assert(pat.$(".history-timeline").textContent.includes("Креиран термин"), "Patient sees recorded creation in details timeline");
@@ -245,6 +248,7 @@ try {
     "Rescheduling completes in DOM flow",
   );
   pat.click("[data-detail]");
+  await until(() => pat.$('[data-status="Cancelled"]'));
   pat.click('[data-status="Cancelled"]');
   assert(pat.$("#confirm-dialog").open, "Cancellation asks for confirmation");
   pat.click("#confirm-yes");
@@ -263,6 +267,7 @@ try {
   await admin.page("appointments"); admin.click('[data-list-tab="all"]');
   admin.change("#list-patient", "p01"); admin.change("#list-from", iso); admin.change("#list-to", iso);
   admin.change("#status-filter", "Cancelled");
+  await until(() => !admin.$("#appointment-results").hasAttribute("aria-busy") && admin.$("#appointment-results .badge.Cancelled"));
   const filtered = [...admin.w.document.querySelectorAll("#appointment-results tbody tr")];
   assert(filtered.length >= 1 && filtered.every(row => row.textContent.includes("Ана") && row.querySelector(".badge.Cancelled")), "Patient date and status filters combine inclusively");
   admin.change("#list-from", "2099-01-01");
@@ -335,6 +340,7 @@ try {
       new admin.w.Event("submit", { bubbles: true, cancelable: true }),
     );
   await until(() => !admin.$("#main-dialog").open);
+  await until(() => admin.$("#patient-results").textContent.includes("DOM Example"));
   assert(
     admin.$("#patient-results").textContent.includes("DOM Example"),
     "Fictional patient creation updates directory",
@@ -368,14 +374,16 @@ try {
   const patientInput = admin.$('#booking-patient-input');
   patientInput.focus(); patientInput.value = 'OTHER SESSION';
   patientInput.dispatchEvent(new admin.w.Event('input', {bubbles:true}));
+  await until(() => admin.$('#booking-patient-list [role="option"]')?.textContent.includes('Other session update'));
   assert(admin.$('#booking-patient-list').textContent.includes('Other session update'), "Patient field directly filters its dropdown");
   admin.click('#booking-patient-list [role="option"]');
   assert(admin.$('#booking-patient').value === contact.id && patientInput.value.startsWith('Other session update · PT-'), "Patient dropdown commits the patient ID and displays a stable patient number");
   admin.click("#close-dialog");
   await pat.page("profile");
-  await until(() => pat.$("#profile-appointments"));
+  await until(() => pat.$("#profile-appointments")?.children.length && !pat.$("#profile-appointments").hasAttribute("aria-busy"));
   assert(!pat.$("#edit-patient") && pat.$("#profile-appointments").textContent.includes("Откажан"), "Patient sees own appointment history without staff edit controls");
   pat.change("#profile-status", "Cancelled");
+  await until(() => !pat.$("#profile-appointments").hasAttribute("aria-busy"));
   assert([...pat.w.document.querySelectorAll("#profile-appointments tbody tr")].every(row => row.textContent.includes("Откажан")), "Patient history status filter narrows appointment rows");
   pat.change("#profile-from", "2030-02-02"); pat.change("#profile-to", "2030-01-01");
   assert(pat.$("#profile-filter-error").textContent.length > 0 && !pat.$("#profile-appointments table"), "Patient history rejects reversed date range");

@@ -9,14 +9,11 @@ using Npgsql;
 
 namespace Appointments.Data;
 
-public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClock clock, BookingPolicy? bookingPolicy = null)
+public sealed partial class PostgresAppointments(AppointmentsDbContext db, SchedulingClock clock, BookingPolicy? bookingPolicy = null)
 {
     public async Task<BootstrapResponse> BootstrapAsync(DemoActor actor, bool demo, CancellationToken ct)
     {
-        var doctors = await db.Doctors.AsNoTracking().AsSplitQuery().OrderBy(d => d.Id).ToListAsync(ct);
-        var patients = await db.Patients.AsNoTracking().Where(p => actor.Role != DemoRole.Patient || p.Id == actor.PatientId).OrderBy(p => p.Name).ToListAsync(ct);
-        var appointments = await Visible(actor).AsNoTracking().OrderBy(a => a.Start).ToListAsync(ct);
-        return new(actor, doctors, patients, appointments, clock.Today.ToString("yyyy-MM-dd"), clock.LocalNow.ToString("yyyy-MM-ddTHH:mm:ss"), clock.Zone.Id, clock.UtcNow, demo, false, "Api", await db.Specialties.AsNoTracking().ToListAsync(ct), await db.Services.AsNoTracking().ToListAsync(ct), await db.DoctorServices.AsNoTracking().ToListAsync(ct));
+        return await WorkspaceBootstrapAsync(actor, demo, ct);
     }
     public async Task<ReportResult> ReportAsync(DemoActor actor, ReportQuery query, CancellationToken ct)
     {
@@ -43,6 +40,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         var version = await Visible(actor).Where(a => a.Id == id).Select(a => (int?)a.Version).SingleOrDefaultAsync(ct)
             ?? throw new RuleException("Терминот не е пронајден или немате пристап до него.", 404);
         var entries = await db.AppointmentHistory.AsNoTracking().Where(h => h.AppointmentId == id).OrderByDescending(h => h.AppointmentVersion).ToListAsync(ct);
+        Audit(actor, "appointment.history.viewed", id); await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
         return new(version, entries.Any(h => h.Kind == AppointmentChangeKind.Created), entries);
     }
@@ -147,6 +145,7 @@ public sealed class PostgresAppointments(AppointmentsDbContext db, SchedulingClo
         var patient = await db.Patients.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id && (actor.Role != DemoRole.Patient || p.Id == actor.PatientId), ct)
             ?? throw new RuleException("Пациентот не е пронајден или немате пристап до него.", 404);
         var appointments = await Visible(actor).AsNoTracking().Where(a => a.PatientId == id).OrderByDescending(a => a.Start).ToListAsync(ct);
+        Audit(actor, "patient.viewed", id); await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
         return new(patient, appointments, actor.Role != DemoRole.Patient);
     }

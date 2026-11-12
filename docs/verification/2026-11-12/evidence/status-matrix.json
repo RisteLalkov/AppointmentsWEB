@@ -1,0 +1,2927 @@
+[
+  {
+    "id": "X0001",
+    "name": "reception Scheduled -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0002",
+    "name": "reception Scheduled -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0003",
+    "name": "reception Scheduled -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0004",
+    "name": "reception Scheduled -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Confirmed",
+      "version": 2,
+      "history": 1,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0005",
+    "name": "reception Scheduled -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0006",
+    "name": "reception Scheduled -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0007",
+    "name": "reception Scheduled -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0008",
+    "name": "reception Scheduled -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0009",
+    "name": "reception Scheduled -> Completed past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Completed",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0010",
+    "name": "reception Scheduled -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0011",
+    "name": "reception Scheduled -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0012",
+    "name": "reception Scheduled -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0013",
+    "name": "reception Scheduled -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0014",
+    "name": "reception Scheduled -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0015",
+    "name": "reception Scheduled -> NoShow past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "NoShow",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0016",
+    "name": "reception Confirmed -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0017",
+    "name": "reception Confirmed -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0018",
+    "name": "reception Confirmed -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0019",
+    "name": "reception Confirmed -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0020",
+    "name": "reception Confirmed -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0021",
+    "name": "reception Confirmed -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0022",
+    "name": "reception Confirmed -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0023",
+    "name": "reception Confirmed -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0024",
+    "name": "reception Confirmed -> Completed past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Completed",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0025",
+    "name": "reception Confirmed -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0026",
+    "name": "reception Confirmed -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0027",
+    "name": "reception Confirmed -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0028",
+    "name": "reception Confirmed -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0029",
+    "name": "reception Confirmed -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0030",
+    "name": "reception Confirmed -> NoShow past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "NoShow",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0031",
+    "name": "reception Completed -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0032",
+    "name": "reception Completed -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0033",
+    "name": "reception Completed -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0034",
+    "name": "reception Completed -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0035",
+    "name": "reception Completed -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0036",
+    "name": "reception Completed -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0037",
+    "name": "reception Completed -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0038",
+    "name": "reception Completed -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0039",
+    "name": "reception Completed -> Completed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0040",
+    "name": "reception Completed -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0041",
+    "name": "reception Completed -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0042",
+    "name": "reception Completed -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0043",
+    "name": "reception Completed -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0044",
+    "name": "reception Completed -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0045",
+    "name": "reception Completed -> NoShow past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0046",
+    "name": "reception Cancelled -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0047",
+    "name": "reception Cancelled -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0048",
+    "name": "reception Cancelled -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0049",
+    "name": "reception Cancelled -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0050",
+    "name": "reception Cancelled -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0051",
+    "name": "reception Cancelled -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0052",
+    "name": "reception Cancelled -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0053",
+    "name": "reception Cancelled -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0054",
+    "name": "reception Cancelled -> Completed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0055",
+    "name": "reception Cancelled -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0056",
+    "name": "reception Cancelled -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0057",
+    "name": "reception Cancelled -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0058",
+    "name": "reception Cancelled -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0059",
+    "name": "reception Cancelled -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0060",
+    "name": "reception Cancelled -> NoShow past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0061",
+    "name": "reception NoShow -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0062",
+    "name": "reception NoShow -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0063",
+    "name": "reception NoShow -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0064",
+    "name": "reception NoShow -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0065",
+    "name": "reception NoShow -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0066",
+    "name": "reception NoShow -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0067",
+    "name": "reception NoShow -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0068",
+    "name": "reception NoShow -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0069",
+    "name": "reception NoShow -> Completed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0070",
+    "name": "reception NoShow -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0071",
+    "name": "reception NoShow -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0072",
+    "name": "reception NoShow -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0073",
+    "name": "reception NoShow -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0074",
+    "name": "reception NoShow -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0075",
+    "name": "reception NoShow -> NoShow past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0076",
+    "name": "doctor Scheduled -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0077",
+    "name": "doctor Scheduled -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0078",
+    "name": "doctor Scheduled -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0079",
+    "name": "doctor Scheduled -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Confirmed",
+      "version": 2,
+      "history": 1,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0080",
+    "name": "doctor Scheduled -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0081",
+    "name": "doctor Scheduled -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0082",
+    "name": "doctor Scheduled -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0083",
+    "name": "doctor Scheduled -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0084",
+    "name": "doctor Scheduled -> Completed past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Completed",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0085",
+    "name": "doctor Scheduled -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0086",
+    "name": "doctor Scheduled -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0087",
+    "name": "doctor Scheduled -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0088",
+    "name": "doctor Scheduled -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0089",
+    "name": "doctor Scheduled -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0090",
+    "name": "doctor Scheduled -> NoShow past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "NoShow",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0091",
+    "name": "doctor Confirmed -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0092",
+    "name": "doctor Confirmed -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0093",
+    "name": "doctor Confirmed -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0094",
+    "name": "doctor Confirmed -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0095",
+    "name": "doctor Confirmed -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0096",
+    "name": "doctor Confirmed -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0097",
+    "name": "doctor Confirmed -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0098",
+    "name": "doctor Confirmed -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0099",
+    "name": "doctor Confirmed -> Completed past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Completed",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0100",
+    "name": "doctor Confirmed -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0101",
+    "name": "doctor Confirmed -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0102",
+    "name": "doctor Confirmed -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0103",
+    "name": "doctor Confirmed -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0104",
+    "name": "doctor Confirmed -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0105",
+    "name": "doctor Confirmed -> NoShow past",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "NoShow",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0106",
+    "name": "doctor Completed -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0107",
+    "name": "doctor Completed -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0108",
+    "name": "doctor Completed -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0109",
+    "name": "doctor Completed -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0110",
+    "name": "doctor Completed -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0111",
+    "name": "doctor Completed -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0112",
+    "name": "doctor Completed -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0113",
+    "name": "doctor Completed -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0114",
+    "name": "doctor Completed -> Completed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0115",
+    "name": "doctor Completed -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0116",
+    "name": "doctor Completed -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0117",
+    "name": "doctor Completed -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0118",
+    "name": "doctor Completed -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0119",
+    "name": "doctor Completed -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0120",
+    "name": "doctor Completed -> NoShow past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0121",
+    "name": "doctor Cancelled -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0122",
+    "name": "doctor Cancelled -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0123",
+    "name": "doctor Cancelled -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0124",
+    "name": "doctor Cancelled -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0125",
+    "name": "doctor Cancelled -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0126",
+    "name": "doctor Cancelled -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0127",
+    "name": "doctor Cancelled -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0128",
+    "name": "doctor Cancelled -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0129",
+    "name": "doctor Cancelled -> Completed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0130",
+    "name": "doctor Cancelled -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0131",
+    "name": "doctor Cancelled -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0132",
+    "name": "doctor Cancelled -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0133",
+    "name": "doctor Cancelled -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0134",
+    "name": "doctor Cancelled -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0135",
+    "name": "doctor Cancelled -> NoShow past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0136",
+    "name": "doctor NoShow -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0137",
+    "name": "doctor NoShow -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0138",
+    "name": "doctor NoShow -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0139",
+    "name": "doctor NoShow -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0140",
+    "name": "doctor NoShow -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0141",
+    "name": "doctor NoShow -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0142",
+    "name": "doctor NoShow -> Completed future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0143",
+    "name": "doctor NoShow -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0144",
+    "name": "doctor NoShow -> Completed past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0145",
+    "name": "doctor NoShow -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0146",
+    "name": "doctor NoShow -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0147",
+    "name": "doctor NoShow -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0148",
+    "name": "doctor NoShow -> NoShow future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0149",
+    "name": "doctor NoShow -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0150",
+    "name": "doctor NoShow -> NoShow past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0151",
+    "name": "patient Scheduled -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0152",
+    "name": "patient Scheduled -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0153",
+    "name": "patient Scheduled -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0154",
+    "name": "patient Scheduled -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0155",
+    "name": "patient Scheduled -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0156",
+    "name": "patient Scheduled -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0157",
+    "name": "patient Scheduled -> Completed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0158",
+    "name": "patient Scheduled -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0159",
+    "name": "patient Scheduled -> Completed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0160",
+    "name": "patient Scheduled -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0161",
+    "name": "patient Scheduled -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0162",
+    "name": "patient Scheduled -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0163",
+    "name": "patient Scheduled -> NoShow future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0164",
+    "name": "patient Scheduled -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0165",
+    "name": "patient Scheduled -> NoShow past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Scheduled",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0166",
+    "name": "patient Confirmed -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0167",
+    "name": "patient Confirmed -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0168",
+    "name": "patient Confirmed -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0169",
+    "name": "patient Confirmed -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0170",
+    "name": "patient Confirmed -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0171",
+    "name": "patient Confirmed -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0172",
+    "name": "patient Confirmed -> Completed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0173",
+    "name": "patient Confirmed -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0174",
+    "name": "patient Confirmed -> Completed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0175",
+    "name": "patient Confirmed -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 200,
+    "actual_http": 200,
+    "database": {
+      "status": "Cancelled",
+      "version": 2,
+      "history": 1,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0176",
+    "name": "patient Confirmed -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0177",
+    "name": "patient Confirmed -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0178",
+    "name": "patient Confirmed -> NoShow future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0179",
+    "name": "patient Confirmed -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0180",
+    "name": "patient Confirmed -> NoShow past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Confirmed",
+      "version": 1,
+      "history": 0,
+      "busy": 1
+    }
+  },
+  {
+    "id": "X0181",
+    "name": "patient Completed -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0182",
+    "name": "patient Completed -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0183",
+    "name": "patient Completed -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0184",
+    "name": "patient Completed -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0185",
+    "name": "patient Completed -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0186",
+    "name": "patient Completed -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0187",
+    "name": "patient Completed -> Completed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0188",
+    "name": "patient Completed -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0189",
+    "name": "patient Completed -> Completed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0190",
+    "name": "patient Completed -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0191",
+    "name": "patient Completed -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0192",
+    "name": "patient Completed -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0193",
+    "name": "patient Completed -> NoShow future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0194",
+    "name": "patient Completed -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0195",
+    "name": "patient Completed -> NoShow past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Completed",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0196",
+    "name": "patient Cancelled -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0197",
+    "name": "patient Cancelled -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0198",
+    "name": "patient Cancelled -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0199",
+    "name": "patient Cancelled -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0200",
+    "name": "patient Cancelled -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0201",
+    "name": "patient Cancelled -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0202",
+    "name": "patient Cancelled -> Completed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0203",
+    "name": "patient Cancelled -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0204",
+    "name": "patient Cancelled -> Completed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0205",
+    "name": "patient Cancelled -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0206",
+    "name": "patient Cancelled -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0207",
+    "name": "patient Cancelled -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0208",
+    "name": "patient Cancelled -> NoShow future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0209",
+    "name": "patient Cancelled -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0210",
+    "name": "patient Cancelled -> NoShow past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "Cancelled",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0211",
+    "name": "patient NoShow -> Scheduled future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0212",
+    "name": "patient NoShow -> Scheduled in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0213",
+    "name": "patient NoShow -> Scheduled past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0214",
+    "name": "patient NoShow -> Confirmed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0215",
+    "name": "patient NoShow -> Confirmed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0216",
+    "name": "patient NoShow -> Confirmed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0217",
+    "name": "patient NoShow -> Completed future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0218",
+    "name": "patient NoShow -> Completed in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0219",
+    "name": "patient NoShow -> Completed past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0220",
+    "name": "patient NoShow -> Cancelled future",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0221",
+    "name": "patient NoShow -> Cancelled in progress",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0222",
+    "name": "patient NoShow -> Cancelled past",
+    "status": "PASS",
+    "expected_http": 400,
+    "actual_http": 400,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0223",
+    "name": "patient NoShow -> NoShow future",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0224",
+    "name": "patient NoShow -> NoShow in progress",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  },
+  {
+    "id": "X0225",
+    "name": "patient NoShow -> NoShow past",
+    "status": "PASS",
+    "expected_http": 403,
+    "actual_http": 403,
+    "database": {
+      "status": "NoShow",
+      "version": 1,
+      "history": 0,
+      "busy": 0
+    }
+  }
+]

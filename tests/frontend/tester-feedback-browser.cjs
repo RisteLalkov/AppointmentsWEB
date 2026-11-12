@@ -20,9 +20,10 @@ function check(ok, message) { if (!ok) throw Error(message); checks++; console.l
   check(!await page.locator('#sidebar').innerText().then(t=>t.includes('ПОВРЗАНО')), 'Technical connected badge is absent');
   await page.goto(base+'/Workspace#patients');await page.locator('#patient-results .patient-card').first().waitFor();
   check(await page.locator('#patient-results').innerText().then(t=>fixture.people.every(p=>t.includes(code(p)))), 'Same-name patients show distinct permanent numbers in card view');
-  await page.locator('[data-records-view=list]').click();
+  await page.locator('[data-records-view=list]').click();await page.locator('#patient-results thead').waitFor();
   check(await page.locator('#patient-results thead').innerText().then(t=>t.includes('БРОЈ НА ПАЦИЕНТ')), 'List view has a patient-number column');
   await page.locator('#patient-search').fill(code(fixture.people[1]));
+  await page.waitForFunction(()=>document.querySelectorAll('#patient-results tbody tr').length===1 && !document.querySelector('#patient-results[aria-busy]'));
   check(await page.locator('#patient-results tbody tr').count()===1 && (await page.locator('#patient-results tbody').innerText()).includes(fixture.people[1].email), 'Patient-number search distinguishes identical names');
   await page.locator('[data-patient-profile="'+fixture.people[1].id+'"]').click();await page.locator('.patient-summary').waitFor();
   check((await page.locator('.patient-summary').innerText()).includes(code(fixture.people[1])), 'Patient profile displays its assigned number');
@@ -56,8 +57,10 @@ function check(ok, message) { if (!ok) throw Error(message); checks++; console.l
   await page.goto(base+'/Workspace#patient/'+fixture.people[1].id);await page.locator('#profile-from-display').waitFor();
   const after=new Date(fixture.date+'T12:00:00Z');after.setUTCDate(after.getUTCDate()+1);
   await page.locator('#profile-from-display').fill(display(after.toISOString().slice(0,10)));await page.locator('.patient-summary h2').click();
+  await page.waitForFunction(()=>document.querySelectorAll('#profile-appointments tbody tr').length===0 && !document.querySelector('#profile-appointments[aria-busy]'));
   check(await page.locator('#profile-appointments tbody tr').count()===0, 'Committed patient-history date filters out earlier appointments');
   await page.locator('#profile-from-display').fill('');await page.locator('.patient-summary h2').click();
+  await page.waitForFunction(()=>document.querySelectorAll('#profile-appointments tbody tr').length===1 && !document.querySelector('#profile-appointments[aria-busy]'));
   check(await page.locator('#profile-appointments tbody tr').count()===1, 'Clearing the optional date restores the saved appointment');
   await page.goto(base+'/Discover/Doctor/'+fixture.doctor.id+'?clinicId=main');await page.locator('#preview-date-display').waitFor();
   await page.locator('#preview-date-display').fill(display(fixture.date));await page.locator('#availability button[type=submit]').click();

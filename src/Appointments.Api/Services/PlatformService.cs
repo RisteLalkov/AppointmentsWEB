@@ -30,7 +30,11 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             await upgrade.ExecuteNonQueryAsync(ct);
             await using var management = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "database", "007-platform-managed-clinics.sql"), ct), c);
             await management.ExecuteNonQueryAsync(ct);
+            await using var audit = new NpgsqlCommand(await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "database", "011-platform-audit.sql"), ct), c);
+            await audit.ExecuteNonQueryAsync(ct);
         }
+        if (!await db.Database.SqlQueryRaw<bool>("SELECT to_regclass('\"PlatformAuditEvents\"') IS NOT NULL AS \"Value\"").SingleAsync(ct))
+            throw new InvalidOperationException("Platform audit upgrade required. Stop all hosts and run --migrate before starting this version.");
         // Explicit bootstrap only; never reset an existing operator's credentials on restart.
         var email = configuration["Platform:Bootstrap:Email"]; var password = configuration["Platform:Bootstrap:Password"];
         if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
@@ -52,17 +56,26 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
         await db.Database.ExecuteSqlRawAsync("SELECT pg_advisory_xact_lock(734251898)", ct);
         var user = await db.Operators.SingleOrDefaultAsync(a => a.Email == AccountService.Email(input.Email), ct);
         var now = DateTimeOffset.UtcNow;
-        if (user == null || !user.Enabled || user.LockedUntil > now) throw Failure();
+        if (user == null || !user.Enabled || user.LockedUntil > now)
+        {
+            SecurityAudit.Platform(db, "anonymous", user == null ? "auth.login.failed" : "auth.login.blocked", user?.Id);
+            await db.SaveChangesAsync(ct); await tx.CommitAsync(ct); throw Failure();
+        }
         var verified = hasher.VerifyHashedPassword(new Account(), user.PasswordHash, input.Password);
         if (verified == PasswordVerificationResult.Failed)
         {
-            if (++user.FailedAttempts >= 5) { user.LockedUntil = now.AddMinutes(15); user.FailedAttempts = 0; }
+            SecurityAudit.Platform(db, "anonymous", "auth.login.failed", user.Id);
+            if (++user.FailedAttempts >= 5) {
+                user.LockedUntil = now.AddMinutes(15); user.FailedAttempts = 0;
+                SecurityAudit.Platform(db, "anonymous", "auth.account.locked", user.Id);
+            }
             await db.SaveChangesAsync(ct); await tx.CommitAsync(ct); throw Failure();
         }
         if (verified == PasswordVerificationResult.SuccessRehashNeeded) user.PasswordHash = hasher.HashPassword(new Account(), input.Password);
         user.FailedAttempts = 0; user.LockedUntil = null;
         var token = "p1." + WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(48)); var expires = now.AddHours(2);
         db.Sessions.Add(new() { TokenHash = AccountService.HashToken(token), OperatorId = user.Id, ExpiresAt = expires });
+        SecurityAudit.Platform(db, user.Id, "session.created", user.Id);
         await db.Sessions.Where(s => s.ExpiresAt < now).ExecuteDeleteAsync(ct);
         await db.SaveChangesAsync(ct); await tx.CommitAsync(ct);
         return new(token, expires, user.Id, user.Name);
@@ -76,6 +89,7 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
         var user = await db.Operators.SingleAsync(x => x.Id == id, ct);
         if (hasher.VerifyHashedPassword(new Account(), user.PasswordHash, input.CurrentPassword) == PasswordVerificationResult.Failed) throw Failure();
         user.PasswordHash = hasher.HashPassword(new Account(), input.NewPassword);
+        SecurityAudit.Platform(db, id, "password.changed", id);
         await db.Sessions.Where(x => x.OperatorId == id).ExecuteDeleteAsync(ct);
         await db.SaveChangesAsync(ct); await tx.CommitAsync(ct);
     }
@@ -112,10 +126,11 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             Description = clinic.Description, Address = clinic.Address, Phone = clinic.Phone,
             Discoverable = clinic.Discoverable, AllowRegistration = clinic.AllowRegistration,
             CreatedBy = actor, CreatedAt = DateTimeOffset.UtcNow };
-        db.Clinics.Add(row); await db.SaveChangesAsync(ct); await registry.RefreshAsync(ct);
+        db.Clinics.Add(row); SecurityAudit.Platform(db, actor, "clinic.adopted", row.Id);
+        await db.SaveChangesAsync(ct); await registry.RefreshAsync(ct);
         return Summary(row);
     }
-    public async Task<PlatformClinicSummary> UpdateAsync(string id, UpdateClinicInput input, CancellationToken ct)
+    public async Task<PlatformClinicSummary> UpdateAsync(string actor, string id, UpdateClinicInput input, CancellationToken ct)
     {
         if (input.Name.Trim().Length < 2) throw new RuleException("Внесете име на клиниката од најмалку 2 знаци.");
         await using var lease = await connections.IdentityLockAsync(ct);
@@ -127,6 +142,7 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
         row.Name = input.Name.Trim(); row.Description = input.Description?.Trim();
         row.Address = input.Address?.Trim(); row.Phone = input.Phone?.Trim();
         row.Discoverable = input.Discoverable; row.AllowRegistration = input.AllowRegistration; row.Version++;
+        SecurityAudit.Platform(db, actor, "clinic.updated", id);
         try { await db.SaveChangesAsync(ct); }
         catch (DbUpdateConcurrencyException) { throw new RuleException("Податоците се променети во друга сесија. Вчитајте ги тековните податоци.", 409); }
         await registry.RefreshAsync(ct);
@@ -205,13 +221,15 @@ public sealed class PlatformService(ClinicRegistry registry, ClinicConnections c
             else if (admin.Role != DemoRole.Administrator || hasher.VerifyHashedPassword(admin, admin.PasswordHash, input.AdminPassword) == PasswordVerificationResult.Failed)
                 throw new RuleException("Податоците за повторување не се совпаѓаат. Контактирајте го техничкиот администратор.", 409);
             await clinicDb.SaveChangesAsync(ct); await tx.CommitAsync(ct);
-            row.State = "Ready"; await db.SaveChangesAsync(ct); await registry.RefreshAsync(ct);
+            row.State = "Ready"; SecurityAudit.Platform(db, actor, "clinic.provisioned", row.Id);
+            await db.SaveChangesAsync(ct); await registry.RefreshAsync(ct);
             return Summary(row);
         }
         catch
         {
             // Never delete or reset a schema on failure. Retry this clinic ID to resume safely.
             row.State = "Failed";
+            SecurityAudit.Platform(db, actor, "clinic.provisioning.failed", row.Id);
             using var cleanup = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             await db.SaveChangesAsync(cleanup.Token);
             throw;

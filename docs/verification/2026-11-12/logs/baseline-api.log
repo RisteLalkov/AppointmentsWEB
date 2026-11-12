@@ -1,0 +1,30 @@
+PASS Anonymous appointment access rejected
+
+SERVER LOG: /tmp/careline-api-wno16wtj/Appointments.Api-0.log 
+ warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {90e6f863-f036-4275-84a5-afef070c57d1} may be persisted to storage in unencrypted form.
+
+
+SERVER LOG: /tmp/careline-api-wno16wtj/Appointments.Api-1.log 
+ warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {0b95f672-d371-44b1-a1a8-33f8847e45b1} may be persisted to storage in unencrypted form.
+
+Traceback (most recent call last):
+  File "/workspace/AppointmentsWEB/tests/api_integration.py", line 111, in <module>
+    admin = Client(api1).login('admin@integration.test')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/AppointmentsWEB/tests/api_integration.py", line 74, in login
+    self.token = self.ok('/api/auth/login', {'email': email, 'password': secret})['accessToken']
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/AppointmentsWEB/tests/api_integration.py", line 68, in ok
+    if code != 200: raise AssertionError(f'{path}: {code}: {body}')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: /api/auth/login: 401: {'error': 'Е-поштата или лозинката е неточна, или сметката е недостапна.'}

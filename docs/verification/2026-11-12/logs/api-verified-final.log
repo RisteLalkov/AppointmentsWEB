@@ -1,0 +1,328 @@
+PASS Anonymous appointment access rejected
+PASS Session and PostgreSQL work across two API instances
+PASS Anonymous reports rejected
+PASS Patient reports rejected by API
+PASS Doctor reports rejected by API
+PASS PostgreSQL reports return consistent daily status totals
+PASS API rejects invalid report grouping
+PASS Database imports source doctors and 87 schedule periods
+PASS API mode advertises real persistence and disables browser reset
+PASS Development OpenAPI document generated
+PASS Swagger documents opaque bearer-token authorization
+PASS Protected operations declare session authorization
+PASS Swagger exposes required clinic header for scoped operations
+PASS Public discovery remains documented without login
+PASS Credential login does not require a chosen clinic
+PASS Swagger entry redirects to a working UI with relative schema URL
+PASS Swagger assets are served locally without a CDN
+PASS Weak password rejected
+PASS Registration cannot choose elevated role
+PASS Patient cannot administer accounts
+PASS Patient cannot create patient records
+PASS Registration normalizes email and rejects duplicate identities
+PASS Real schedule produces future availability
+PASS Concurrent identical requests return one durable booking
+PASS Concurrent booking retries produce one attributed history entry
+PASS History rejects anonymous and unrelated roles
+PASS Own doctor can read appointment history across instances
+PASS Idempotency key cannot be reused with another payload
+PASS Reception booking appears for patient
+PASS Reception booking appears for doctor on second API instance
+PASS Another patient cannot read the booking
+PASS Another doctor cannot mutate the booking
+PASS Two API processes cannot double-book one doctor
+PASS One patient cannot book overlapping visits across two doctors and API processes
+PASS Doctor phone booking appears in reception workspace
+PASS Patient rescheduling persists and increments version
+PASS Stale appointment update rejected
+PASS Rescheduling history snapshots are atomic and stale updates add no entry
+PASS Combined API appointment filters preserve role scope
+PASS API rejects reversed appointment date range
+PASS Idempotency replay is stable after appointment changes
+PASS Patient cannot book for another patient
+PASS Invalid duration rejected
+PASS Past appointment rejected
+PASS Working periods save through EF owned collections
+PASS Stale schedule update rejected
+PASS Schedule change cannot strand an existing booking
+PASS Doctor cannot edit another schedule
+PASS Unavailable period cannot cover existing appointment
+PASS Persisted break removes availability
+PASS Cancellation frees the slot on second API instance
+PASS Patient cannot elevate appointment status
+PASS Normal receptionist creates a non-demo scheduling profile
+PASS Registration cannot claim an existing contact record by email
+PASS Reception cannot provision or link personal patient accounts
+PASS Patient self-registration owns its clinic-local profile
+PASS Patient profile includes cancelled appointment history
+PASS Doctor profile history is restricted to own appointments
+PASS Patient profile read is self-only
+PASS Profile endpoint requires authentication and handles missing records
+PASS Patient cannot edit contact data through staff endpoint
+PASS Concurrent patient edits across API processes save exactly once
+PASS Updated normalized patient contacts persist
+PASS Contact edits preserve linked account credentials and patient identity
+PASS Doctor may edit clinic patient contacts
+PASS Patient edit prevents duplicate email
+PASS Patient edit validates name and phone on server
+PASS SQL doctor exclusion constraint
+PASS SQL patient exclusion across different doctors
+PASS SQL invalid appointment range
+PASS SQL invalid status
+PASS SQL nonexistent patient foreign key
+PASS SQL role requires matching profile link
+PASS SQL cancelled intervals do not reserve a slot
+7/7 direct PostgreSQL constraint checks passed.
+PASS PostgreSQL legacy upgrade and repeated patient-profile SQL preserve contacts, appointments and exact specialty without inventing history
+PASS PostgreSQL first clinic: preserved same-name patients, repeatable number backfill, 12 concurrent allocations, positive/unique constraints
+PASS PostgreSQL second clinic: preserved same-name patients, repeatable number backfill, 12 concurrent allocations, positive/unique constraints
+PASS Password login page defaults to Macedonian
+PASS Password login renders MVC workspace
+PASS Authenticated patient login with a root return opens the all-clinic dashboard
+PASS Authenticated patient registration returns to the workspace
+PASS Wrong-role MVC navigation ends at access denied without redirecting to login
+PASS MVC proxies own patient profile
+PASS MVC proxy does not disclose another patient profile
+PASS Password workspace omits technical connection/demo badges
+PASS API session token is not rendered into HTML
+PASS MVC reads shared database state through API
+PASS MVC rejects mutations without anti-forgery token
+PASS Browser booking reaches doctor through database
+PASS Password login page defaults to Macedonian
+PASS Password login renders MVC workspace
+PASS Administrator account management Razor page renders live accounts
+PASS Account creation offers staff roles and removes patient linking
+PASS API-backed MVC never creates a local JSON store
+PASS MVC reports API outage without silently falling back to demonstration data
+PASS Appointments and sessions survive API restart
+PASS Schedule revision survives API restart
+PASS Cancellation history survives API restart with original status snapshot
+PASS Administrative audit records actions without credential payloads
+PASS Disabling a clinic membership immediately blocks its patient requests
+PASS Password login page defaults to Macedonian
+PASS Password login renders MVC workspace
+PASS Password change revokes every session
+PASS Revoked API session removes clinic web authentication and allows login
+PASS Login detects database session revocation even before a workspace API request
+PASS Password login page defaults to Macedonian
+PASS Password login renders MVC workspace
+PASS User can sign in again after revocation with valid antiforgery
+PASS Logout revokes the database session
+PASS Doctor password credentials preserve profile link
+PASS Provisioned doctor removed from anonymous demo login
+PASS Disabled account cannot sign in
+PASS Disabled account cannot sign in
+PASS Disabled account cannot sign in
+PASS Disabled account cannot sign in
+PASS Disabled account cannot sign in
+PASS Five failures lock an enabled account
+
+> test
+> node localization.mjs && node password-visibility.mjs && node themes.mjs && node dates.mjs && node smoke.mjs
+
+PASS language mk translates explicit labels and keeps spacing
+PASS language mk formats parameters
+PASS language mk keeps interpolated data and escaping exactly intact
+PASS language mk does not transliterate names
+PASS language mk rejects invalid icon identifiers
+PASS language mk password visibility action is localized
+PASS language mk required validation is localized
+PASS language mk protects dirty input before changing language
+PASS language mk successful saves clear unsaved-input warnings
+PASS language mk edits made during a save remain protected
+PASS language mk preserves selected screen, filters and fragment
+PASS language en translates explicit labels and keeps spacing
+PASS language en formats parameters
+PASS language en keeps interpolated data and escaping exactly intact
+PASS language English translations are escaped in HTML text and attributes
+PASS language en does not transliterate names
+PASS language en rejects invalid icon identifiers
+PASS language en password visibility action is localized
+PASS language en required validation is localized
+PASS language en protects dirty input before changing language
+PASS language en successful saves clear unsaved-input warnings
+PASS language en edits made during a save remain protected
+PASS language en preserves selected screen, filters and fragment
+23/23 language runtime checks passed.
+PASS password Every password gets exactly one toggle
+PASS password Passwords are hidden initially
+PASS password Reveal affects only the chosen field
+PASS password Accessible label and state describe hiding
+PASS password Toggle targets its field and never submits
+PASS password Second click masks the password
+PASS password Value, field name and autofill semantics remain intact
+PASS password Password constraints are preserved
+PASS password Submitting re-hides every revealed field
+PASS password Submission values are unchanged
+PASS password Form reset restores hidden state
+PASS password Restoring a page masks passwords
+PASS password Dynamically added fields get a unique linked toggle
+PASS password Mutation handling does not duplicate controls
+PASS password Disabled fields cannot be revealed
+PASS password Password value is not copied into rendered markup
+
+16/16 password visibility checks passed.
+PASS theme Stored undefined applied before DOM ready
+PASS theme Control initialized for default
+PASS theme Stored dark applied before DOM ready
+PASS theme Control initialized for dark
+PASS theme Stored vibrant applied before DOM ready
+PASS theme Control initialized for vibrant
+PASS theme Stored invalid applied before DOM ready
+PASS theme Control initialized for default
+PASS theme Selection persists without a page reload
+PASS theme Browser chrome follows chosen theme
+PASS theme Other-tab changes synchronize
+PASS theme Invalid other-tab values cannot select an arbitrary theme
+PASS theme Clearing storage restores default
+PASS theme Blocked browser storage does not break switching
+14/14 theme preference checks passed.
+PASS dates mk initial date is day-first with unchanged ISO value
+PASS dates mk label targets editable date and mirror has no submitted name
+PASS dates mk invalid month-day combination cannot retain a previous date
+PASS dates mk non-leap-year February 29 is rejected
+PASS dates mk leap date and punctuation-free phone entry work
+PASS dates mk typing never refreshes a screen before the date is committed
+PASS dates mk committing a valid date emits one application change
+PASS dates mk editing a day in the middle does not shift the month or year
+PASS dates mk ambiguous slash format is rejected
+PASS dates mk required date blocks forms and non-form booking review
+PASS dates mk date before minimum is rejected
+PASS dates mk minimum date is inclusive
+PASS dates mk maximum date is inclusive
+PASS dates mk date after maximum is rejected
+PASS dates mk localized range error uses day-first boundary
+PASS dates mk native calendar selection updates visible date and validity
+PASS dates mk form submits exactly one original ISO date
+PASS dates mk disabled dates stay disabled and do not block validation
+PASS dates mk reset restores both representations
+PASS dates mk dynamic optional dates are enhanced without becoming required
+PASS dates mk mutation handling never duplicates controls
+PASS dates en initial date is day-first with unchanged ISO value
+PASS dates en label targets editable date and mirror has no submitted name
+PASS dates en invalid month-day combination cannot retain a previous date
+PASS dates en non-leap-year February 29 is rejected
+PASS dates en leap date and punctuation-free phone entry work
+PASS dates en typing never refreshes a screen before the date is committed
+PASS dates en committing a valid date emits one application change
+PASS dates en editing a day in the middle does not shift the month or year
+PASS dates en ambiguous slash format is rejected
+PASS dates en required date blocks forms and non-form booking review
+PASS dates en date before minimum is rejected
+PASS dates en minimum date is inclusive
+PASS dates en maximum date is inclusive
+PASS dates en date after maximum is rejected
+PASS dates en localized range error uses day-first boundary
+PASS dates en native calendar selection updates visible date and validity
+PASS dates en form submits exactly one original ISO date
+PASS dates en disabled dates stay disabled and do not block validation
+PASS dates en reset restores both representations
+PASS dates en dynamic optional dates are enhanced without becoming required
+PASS dates en mutation handling never duplicates controls
+42/42 date control checks passed.
+PASS Patient overview renders
+PASS HTML defaults to Macedonian
+PASS Navigation is Macedonian
+PASS Directory paginates source providers
+PASS Macedonian name search filters correctly
+PASS Doctor profile shows schedule
+PASS Doctor profile uses Macedonian weekdays
+PASS Booking doctor label is concise and labels the searchable input
+PASS Booking doctor is a searchable combobox
+PASS Booking omits redundant patient search and timezone labels
+PASS Doctor dropdown searches Macedonian names without case sensitivity
+PASS Keyboard choice keeps a real doctor ID
+PASS Unknown doctor search shows an empty state
+PASS Uncommitted search text cannot silently book the previously selected doctor
+PASS Review step appears after choosing slot
+PASS Patient booking completes in DOM flow
+PASS Booking confirmation has no repeated timezone
+PASS Status label translated while CSS/protocol status stays stable
+PASS Patient sees recorded creation in details timeline
+PASS Saved appointment offers rescheduling
+PASS Rescheduling starts on the original future appointment date
+PASS Rescheduling completes in DOM flow
+PASS Cancellation asks for confirmation
+PASS Cancellation updates displayed status
+PASS Timeline shows move and patient cancellation attribution
+PASS Patient appointment list renders
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {7563639c-8631-4646-b702-dbdc4cbf86af} may be persisted to storage in unencrypted form.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+
+file:///workspace/AppointmentsWEB/tests/frontend/smoke.mjs:263
+  assert(/[а-ш]/i.test(pat.$(".table-date strong").textContent) && !/[a-z]/i.test(pat.$(".table-date strong").textContent), "Appointment dates stay Macedonian without browser locale data");
+                                                  ^
+
+TypeError: Cannot read properties of null (reading 'textContent')
+    at file:///workspace/AppointmentsWEB/tests/frontend/smoke.mjs:263:51
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processTimers (node:internal/timers:568:9)
+
+Node.js v24.19.0
+
+SERVER LOG: /tmp/careline-api-_mdyw3pw/Appointments.Api-0.log 
+ fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "MigrationId", "ProductVersion"
+      FROM "__EFMigrationsHistory"
+      ORDER BY "MigrationId";
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {eddaaae5-7898-41c6-b5bd-e4f3b2d824cf} may be persisted to storage in unencrypted form.
+
+
+SERVER LOG: /tmp/careline-api-_mdyw3pw/Appointments.Api-1.log 
+ warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {d998693c-9c24-4ba5-9a91-fc31aac1401e} may be persisted to storage in unencrypted form.
+
+
+SERVER LOG: /tmp/careline-api-_mdyw3pw/Appointments.Web-2.log 
+ warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {9d465da7-22c7-4e69-9ba6-bdc0f342d9f6} may be persisted to storage in unencrypted form.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+
+
+SERVER LOG: /tmp/careline-api-_mdyw3pw/Appointments.Api-3.log 
+ warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {f21959e3-245d-469b-b232-169cd5c5b308} may be persisted to storage in unencrypted form.
+
+Traceback (most recent call last):
+  File "/workspace/AppointmentsWEB/tests/api_integration.py", line 293, in <module>
+    subprocess.run(['npm', 'test', '--prefix', str(root/'tests/frontend')], env=dict(env, TEST_API_BASE=api1+'/', TEST_DOTNET=args.dotnet), check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['npm', 'test', '--prefix', '/workspace/AppointmentsWEB/tests/frontend']' returned non-zero exit status 1.

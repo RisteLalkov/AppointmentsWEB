@@ -1,0 +1,88 @@
+[
+  {
+    "id": "X0001",
+    "name": "old offline migration succeeds",
+    "status": "PASS"
+  },
+  {
+    "id": "X0002",
+    "name": "Pre-fix binaries produce real shared identity, two memberships and booking",
+    "status": "PASS"
+  },
+  {
+    "id": "X0003",
+    "name": "All hosts for upgrade pair stopped before maintenance",
+    "status": "PASS"
+  },
+  {
+    "id": "X0004",
+    "name": "new offline migration succeeds",
+    "status": "PASS"
+  },
+  {
+    "id": "X0005",
+    "name": "repeat offline migration succeeds",
+    "status": "PASS"
+  },
+  {
+    "id": "X0006",
+    "name": "Upgrade preserves clinical rows, accounts, memberships, busy times and appointment history",
+    "status": "PASS",
+    "fingerprints": {
+      "public.Doctors": "1:30bc5189ab6a1f8d79b3fdd16c691fd2",
+      "public.Patients": "1:baf8333ccdf93340414ddf118dbd5e77",
+      "public.Accounts": "2:71c87fb5593eac5ba749f8bf68939c73",
+      "public.Appointments": "1:4afa1794ccd44e6fa3ba7ef5a7986ecc",
+      "public.AppointmentHistory": "1:30f0ba35dbad2c961a6fe72db1fb9d93",
+      "clinic_east.Accounts": "2:e95d611597ecea3c8f56563dbecaf870",
+      "careline_identity.PatientAccounts": "1:bf996b1655e514cfc178886a9cb2f1a1",
+      "careline_identity.PatientMemberships": "2:f6596b10176f6ae1cb2b541210372fc1",
+      "careline_identity.PatientBookings": "1:2677da3eba482bb87fe25cb46602d05e"
+    }
+  },
+  {
+    "id": "X0007",
+    "name": "Both clinic schemas receive eight migrations",
+    "status": "PASS"
+  },
+  {
+    "id": "X0008",
+    "name": "Shared security and platform audit stores installed",
+    "status": "PASS"
+  },
+  {
+    "id": "X0009",
+    "name": "Existing staff session and booking remain usable after upgrade",
+    "status": "PASS"
+  },
+  {
+    "id": "X0010",
+    "name": "Existing global patient session works in both clinic memberships",
+    "status": "PASS"
+  },
+  {
+    "id": "X0011",
+    "name": "Existing company session and managed clinic survive upgrade",
+    "status": "PASS"
+  },
+  {
+    "id": "X0012",
+    "name": "Existing patient credentials still authenticate",
+    "status": "PASS"
+  },
+  {
+    "id": "X0013",
+    "name": "Upgraded database accepts a new booking with atomic history",
+    "status": "PASS"
+  },
+  {
+    "id": "X0014",
+    "name": "New paging returns complete old and new patient history",
+    "status": "PASS"
+  },
+  {
+    "id": "X0015",
+    "name": "Generated upgrade databases and roles removed",
+    "status": "PASS"
+  }
+]

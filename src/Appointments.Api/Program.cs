@@ -97,6 +97,9 @@ app.UseRequestLocalization(new RequestLocalizationOptions()
 app.Use(async (context, next) =>
 {
     context.Response.Headers.CacheControl = "no-store";
+    context.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
     try { await next(); }
     catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
     catch (RuleException e) { context.Response.StatusCode = e.StatusCode; await context.Response.WriteAsJsonAsync(new { error = e.Message }); }

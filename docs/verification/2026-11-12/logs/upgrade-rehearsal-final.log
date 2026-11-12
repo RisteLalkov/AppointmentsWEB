@@ -1,0 +1,15 @@
+{"id": "X0001", "name": "old offline migration succeeds", "status": "PASS"}
+{"id": "X0002", "name": "Pre-fix binaries produce real shared identity, two memberships and booking", "status": "PASS"}
+{"id": "X0003", "name": "All hosts for upgrade pair stopped before maintenance", "status": "PASS"}
+{"id": "X0004", "name": "new offline migration succeeds", "status": "PASS"}
+{"id": "X0005", "name": "repeat offline migration succeeds", "status": "PASS"}
+{"id": "X0006", "name": "Upgrade preserves clinical rows, accounts, memberships, busy times and appointment history", "status": "PASS", "fingerprints": {"public.Doctors": "1:3365cf5a7a258d9b781c8ecac421c3a5", "public.Patients": "1:015905b3f4a8b257c43d3d6ee7222ce5", "public.Accounts": "2:3efce6809cdc6f11bb07d583c41b5959", "public.Appointments": "1:a7d7ace1bbece8b1e01c896b34abde33", "public.AppointmentHistory": "1:69f86ede64f83257ede1cb3077493f0d", "clinic_east.Accounts": "2:726acec5f999647ac1430c8022f05024", "careline_identity.PatientAccounts": "1:5f67a4190e83b593bcf325b7e9fe6763", "careline_identity.PatientMemberships": "2:f94e7e176de75bc5b40dd68de2fa3b21", "careline_identity.PatientBookings": "1:99ee5c312237c2b51b8e0f1f380104d9"}}
+{"id": "X0007", "name": "Both clinic schemas receive eight migrations", "status": "PASS"}
+{"id": "X0008", "name": "Shared security and platform audit stores installed", "status": "PASS"}
+{"id": "X0009", "name": "Existing staff session and booking remain usable after upgrade", "status": "PASS"}
+{"id": "X0010", "name": "Existing global patient session works in both clinic memberships", "status": "PASS"}
+{"id": "X0011", "name": "Existing company session and managed clinic survive upgrade", "status": "PASS"}
+{"id": "X0012", "name": "Existing patient credentials still authenticate", "status": "PASS"}
+{"id": "X0013", "name": "Upgraded database accepts a new booking with atomic history", "status": "PASS"}
+{"id": "X0014", "name": "New paging returns complete old and new patient history", "status": "PASS"}
+{"id": "X0015", "name": "Generated upgrade databases and roles removed", "status": "PASS"}
