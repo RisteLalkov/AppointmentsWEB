@@ -1,0 +1,7 @@
+{
+  "result": "PASS",
+  "fixture_hosts_stopped": true,
+  "generated_databases_and_roles_dropped": true,
+  "dedicated_test_postgres_container_and_volume_removed": true,
+  "production_touched": false
+}

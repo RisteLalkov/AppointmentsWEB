@@ -1,0 +1,39 @@
+PASS Desktop navigation toggle is available
+PASS Collapsing desktop navigation releases space and removes hidden controls from focus
+PASS Desktop preference survives reload
+PASS Mobile drawer opens despite a collapsed desktop preference
+PASS Mobile Escape closes navigation and restores the workspace
+PASS Desktop navigation expands after returning from mobile
+PASS Report today preset keeps display, form and requested dates synchronized
+PASS Report week preset keeps display, form and requested dates synchronized
+PASS Report month preset keeps display, form and requested dates synchronized
+PASS A preset safely replaces a manually edited date
+PASS Already selected doctors appear before unchecked doctors
+PASS Specialty filters the list while preserving an existing selection from another specialty
+PASS Changing specialty shows only matching doctors
+PASS Saving after filtering preserves hidden doctor assignments in PostgreSQL
+PASS Explicitly removing a selected doctor persists without changing other links
+PASS Combined availability is displayed in bounded result pages
+PASS More available times can be shown without another API fan-out
+PASS Selecting a service restricts every returned appointment to that service
+PASS Choosing a result carries doctor, service, date and time into validated booking
+PASS Failed availability search shows a recoverable error instead of false results
+PASS Search recovers after the API is available again
+PASS Changing specialty clears previous availability choices immediately
+PASS Specialty-only search works without selecting a doctor
+PASS A late search response cannot restore results for an old specialty
+PASS Accessibility reception availability search
+PASS Availability and navigation fit 320px
+PASS Availability and navigation fit 768px
+PASS Availability and navigation fit 1360px
+PASS Patient results exclude reception-only and agreement-only doctors
+PASS Search includes matching doctors beyond the first directory page
+PASS A patient books only for their own identity
+PASS Combined search completes a real booking for the authenticated patient
+PASS Switching clinic searches only the selected clinic
+PASS Accessibility patient availability search
+PASS New availability controls are translated into English
+PASS Accessibility patient availability dark
+PASS Accessibility patient availability vibrant
+PASS English availability fits a 320px phone
+PASS No uncaught JavaScript errors

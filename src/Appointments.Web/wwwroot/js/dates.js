@@ -195,7 +195,9 @@
   document.addEventListener("close",()=>openedCalendar?.close(),true);
 
   // Also used by the booking dialog, whose review button is outside a form.
-  window.MedTerminDates = Object.freeze({ availability: attachAvailability, validate(root) {
+  window.MedTerminDates = Object.freeze({ availability: attachAvailability, setValue(source, value) {
+    enhance(source); source.value = value; controls.get(source)?.sync();
+  }, validate(root) {
     for (const source of root.querySelectorAll("input[type=date]")) {
       const control = controls.get(source);
       if (!source.disabled && control?.validate().error) { control.visible.reportValidity(); control.visible.focus(); return false; }

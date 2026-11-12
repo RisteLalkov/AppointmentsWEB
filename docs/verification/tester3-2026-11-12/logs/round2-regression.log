@@ -1,0 +1,101 @@
+PASS tester2 New clinic contacts require a phone
+PASS tester2 New clinic contacts require email as well as phone
+PASS tester2 A new contact retains both required email and phone
+PASS tester2 Editing a contact cannot remove its required phone
+PASS tester2 A dated afternoon week replaces the regular morning hours
+PASS tester2 Omitted weekdays in a date-limited week do not inherit regular hours
+PASS tester2 Regular hours automatically resume after the dated schedule
+PASS tester2 A stale schedule version cannot remove a dated week
+PASS tester2 Overlapping date ranges are rejected atomically
+PASS tester2 Public discovery applies the same dated working hours
+PASS tester2 Shared account registration requires a phone
+PASS tester2 Ordinary patient login starts with the shared identity, without silently selecting a clinic
+PASS tester2 Joining a new clinic carries the patient’s own phone
+PASS tester2 Shared patient books through the selected clinic profile
+PASS tester2 Cross-clinic patient overlaps remain blocked
+PASS tester2 Non-overlapping appointments in a second clinic remain available
+PASS tester2 Patient home aggregates appointments with explicit clinic identifiers
+PASS tester2 The lightweight switcher endpoint returns only this patient’s clinic choices
+PASS tester2 Upcoming and history views retain the correct clinic context
+PASS tester2 An unrelated patient cannot see the first patient’s current or cancelled visits
+PASS tester2 A patient account alone cannot read an unjoined clinic
+PASS tester2 Receptionist credentials remain bound to their own clinic
+PASS tester2 A twenty-minute service fits twenty-minute hours despite the thirty-minute fallback
+PASS tester2 Patients receive no self-bookable slots for agreement-only doctors
+PASS tester2 A direct patient request cannot bypass the disabled agreement-only booking button
+PASS tester2 Reception can still book an explicitly agreed time
+PASS tester2 Public doctor profiles consistently identify agreement-only booking
+PASS tester2 browser Ordinary login opens the all-clinics patient dashboard
+PASS tester2 browser The existing patient welcome design remains present
+PASS tester2 browser Upcoming view labels the correct clinic
+PASS tester2 browser Cancelled appointments appear in labelled cross-clinic history
+PASS tester2 browser Filtering history to another clinic cannot display the first clinic’s appointment
+PASS tester2 browser An older all-clinics page can safely select its own clinic after another tab switches
+PASS tester2 browser The old clinic workspace remains blocked after another tab switches clinics
+PASS tester2 browser An old clinical form cannot be revived by changing its clinic header
+PASS tester2 browser default patient dashboard fits 320px
+PASS tester2 browser default patient dashboard has no detected WCAG A/AA violations: []
+PASS tester2 browser dark patient dashboard fits 320px
+PASS tester2 browser dark patient dashboard has no detected WCAG A/AA violations: []
+PASS tester2 browser vibrant patient dashboard fits 320px
+PASS tester2 browser vibrant patient dashboard has no detected WCAG A/AA violations: []
+PASS tester2 browser All-clinic dashboard translates into English
+PASS tester2 browser Patient language controls also work inside a selected clinic
+PASS tester2 browser Current clinic appears in the breadcrumb instead of a sidebar card
+PASS tester2 browser Switcher shows both memberships and marks the current clinic
+PASS tester2 browser Breadcrumb switcher opens the chosen clinic with its own session context
+PASS tester2 browser A clinic switch from the breadcrumb still invalidates previous clinical forms
+PASS tester2 browser Patients cannot select agreement-only doctors from another booking dialog
+PASS tester2 browser Patients see a disabled booking button and concise agreement-only instructions
+PASS tester2 browser Doctor heading no longer shows the removed slogan
+PASS tester2 browser default breadcrumb and switcher fit a 320px phone
+PASS tester2 browser default clinic switcher has no detected WCAG A/AA violations: []
+PASS tester2 browser dark breadcrumb and switcher fit a 320px phone
+PASS tester2 browser dark clinic switcher has no detected WCAG A/AA violations: []
+PASS tester2 browser vibrant breadcrumb and switcher fit a 320px phone
+PASS tester2 browser vibrant clinic switcher has no detected WCAG A/AA violations: []
+PASS tester2 browser Patient can sign out from the all-clinics dashboard
+PASS tester2 browser Doctor text search finds assigned service names
+PASS tester2 browser Searchable service filter selects exactly the matching doctor
+PASS tester2 browser Card shows the doctor duration rather than the selected service duration
+PASS tester2 browser Patient form requires both phone and contact email
+PASS tester2 browser Date-limited hours save without replacing the regular week
+PASS tester2 browser Service-based doctors do not show an unrelated default duration field
+PASS tester2 browser Date-limited hours survive reload
+PASS tester2 browser default availability shading matches its legend and stays visible
+PASS tester2 browser dark availability shading matches its legend and stays visible
+PASS tester2 browser vibrant availability shading matches its legend and stays visible
+PASS tester2 browser Reception cannot access a cross-clinic switcher
+PASS tester2 browser Doctors are limited to twelve cards per page
+PASS tester2 browser Next doctor page shows distinct records
+PASS tester2 browser Doctor search resets pagination and uses the short contact message
+PASS tester2 browser Reception retains its booking action for agreement-only doctors
+PASS tester2 browser Patients are paginated in card view
+PASS tester2 browser Switching to list view preserves the selected patient page
+PASS tester2 browser Changing page size resets to the first page
+PASS tester2 browser Patient search considers all records beyond the current page
+PASS tester2 browser Appointment lists paginate after filtering
+PASS tester2 browser Appointment next page remains usable
+PASS tester2 browser Individual patient history is also paginated
+PASS tester2 browser History filters apply to all records and reset the page
+PASS tester2 browser specialties uses list pagination
+PASS tester2 browser specialties next page stays usable
+PASS tester2 browser services uses list pagination
+PASS tester2 browser services next page stays usable
+PASS tester2 browser Public agreement-only profiles do not offer a booking route
+PASS tester2 browser No uncaught browser errors
+59/59 tester round two browser checks passed.
+PASS tester2 Clinic filtering happens before the global history limit
+PASS tester2 Global history remains bounded
+PASS tester2 A legacy identity must provide a phone before creating another clinic profile
+PASS tester2 A supplied legacy phone is used only for that patient’s new clinic profile
+PASS tester2 Joining another clinic does not overwrite existing clinic contact records
+PASS tester2 Offline full database upgrade is repeatable
+PASS tester2 Offline full database upgrade is repeatable
+PASS tester2 Database maintenance preserves date-limited working hours
+PASS tester2 Upgrading an older clinic schema preserves its existing regular working hours
+PASS tester2 Database maintenance preserves the shared patient contact
+PASS tester2 The full maintenance command upgrades the previous shared identity schema
+PASS tester2 Identity schema upgrade retains accounts without fabricating missing legacy phones
+PASS tester2 Complete API publish contains the checked-exit-code database upgrade launcher
+40/40 tester round two API/database checks passed.

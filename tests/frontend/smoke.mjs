@@ -484,7 +484,7 @@ try {
   assert(admin.$("#app").textContent.includes("DOM specialty"), "Administrator creates specialty through catalogue UI");
   await admin.page("catalogue/services"); admin.click("#catalogue-add");
   admin.$("#catalogue-name").value = "DOM examination";
-  admin.$("#catalogue-specialty").value = [...admin.$("#catalogue-specialty").options].find(o => o.textContent === "DOM specialty").value;
+  admin.change("#catalogue-specialty", [...admin.$("#catalogue-specialty").options].find(o => o.textContent === now.doctors.find(d => d.id === "d01").specialty).value);
   admin.$("#catalogue-duration").value = "45";
   admin.$('[name="doctorIds"][value="d01"]').checked = true;
   admin.$("#catalogue-form").dispatchEvent(new admin.w.Event("submit", { bubbles: true, cancelable: true }));

@@ -159,6 +159,8 @@ jobs:
           python tests/remediation_20261112.py
           node tests/frontend/remediation-browser.cjs
           node tests/audit/browser_20261112.cjs
+          python tests/tester3_seed.py
+          node tests/frontend/tester3-browser.cjs
           python tests/audit/performance_20261112.py
           node tests/audit/browser_performance_20261112.cjs
           python tests/assert_workspace_budget.py

@@ -1,0 +1,13 @@
+  Appointments.Core -> /workspace/AppointmentsWEB/src/Appointments.Core/bin/Release/net10.0/Appointments.Core.dll
+  Appointments.Contracts -> /workspace/AppointmentsWEB/src/Appointments.Contracts/bin/Release/net10.0/Appointments.Contracts.dll
+  Appointments.Tests -> /workspace/AppointmentsWEB/tests/Appointments.Tests/bin/Release/net10.0/Appointments.Tests.dll
+  Appointments.Data -> /workspace/AppointmentsWEB/src/Appointments.Data/bin/Release/net10.0/Appointments.Data.dll
+  Appointments.DatabaseTests -> /workspace/AppointmentsWEB/tests/Appointments.DatabaseTests/bin/Release/net10.0/Appointments.DatabaseTests.dll
+  Appointments.Web -> /workspace/AppointmentsWEB/src/Appointments.Web/bin/Release/net10.0/Appointments.Web.dll
+  Appointments.Api -> /workspace/AppointmentsWEB/src/Appointments.Api/bin/Release/net10.0/Appointments.Api.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.52

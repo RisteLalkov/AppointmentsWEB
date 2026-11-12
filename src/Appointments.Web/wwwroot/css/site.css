@@ -2817,3 +2817,36 @@ tbody tr:hover { background: var(--theme-surface, #f5fafb); }
 .records-pagination select { width:auto;min-width:70px; }
 @media(max-width:1100px) { .workspace-context .workspace-root { display:none; } .clinic-context-button,.clinic-context-name { max-width:210px; } }
 @media(max-width:650px) { .topbar-left { flex:1;gap:8px; } .workspace-context { display:flex;gap:6px;font-size:.8rem;flex:1; } .clinic-context-button,.clinic-context-name { max-width:145px;gap:5px; } .clinic-context-button { padding:7px 6px; } .clinic-context-button > .ui-icon:first-child,.clinic-context-name > .ui-icon { display:none; } #page-label { max-width:85px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; } .clinic-switch-dialog { padding:22px 18px; } .records-pagination { align-items:flex-start; } .records-page-buttons { order:3;width:100%; } }
+
+/* Service assignments remain selected when their specialty is filtered out. */
+.service-doctor-selected { margin: -8px 0 20px; font-size: .9375rem; }
+.service-doctor-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.service-doctor-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; text-align: left; overflow-wrap: anywhere; border: 1px solid var(--line); border-radius: 20px; padding: 7px 12px; background: var(--mint); color: var(--ink); font: inherit; cursor: pointer; }
+.service-doctor-chip .ui-icon { width: 15px; height: 15px; flex-shrink: 0; }
+.doctor-availability-search { margin: 0 0 24px; }
+.doctor-availability-search > summary { display: flex; align-items: center; gap: 14px; padding: 20px; cursor: pointer; list-style: none; font-weight: 600; }
+.doctor-availability-search > summary::-webkit-details-marker { display: none; }
+.doctor-availability-search > summary > span { flex: 1; min-width: 0; }
+.availability-search-caption { display: block; color: var(--muted); font-weight: 400; font-size: .9375rem; margin-top: 4px; }
+.doctor-availability-search[open] > summary > .ui-icon:last-child { transform: rotate(180deg); }
+.availability-search-body { padding: 0 20px 20px; }
+#doctor-availability-form { display: flex; gap: 14px; align-items: end; flex-wrap: wrap; }
+#doctor-availability-form label { flex: 1; min-width: 160px; }
+#doctor-availability-form button { min-height: 48px; }
+#doctor-availability-results { margin-top: 18px; }
+.availability-search-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 14px 0; }
+.availability-search-choice { display: flex; align-items: center; gap: 14px; padding: 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--theme-surface,#fff); color: var(--ink); cursor: pointer; font: inherit; text-align: left; }
+.availability-search-choice:hover { border-color: var(--green); background: var(--mint); }
+.availability-search-choice > strong { color: var(--green-dark); }
+.availability-search-choice > span { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.availability-search-choice small { display: block; color: var(--muted); margin-top: 4px; }
+.availability-search-choice .ui-icon { flex-shrink: 0; }
+@media (min-width: 651px) {
+  .mobile-menu { display: inline-flex; }
+  body.sidebar-collapsed .sidebar { transform: translateX(-100%); visibility: hidden; }
+  body.sidebar-collapsed .main-shell { margin-left: 0; width: 100%; }
+}
+@media (max-width: 650px) {
+  .availability-search-list { grid-template-columns: minmax(0,1fr); }
+  #doctor-availability-form button { width: 100%; }
+}

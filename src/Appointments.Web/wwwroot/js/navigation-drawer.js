@@ -4,14 +4,19 @@
   if (!sidebar || !toggle) return;
   const backdrop = document.querySelector("#navigation-backdrop"), main = document.querySelector(".main-shell");
   const mobile = matchMedia("(max-width: 650px)");
-  let previousFocus;
+  let previousFocus, collapsed = false;
+  try { collapsed = localStorage.getItem("medtermin.sidebarCollapsed") === "true"; } catch { }
+  function desktopLayout() {
+    document.body.classList.toggle("sidebar-collapsed", !mobile.matches && collapsed);
+    toggle.setAttribute("aria-expanded", String(!mobile.matches && !collapsed));
+    sidebar.inert = mobile.matches || collapsed;
+  }
   const isOpen = () => sidebar.classList.contains("open");
   function close(restoreFocus = true) {
     const wasOpen = isOpen();
     sidebar.classList.remove("open"); backdrop.hidden = true;
-    toggle.setAttribute("aria-expanded", "false");
+    desktopLayout();
     sidebar.removeAttribute("role"); sidebar.removeAttribute("aria-modal");
-    sidebar.inert = mobile.matches;
     main.inert = false; document.body.classList.remove("navigation-open");
     if (wasOpen && restoreFocus && previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
   }
@@ -25,7 +30,17 @@
     main.inert = true; document.body.classList.add("navigation-open");
     document.querySelector("#close-navigation").focus({ preventScroll: true });
   }
-  toggle.addEventListener("click", () => isOpen() ? close() : open());
+  toggle.setAttribute("aria-controls", sidebar.id);
+  toggle.addEventListener("click", () => {
+    if (mobile.matches) { isOpen() ? close() : open(); return; }
+    collapsed = !collapsed;
+    try { localStorage.setItem("medtermin.sidebarCollapsed", String(collapsed)); } catch { }
+    desktopLayout(); window.dispatchEvent(new Event("resize"));
+  });
+  document.addEventListener("medtermin:close-navigation", () => close(false));
+  window.addEventListener("storage", e => {
+    if (e.key === "medtermin.sidebarCollapsed") { collapsed = e.newValue === "true"; close(false); window.dispatchEvent(new Event("resize")); }
+  });
   document.querySelector("#close-navigation").addEventListener("click", () => close());
   backdrop.addEventListener("click", () => close());
   sidebar.addEventListener("click", event => {
@@ -46,5 +61,5 @@
   }, true);
   mobile.addEventListener("change", () => close(false));
   window.addEventListener("hashchange", () => close(false));
-  sidebar.inert = mobile.matches;
+  desktopLayout();
 })();

@@ -1,0 +1,42 @@
+[
+  {
+    "file": "Appointments.Web.dll",
+    "sha256": "7cc019b19262cc7c832de1f9e13576b1252e37b98e9f384afe53518d101c1578",
+    "matches_tested": true
+  },
+  {
+    "file": "Appointments.Core.dll",
+    "sha256": "4eafd46513130bf2b1e7b47d1d5794df6ccc5cd1bb52afbf8ee01d11fc7e3bcc",
+    "matches_tested": true
+  },
+  {
+    "file": "wwwroot/js/app.js",
+    "sha256": "74dac37c0807ea8f4516ff455710a1589397e813518f5dd31517862b9100a402",
+    "matches_tested": true
+  },
+  {
+    "file": "wwwroot/js/dates.js",
+    "sha256": "f45b90b13ffb07c9518e297d06ba20d8869fa9951471b2f0c14ba1a2fc61396e",
+    "matches_tested": true
+  },
+  {
+    "file": "wwwroot/js/navigation-drawer.js",
+    "sha256": "0f52e4cce38f36a5245460e16a2119356aca0fdf7c8b92ba96f5d77bbb74feb1",
+    "matches_tested": true
+  },
+  {
+    "file": "wwwroot/js/account-settings.js",
+    "sha256": "3c3a41d9a44ff71d70d21fc57460342c5df20310ce24faf25def6b34ec2c577d",
+    "matches_tested": true
+  },
+  {
+    "file": "wwwroot/i18n/en.js",
+    "sha256": "1aea48a70d3f3c1369f6481c9d2ff853546464bfdd58dc3ff9d536526cae35c0",
+    "matches_tested": true
+  },
+  {
+    "file": "wwwroot/css/site.css",
+    "sha256": "e11b1e12e9024d2457fbbff084c97047be6baf67453d5d329a573aa22f68f3a4",
+    "matches_tested": true
+  }
+]

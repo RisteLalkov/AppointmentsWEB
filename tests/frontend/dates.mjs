@@ -34,6 +34,12 @@ for (const lang of ["mk", "en"]) {
   check(visible.validationMessage.includes("31.03.2026") && visible.validationMessage.startsWith(lang === "en" ? "Choose" : "Изберете"), lang + " localized range error uses day-first boundary");
   source.value = "2026-03-12"; source.dispatchEvent(new w.Event("input", { bubbles: true })); source.dispatchEvent(new w.Event("change", { bubbles: true }));
   check(visible.value === "12.03.2026" && valid(), lang + " native calendar selection updates visible date and validity");
+  const beforePreset = changes;
+  w.MedTerminDates.setValue(source,"2026-03-15");
+  check(visible.value === "15.03.2026" && source.value === "2026-03-15" && changes === beforePreset, lang + " programmatic presets synchronize both dates without emitting a second request");
+  visible.dispatchEvent(new w.Event("blur"));
+  check(source.value === "2026-03-15", lang + " blurring after a preset cannot restore the old date");
+  w.MedTerminDates.setValue(source,"2026-03-12");
   const values = [...new w.FormData(form)]; check(values.length === 1 && values[0][0] === "date" && values[0][1] === "2026-03-12", lang + " form submits exactly one original ISO date");
   source.disabled = true; await new Promise(r => w.setTimeout(r, 0));
   check(visible.disabled && w.MedTerminDates.validate(form), lang + " disabled dates stay disabled and do not block validation");

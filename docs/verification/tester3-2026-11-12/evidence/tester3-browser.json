@@ -1,0 +1,265 @@
+{
+  "results": [
+    {
+      "name": "Desktop navigation toggle is available",
+      "status": "PASS"
+    },
+    {
+      "name": "Collapsing desktop navigation releases space and removes hidden controls from focus",
+      "status": "PASS"
+    },
+    {
+      "name": "Desktop preference survives reload",
+      "status": "PASS"
+    },
+    {
+      "name": "Mobile drawer opens despite a collapsed desktop preference",
+      "status": "PASS"
+    },
+    {
+      "name": "Mobile Escape closes navigation and restores the workspace",
+      "status": "PASS"
+    },
+    {
+      "name": "Desktop navigation expands after returning from mobile",
+      "status": "PASS"
+    },
+    {
+      "name": "Report today preset keeps display, form and requested dates synchronized",
+      "status": "PASS",
+      "values": [
+        {
+          "iso": "2026-11-12",
+          "visible": "12.11.2026"
+        },
+        {
+          "iso": "2026-11-12",
+          "visible": "12.11.2026"
+        }
+      ],
+      "requested": {
+        "from": "2026-11-12",
+        "to": "2026-11-12",
+        "groupBy": "day",
+        "doctorId": "",
+        "specialty": "",
+        "serviceId": ""
+      }
+    },
+    {
+      "name": "Report week preset keeps display, form and requested dates synchronized",
+      "status": "PASS",
+      "values": [
+        {
+          "iso": "2026-11-09",
+          "visible": "09.11.2026"
+        },
+        {
+          "iso": "2026-11-15",
+          "visible": "15.11.2026"
+        }
+      ],
+      "requested": {
+        "from": "2026-11-09",
+        "to": "2026-11-15",
+        "groupBy": "day",
+        "doctorId": "",
+        "specialty": "",
+        "serviceId": ""
+      }
+    },
+    {
+      "name": "Report month preset keeps display, form and requested dates synchronized",
+      "status": "PASS",
+      "values": [
+        {
+          "iso": "2026-11-01",
+          "visible": "01.11.2026"
+        },
+        {
+          "iso": "2026-11-30",
+          "visible": "30.11.2026"
+        }
+      ],
+      "requested": {
+        "from": "2026-11-01",
+        "to": "2026-11-30",
+        "groupBy": "day",
+        "doctorId": "",
+        "specialty": "",
+        "serviceId": ""
+      }
+    },
+    {
+      "name": "A preset safely replaces a manually edited date",
+      "status": "PASS"
+    },
+    {
+      "name": "Already selected doctors appear before unchecked doctors",
+      "status": "PASS"
+    },
+    {
+      "name": "Specialty filters the list while preserving an existing selection from another specialty",
+      "status": "PASS"
+    },
+    {
+      "name": "Newly selected doctors move ahead of unselected doctors without losing the selection",
+      "status": "PASS"
+    },
+    {
+      "name": "Accessibility service editor",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "name": "Service selections and chips fit a 320px phone",
+      "status": "PASS"
+    },
+    {
+      "name": "Changing specialty shows only matching doctors",
+      "status": "PASS"
+    },
+    {
+      "name": "Saving after filtering preserves hidden doctor assignments in PostgreSQL",
+      "status": "PASS"
+    },
+    {
+      "name": "Explicitly removing a selected doctor persists without changing other links",
+      "status": "PASS"
+    },
+    {
+      "name": "Combined availability is displayed in bounded result pages",
+      "status": "PASS"
+    },
+    {
+      "name": "More available times can be shown without another API fan-out",
+      "status": "PASS"
+    },
+    {
+      "name": "Selecting a service restricts every returned appointment to that service",
+      "status": "PASS"
+    },
+    {
+      "name": "Choosing a result carries doctor, service, date and time into validated booking",
+      "status": "PASS"
+    },
+    {
+      "name": "A deactivated service in stale results cannot silently become a different service",
+      "status": "PASS"
+    },
+    {
+      "name": "Failed availability search shows a recoverable error instead of false results",
+      "status": "PASS"
+    },
+    {
+      "name": "Search recovers after the API is available again",
+      "status": "PASS"
+    },
+    {
+      "name": "Changing specialty clears previous availability choices immediately",
+      "status": "PASS"
+    },
+    {
+      "name": "Specialty-only search works without selecting a doctor",
+      "status": "PASS"
+    },
+    {
+      "name": "A late search response cannot restore results for an old specialty",
+      "status": "PASS"
+    },
+    {
+      "name": "Accessibility reception availability search",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "name": "Availability and navigation fit 320px",
+      "status": "PASS"
+    },
+    {
+      "name": "Availability and navigation fit 768px",
+      "status": "PASS"
+    },
+    {
+      "name": "Availability and navigation fit 1360px",
+      "status": "PASS"
+    },
+    {
+      "name": "Patient results exclude reception-only and agreement-only doctors",
+      "status": "PASS"
+    },
+    {
+      "name": "Search includes matching doctors beyond the first directory page",
+      "status": "PASS"
+    },
+    {
+      "name": "A patient books only for their own identity",
+      "status": "PASS"
+    },
+    {
+      "name": "Combined search completes a real booking for the authenticated patient",
+      "status": "PASS",
+      "appointmentId": "30cd8f0f1fd84cc3a0975e29f5bb2925",
+      "patientId": "836b1a6703864bd38a5b8cb1e952d676"
+    },
+    {
+      "name": "Switching clinic searches only the selected clinic",
+      "status": "PASS"
+    },
+    {
+      "name": "Accessibility patient availability search",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "name": "New availability controls are translated into English",
+      "status": "PASS"
+    },
+    {
+      "name": "Accessibility patient availability dark",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "name": "Accessibility patient availability vibrant",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "name": "English availability fits a 320px phone",
+      "status": "PASS"
+    },
+    {
+      "name": "Doctor availability search remains limited to their own doctor profile",
+      "status": "PASS"
+    },
+    {
+      "name": "No uncaught JavaScript errors",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "axes": [
+    {
+      "name": "service editor",
+      "violations": []
+    },
+    {
+      "name": "reception availability search",
+      "violations": []
+    },
+    {
+      "name": "patient availability search",
+      "violations": []
+    },
+    {
+      "name": "patient availability dark",
+      "violations": []
+    },
+    {
+      "name": "patient availability vibrant",
+      "violations": []
+    }
+  ]
+}

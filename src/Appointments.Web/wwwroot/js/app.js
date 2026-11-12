@@ -54,6 +54,7 @@ const icon = window.MedTerminIcons.icon;
   let patientFocusId = "";
   let patientRequest = 0, patientProfile, patientProfileId = "", patientFilters;
   let doctorService = "", nextSlotRequest = 0, nextSlotTimer;
+  let doctorAvailabilityRequest = 0, doctorAvailabilityResults;
   const workspaceRequests = new Map();
   let calendarRequest = 0;
   let calendarSpecialty = "", calendarService = "", calendarRange, reportRequest = 0, reportFilters;
@@ -287,6 +288,7 @@ const icon = window.MedTerminIcons.icon;
   }
   function renderPage() {
     detailRequest++;
+    doctorAvailabilityRequest++;
     reportRequest++;
     patientRequest++;
     calendarRequest++;
@@ -548,18 +550,76 @@ const icon = window.MedTerminIcons.icon;
           (s) =>
             `<option ${s === specialty ? "selected" : ""}>${escape(s)}</option>`,
         )
-        .join("")}</select><label class="visually-hidden" for="doctor-service-filter">Услуга / преглед</label><select id="doctor-service-filter"><option value="">Сите услуги / прегледи</option>${state.services.filter(s => s.enabled).map(s => `<option value="${s.id}" ${doctorService === s.id ? "selected" : ""}>${escape(s.name)}</option>`).join("")}</select></div><div id="doctor-results"></div>`;
+        .join("")}</select><label class="visually-hidden" for="doctor-service-filter">Услуга / преглед</label><select id="doctor-service-filter"><option value="">Сите услуги / прегледи</option>${state.services.filter(s => s.enabled).map(s => `<option value="${s.id}" ${doctorService === s.id ? "selected" : ""}>${escape(s.name)}</option>`).join("")}</select></div><details class="card doctor-availability-search" id="doctor-availability-search"><summary>${icon("calendar-check")} <span>Пребарај слободни термини<span class="availability-search-caption">Според избраната специјалност и услуга, кај сите соодветни лекари.</span></span>${icon("chevron-down")}</summary><div class="availability-search-body"><form id="doctor-availability-form"><label for="doctor-availability-date">Изберете датум<input type="date" id="doctor-availability-date" value="${state.today}" min="${state.today}" max="${addDays(state.today,180)}" required></label><button class="btn primary" type="submit">Пребарај термини ${icon("search")}</button></form><div id="doctor-availability-results" aria-live="polite"><p class="muted">Изберете датум и пребарајте слободни термини кај соодветните лекари.</p></div></div></details><div id="doctor-results"></div>`;
     $("#doctor-search").addEventListener("input", (e) => {
       search = e.target.value;
+      invalidateDoctorAvailability();
       doctorResults();
     });
     $("#specialty").addEventListener("change", (e) => {
       specialty = e.target.value;
+      invalidateDoctorAvailability();
       doctorResults();
     });
-    $("#doctor-service-filter").addEventListener("change", e => { doctorService = e.target.value; doctorResults(); });
+    $("#doctor-service-filter").addEventListener("change", e => { doctorService = e.target.value; invalidateDoctorAvailability(); doctorResults(); });
     searchableBookingSelect($("#doctor-service-filter"), tr("Пребарајте услуга…"));
+    $("#doctor-availability-form").addEventListener("submit", searchDoctorAvailability);
+    $("#doctor-availability-date").addEventListener("change", invalidateDoctorAvailability);
+    $("#doctor-availability-results").addEventListener("click", e => {
+      const more = e.target.closest('[data-more-availability]');
+      if (more && doctorAvailabilityResults) { doctorAvailabilityResults.visible += 12; renderDoctorAvailability(); return; }
+      const choice = e.target.closest('[data-available-choice]');
+      const row = choice && doctorAvailabilityResults?.rows[Number(choice.dataset.availableChoice)];
+      if (row?.service && !servicesFor(row.doctor.id).some(service => service.id === row.service.id)) {
+        invalidateDoctorAvailability(); toast(tr("Изберете достапна услуга за лекарот."),true); return;
+      }
+      if (row) openBooking(row.doctor.id,row.slot.date,row.slot.time.slice(0,5),undefined,undefined,row.service?.id);
+    });
     doctorResults();
+  }
+  function invalidateDoctorAvailability() {
+    doctorAvailabilityRequest++; doctorAvailabilityResults = null;
+    const results = $("#doctor-availability-results"), button = $("#doctor-availability-form button");
+    if (results) { results.removeAttribute("aria-busy"); results.innerHTML = `<p class="muted">${escape(tr("Филтрите се променети. Пребарајте повторно."))}</p>`; }
+    if (button) button.disabled = false;
+  }
+  async function searchDoctorAvailability(event) {
+    event.preventDefault(); const form = event.currentTarget, target = $("#doctor-availability-results"), button = form.querySelector('button');
+    if (!window.MedTerminDates.validate(form) || !form.reportValidity() || button.disabled) return;
+    const date = $("#doctor-availability-date").value, request = ++doctorAvailabilityRequest;
+    const formRevision = window.MedTerminFormState?.revision(form);
+    const current = () => request === doctorAvailabilityRequest && page === "doctors" && target.isConnected;
+    const tasks = filteredDoctors().filter(d => d.enabled !== false && !patientBookingBlocked(d)).flatMap(d => {
+      const services = servicesFor(d.id).filter(v => !doctorService || v.id === doctorService);
+      if (!services.length && !doctorService && !state.doctorServices.some(v => v.doctorId === d.id)) return [{doctor:d,service:null}];
+      return services.map(service => ({doctor:d,service}));
+    });
+    doctorAvailabilityResults = null; button.disabled = true; target.setAttribute("aria-busy","true");
+    let cursor = 0, finished = 0; const rows = [], errors = [];
+    const worker = async () => {
+      while (cursor < tasks.length && current()) {
+        const task = tasks[cursor++], query = new URLSearchParams({doctorId:task.doctor.id,date});
+        if (task.service) query.set("serviceId",task.service.id);
+        try {
+          const slots = await api("slots?"+query);
+          for (const slot of slots) rows.push({...task,slot});
+        } catch(error) { errors.push(error.message); }
+        finished++;
+        if (current()) target.textContent = tr("Проверени услуги: {0} од {1}.",finished,tasks.length);
+      }
+    };
+    target.textContent = tr("Се проверуваат слободните термини…");
+    await Promise.all(Array.from({length:Math.min(4,tasks.length)},worker));
+    if (!current()) return;
+    rows.sort((a,b) => new Date(a.slot.start)-new Date(b.slot.start) || compareRecords(a.doctor,b.doctor) || (a.service?.name||"").localeCompare(b.service?.name||"",locale));
+    if (!errors.length) window.MedTerminFormState?.saved(form,formRevision);
+    doctorAvailabilityResults = {rows,visible:12,date,errors}; target.removeAttribute("aria-busy"); button.disabled = false;
+    renderDoctorAvailability();
+  }
+  function renderDoctorAvailability() {
+    const result = doctorAvailabilityResults, target = $("#doctor-availability-results"); if (!result || !target) return;
+    const warning = result.errors.length ? `<div class="inline-error" role="alert">${escape(tr("Дел од достапноста не можеше да се провери. Пребарајте повторно."))} ${escape(result.errors[0])}</div>` : "";
+    target.innerHTML = warning + (result.rows.length ? `<p class="results-count">${escape(tr("Слободни термини: {0}",result.rows.length))}</p><div class="availability-search-list">${result.rows.slice(0,result.visible).map((r,i) => `<button type="button" class="availability-search-choice" data-available-choice="${i}"><strong>${escape(r.slot.time.slice(0,5))}</strong><span><b>${escape(r.doctor.name)}</b><small>${escape(r.service?.name || tr("Преглед"))} · ${escape(r.doctor.specialty)}</small></span>${icon("arrow-up-right")}</button>`).join("")}</div>${result.visible < result.rows.length ? `<button class="btn secondary small" type="button" data-more-availability>${escape(tr("Прикажи повеќе термини"))}</button>` : ""}` : result.errors.length ? "" : `<p class="inline-note">${escape(tr("Нема слободни термини за избраните филтри и датум. Променете ги филтрите или датумот; за термин по договор контактирајте ја рецепцијата."))}</p>`);
   }
   // This legacy sentinel is application metadata, not a translated record value.
   const fundingLabel = d => !d.funding || d.funding === "Не е наведено"
@@ -1568,16 +1628,48 @@ const icon = window.MedTerminIcons.icon;
       ${kind !== "specialties" ? html`<div class="field"><label for="catalogue-specialty">Специјалност</label><select id="catalogue-specialty" name="specialtyId" required><option value="">Изберете специјалност</option>${specialties}</select></div>` : ""}
       ${kind === "doctors" ? html`<div class="field"><label for="catalogue-sub">Субспецијалност (незадолжително)</label><input id="catalogue-sub" name="subspecialty" maxlength="200" value="${escape(item?.subspecialty || "")}"></div><p class="inline-note">Нов лекар започнува без работни часови. По зачувување, внесете распоред во Достапност и доделете услуги во каталогот.</p>` : ""}
       ${kind === "doctors" ? html`<label class="catalogue-toggle"><input type="checkbox" id="catalogue-confirmation" name="requiresConfirmation" ${item?.requiresConfirmation ? "checked" : ""}> Потребна е потврда за закажување</label><label class="catalogue-toggle"><input type="checkbox" id="catalogue-staff-only" name="staffOnly" ${item?.staffOnly ? "checked" : ""}> Закажување само преку рецепција</label><p class="field-help">Важи за нови термини и презакажувања. Постоечките статуси не се менуваат.</p>` : ""}
-      ${kind === "services" ? html`<div class="field"><label for="catalogue-duration">Траење (минути)</label><input id="catalogue-duration" name="durationMinutes" type="number" required min="10" max="120" step="5" value="${item?.durationMinutes || 30}"></div><fieldset class="catalogue-assignments"><legend>Лекари / профили кои ја извршуваат услугата</legend>${state.doctors.map(d => `<label><input type="checkbox" name="doctorIds" value="${d.id}" ${state.doctorServices.some(x => x.doctorId === d.id && x.serviceId === item?.id) ? "checked" : ""}><span>${escape(d.name)}${d.enabled === false ? tr(" · Неактивен") : ""}<small>${escape(d.specialty)}</small></span></label>`).join("")}</fieldset><p class="inline-note">Промената на траење важи за нови термини. Веќе закажаните го задржуваат своето траење.</p>` : ""}
+      ${kind === "services" ? html`<div class="field"><label for="catalogue-duration">Траење (минути)</label><input id="catalogue-duration" name="durationMinutes" type="number" required min="10" max="120" step="5" value="${item?.durationMinutes || 30}"></div><fieldset class="catalogue-assignments"><legend>Лекари / профили кои ја извршуваат услугата</legend><div id="service-doctor-choices"></div></fieldset><div id="service-doctor-selected" class="service-doctor-selected"></div><p class="inline-note">Промената на траење важи за нови термини. Веќе закажаните го задржуваат своето траење.</p>` : ""}
       ${kind !== "specialties" ? html`<label class="catalogue-toggle"><input type="checkbox" name="enabled" ${item?.enabled !== false ? "checked" : ""}> Активен за нови закажувања</label>` : ""}
       <div id="catalogue-error" role="alert"></div><div class="dialog-actions"><button class="btn secondary" type="button" data-action="close">Назад</button><button class="btn primary" type="submit">Зачувај</button></div></form>`, tr("УПРАВУВАЊЕ"));
+    const assignedDoctors = new Set(state.doctorServices.filter(x => x.serviceId === item?.id).map(x => x.doctorId));
+    if (kind === "services") {
+      const renderAssignments = () => {
+        const field = $("#service-doctor-choices"), selectedSpecialty = $("#catalogue-specialty").value;
+        const specialtyName = state.specialties.find(x => x.id === selectedSpecialty)?.name;
+        const focused = document.activeElement?.matches('#service-doctor-choices input') ? document.activeElement.value : null;
+        const doctors = state.doctors.filter(d => !selectedSpecialty || d.specialtyId === selectedSpecialty || !d.specialtyId && d.specialty === specialtyName)
+          .sort((a,b) => Number(assignedDoctors.has(b.id)) - Number(assignedDoctors.has(a.id)) || compareRecords(a,b));
+        field.innerHTML = doctors.length ? doctors.map(d => `<label><input type="checkbox" name="doctorIds" value="${escape(d.id)}" ${assignedDoctors.has(d.id) ? "checked" : ""}><span>${escape(d.name)}${d.enabled === false ? escape(tr(" · Неактивен")) : ""}<small>${escape(d.specialty)}</small></span></label>`).join("") : `<p class="muted">${escape(tr("Нема лекари за избраната специјалност."))}</p>`;
+        const visibleDoctorIds = new Set(doctors.map(d => d.id));
+        const hiddenSelected = state.doctors.filter(d => assignedDoctors.has(d.id) && !visibleDoctorIds.has(d.id)).sort(compareRecords);
+        $("#service-doctor-selected").innerHTML = `<strong>${escape(tr("Избрани лекари"))}: ${assignedDoctors.size}</strong>${hiddenSelected.length ? `<p class="muted">${escape(tr("Изборот од другите специјалности се задржува."))}</p>` : ""}<div class="service-doctor-chips">${hiddenSelected.map(d => `<button type="button" class="service-doctor-chip" data-unassign-doctor="${escape(d.id)}" aria-label="${escape(tr("Отстрани лекар: {0}",d.name))}">${escape(d.name)} ${icon("x")}</button>`).join("")}</div>`;
+        if (focused) [...field.querySelectorAll('input')].find(x => x.value === focused)?.focus({preventScroll:true});
+      };
+      $("#catalogue-specialty").addEventListener("change", renderAssignments);
+      $("#service-doctor-choices").addEventListener("change", e => {
+        if (!e.target.matches('input[name="doctorIds"]')) return;
+        if (e.target.checked) assignedDoctors.add(e.target.value); else assignedDoctors.delete(e.target.value);
+        renderAssignments();
+      });
+      $("#service-doctor-selected").addEventListener("click", e => {
+        const button = e.target.closest('[data-unassign-doctor]'); if (!button) return;
+        assignedDoctors.delete(button.dataset.unassignDoctor); renderAssignments();
+        $("#catalogue-specialty").focus();
+      });
+      renderAssignments();
+    }
     $("#catalogue-form").onsubmit = async e => {
       e.preventDefault(); const form = e.target, button = form.querySelector('[type="submit"]'); button.disabled = true;
       try {
         const f = new FormData(form), input = { id: item?.id || null, name: f.get("name"), version: item?.catalogVersion || item?.version || 0 };
         if (kind !== "specialties") Object.assign(input, { specialtyId: f.get("specialtyId"), enabled: f.has("enabled") });
         if (kind === "doctors") { input.subspecialty = f.get("subspecialty"); input.requiresConfirmation = f.has("requiresConfirmation"); input.staffOnly = f.has("staffOnly"); }
-        if (kind === "services") Object.assign(input, { durationMinutes: Number(f.get("durationMinutes")), doctorIds: f.getAll("doctorIds") });
+        if (kind === "services") {
+          for (const choice of form.querySelectorAll('input[name="doctorIds"]')) {
+            if (choice.checked) assignedDoctors.add(choice.value); else assignedDoctors.delete(choice.value);
+          }
+        }
+        if (kind === "services") Object.assign(input, { durationMinutes: Number(f.get("durationMinutes")), doctorIds: [...assignedDoctors] });
         const saved = await api("catalogue/" + kind, input); rememberSaved(kind, saved);
         if (kind === "services") state.doctorServices = state.doctorServices.filter(link => link.serviceId !== saved.id).concat(input.doctorIds.map(doctorId => ({doctorId, serviceId:saved.id})));
         const refreshed = await refreshAfterSave();
@@ -1603,9 +1695,9 @@ const icon = window.MedTerminIcons.icon;
     form.onsubmit = e => { e.preventDefault(); reportFilters = Object.fromEntries(new FormData(form)); loadReport(); };
     $$("[data-report-preset]").forEach(b => b.onclick = () => {
       const type = b.dataset.reportPreset;
-      form.elements.from.value = type === "today" ? state.today : type === "week" ? monday(state.today) : state.today.slice(0,8) + "01";
-      form.elements.to.value = type === "week" ? addDays(monday(state.today), 6) : type === "month"
-        ? new Date(Date.UTC(Number(state.today.slice(0,4)), Number(state.today.slice(5,7)), 0, 12)).toISOString().slice(0,10) : state.today;
+      window.MedTerminDates.setValue(form.elements.from, type === "today" ? state.today : type === "week" ? monday(state.today) : state.today.slice(0,8) + "01");
+      window.MedTerminDates.setValue(form.elements.to, type === "week" ? addDays(monday(state.today), 6) : type === "month"
+        ? new Date(Date.UTC(Number(state.today.slice(0,4)), Number(state.today.slice(5,7)), 0, 12)).toISOString().slice(0,10) : state.today);
       form.requestSubmit();
     });
     $("#report-reset").onclick = () => { for (const key of ["doctorId", "specialty", "serviceId"]) form.elements[key].value = ""; form.requestSubmit(); };

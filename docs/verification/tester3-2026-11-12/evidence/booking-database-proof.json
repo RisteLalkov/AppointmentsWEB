@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "observed_utc": "2026-11-12T14:13:56.867726+00:00",
+  "appointmentId": "30cd8f0f1fd84cc3a0975e29f5bb2925",
+  "patientId": "836b1a6703864bd38a5b8cb1e952d676",
+  "appointmentStatus": "Confirmed",
+  "historyRows": 1,
+  "sharedBusyRows": 1
+}

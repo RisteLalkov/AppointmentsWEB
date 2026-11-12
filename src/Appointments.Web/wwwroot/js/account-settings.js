@@ -6,8 +6,7 @@
   if (!trigger || !dialog) return;
   trigger.addEventListener("click", () => {
     if (dialog.open) return;
-    document.getElementById("sidebar")?.classList.remove("open");
-    document.getElementById("menu-toggle")?.setAttribute("aria-expanded", "false");
+    document.dispatchEvent(new Event("medtermin:close-navigation"));
     dialog.showModal();
     trigger.setAttribute("aria-expanded", "true");
   });

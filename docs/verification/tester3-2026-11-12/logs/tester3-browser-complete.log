@@ -1,0 +1,10 @@
+PASS Desktop navigation toggle is available
+PASS Collapsing desktop navigation releases space and removes hidden controls from focus
+PASS Desktop preference survives reload
+PASS Mobile drawer opens despite a collapsed desktop preference
+PASS Mobile Escape closes navigation and restores the workspace
+PASS Desktop navigation expands after returning from mobile
+FAIL Report today preset keeps display, form and requested dates synchronized
+Error: Report today preset keeps display, form and requested dates synchronized
+    at check (/workspace/AppointmentsWEB/tests/frontend/tester3-browser.cjs:5:242)
+    at /workspace/AppointmentsWEB/tests/frontend/tester3-browser.cjs:19:3

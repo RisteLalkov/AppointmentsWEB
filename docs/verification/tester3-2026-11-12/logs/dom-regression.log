@@ -1,0 +1,195 @@
+
+> test
+> node localization.mjs && node password-visibility.mjs && node themes.mjs && node dates.mjs && node smoke.mjs
+
+PASS language mk translates explicit labels and keeps spacing
+PASS language mk formats parameters
+PASS language mk keeps interpolated data and escaping exactly intact
+PASS language mk does not transliterate names
+PASS language mk rejects invalid icon identifiers
+PASS language mk password visibility action is localized
+PASS language mk required validation is localized
+PASS language mk protects dirty input before changing language
+PASS language mk successful saves clear unsaved-input warnings
+PASS language mk edits made during a save remain protected
+PASS language mk preserves selected screen, filters and fragment
+PASS language en translates explicit labels and keeps spacing
+PASS language en formats parameters
+PASS language en keeps interpolated data and escaping exactly intact
+PASS language English translations are escaped in HTML text and attributes
+PASS language en does not transliterate names
+PASS language en rejects invalid icon identifiers
+PASS language en password visibility action is localized
+PASS language en required validation is localized
+PASS language en protects dirty input before changing language
+PASS language en successful saves clear unsaved-input warnings
+PASS language en edits made during a save remain protected
+PASS language en preserves selected screen, filters and fragment
+23/23 language runtime checks passed.
+PASS password Every password gets exactly one toggle
+PASS password Passwords are hidden initially
+PASS password Reveal affects only the chosen field
+PASS password Accessible label and state describe hiding
+PASS password Toggle targets its field and never submits
+PASS password Second click masks the password
+PASS password Value, field name and autofill semantics remain intact
+PASS password Password constraints are preserved
+PASS password Submitting re-hides every revealed field
+PASS password Submission values are unchanged
+PASS password Form reset restores hidden state
+PASS password Restoring a page masks passwords
+PASS password Dynamically added fields get a unique linked toggle
+PASS password Mutation handling does not duplicate controls
+PASS password Disabled fields cannot be revealed
+PASS password Password value is not copied into rendered markup
+
+16/16 password visibility checks passed.
+PASS theme Stored undefined applied before DOM ready
+PASS theme Control initialized for default
+PASS theme Stored dark applied before DOM ready
+PASS theme Control initialized for dark
+PASS theme Stored vibrant applied before DOM ready
+PASS theme Control initialized for vibrant
+PASS theme Stored invalid applied before DOM ready
+PASS theme Control initialized for default
+PASS theme Selection persists without a page reload
+PASS theme Browser chrome follows chosen theme
+PASS theme Other-tab changes synchronize
+PASS theme Invalid other-tab values cannot select an arbitrary theme
+PASS theme Clearing storage restores default
+PASS theme Blocked browser storage does not break switching
+14/14 theme preference checks passed.
+PASS dates mk initial date is day-first with unchanged ISO value
+PASS dates mk label targets editable date and mirror has no submitted name
+PASS dates mk invalid month-day combination cannot retain a previous date
+PASS dates mk non-leap-year February 29 is rejected
+PASS dates mk leap date and punctuation-free phone entry work
+PASS dates mk typing never refreshes a screen before the date is committed
+PASS dates mk committing a valid date emits one application change
+PASS dates mk editing a day in the middle does not shift the month or year
+PASS dates mk ambiguous slash format is rejected
+PASS dates mk required date blocks forms and non-form booking review
+PASS dates mk date before minimum is rejected
+PASS dates mk minimum date is inclusive
+PASS dates mk maximum date is inclusive
+PASS dates mk date after maximum is rejected
+PASS dates mk localized range error uses day-first boundary
+PASS dates mk native calendar selection updates visible date and validity
+PASS dates mk programmatic presets synchronize both dates without emitting a second request
+PASS dates mk blurring after a preset cannot restore the old date
+PASS dates mk form submits exactly one original ISO date
+PASS dates mk disabled dates stay disabled and do not block validation
+PASS dates mk reset restores both representations
+PASS dates mk dynamic optional dates are enhanced without becoming required
+PASS dates mk mutation handling never duplicates controls
+PASS dates en initial date is day-first with unchanged ISO value
+PASS dates en label targets editable date and mirror has no submitted name
+PASS dates en invalid month-day combination cannot retain a previous date
+PASS dates en non-leap-year February 29 is rejected
+PASS dates en leap date and punctuation-free phone entry work
+PASS dates en typing never refreshes a screen before the date is committed
+PASS dates en committing a valid date emits one application change
+PASS dates en editing a day in the middle does not shift the month or year
+PASS dates en ambiguous slash format is rejected
+PASS dates en required date blocks forms and non-form booking review
+PASS dates en date before minimum is rejected
+PASS dates en minimum date is inclusive
+PASS dates en maximum date is inclusive
+PASS dates en date after maximum is rejected
+PASS dates en localized range error uses day-first boundary
+PASS dates en native calendar selection updates visible date and validity
+PASS dates en programmatic presets synchronize both dates without emitting a second request
+PASS dates en blurring after a preset cannot restore the old date
+PASS dates en form submits exactly one original ISO date
+PASS dates en disabled dates stay disabled and do not block validation
+PASS dates en reset restores both representations
+PASS dates en dynamic optional dates are enhanced without becoming required
+PASS dates en mutation handling never duplicates controls
+46/46 date control checks passed.
+PASS Patient overview renders
+PASS HTML defaults to Macedonian
+PASS Navigation is Macedonian
+PASS Directory paginates source providers
+PASS Macedonian name search filters correctly
+PASS Doctor profile shows schedule
+PASS Doctor profile uses Macedonian weekdays
+PASS Booking doctor label is concise and labels the searchable input
+PASS Booking doctor is a searchable combobox
+PASS Booking omits redundant patient search and timezone labels
+PASS Doctor dropdown searches Macedonian names without case sensitivity
+PASS Keyboard choice keeps a real doctor ID
+PASS Unknown doctor search shows an empty state
+PASS Uncommitted search text cannot silently book the previously selected doctor
+PASS Review step appears after choosing slot
+PASS Patient booking completes in DOM flow
+PASS Booking confirmation has no repeated timezone
+PASS Status label translated while CSS/protocol status stays stable
+PASS Patient sees recorded creation in details timeline
+PASS Saved appointment offers rescheduling
+PASS Rescheduling starts on the original future appointment date
+PASS Rescheduling completes in DOM flow
+PASS Cancellation asks for confirmation
+PASS Cancellation updates displayed status
+PASS Timeline shows move and patient cancellation attribution
+PASS Patient appointment list renders
+PASS Appointment dates stay Macedonian without browser locale data
+PASS Patient date and status filters combine inclusively
+PASS Invalid appointment date range shows validation
+PASS Appointment filters reset together
+PASS Reception weekly calendar initializes
+PASS Calendar title uses Macedonian months
+PASS Calendar starts on Monday with Macedonian weekday
+PASS Calendar loads authoritative availability successfully
+PASS Month view initializes
+PASS Day view initializes
+PASS Calendar specialty filters provider choices
+PASS Calendar service filter uses actual service profiles
+PASS Custom calendar period initializes
+PASS Custom period navigation advances the selected range
+PASS Invalid calendar period rejected
+PASS Administrator reports render all summary metrics
+PASS Reports disclose missing service attribution
+PASS Patient cannot access reports endpoint
+PASS Reports reject reversed date ranges with useful error
+PASS Report recovers after error and changes grouping
+PASS Native required validation is Macedonian
+PASS Editing clears localized validation error
+PASS Fictional patient creation updates directory
+PASS Patient profile opens from directory with matching navigation
+PASS Patient profile shows useful empty appointment state
+PASS Patient contact edit persists and refreshes profile
+PASS Stale contact edit is rejected without discarding typed input
+PASS Conflict recovery reloads the current profile explicitly
+PASS Booking from patient profile keeps selected patient
+PASS Patient field directly filters its dropdown
+PASS Patient dropdown commits the patient ID and displays a stable patient number
+PASS Patient sees own appointment history without staff edit controls
+PASS Patient history status filter narrows appointment rows
+PASS Patient history rejects reversed date range
+PASS Patient history period tabs update accessible selection
+PASS Patient cannot open another profile by changing hash
+PASS Availability has no standalone navigation entry
+PASS Doctor directory opens existing availability editor
+PASS Weekly schedule editor loads actual periods
+PASS Schedule editor preserves enum values behind Macedonian labels
+PASS Localized schedule saves and round-trips through server
+PASS Second staff member saves newer working hours
+PASS Background refresh preserves the displayed schedule form
+PASS Stale schedule submission cannot overwrite the other staff change
+PASS Conflict warning preserves unsaved form values
+PASS Explicit conflict recovery loads current hours
+PASS Reloaded schedule can save with its current revision
+PASS Availability exception form saves and refreshes
+PASS Doctor calendar cannot switch to other doctors
+PASS Doctor availability selection stays on own profile
+PASS Catalogue submenu expands and identifies the deep-linked section
+PASS Administrator creates specialty through catalogue UI
+PASS Administrator creates and assigns service through catalogue UI
+PASS Booking offers assigned service and its duration
+PASS Service field searches the selected doctor's assigned services
+PASS Service keyboard selection retains the correct visit duration
+PASS Calendar can filter retired services without requesting unavailable slots
+PASS Doctor cannot access catalogue management UI
+PASS No uncaught JavaScript errors in exercised flows
+
+85/85 DOM integration checks passed. No layout/visual assertions are made.
