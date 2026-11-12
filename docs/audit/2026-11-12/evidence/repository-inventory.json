@@ -1,0 +1,1916 @@
+[
+  {
+    "path": ".config/dotnet-tools.json",
+    "kind": "source/configuration",
+    "bytes": 146,
+    "sha256": "a9fd20a79a1f8623cf5e855ffc25202b45adb320c6bdfbe52185ac05b75eb7ff"
+  },
+  {
+    "path": ".env.example",
+    "kind": "source/configuration",
+    "bytes": 134,
+    "sha256": "7909f2e0a09a5f9d70afe264015b6562973a135a456c8cc2766e82d141ea8068"
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "kind": "source/configuration",
+    "bytes": 4514,
+    "sha256": "66d4bd8da38484bf7ddf9347a47e219dff2e35254828500108bde99316fc2a5e"
+  },
+  {
+    "path": ".gitignore",
+    "kind": "source/configuration",
+    "bytes": 256,
+    "sha256": "2677c273c80d3e8f0216a9e23a3498e00ad9dc100f1a3d2e12021580ef321a41"
+  },
+  {
+    "path": "Appointments.sln",
+    "kind": "source/configuration",
+    "bytes": 9419,
+    "sha256": "baa913bbcfe5e49ed2766eab26401e21cb16bebdf205ab70e6603dbba3fd12e4"
+  },
+  {
+    "path": "Appointments.slnLaunch",
+    "kind": "source/configuration",
+    "bytes": 247,
+    "sha256": "07447e72ed68dbe4fcffcdd7c5d2d965de3c6964d275b7688dac2b1958ad4186"
+  },
+  {
+    "path": "Directory.Build.props",
+    "kind": "source/configuration",
+    "bytes": 237,
+    "sha256": "bf23a5a89d4da1f7b12145f025d86ee88aa6f6f6b2dbb7d2fa4bc042fff5fe50"
+  },
+  {
+    "path": "README.md",
+    "kind": "documentation",
+    "bytes": 25641,
+    "sha256": "abafa5d777b8a2a2a7bf9d958599eabdf7c8d821e132a8bac849e8b3f5fc8e51"
+  },
+  {
+    "path": "THIRD_PARTY_NOTICES.md",
+    "kind": "documentation",
+    "bytes": 4932,
+    "sha256": "201d0ba161dafebcfde20c06e649d05c91277dec361c3ba6226d664e7085c1e8"
+  },
+  {
+    "path": "assets/branding/careline-logo-light.png",
+    "kind": "source/configuration",
+    "bytes": 1172955,
+    "sha256": "dde53e4fa1184e002a9b946202d4a87340af5ce6968c444d65b38effdc33081b"
+  },
+  {
+    "path": "assets/branding/careline-logo-transparent.png",
+    "kind": "source/configuration",
+    "bytes": 453366,
+    "sha256": "8f88a5b10398d7f5778d4b0d06d04b84295f89ff485f5ac31dc54cba0761a357"
+  },
+  {
+    "path": "compose.yaml",
+    "kind": "source/configuration",
+    "bytes": 525,
+    "sha256": "0761f34c9efe1bdf1ac8c3e610889a31de59df8ad594de7d0351300b965752e5"
+  },
+  {
+    "path": "database/001-initial.sql",
+    "kind": "database",
+    "bytes": 12459,
+    "sha256": "7ea3caa9e20ff51313578dd77c6d40ff4d7627af83cd856a574c6d58ecd64f7a"
+  },
+  {
+    "path": "database/002-service-catalogue.sql",
+    "kind": "database",
+    "bytes": 5541,
+    "sha256": "42d9d5e985c44642a728a6aa8c3dbb9ff630c185e76201b30e2dd482fafcd905"
+  },
+  {
+    "path": "database/003-appointment-history.sql",
+    "kind": "database",
+    "bytes": 2199,
+    "sha256": "703f8da981e2e2e003a4b7de317fb4b17efd60eee2f0d3bff24875e37c26992f"
+  },
+  {
+    "path": "database/004-patient-profiles.sql",
+    "kind": "database",
+    "bytes": 780,
+    "sha256": "43f3e1129a4157a80135c99a43c16599f081f5c1c997101aa3b29b0f6b1eda43"
+  },
+  {
+    "path": "database/005-platform-registry.sql",
+    "kind": "database",
+    "bytes": 1746,
+    "sha256": "5653e7b316670eff517da43086268df3088a4bbc049331c39ee353c68525a8d4"
+  },
+  {
+    "path": "database/006-shared-clinic-registry.sql",
+    "kind": "database",
+    "bytes": 630,
+    "sha256": "1bfa32eb6eb4369ddfd9b741d0da71040ba343b2e17591c9ad14421aa7127045"
+  },
+  {
+    "path": "database/007-platform-managed-clinics.sql",
+    "kind": "database",
+    "bytes": 410,
+    "sha256": "dc03cf0d3f41166f6918a4ec3110f70475e713f5727b02eb74028be42e82e147"
+  },
+  {
+    "path": "database/008-identity-directory.sql",
+    "kind": "database",
+    "bytes": 1535,
+    "sha256": "b546658665b7e823855b56629b798671d1dc53818a486405014b2024f4e8ad35"
+  },
+  {
+    "path": "database/009-global-patients.sql",
+    "kind": "database",
+    "bytes": 5854,
+    "sha256": "d2f66c41764988242e660cee9630fe389cd74ac455c4504a3d5903fc9504b7b9"
+  },
+  {
+    "path": "database/prepare-shared-clinic-database.sql",
+    "kind": "database",
+    "bytes": 1104,
+    "sha256": "344f5455ff45bc6276309806aec8572f2a89fba3b079994444e7826d071c4126"
+  },
+  {
+    "path": "deployment/seed-sample-clinic.cmd",
+    "kind": "source/configuration",
+    "bytes": 787,
+    "sha256": "3be634edd272ba55dba5e4022e69cc9bb20641b23578d70f2f58386da1d68878"
+  },
+  {
+    "path": "deployment/upgrade-databases.cmd",
+    "kind": "source/configuration",
+    "bytes": 686,
+    "sha256": "49fe305f3fd1b51af60357660379debb157b8945421cec7e9c49c57c7f7f30c3"
+  },
+  {
+    "path": "docs/API.md",
+    "kind": "documentation",
+    "bytes": 11598,
+    "sha256": "c9a9ab86aa114921838ec9693801099c0d9cff2be1dd537695011f87e5c139be"
+  },
+  {
+    "path": "docs/APPOINTMENT_HISTORY.md",
+    "kind": "documentation",
+    "bytes": 5796,
+    "sha256": "93f2a5dbabd0f9f5126dfc304abd2b55849d6c9fc65beb4f70817dde315c9ebb"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "kind": "documentation",
+    "bytes": 9461,
+    "sha256": "e7a6e85eaf559689218c254afebd3d300796a76a3e5800f566806cda61ab7610"
+  },
+  {
+    "path": "docs/BOOKING_REVIEW_2026-11-10.md",
+    "kind": "documentation",
+    "bytes": 12681,
+    "sha256": "8b7340bbf88af266eafa59378f2b759dc544a61a24c95873e3a6944ced10fccb"
+  },
+  {
+    "path": "docs/DATABASE.md",
+    "kind": "documentation",
+    "bytes": 9209,
+    "sha256": "1255d77146678f1b80b8e672ad4e9ac5889bea3cdfc5a2f3eccda23128cfd831"
+  },
+  {
+    "path": "docs/GLOBAL_PATIENT_ACCOUNTS.md",
+    "kind": "documentation",
+    "bytes": 13959,
+    "sha256": "f3b39275eff310f94010ab5be8b95f35f88d0636898f68a576450506f8164d64"
+  },
+  {
+    "path": "docs/GLOBAL_PATIENT_ACCOUNTS_VERIFICATION.md",
+    "kind": "documentation",
+    "bytes": 4498,
+    "sha256": "9a53ce6af9b313fb1a5f16b76b094bd84dfa1d0c67f5aa48fe2d43a3f4ea741a"
+  },
+  {
+    "path": "docs/HIGH_SEVERITY_FIXES.md",
+    "kind": "documentation",
+    "bytes": 14952,
+    "sha256": "9b733a7c8e7ddff02a083188c49dd0fb58bcaea0107e3c65425b0df8883381e9"
+  },
+  {
+    "path": "docs/LOCALIZATION.md",
+    "kind": "documentation",
+    "bytes": 5604,
+    "sha256": "9ec46cd2ef78ce836893ce26241a1a5f6c5b461ccd4eacee5f50661864e3f638"
+  },
+  {
+    "path": "docs/MEDTERMIN_DOMAINS.md",
+    "kind": "documentation",
+    "bytes": 4268,
+    "sha256": "d5bcfbb39dff47ebbd7951f339adcc03104bddb43364422b7e4664bbe39242bb"
+  },
+  {
+    "path": "docs/MULTI_TENANCY.md",
+    "kind": "documentation",
+    "bytes": 1536,
+    "sha256": "e0db5b0867fc639e9bfc0f6375c4769bdb562c0b47f0173ae4a4e613c6fe65a4"
+  },
+  {
+    "path": "docs/PATIENT_PROFILES.md",
+    "kind": "documentation",
+    "bytes": 4055,
+    "sha256": "1e23bd986128917602f710e804d6003935ddcbba6e33503d226de248ea881ec8"
+  },
+  {
+    "path": "docs/PLATFORM_AND_DISCOVERY.md",
+    "kind": "documentation",
+    "bytes": 19394,
+    "sha256": "911be1619da13af7e4a8eab2bd0f1692e753194def8cd63c43bb799aef883023"
+  },
+  {
+    "path": "docs/PLATFORM_CLINIC_TRANSFER.md",
+    "kind": "documentation",
+    "bytes": 5192,
+    "sha256": "a35acbd6c4d2c9f14a22bd651dbe4e8288f0bef3f5bdc9e39d95b4f9f7f03462"
+  },
+  {
+    "path": "docs/QA_CHECKLIST.md",
+    "kind": "documentation",
+    "bytes": 7224,
+    "sha256": "ab35b37d0d6b0a1eb25797e79c6e15b91322611b515336d342d568ef9d51e329"
+  },
+  {
+    "path": "docs/REPORTS_AND_CALENDAR.md",
+    "kind": "documentation",
+    "bytes": 5396,
+    "sha256": "17dd4f97cbd4c834d8ddd5cdd19128b3bf4797a7df419e7a848a0bc89b24d971"
+  },
+  {
+    "path": "docs/REVIEW_FOLLOWUP_2026-11-11.md",
+    "kind": "documentation",
+    "bytes": 10034,
+    "sha256": "38cbe4ea4a70989df529d8b5c9a712f7c7ebd19e40f6f248a218f07c80ceb9c1"
+  },
+  {
+    "path": "docs/SERVICE_CATALOGUE.md",
+    "kind": "documentation",
+    "bytes": 6157,
+    "sha256": "396678f869cdcb3329941659fd83c926cfefa4724925eda09620129420c8a44c"
+  },
+  {
+    "path": "docs/SHARED_DATABASE.md",
+    "kind": "documentation",
+    "bytes": 9740,
+    "sha256": "79eada255897baa7225a8f1eeed3ad447f3fa0cbf85f0db9371f44bb10d6aad8"
+  },
+  {
+    "path": "docs/SIX_IMPROVEMENTS_VERIFICATION.md",
+    "kind": "documentation",
+    "bytes": 5896,
+    "sha256": "b4ca4adfcc6943c5278f567d729d12c8e5a71e2ec32de89d1b74762fc8921f0d"
+  },
+  {
+    "path": "docs/TERMINO_BOOKING.md",
+    "kind": "documentation",
+    "bytes": 9709,
+    "sha256": "e1f8069793a879d6033cf74fe9fa08e107c1692b2a41b1cf096c7d403abfedb0"
+  },
+  {
+    "path": "docs/TESTER_FEEDBACK_2026-11-10.md",
+    "kind": "documentation",
+    "bytes": 5497,
+    "sha256": "3804e137de546c26d5722c50dc0cb9b06bcaac9b6e652309717d901212ca066a"
+  },
+  {
+    "path": "docs/TESTER_ROUND2_2026-11-11.md",
+    "kind": "documentation",
+    "bytes": 13153,
+    "sha256": "f44a5257375e6915f44678415c47064ce5c6e88c9c9d20119d1e29fff770862f"
+  },
+  {
+    "path": "docs/VERIFICATION.md",
+    "kind": "documentation",
+    "bytes": 5751,
+    "sha256": "0ece71ef0ad71ffe81a95f43a6de2a3129d8a1a66a27e55c9f92ed302a818186"
+  },
+  {
+    "path": "docs/WORKBOOK_ANALYSIS.md",
+    "kind": "documentation",
+    "bytes": 5777,
+    "sha256": "190c4751e1af4063e80b103f61b6d50089f880876febf818cd13280f3ae8b9a3"
+  },
+  {
+    "path": "docs/audit/2026-11-02/PRODUCTION_READINESS_AUDIT.html",
+    "kind": "documentation",
+    "bytes": 136198,
+    "sha256": "5355b184c0bb2a4e180e54608d8d581f4a4d1b7bbb5e9ded545d3ca4d1aef0ae"
+  },
+  {
+    "path": "docs/audit/2026-11-02/PRODUCTION_READINESS_AUDIT.md",
+    "kind": "documentation",
+    "bytes": 103307,
+    "sha256": "03905ef948c693611a32ee5f88515aa660ced85de298cb6ee72c324233388b50"
+  },
+  {
+    "path": "docs/audit/2026-11-02/PRODUCTION_READINESS_AUDIT.pdf",
+    "kind": "documentation",
+    "bytes": 1064682,
+    "sha256": "703d4a9a8070f16652b6cf2aaa8465f67ce44b4a795c2ceec58ebcbfd3893ed8"
+  },
+  {
+    "path": "docs/audit/2026-11-02/README.md",
+    "kind": "documentation",
+    "bytes": 1428,
+    "sha256": "243803c03446f8ced3420f2bb0a44de98d56e6479b7094f56f85a1deb4d6f3b3"
+  },
+  {
+    "path": "docs/audit/2026-11-02/audit-summary.json",
+    "kind": "documentation",
+    "bytes": 396,
+    "sha256": "4e117808dfb5245dabe50eb9c90475089a59251b53fa2d1d576b754dc889013d"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/accessibility.json",
+    "kind": "documentation",
+    "bytes": 14423,
+    "sha256": "7fd090756ce167503a8e120803151393b851843cb1414315b88c53f172f8937e"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/account-access-form.json",
+    "kind": "documentation",
+    "bytes": 822,
+    "sha256": "14fc25de45f4d826c0aa7e73de446ce5307af760c23103a27f3d68fbd1933648"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/account-form-error.json",
+    "kind": "documentation",
+    "bytes": 51,
+    "sha256": "e7becdf5a7be0f8ee45a518b29ac129fe917c52e276963c4ef665b6c043ddf8d"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/clinic-columns.csv",
+    "kind": "documentation",
+    "bytes": 24017,
+    "sha256": "53fb902ad65dded80916d64ff40cdae06dffc04f0767df49149f6c9c7cbe2a9d"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/clinic-constraints.csv",
+    "kind": "documentation",
+    "bytes": 23495,
+    "sha256": "8e47dfaf1a365f694a302d22c717c581adf7a3ffeaa1f10c6568e5c8d2120f26"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/clinic-indexes.csv",
+    "kind": "documentation",
+    "bytes": 24470,
+    "sha256": "c1b1b3c0e9f0ac10e2c5d7d639f7057d3631932442038a1ee1eed7d78444c9ae"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/constraint-audit.json",
+    "kind": "documentation",
+    "bytes": 104,
+    "sha256": "43f6bb7ebb348abed7d2e20d26cac41b3ef4bc84f2b6d620b3496d87e5c4aaa0"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/constraint-extra.json",
+    "kind": "documentation",
+    "bytes": 223,
+    "sha256": "5fa899b62574d39c8e4aba154ebe695303da8234b95153b7a7f7b00ec43cd32b"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/demo-parity.json",
+    "kind": "documentation",
+    "bytes": 63,
+    "sha256": "d25f079a7db8200fe41174c8b764e709782e2e9d8964c2314782c6790c3502e6"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/dependencies.json",
+    "kind": "documentation",
+    "bytes": 9410,
+    "sha256": "bbbf6f738c0501e982fa0b59023e8ab7d89aa800be61371701cbb1200b324289"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/dialog-race.json",
+    "kind": "documentation",
+    "bytes": 122,
+    "sha256": "14c334026130db5363c3806e38e3ff2a242d5024605b2ac3446b45c413872ea5"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/endpoint-boundaries.json",
+    "kind": "documentation",
+    "bytes": 5953,
+    "sha256": "b9d27015fa3d1b5edd2b11fd36fc45e4abb047198329b6211b127d556e0c0bba"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/followup.json",
+    "kind": "documentation",
+    "bytes": 74,
+    "sha256": "a0b8580679c3796613c5b84e7d5f4be292c99403b72dfa9a6cd8a55bf0e189c2"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/method-matrix.json",
+    "kind": "documentation",
+    "bytes": 21217,
+    "sha256": "56bd8711b371d3c3957ebd859c80ae2b37969b2d0151645a3bf38d09b5ace743"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/model-comparison.json",
+    "kind": "documentation",
+    "bytes": 1794,
+    "sha256": "1fb5816c9ef34a2949da4ba5f1746252a9d939d75d193923a30902106ffc320e"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/network-check.json",
+    "kind": "documentation",
+    "bytes": 809,
+    "sha256": "966f8b8dcc8abece9fd48dbaa116150519a5587912cae873f995457b803012bf"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/npm-audit.json",
+    "kind": "documentation",
+    "bytes": 360,
+    "sha256": "3f4f748e929972c4aeb136d59d3c6c36fbf7cad8cbde5f37a4566661f432d73a"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/nuget-vulnerabilities.json",
+    "kind": "documentation",
+    "bytes": 905,
+    "sha256": "46259e3716f54791bf54a241fdfb7503783b707b75a6e93faab64c3ae73cfb04"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/platform-columns.csv",
+    "kind": "documentation",
+    "bytes": 1604,
+    "sha256": "063e97fa4be2ee7046e96f91ef7db31deb074045f7a82a6cf12c55fd264e7c3c"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/platform-constraints.csv",
+    "kind": "documentation",
+    "bytes": 720,
+    "sha256": "e78e22fad7557bfaed559a6db5c805411b8398844ea3004c8402fef8e30e0d56"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/platform-indexes.csv",
+    "kind": "documentation",
+    "bytes": 985,
+    "sha256": "81f802a88b9784689fb41c6cf7dc09d79215af246a39abb175304fbef58fdcf9"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/probes.json",
+    "kind": "documentation",
+    "bytes": 6260,
+    "sha256": "bf164f46b53e66811e76774fbe06eb1b1dbb3594e9c4e0da8404af6f8be74c4c"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/repository-inventory.json",
+    "kind": "documentation",
+    "bytes": 38084,
+    "sha256": "57b5e44eb854eae36d641600ac795179f16bece33b1b75063b500a740a280f86"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/role-matrix.json",
+    "kind": "documentation",
+    "bytes": 19890,
+    "sha256": "3903eccf2c0598503452a5e848a271ad13cdb853fc1c842318b196aa9dece459"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/stale-patient-move.json",
+    "kind": "documentation",
+    "bytes": 182,
+    "sha256": "4640e0cf66289c3dc3563427ded54bb39723ce5df2a1c4efd78c48e64b7bbc10"
+  },
+  {
+    "path": "docs/audit/2026-11-02/evidence/syntax-validation.json",
+    "kind": "documentation",
+    "bytes": 41,
+    "sha256": "9653f63bd0800d752acd8abb177cc2662c74d0078942592c80cf2f394dd8763f"
+  },
+  {
+    "path": "docs/audit/2026-11-02/findings.json",
+    "kind": "documentation",
+    "bytes": 45553,
+    "sha256": "a0304b16d1720a2b3bdee0d5ad6278a8f217079a846795a45783a219813eba16"
+  },
+  {
+    "path": "docs/audit/2026-11-10/README.md",
+    "kind": "documentation",
+    "bytes": 22276,
+    "sha256": "78f0a0527e13c9b9b47767f805eeb74600a207634f59cf23e7b28acc6ca2dea9"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/accessibility.json",
+    "kind": "documentation",
+    "bytes": 2333,
+    "sha256": "3d0ec7a0b2d4a71c6a921c73eef8a16bf2787c1f6155b93ea9aa7b25dcab5ed2"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/clinic-columns.json",
+    "kind": "documentation",
+    "bytes": 31883,
+    "sha256": "89842351b7f7737860c84e21fe916a6d2da57e9fd48e9b1cbe95d93fddccc1cc"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/clinic-constraints.json",
+    "kind": "documentation",
+    "bytes": 16572,
+    "sha256": "8398848e169a3797466b6179552c9959e4370d522193e0896a379d9dd3b2e303"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/clinic-indexes.json",
+    "kind": "documentation",
+    "bytes": 12975,
+    "sha256": "05b2cf5e19fc43db1e916aac0dec6b2b8d3e354267cde17e4f726e6abedb1836"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/model-comparison.json",
+    "kind": "documentation",
+    "bytes": 2628,
+    "sha256": "136064e3f449490d5daf1701a061d27875b07795ba2447c4dd3de6ddb0e625c1"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/platform-columns.json",
+    "kind": "documentation",
+    "bytes": 6182,
+    "sha256": "6673d963ad248a32939f29d7de952a3f7e22ef6e57cc2224d252abe46b927711"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/platform-constraints.json",
+    "kind": "documentation",
+    "bytes": 1566,
+    "sha256": "08abfb5bb7ce22a95d739c3b8bbfb8c6ef4db6ad40bad51201c02a00144cd815"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/platform-indexes.json",
+    "kind": "documentation",
+    "bytes": 1463,
+    "sha256": "d1650db8e58340253520661234093eefa1a0d8eac04e7b32cbd568986853d5a9"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/restore-comparison.json",
+    "kind": "documentation",
+    "bytes": 2504,
+    "sha256": "f0f361aaa3d4f283dfa1e0eb8ee83c3973401eb2a4ab82e336eb8f82be53c60e"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/syntax-validation.json",
+    "kind": "documentation",
+    "bytes": 3319,
+    "sha256": "fc7f3a0578c20dcb4603ac515d4adc1d4f5d7f3eed365e9c530daeb74576850e"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/test-results.json",
+    "kind": "documentation",
+    "bytes": 2882,
+    "sha256": "16849a112be066f91e5fd95b110844989c8831ce4bdffa2b30953676ec2b140f"
+  },
+  {
+    "path": "docs/audit/2026-11-10/evidence/verification.json",
+    "kind": "documentation",
+    "bytes": 1858,
+    "sha256": "acd4ae66c3e422994da3ee325ca21a9ae7a2157b307b9a4ced9ba84fd9ff2e1f"
+  },
+  {
+    "path": "docs/high-severity-verification-2026-11-02.json",
+    "kind": "documentation",
+    "bytes": 1310,
+    "sha256": "606bcfbcd03ad52689e4f2119baaaf12836237d46fb65b0867d01eb9146a6d6a"
+  },
+  {
+    "path": "docs/print/README.md",
+    "kind": "documentation",
+    "bytes": 689,
+    "sha256": "c2803dbc01ed222a13075c8304063cdadddd06a3734c0426f9cb6045a1a70fcf"
+  },
+  {
+    "path": "docs/print/Termino-System-Guide.docx",
+    "kind": "documentation",
+    "bytes": 232680,
+    "sha256": "7532fde8f7f07481a1d50417b88ba8f1b70f1358d399a9db42c5268bb5e08654"
+  },
+  {
+    "path": "docs/print/Termino-System-Guide.md",
+    "kind": "documentation",
+    "bytes": 29760,
+    "sha256": "d515bd8c5c6d87aba6f259818c5eda7a57dcfd84474414f2b54da3ff97c04cc6"
+  },
+  {
+    "path": "docs/print/Termino-System-Guide.pdf",
+    "kind": "documentation",
+    "bytes": 294241,
+    "sha256": "29b5dc8d01dbc7100eb29256e0e1814e300de1197fa8b23a8ed46e291ee58660"
+  },
+  {
+    "path": "docs/user-guide/MedTermin-User-Guide-EN.docx",
+    "kind": "documentation",
+    "bytes": 1270847,
+    "sha256": "d6770ee78cc32cf68150afcc4342de5f4f27b808e102446819112f7c7943abbc"
+  },
+  {
+    "path": "docs/user-guide/MedTermin-User-Guide-EN.md",
+    "kind": "documentation",
+    "bytes": 48830,
+    "sha256": "bcb9c4e7664a980a7c0fcc927451a888503ec66b3ae905cebf1ce22fdd387371"
+  },
+  {
+    "path": "docs/user-guide/MedTermin-User-Guide-EN.pdf",
+    "kind": "documentation",
+    "bytes": 1474118,
+    "sha256": "522e727314f4a38ac5341f838317ca8104ac44065e50f08224eca18d1161e55b"
+  },
+  {
+    "path": "docs/user-guide/MedTermin-User-Guide-MK.docx",
+    "kind": "documentation",
+    "bytes": 1273338,
+    "sha256": "b69f83a72015fbb0e5115265176cd1089379ac1a840a8ef606716d19eceb17fd"
+  },
+  {
+    "path": "docs/user-guide/MedTermin-User-Guide-MK.md",
+    "kind": "documentation",
+    "bytes": 82121,
+    "sha256": "812b9a3353c74f912c2f5dad902155af8699dffa48a8e5b4babbfb384b56b6fb"
+  },
+  {
+    "path": "docs/user-guide/MedTermin-User-Guide-MK.pdf",
+    "kind": "documentation",
+    "bytes": 1469291,
+    "sha256": "5f3fe5c687ec40315fb5c58ffc2d305c6b5ea97ea0e9779a30d35e3a3d6ec567"
+  },
+  {
+    "path": "docs/user-guide/README.md",
+    "kind": "documentation",
+    "bytes": 2819,
+    "sha256": "8125fb51359fdb16c60ccae9c2dacf724c771d3bc71c81fa46c68c5d65a5d277"
+  },
+  {
+    "path": "docs/user-guide/assets/flow-en.png",
+    "kind": "documentation",
+    "bytes": 26729,
+    "sha256": "642c424209ff31e271c63f3b5eb10b35c553c96445351764b978404ebcf8d606"
+  },
+  {
+    "path": "docs/user-guide/assets/flow-mk.png",
+    "kind": "documentation",
+    "bytes": 26849,
+    "sha256": "665836bc17da66a1cef49af4c6f667dc5542f6246480fc3ca2fca4a0da951e9c"
+  },
+  {
+    "path": "docs/user-guide/build_guides.py",
+    "kind": "documentation",
+    "bytes": 15488,
+    "sha256": "76d8bff0ea43f2a41fd5a1a3f656d8e6f9bee76ca1cc90f635b44c477b7a5fde"
+  },
+  {
+    "path": "docs/user-guide/screens/account-panel.png",
+    "kind": "documentation",
+    "bytes": 55137,
+    "sha256": "9d66fd2f885b91e099c8195978827fadda9e3e2f8dd6389724c8f69bffa2f819"
+  },
+  {
+    "path": "docs/user-guide/screens/accounts.png",
+    "kind": "documentation",
+    "bytes": 48203,
+    "sha256": "3c363a50fa122b80fd6452df9aa6e8ac01cf4079fdfcba3aaa62a0df040828a3"
+  },
+  {
+    "path": "docs/user-guide/screens/booking.png",
+    "kind": "documentation",
+    "bytes": 54499,
+    "sha256": "c6f3649b44395c6474a553869f0126535b6bc5e103d56f6add3ee6aadf2ce82d"
+  },
+  {
+    "path": "docs/user-guide/screens/calendar.png",
+    "kind": "documentation",
+    "bytes": 135754,
+    "sha256": "0d358675aaca77f39ddd2e41bd648924710aa778f52915c898efd66783c5a1e7"
+  },
+  {
+    "path": "docs/user-guide/screens/doctor-availability.png",
+    "kind": "documentation",
+    "bytes": 42696,
+    "sha256": "efdef47e5371cc2f557b758b0ace568a1b977e40e98c6a23821038d0ce1917f7"
+  },
+  {
+    "path": "docs/user-guide/screens/doctors.png",
+    "kind": "documentation",
+    "bytes": 156788,
+    "sha256": "89fe26c58569fd99f0be29754824711f7447a4343352b340267d9a2d2225ed1e"
+  },
+  {
+    "path": "docs/user-guide/screens/patient-profile.png",
+    "kind": "documentation",
+    "bytes": 121364,
+    "sha256": "52b5041d003e0fa49348dcdebd4fcdc46460f4538cbaebc1b1fd442e304e4f3c"
+  },
+  {
+    "path": "docs/user-guide/screens/public-results.png",
+    "kind": "documentation",
+    "bytes": 213972,
+    "sha256": "7d5a599953a91a6f6a31bb054c29337e5ef7cfce748ebc7f305f9c5dfc213d40"
+  },
+  {
+    "path": "docs/user-guide/screens/reports.png",
+    "kind": "documentation",
+    "bytes": 126071,
+    "sha256": "f83c5420a3d00dbd78315ae7a5d80ea0860d90a2d38552f6292a6cad020c0f5c"
+  },
+  {
+    "path": "docs/user-guide/screens/review.png",
+    "kind": "documentation",
+    "bytes": 40600,
+    "sha256": "7a8be8caf7284ee1aa6441a45663497e2831be030530ae81bffd5dbd2248e587"
+  },
+  {
+    "path": "docs/user-guide/screens/schedule.png",
+    "kind": "documentation",
+    "bytes": 85816,
+    "sha256": "7998c1e24d04d790f691d622379420ae9d84ecf8a7d6d75cfca0fae23af5cd7c"
+  },
+  {
+    "path": "docs/user-guide/screens/workspace.png",
+    "kind": "documentation",
+    "bytes": 145892,
+    "sha256": "e83e1ccfd7338004d8235827b6048c99489f64c9e37a1ea1a6350b00660b131e"
+  },
+  {
+    "path": "global.json",
+    "kind": "source/configuration",
+    "bytes": 97,
+    "sha256": "1c6737f7e65b0108778ab30ace593c3ec63382090718c2cbc3d6752486178a35"
+  },
+  {
+    "path": "scripts/build-localization.py",
+    "kind": "source/configuration",
+    "bytes": 1697,
+    "sha256": "e34d098b85d1896209e7278e0958123471fd95d82bd297c31cd8ae179e04e2f3"
+  },
+  {
+    "path": "scripts/setup-local.ps1",
+    "kind": "source/configuration",
+    "bytes": 2312,
+    "sha256": "fbcf0da0c8bdc17c17b3394ae72963225a0c45981f1679959c64959aacdad10c"
+  },
+  {
+    "path": "src/Appointments.Api/Appointments.Api.csproj",
+    "kind": "source/configuration",
+    "bytes": 1849,
+    "sha256": "4594438ef937e7387eec73a57e30c2dda16b3348dbc53c0b78680e7f3669590d"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/AccountsController.cs",
+    "kind": "source/configuration",
+    "bytes": 1497,
+    "sha256": "83ba5ba0033bf3ddb45f3e3c44fdcee4a109ad2ae0a6785383202d2eaf414575"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/ApiControllerBase.cs",
+    "kind": "source/configuration",
+    "bytes": 495,
+    "sha256": "82803a92968bb107e831eb1e7dd00c5ca0768bc210eb87a6b81513bd7de0a722"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "kind": "source/configuration",
+    "bytes": 5723,
+    "sha256": "b2afc993d74b932fde4c7f163adedc8852cf00490e3a53642a5c2ed5bdcaa05d"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/AuthController.cs",
+    "kind": "source/configuration",
+    "bytes": 2749,
+    "sha256": "de249cf1e9a905b67d2d11348055f7927f702d0f0f00a0d50925e94fd73b6431"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/DiscoveryController.cs",
+    "kind": "source/configuration",
+    "bytes": 1544,
+    "sha256": "52dade0f0099eecca34a933bf5ed8779514550c05f01c1fe3118262f9e2f1807"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/LoginController.cs",
+    "kind": "source/configuration",
+    "bytes": 599,
+    "sha256": "67652c683c0cb57892d41bd5c087393303a1755e11eec0ecf8f1d9941a057c83"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/PatientAccountController.cs",
+    "kind": "source/configuration",
+    "bytes": 1136,
+    "sha256": "fce59e38997f444cd26417e4b9dfca0c921d1a8ad2acd2b52b9ba4acc90e8319"
+  },
+  {
+    "path": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "kind": "source/configuration",
+    "bytes": 2404,
+    "sha256": "0f06cb2793ff4c3485f9aad2cd58640e21eb9c4cc46b077ab98e173e206157db"
+  },
+  {
+    "path": "src/Appointments.Api/Program.cs",
+    "kind": "source/configuration",
+    "bytes": 15478,
+    "sha256": "2995623aa7ef41afd85746ab3853ce597cc8496da67cd1857a073826e9bedf4a"
+  },
+  {
+    "path": "src/Appointments.Api/Properties/PublishProfiles/FolderProfile.pubxml",
+    "kind": "source/configuration",
+    "bytes": 865,
+    "sha256": "dc679be5898b0ef8728ff5610fff93ca1db596dab93d9f9b2adf679c6ad89b4b"
+  },
+  {
+    "path": "src/Appointments.Api/Properties/launchSettings.json",
+    "kind": "source/configuration",
+    "bytes": 270,
+    "sha256": "282c0271c5d7bfbc3b4172bf90fedba06f8c2c22030f673b2b7068cb3c90cc15"
+  },
+  {
+    "path": "src/Appointments.Api/Services/AccountService.cs",
+    "kind": "source/configuration",
+    "bytes": 10538,
+    "sha256": "de9466b345076cbda7e368837b71d007106a803dba85296bc04f938bd6cdf995"
+  },
+  {
+    "path": "src/Appointments.Api/Services/ApiDocumentation.cs",
+    "kind": "source/configuration",
+    "bytes": 3361,
+    "sha256": "51170bcbda5e2e368fdadbc8ac2bf247fe3f4779ea9640ccad8ab8fcf3e8fa95"
+  },
+  {
+    "path": "src/Appointments.Api/Services/AutomaticLogin.cs",
+    "kind": "source/configuration",
+    "bytes": 1089,
+    "sha256": "6917ea0b3c501af8bc0ff04225e972351333ec041bee5326d715c35af432530c"
+  },
+  {
+    "path": "src/Appointments.Api/Services/ClinicConnections.cs",
+    "kind": "source/configuration",
+    "bytes": 4711,
+    "sha256": "a154aeeaa8350e10cbe50d00eb8611be3130bace990fe5c506c2ceb850240a27"
+  },
+  {
+    "path": "src/Appointments.Api/Services/ClinicRegistry.cs",
+    "kind": "source/configuration",
+    "bytes": 8490,
+    "sha256": "011759a0dcb746a9883023d38e9e865f084fc93667a9fc847d028daa244abbe2"
+  },
+  {
+    "path": "src/Appointments.Api/Services/DatabaseInitializer.cs",
+    "kind": "source/configuration",
+    "bytes": 3275,
+    "sha256": "91250960367177a6902be094b3f5ecdb6590c30547a260d34991e073fac13ba9"
+  },
+  {
+    "path": "src/Appointments.Api/Services/GlobalPatients.cs",
+    "kind": "source/configuration",
+    "bytes": 19128,
+    "sha256": "d82ce33716800ad2f9e939b9a3d5542a41c4d37f6e943563c15f3c9950812195"
+  },
+  {
+    "path": "src/Appointments.Api/Services/IdentityDirectory.cs",
+    "kind": "source/configuration",
+    "bytes": 7424,
+    "sha256": "ff55dd37c5c2f7f1fc94e8be4a6347e2042dae2aa0be585a4ca8c5364ce32299"
+  },
+  {
+    "path": "src/Appointments.Api/Services/PlatformAuthentication.cs",
+    "kind": "source/configuration",
+    "bytes": 1540,
+    "sha256": "12125e1f6cdf37336cca801be60e590ce379231036c4e4d58730f37038ab7bac"
+  },
+  {
+    "path": "src/Appointments.Api/Services/PlatformService.cs",
+    "kind": "source/configuration",
+    "bytes": 17634,
+    "sha256": "f8b8894308f59d4b7a348eeea5066945612c6a2f6df568869f747c5a2e688e54"
+  },
+  {
+    "path": "src/Appointments.Api/Services/PreviewSeeder.cs",
+    "kind": "source/configuration",
+    "bytes": 11337,
+    "sha256": "73492d7a1507dafb8f6253cd464d87eb371033002876d94b359668c11277f159"
+  },
+  {
+    "path": "src/Appointments.Api/Services/PublicDiscovery.cs",
+    "kind": "source/configuration",
+    "bytes": 8535,
+    "sha256": "71d6b7f3258a48b9deb0394fec55bd5e54cceb41672558573604e5693b4e10b0"
+  },
+  {
+    "path": "src/Appointments.Api/Services/RegistryRefreshService.cs",
+    "kind": "source/configuration",
+    "bytes": 1111,
+    "sha256": "bea0322fd1ad60d0e3c3ace5e3c67c3abb223599dc8f7225cd829b135f1fe3cf"
+  },
+  {
+    "path": "src/Appointments.Api/Services/SessionAuthentication.cs",
+    "kind": "source/configuration",
+    "bytes": 4281,
+    "sha256": "f17d838d7039ef44b09c9c9237b1b1348f75068ec2c55ac1baa554cd8326c970"
+  },
+  {
+    "path": "src/Appointments.Api/Services/SharedClinicDatabase.cs",
+    "kind": "source/configuration",
+    "bytes": 3145,
+    "sha256": "6dc3496000415d5be6e12fce764d271b8a7dd296ec4abd148ca66414d4469dba"
+  },
+  {
+    "path": "src/Appointments.Api/appsettings.Development.json",
+    "kind": "source/configuration",
+    "bytes": 77,
+    "sha256": "4b2d2da42b2773b24d5f741162cf539ba4608fec30c6b33f4c61ff3f7571b40a"
+  },
+  {
+    "path": "src/Appointments.Api/appsettings.json",
+    "kind": "source/configuration",
+    "bytes": 436,
+    "sha256": "087bc04913c81a7d5c47523bfe530e4ddb2a370aef1dc12596c2bab4597efdc9"
+  },
+  {
+    "path": "src/Appointments.Api/dotnet-tools.json",
+    "kind": "source/configuration",
+    "bytes": 183,
+    "sha256": "e48342794ccf9dd33332c04e3c946488ab797c138f07d13b1a26c95b5664b3b9"
+  },
+  {
+    "path": "src/Appointments.Contracts/Appointments.Contracts.csproj",
+    "kind": "source/configuration",
+    "bytes": 147,
+    "sha256": "955b50946b5dc7724ac7d7418e45d591c3ee9b7ded550b5f1ae1759a8c52a274"
+  },
+  {
+    "path": "src/Appointments.Contracts/Contracts.cs",
+    "kind": "source/configuration",
+    "bytes": 3046,
+    "sha256": "8427a9ed68ac8fdf67fa241c91761899204b9f493e2dd9df3725aed74343ee6e"
+  },
+  {
+    "path": "src/Appointments.Contracts/Discovery.cs",
+    "kind": "source/configuration",
+    "bytes": 2616,
+    "sha256": "41b0ca06f3b54c3bf891bb0d78f5b50c4035e4056c45e45e9b637f50f0805605"
+  },
+  {
+    "path": "src/Appointments.Core/AppointmentHistory.cs",
+    "kind": "source/configuration",
+    "bytes": 1659,
+    "sha256": "e0397fe5e36fc0113113a2e4fe478fdb31f675e4be725805c9d41daf63d1f9c8"
+  },
+  {
+    "path": "src/Appointments.Core/AppointmentService.cs",
+    "kind": "source/configuration",
+    "bytes": 21353,
+    "sha256": "9c2700d2c3f3bd2b975bb8661a2b55ce63002f90260c659b0ca20bde19e1f59c"
+  },
+  {
+    "path": "src/Appointments.Core/Appointments.Core.csproj",
+    "kind": "source/configuration",
+    "bytes": 122,
+    "sha256": "c1c28c662d9d065b3d966b50d01075d425bf5ff6c418a980caedffe4e101203d"
+  },
+  {
+    "path": "src/Appointments.Core/AvailabilityOverview.cs",
+    "kind": "source/configuration",
+    "bytes": 5153,
+    "sha256": "15547c7bf67c1f5f505a3be0b2ca5ab3d046dcf46e0a71134cd079294dc1e541"
+  },
+  {
+    "path": "src/Appointments.Core/BookingPolicy.cs",
+    "kind": "source/configuration",
+    "bytes": 1518,
+    "sha256": "87f398c79fefc44dca01254848ce709fdca3915cbf4fff9b718ad4d3aeba9636"
+  },
+  {
+    "path": "src/Appointments.Core/Catalogue.cs",
+    "kind": "source/configuration",
+    "bytes": 7566,
+    "sha256": "58dd7b2e816935d7a6074048dd9de542b20870fb4be2245152a19ff9f1f6b6c4"
+  },
+  {
+    "path": "src/Appointments.Core/DemoSeed.cs",
+    "kind": "source/configuration",
+    "bytes": 5237,
+    "sha256": "85b1b7993a26cc297604008fec8ae2c95af8f3d1521237182652965b34ea7540"
+  },
+  {
+    "path": "src/Appointments.Core/JsonDemoStore.cs",
+    "kind": "source/configuration",
+    "bytes": 3368,
+    "sha256": "176ba140cb9b501c63b64d80708b215b3198975438a0e8e27bc2901188735e2e"
+  },
+  {
+    "path": "src/Appointments.Core/Localization/en.json",
+    "kind": "source/configuration",
+    "bytes": 122049,
+    "sha256": "db6f83e3720264dd1b304faab28a00ff11462c50648eeb304fffd8e3ed918a0b"
+  },
+  {
+    "path": "src/Appointments.Core/Models.cs",
+    "kind": "source/configuration",
+    "bytes": 5825,
+    "sha256": "cb28eb8460baefd6591e23efe7964c34f9da3f8ef51a67b562feb2b575e0ef56"
+  },
+  {
+    "path": "src/Appointments.Core/PatientContact.cs",
+    "kind": "source/configuration",
+    "bytes": 579,
+    "sha256": "58d9c5c21f66675543b11ea84a1c8f6878f6e8401eb6c1c1b085db00ad91d753"
+  },
+  {
+    "path": "src/Appointments.Core/Reports.cs",
+    "kind": "source/configuration",
+    "bytes": 8248,
+    "sha256": "00593e5ea0c8da33cdee302ff7cb01d0e4604f1bb6b9d65c5137530ecc5a9895"
+  },
+  {
+    "path": "src/Appointments.Core/SchedulingClock.cs",
+    "kind": "source/configuration",
+    "bytes": 1922,
+    "sha256": "0b9a6269c3a6101bb81708291f0bee3c28766c45ec39fd5d5573e9b125c1b5b6"
+  },
+  {
+    "path": "src/Appointments.Core/SchedulingRules.cs",
+    "kind": "source/configuration",
+    "bytes": 3873,
+    "sha256": "d5c39018463d89f0b203f6fabf31cc535069c351520dcc948f63f4ecb9347f3b"
+  },
+  {
+    "path": "src/Appointments.Core/UiText.cs",
+    "kind": "source/configuration",
+    "bytes": 1249,
+    "sha256": "29d3602f16b2d1709a5dd0b3956ad442ba1a5a5f9b314adca40e77ec31a3363b"
+  },
+  {
+    "path": "src/Appointments.Core/WebProxyIdentity.cs",
+    "kind": "source/configuration",
+    "bytes": 1108,
+    "sha256": "d3f610913bede1530515f37a612a09f22a27964ac91c1d893f415e2aee638766"
+  },
+  {
+    "path": "src/Appointments.Data/Appointments.Data.csproj",
+    "kind": "source/configuration",
+    "bytes": 585,
+    "sha256": "83f6248803efef517f58b2f7d87f55cccc58dcb869877b8b37e1f1dde74f9053"
+  },
+  {
+    "path": "src/Appointments.Data/AppointmentsDbContext.cs",
+    "kind": "source/configuration",
+    "bytes": 11778,
+    "sha256": "265295fd1622cd34c12331679ce64d966c37d8d6e71586d55a21a5b61b01f209"
+  },
+  {
+    "path": "src/Appointments.Data/DesignTimeFactory.cs",
+    "kind": "source/configuration",
+    "bytes": 574,
+    "sha256": "74269b5a74e4a246edd0c3294625a4b5a88bcca13fa7b7c1832f39d45687b7c6"
+  },
+  {
+    "path": "src/Appointments.Data/Entities.cs",
+    "kind": "source/configuration",
+    "bytes": 2992,
+    "sha256": "e5f15cd0ba441c4402eb9ae63f30a0aadc98f3de59b2fe17d70002dba1991279"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20260922194435_InitialPostgres.Designer.cs",
+    "kind": "database",
+    "bytes": 19506,
+    "sha256": "9ff892c276d119980e1ac076227993f72c637004053c8441725eea7750b2717c"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20260922194435_InitialPostgres.cs",
+    "kind": "database",
+    "bytes": 19506,
+    "sha256": "8601edfa1535954eca1cb3898a68cce50dffbf8e96aab84933dc0742e9cdd07a"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20260930135621_ServiceCatalogue.Designer.cs",
+    "kind": "database",
+    "bytes": 24488,
+    "sha256": "e4234dfc8f3465663536a1bfbf7918d6d0931243c2c6f04b9fa9912600daddea"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20260930135621_ServiceCatalogue.cs",
+    "kind": "database",
+    "bytes": 8209,
+    "sha256": "a87cb6ea8a2a7ff9bd1454623ea88f26e12f0d3591c3a7bc59345280a965928a"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261001070652_AppointmentHistory.Designer.cs",
+    "kind": "database",
+    "bytes": 28027,
+    "sha256": "b03cf5ee8c1f40141ef437377e357502c714f1ecb88ff00d0c784369ec142c00"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261001070652_AppointmentHistory.cs",
+    "kind": "database",
+    "bytes": 3568,
+    "sha256": "4f69bd43f9b40836d1b23b8c1184a3f30a20b4a482569985b2c6db024640213e"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261005225240_PatientProfiles.Designer.cs",
+    "kind": "database",
+    "bytes": 28398,
+    "sha256": "62a3156e6a5a464919237e902da72bc7f1c23ee6d65cf50eb11b74f7bce27632"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261005225240_PatientProfiles.cs",
+    "kind": "database",
+    "bytes": 1063,
+    "sha256": "ac70cb4285c2a2476a9c4d1df55d9c1695c90b041aa5322889698f4d2f4e563b"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261110091110_PatientNumbers.Designer.cs",
+    "kind": "database",
+    "bytes": 28819,
+    "sha256": "fc4d54542da1c4c9079d287cecfa923950bbe24fd332f4e1aa9fe56a99f14f47"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261110091110_PatientNumbers.cs",
+    "kind": "database",
+    "bytes": 1537,
+    "sha256": "8a931b194144e0cda7a1e24620a45b51b105bf8e79a6a485255006cc59176831"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261110131050_GlobalPatientMemberships.Designer.cs",
+    "kind": "database",
+    "bytes": 33984,
+    "sha256": "6e125324bf23339930a0a2a87a24157ed8cabf6eebe142b39927d37aed5f4263"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261110131050_GlobalPatientMemberships.cs",
+    "kind": "database",
+    "bytes": 2074,
+    "sha256": "154a9d182693fbd6fb4c0fc0ed1ace6d9f8e0ed616598aa74ed1f6dbd62359f1"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261111122943_DatedWorkingHours.Designer.cs",
+    "kind": "database",
+    "bytes": 34632,
+    "sha256": "568fb0f98c4a7b53ce8ad6b3e5c466d2e22752fb00a2ee08c4687b22c3ef1c42"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/20261111122943_DatedWorkingHours.cs",
+    "kind": "database",
+    "bytes": 1512,
+    "sha256": "274b6427aeab90497a62bd5e59ecb03d7d8d1664b6e53f88c43dc94af4772fd0"
+  },
+  {
+    "path": "src/Appointments.Data/Migrations/AppointmentsDbContextModelSnapshot.cs",
+    "kind": "database",
+    "bytes": 34532,
+    "sha256": "cb6ac90021038120e728152b770f87236feb4ca651eeebc28d7ec6fb15d6b503"
+  },
+  {
+    "path": "src/Appointments.Data/OperationState.cs",
+    "kind": "source/configuration",
+    "bytes": 494,
+    "sha256": "e71194306608df901da4b3d173944970d22f05f8d31c683217f121a4777806ec"
+  },
+  {
+    "path": "src/Appointments.Data/PlatformDbContext.cs",
+    "kind": "source/configuration",
+    "bytes": 2444,
+    "sha256": "7509d8293b43cb47d679cd4fc7b05a7c8b226c2ada2c7020a1b26fad0e48b63f"
+  },
+  {
+    "path": "src/Appointments.Data/PostgresAppointments.cs",
+    "kind": "source/configuration",
+    "bytes": 22808,
+    "sha256": "8dfaf22c3762f58ce8d4011ca79e241130498ea072a38b91e6f0a6d191e7b050"
+  },
+  {
+    "path": "src/Appointments.Data/PostgresText.cs",
+    "kind": "source/configuration",
+    "bytes": 804,
+    "sha256": "07e602279463567945618bbf072ef367c2b8f9cba12f2f83ebe2e02d7d4d813a"
+  },
+  {
+    "path": "src/Appointments.Web/Appointments.Web.csproj",
+    "kind": "source/configuration",
+    "bytes": 332,
+    "sha256": "b5543bd4d4d5880c480da54ca85c39e7d7c7b85885fec1e8b8a6db9ae23db656"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/AccountController.cs",
+    "kind": "source/configuration",
+    "bytes": 6143,
+    "sha256": "59a8ed48362ef53d4f5cb6e4377681dd966b8b2bc3b931d67d9423884baab348"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/AccountsController.cs",
+    "kind": "source/configuration",
+    "bytes": 3731,
+    "sha256": "0ed8f7b0e78381a77ad5be008abdc56e7228eb0099282e430c43d1085a9763ac"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/DataController.cs",
+    "kind": "source/configuration",
+    "bytes": 7518,
+    "sha256": "516ae1cbb8024fa135fe5160cfad496801d3225bf1cfcc35c59071bd61a6761b"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/DemoController.cs",
+    "kind": "source/configuration",
+    "bytes": 2051,
+    "sha256": "380de38f01948cf765725d2c35830283f4cc19fba2fc1433158575644e9f9651"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/DiscoverController.cs",
+    "kind": "source/configuration",
+    "bytes": 5372,
+    "sha256": "4fc1aacf4a23be97d9b504e8c13d15d2fd31f0b64132e6dc184e3b8b14da24c5"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/HomeController.cs",
+    "kind": "source/configuration",
+    "bytes": 1419,
+    "sha256": "44a2da28d27af85a9edc29e0c3d30d9e5327d3efc12ae6492d28085b3628382f"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/PatientClinicsController.cs",
+    "kind": "source/configuration",
+    "bytes": 3954,
+    "sha256": "4894fd38a072de6e4df61b71b575e5fe752f7c20f37fe0d1c363357c3736ed19"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/PatientSupportController.cs",
+    "kind": "source/configuration",
+    "bytes": 1828,
+    "sha256": "275078d884185fc3e4b3a8b8ee94c49488727778750a6028652ba215c78f4169"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "kind": "source/configuration",
+    "bytes": 9189,
+    "sha256": "cea70bd528a00b1c2d743bacf37e81e42e80d0fd2a734a9163597e07c71ab561"
+  },
+  {
+    "path": "src/Appointments.Web/Controllers/PreferencesController.cs",
+    "kind": "source/configuration",
+    "bytes": 1043,
+    "sha256": "b845eb927b49651bcd4310e15d0ec9f32ba980d4baf0304ee30feaaa9211e024"
+  },
+  {
+    "path": "src/Appointments.Web/Models/AccountManagementViewModel.cs",
+    "kind": "source/configuration",
+    "bytes": 518,
+    "sha256": "55613c9e8d23937b4b14f010765018215144ed2964d122a4a17cf9976163abfa"
+  },
+  {
+    "path": "src/Appointments.Web/Program.cs",
+    "kind": "source/configuration",
+    "bytes": 9253,
+    "sha256": "690b36536681ac1836e56bbe3877ac659806af90700b0ece011e0f759e90fd7f"
+  },
+  {
+    "path": "src/Appointments.Web/Properties/PublishProfiles/FolderProfile.pubxml",
+    "kind": "source/configuration",
+    "bytes": 865,
+    "sha256": "0589bfacdc955543e61d010ee39ab8420e4b0fd1f0ccbb70bf0fa8d4fe3063d6"
+  },
+  {
+    "path": "src/Appointments.Web/Properties/launchSettings.json",
+    "kind": "source/configuration",
+    "bytes": 333,
+    "sha256": "e58e4162887a8a0cdfa941ad1d07e2608b2e4dd20a308bd80a7c18d469f2e30f"
+  },
+  {
+    "path": "src/Appointments.Web/Seed/doctors.json",
+    "kind": "source/configuration",
+    "bytes": 35479,
+    "sha256": "94d98add44141ef8060510abcbcea0928306d9081de42dae366ce0c39debea5f"
+  },
+  {
+    "path": "src/Appointments.Web/Services/ApiClient.cs",
+    "kind": "source/configuration",
+    "bytes": 4859,
+    "sha256": "7c2ddb2c4e89f201c275e15c5ad03c025c5ab8e5c333bd22f62dcf069a3d37ae"
+  },
+  {
+    "path": "src/Appointments.Web/Services/BackendSettings.cs",
+    "kind": "source/configuration",
+    "bytes": 106,
+    "sha256": "80d30f67ce08c3a9b0106c8a5fda66146da7d55073a3d7ba4bf357c2091846af"
+  },
+  {
+    "path": "src/Appointments.Web/Services/ClinicAntiforgery.cs",
+    "kind": "source/configuration",
+    "bytes": 1628,
+    "sha256": "41406bb3bd11a2d8bf331956c2afd8b03548c0c7bfc0ba5d55e19966d8cdba99"
+  },
+  {
+    "path": "src/Appointments.Web/Services/DemoIdentity.cs",
+    "kind": "source/configuration",
+    "bytes": 1074,
+    "sha256": "7fe8c5eb858e733ec694d726d366de9c8e71b8a136b8fc5a98c425a249cecd74"
+  },
+  {
+    "path": "src/Appointments.Web/Services/DisplayExtensions.cs",
+    "kind": "source/configuration",
+    "bytes": 410,
+    "sha256": "fe6c101ac6fcdb1fd46572ff73d474bf7eac3e0b5d20b9f862997368931a4fa5"
+  },
+  {
+    "path": "src/Appointments.Web/Services/IconMarkup.cs",
+    "kind": "source/configuration",
+    "bytes": 429,
+    "sha256": "0cf990567ae55634e3b6db75246d69737c5eef3eeb14c9bfd563c8d64da6696f"
+  },
+  {
+    "path": "src/Appointments.Web/Services/WebSession.cs",
+    "kind": "source/configuration",
+    "bytes": 1591,
+    "sha256": "36a6d5d0e1ca08a8a4f88119d3d58f986a3a0e3877763ac35c5faaea0ef9c06b"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Account/AccessDenied.cshtml",
+    "kind": "source/configuration",
+    "bytes": 665,
+    "sha256": "c92a110fca53261924dbb4f76106600307bed2ca206b27cb40d68196d675f8b6"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Account/Login.cshtml",
+    "kind": "source/configuration",
+    "bytes": 2419,
+    "sha256": "de52780eee1162770255c505cc2e0e23912ebd87874660fa1bed255a0becd580"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Account/Password.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1161,
+    "sha256": "009d90b8c083b073ddfc8a0ec2e49c479b0e1c34fda0c3b0f0d63c7a1f87c164"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Account/Register.cshtml",
+    "kind": "source/configuration",
+    "bytes": 2413,
+    "sha256": "5f731580100cb21c5ad72c5a4e45668878c7d982a37ae07f77d7b7b811771b5f"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Accounts/Index.cshtml",
+    "kind": "source/configuration",
+    "bytes": 9038,
+    "sha256": "afd56907f55f7c19d40af1179e9c62491c7162b9fc293f6afc5a4bbb44c075cc"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Demo/Index.cshtml",
+    "kind": "source/configuration",
+    "bytes": 4142,
+    "sha256": "16569171374d62730633826f8a1f760a3c90b7edfad4c5165d41f53216e6fa6b"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Discover/Doctor.cshtml",
+    "kind": "source/configuration",
+    "bytes": 7245,
+    "sha256": "de2a1cd17346fcee3dc4779af92da7eabc19d7e8b546b1b3a40fea864608bedc"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Discover/Index.cshtml",
+    "kind": "source/configuration",
+    "bytes": 25617,
+    "sha256": "a8bbe7c6b3c787447c2aa58b921f1b46e84ecc750e8cc27d140337e53f8c9d94"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Discover/_ClinicContact.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1159,
+    "sha256": "de81018567d980e7b45e6fc11b8166c6c5b682e43a4af5499a2290f502633536"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Discover/_ClinicMap.cshtml",
+    "kind": "source/configuration",
+    "bytes": 2007,
+    "sha256": "2832f3010414fc24fe2958e2ba0728f049a2751cc630967fa4189700ee0ba513"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Home/Error.cshtml",
+    "kind": "source/configuration",
+    "bytes": 708,
+    "sha256": "c5c2c61300f7b5ceaac6a37b683d80fa9cf37d30df95e367ccfd220ef50ad216"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Home/Workspace.cshtml",
+    "kind": "source/configuration",
+    "bytes": 9236,
+    "sha256": "b7b3c953a39ebee8f39500f22bcf82cede24d097b2c7c71f856ceccc1cb1ae4d"
+  },
+  {
+    "path": "src/Appointments.Web/Views/PatientClinics/Index.cshtml",
+    "kind": "source/configuration",
+    "bytes": 5689,
+    "sha256": "35dfd1e11bb50fd004008aedc006fb5242eb532e2347e52bac63777ba1c7f160"
+  },
+  {
+    "path": "src/Appointments.Web/Views/PatientClinics/Join.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1945,
+    "sha256": "c90308b355d8c74bf4b03c6120ee78a5a47e68363a723c3a5315cde11f3e9daf"
+  },
+  {
+    "path": "src/Appointments.Web/Views/PatientClinics/_ClinicSwitcher.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1215,
+    "sha256": "fb2f2d63f38d8d1711a72aa1545c418354cdc436f05c3471df75a6e545adb2c2"
+  },
+  {
+    "path": "src/Appointments.Web/Views/PatientClinics/_Visit.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1054,
+    "sha256": "e533a3001cdce302cc4e8e8b4cb777ebe3a62654c74b88da68fa83c245d8b047"
+  },
+  {
+    "path": "src/Appointments.Web/Views/PatientSupport/Index.cshtml",
+    "kind": "source/configuration",
+    "bytes": 2885,
+    "sha256": "0210c9ca5ac6aee0b40ce54efe31c6a93abc308ddc514e36ae3b3122772c254a"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Platform/Edit.cshtml",
+    "kind": "source/configuration",
+    "bytes": 2841,
+    "sha256": "8826e57123ce554cf31b9bc90dcf5f33a00ba4976d9acd72bdf2d7c842f2c31a"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Platform/Index.cshtml",
+    "kind": "source/configuration",
+    "bytes": 6730,
+    "sha256": "64efd8e66ce4fddad2792a4522727a12a5c01b4167263bf0da9988fdeae2fd7b"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Platform/Login.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1578,
+    "sha256": "bb79b371de4195ad4d0ad4de4b480d629cf08800540e1bc70b2d8fb5815ace99"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_AccountSettings.cshtml",
+    "kind": "source/configuration",
+    "bytes": 2697,
+    "sha256": "a576cf4ea5eaa6bb2e839921a5097bb65e9dab73c7a10b4d94ac62444a243e7b"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_AppearancePreferences.cshtml",
+    "kind": "source/configuration",
+    "bytes": 112,
+    "sha256": "6342879b554b8c29775a7e11db3541026408ca674342cb92ae8528dff29328fb"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_BrandMark.cshtml",
+    "kind": "source/configuration",
+    "bytes": 134,
+    "sha256": "b769f648daa00d538feaf343a0c062f7209b659f31b55af81ef2f1ec4e47cf98"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_ClinicPicker.cshtml",
+    "kind": "source/configuration",
+    "bytes": 873,
+    "sha256": "fb08e5bd46ff07dabc737b19022f5610b58e203fdf4169c7a90be54794f2d7a4"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_LanguageSelector.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1091,
+    "sha256": "9c9d72e18dc137a9f7a968652e339e10af3aa373bcdc38600870628133ea2aac"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_Layout.cshtml",
+    "kind": "source/configuration",
+    "bytes": 1610,
+    "sha256": "705b8dd015bde9593fde916940b977baacf56d035fff0267fe44c4bfe7ef5b38"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_PublicHeader.cshtml",
+    "kind": "source/configuration",
+    "bytes": 902,
+    "sha256": "d5bb195b58e5795777d83f5589660e2ce582f39e6e63fd0857374bf5235e7d8f"
+  },
+  {
+    "path": "src/Appointments.Web/Views/Shared/_ThemeSelector.cshtml",
+    "kind": "source/configuration",
+    "bytes": 338,
+    "sha256": "39677d6a50b436c08d7e76df72a7553a864e25d0224ed8ea8acd292a7d438156"
+  },
+  {
+    "path": "src/Appointments.Web/Views/_ViewImports.cshtml",
+    "kind": "source/configuration",
+    "bytes": 230,
+    "sha256": "7c03ca82c939a6740ea962bf69925d0a101f94effaf17a83fbacf88a13a2e983"
+  },
+  {
+    "path": "src/Appointments.Web/Views/_ViewStart.cshtml",
+    "kind": "source/configuration",
+    "bytes": 25,
+    "sha256": "3a8c523f595b40ed4d5b54a0ea7b8a42728d368582b2a29ef12db188990f7373"
+  },
+  {
+    "path": "src/Appointments.Web/appsettings.Development.json",
+    "kind": "source/configuration",
+    "bytes": 32,
+    "sha256": "11d7d4815f22315bdc93e752bcf9ea1167001bdc5194d56a3d21a82cd3807e65"
+  },
+  {
+    "path": "src/Appointments.Web/appsettings.json",
+    "kind": "source/configuration",
+    "bytes": 356,
+    "sha256": "a140c919c58f8ba480414f205baf9a6da2e7889a477e27805098774d4eacd513"
+  },
+  {
+    "path": "src/Appointments.Web/dotnet-tools.json",
+    "kind": "source/configuration",
+    "bytes": 183,
+    "sha256": "e48342794ccf9dd33332c04e3c946488ab797c138f07d13b1a26c95b5664b3b9"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/css/account-settings.css",
+    "kind": "asset",
+    "bytes": 6052,
+    "sha256": "943e0726c2c83c42976249781da32edad4b59ab6368cd9c9dc02308db314aea1"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/css/discover.css",
+    "kind": "asset",
+    "bytes": 42476,
+    "sha256": "36e906dd4894dafd7a04e2052d2f894073ec118dba85d71eeac1406c2c13d814"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/css/site.css",
+    "kind": "asset",
+    "bytes": 94003,
+    "sha256": "54e0037d97ccf9e0bb55c4c488531e3dc496cdbdfd0dc7ab4b2db63a2483a28d"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/css/themes.css",
+    "kind": "asset",
+    "bytes": 7864,
+    "sha256": "8ea9b98af0e523dacd01dfcd1d8e3875358324f86e71142878af9cb76816bc62"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/favicon.svg",
+    "kind": "asset",
+    "bytes": 3096,
+    "sha256": "d7201aaa4c81d465ce33fc1f35c4bbaaf696eb4d1caea5636e6be202de4fd781"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/i18n/en.js",
+    "kind": "asset",
+    "bytes": 117529,
+    "sha256": "57d7c9bed25be0fa08e56eb97c4272b3dd04b6bd025cdae3ac103cfc8e2765fe"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/icons/Lucide.LICENSE.txt",
+    "kind": "asset",
+    "bytes": 3208,
+    "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/icons/interface.svg",
+    "kind": "asset",
+    "bytes": 13660,
+    "sha256": "38492fd41b38966bf2e728fc3613328016f045bd8cf53e6800cc78400a60aa69"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/images/codex-computers.png",
+    "kind": "asset",
+    "bytes": 56023,
+    "sha256": "7a2e53a9d21db087311e02107f01423c078757f4e9bf92570aae40735139a49b"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/images/company-mark.svg",
+    "kind": "asset",
+    "bytes": 3096,
+    "sha256": "d7201aaa4c81d465ce33fc1f35c4bbaaf696eb4d1caea5636e6be202de4fd781"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/account-create.js",
+    "kind": "asset",
+    "bytes": 1392,
+    "sha256": "0c920996c78898b8d2c872c1c990296916ed621127a4d1b956771881b396d0a9"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/account-settings.js",
+    "kind": "asset",
+    "bytes": 1441,
+    "sha256": "5c2b005565ba5e391a9308e76abc8b7fecba0c0f661d76c447a19630ce2976a2"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/accounts.js",
+    "kind": "asset",
+    "bytes": 272,
+    "sha256": "11d22e34a7016ba2c0707687fc12848d8c499c1ec638d7f1741502757a40ac47"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/app.js",
+    "kind": "asset",
+    "bytes": 164913,
+    "sha256": "f7db4f99ed22ffac529fb5f511a18f8ad8e244506d7ee160c90a188203b3055d"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/clinic-switcher.js",
+    "kind": "asset",
+    "bytes": 2315,
+    "sha256": "0a55c807cca6375cfa643ba9842b1329aac3e38b28ced3dbaefbf7d564b8c816"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/dates.js",
+    "kind": "asset",
+    "bytes": 14847,
+    "sha256": "e390f01f6125724a1c82a8bcde2733ffe856a693c36266b79659c07066453521"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/demo.js",
+    "kind": "asset",
+    "bytes": 1550,
+    "sha256": "07c5bbfb45d141b86c7518fad78c0669658a92a240c03bbf2d43471d440690bd"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/discover.js",
+    "kind": "asset",
+    "bytes": 3492,
+    "sha256": "0c15708cf0d8b8744c9d8eff87a4aad245a35c1c9cdb82a52217ab8408c56b1a"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/icons.js",
+    "kind": "asset",
+    "bytes": 336,
+    "sha256": "b2ce1513204a530ff166219e685e7bff653122e33765dedfc16d357ea02e811e"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/language.js",
+    "kind": "asset",
+    "bytes": 1454,
+    "sha256": "bdb03611c75f3fe7168fe9f22fdde7340b7bce737e1fc8044756c3506c744ea9"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/localization.js",
+    "kind": "asset",
+    "bytes": 1672,
+    "sha256": "4068b37e2411d96bbb66e5179e8ac9909bfd7d29d0bc8ffebefd06f2f2d3929e"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/navigation-drawer.js",
+    "kind": "asset",
+    "bytes": 2682,
+    "sha256": "43095d93adfa835a46c9b18ceb6430f7dc44d71860eef4d41b739e46d4127fb8"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/navigation.js",
+    "kind": "asset",
+    "bytes": 302,
+    "sha256": "ab8ef8f963dfba9c1d51d7564d5ef21d9a0deb9aa98a02dfe66e56e30319f00e"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/password-visibility.js",
+    "kind": "asset",
+    "bytes": 3274,
+    "sha256": "722dbc31a4fb783e2dbdd251dc5b115971921c194d29cdfd95b0e118ac53bae8"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/platform.js",
+    "kind": "asset",
+    "bytes": 807,
+    "sha256": "a01523f8d91c16393c98e37a265062f2312c06fa03eed458f03defabdb29e30d"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/theme.js",
+    "kind": "asset",
+    "bytes": 1523,
+    "sha256": "d5ba64fd936379bd755304b072b16728caa2d625827466af3a52ed87cfec775e"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/js/validation-mk.js",
+    "kind": "asset",
+    "bytes": 2001,
+    "sha256": "b5c6a8574d8402109ba63b47915079a18eb65f8893aaf7ee85ef3b95efb0b526"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/vendor/FullCalendar.LICENSE.md",
+    "kind": "documentation",
+    "bytes": 1066,
+    "sha256": "4c0b0dae26c99e3b11be70b990a703be4deb75e21884104582e0e217786d3209"
+  },
+  {
+    "path": "src/Appointments.Web/wwwroot/vendor/fullcalendar.min.js",
+    "kind": "asset",
+    "bytes": 283987,
+    "sha256": "b101204ba23e14478e957e284d58bba96fc7311021d0eeaf89fa5e65720c46c8"
+  },
+  {
+    "path": "tests/Appointments.DatabaseTests/Appointments.DatabaseTests.csproj",
+    "kind": "test",
+    "bytes": 628,
+    "sha256": "e26b701eb91d4aba1692255e22e457ae02fc3c40594709bce865452b41c5f85b"
+  },
+  {
+    "path": "tests/Appointments.DatabaseTests/CatalogueUpgrade.cs",
+    "kind": "test",
+    "bytes": 3573,
+    "sha256": "e8564f568de14d09842511a1ba296f76d77536f8a6b7cafaf7639d0fc37bd3c8"
+  },
+  {
+    "path": "tests/Appointments.DatabaseTests/PatientNumbers.cs",
+    "kind": "test",
+    "bytes": 4391,
+    "sha256": "59dcf26228531f88a12163a2cec280c0acc4fb2a2e76761a69b5c6d4bbe3028a"
+  },
+  {
+    "path": "tests/Appointments.DatabaseTests/Program.cs",
+    "kind": "test",
+    "bytes": 3564,
+    "sha256": "56ab325bb0c98044fd68ef0f5ec7ddffbbf229106bcfda2e371a082ed3f81d59"
+  },
+  {
+    "path": "tests/Appointments.DatabaseTests/TenantFixtures.cs",
+    "kind": "test",
+    "bytes": 11390,
+    "sha256": "b16fa89ea179795491a530272d5ea448fddaf337a81919c3ed07192ee3e03ad4"
+  },
+  {
+    "path": "tests/Appointments.Tests/Appointments.Tests.csproj",
+    "kind": "test",
+    "bytes": 354,
+    "sha256": "fdfd105cf344be42eb6212a82722a6c77a7871d21bb71c7be7aaada774818ba2"
+  },
+  {
+    "path": "tests/Appointments.Tests/Program.cs",
+    "kind": "test",
+    "bytes": 50670,
+    "sha256": "22d9a75f9bca6759b3a9358a3e18148d382a28de2862cb50e3a589b69d9b45c8"
+  },
+  {
+    "path": "tests/api_integration.py",
+    "kind": "test",
+    "bytes": 33051,
+    "sha256": "608a34ff86382d36d9dbe1f846884d2143599976797c5795b942a18734d0b956"
+  },
+  {
+    "path": "tests/booking_review_integration.py",
+    "kind": "test",
+    "bytes": 13479,
+    "sha256": "7523e391eb68db6782fc6f9e1e56320a8ec8b383be4d829a85db7395108ec529"
+  },
+  {
+    "path": "tests/discovery_web_smoke.py",
+    "kind": "test",
+    "bytes": 30414,
+    "sha256": "e7661894c676bd7e8ba090806e56b6caa6bacb7f356a42765051e4dd165bcfd5"
+  },
+  {
+    "path": "tests/frontend/accessibility-browser.cjs",
+    "kind": "test",
+    "bytes": 4118,
+    "sha256": "8998588965fb76a0f3e4955e3b6686397bd310335fb2acfba9ebabfd812147bc"
+  },
+  {
+    "path": "tests/frontend/account-settings-browser.cjs",
+    "kind": "test",
+    "bytes": 12906,
+    "sha256": "464dff6412208c637fdaadc81b2ac1e1e6bd03fa93e6d56fa9dbd34b8fb3a27d"
+  },
+  {
+    "path": "tests/frontend/booking-review-browser.cjs",
+    "kind": "test",
+    "bytes": 10225,
+    "sha256": "6f31b0e64df474088a7fee27c6c747eb42379dff319044fca78243dc5cb2dae3"
+  },
+  {
+    "path": "tests/frontend/dates.mjs",
+    "kind": "test",
+    "bytes": 4862,
+    "sha256": "0d488ec643fa12184b6dde9e950ec5e987a69669c2cc03a91b3de11a5ce4c943"
+  },
+  {
+    "path": "tests/frontend/discovery-browser.cjs",
+    "kind": "test",
+    "bytes": 41899,
+    "sha256": "dac5b237db5320f7c1fd5b54e8dc895b619da0938571dccb08db40805dcfb1dc"
+  },
+  {
+    "path": "tests/frontend/global-patients-browser.cjs",
+    "kind": "test",
+    "bytes": 11408,
+    "sha256": "3ca925ba8063de5d49aef2b4335639e5591ec3029b48378e808ed13f16b7ebbc"
+  },
+  {
+    "path": "tests/frontend/helpers/account-settings.cjs",
+    "kind": "test",
+    "bytes": 851,
+    "sha256": "03cceeb07d3975c4a976a4a08c2d24a25b8ad0f79bf8fee2d95a3e95da7aa597"
+  },
+  {
+    "path": "tests/frontend/high-severity.cjs",
+    "kind": "test",
+    "bytes": 5544,
+    "sha256": "4d3da9f724a0fbd57e3a93fd1e5acae6476b2d468d36c5f59fe638b5dde70ee8"
+  },
+  {
+    "path": "tests/frontend/localization-browser.cjs",
+    "kind": "test",
+    "bytes": 16120,
+    "sha256": "da24919d3d350493b926ae915c3d2851277eca69b29244d659be1fff756ab485"
+  },
+  {
+    "path": "tests/frontend/localization.mjs",
+    "kind": "test",
+    "bytes": 3971,
+    "sha256": "bf7ab7953504022013c321d1917665082014f96cd95eeaa6e88f2b5a1f513669"
+  },
+  {
+    "path": "tests/frontend/overnight-browser.cjs",
+    "kind": "test",
+    "bytes": 7992,
+    "sha256": "e3490cbce5d726dcbac539b22b3efd658e13e17acf048b26613a98f4e4e2898e"
+  },
+  {
+    "path": "tests/frontend/package-lock.json",
+    "kind": "test",
+    "bytes": 18949,
+    "sha256": "6a41b25f8318b355d53680444d957c9ea3b9dfefc55f7db977b1c7ea2b902570"
+  },
+  {
+    "path": "tests/frontend/package.json",
+    "kind": "test",
+    "bytes": 294,
+    "sha256": "20a4bfe685241e98a6be07024446b8e4b42d51ce86c5c47ac078433e0ca0862e"
+  },
+  {
+    "path": "tests/frontend/password-visibility.mjs",
+    "kind": "test",
+    "bytes": 3849,
+    "sha256": "ea72782cc6e6b9a76126a8a27499e01d97f99406bc708199329df64bd506638e"
+  },
+  {
+    "path": "tests/frontend/smoke.mjs",
+    "kind": "test",
+    "bytes": 31189,
+    "sha256": "5385d4328e9b8e5130267758124212fb276e9288ba067e2a2c703fcd418b0a6a"
+  },
+  {
+    "path": "tests/frontend/tenancy.mjs",
+    "kind": "test",
+    "bytes": 3963,
+    "sha256": "b62f745a0df785c32ee7680fdf253622840c9c49cd6bfd1ac3e785ccf0431950"
+  },
+  {
+    "path": "tests/frontend/tester-feedback-browser.cjs",
+    "kind": "test",
+    "bytes": 15880,
+    "sha256": "a3add79da079075d53de8f27fc12f9f3b7841e44f66f8b9ace541e959fd2a71a"
+  },
+  {
+    "path": "tests/frontend/tester-round2-browser.cjs",
+    "kind": "test",
+    "bytes": 17304,
+    "sha256": "21a8710e954eb695fb9927274bc9d9b259ca9c55e61ed01f28216dc4ca9452ae"
+  },
+  {
+    "path": "tests/frontend/themes-browser.cjs",
+    "kind": "test",
+    "bytes": 8341,
+    "sha256": "3ded6bafee58fc8feecac5c73c6125e12fd98b926a9552ea6b35ccd27594a454"
+  },
+  {
+    "path": "tests/frontend/themes.mjs",
+    "kind": "test",
+    "bytes": 2863,
+    "sha256": "f5a7363f9eba67f7d366ca2fce24cc09096ed68612b7082200c23b718aabbb49"
+  },
+  {
+    "path": "tests/global_patients_integration.py",
+    "kind": "test",
+    "bytes": 23548,
+    "sha256": "c4c46aef7b8a099011c0b3e159d7259f332cf3c5606ba4a2356f14af3afb3f49"
+  },
+  {
+    "path": "tests/high_severity_integration.py",
+    "kind": "test",
+    "bytes": 22192,
+    "sha256": "ae1cda2b63791d6e935b74cbd3e88087abe30771ce0923b8a4f0fe6a6b1f3dd7"
+  },
+  {
+    "path": "tests/http_smoke.py",
+    "kind": "test",
+    "bytes": 9539,
+    "sha256": "fe668523c44c21dd6e0f3679adbda70d5238b585de2e5613c1fd209351597908"
+  },
+  {
+    "path": "tests/overnight_integration.py",
+    "kind": "test",
+    "bytes": 10192,
+    "sha256": "78814a09ddc4918697d138c5f95bcead46fb62a56dbfb77cee0197333b242221"
+  },
+  {
+    "path": "tests/platform_integration.py",
+    "kind": "test",
+    "bytes": 27602,
+    "sha256": "03e1e5efa716e9e672d50f93314fd0e536400db73b7426c9816e508964e3d92a"
+  },
+  {
+    "path": "tests/tenancy_integration.py",
+    "kind": "test",
+    "bytes": 22667,
+    "sha256": "892e5f9698d69971e2d90f3b9334ea452a7b2aef55c6523b560852b06381327d"
+  },
+  {
+    "path": "tests/tester_feedback_integration.py",
+    "kind": "test",
+    "bytes": 7152,
+    "sha256": "b8f5693dbd22c3770b07022266142e674255a0a09bdf5f993035e49dd94ef5d9"
+  },
+  {
+    "path": "tests/tester_round2_integration.py",
+    "kind": "test",
+    "bytes": 21928,
+    "sha256": "00698603d7c8f67b7dd31daed06131956ccaca5a0a72c59aecaa263e12a8c4b2"
+  }
+]

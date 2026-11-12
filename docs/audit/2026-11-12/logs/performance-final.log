@@ -1,0 +1,1 @@
+{"id": "X0007", "name": "Large next-slot summary", "status": "PASS", "measurement": {"samples": 5, "concurrency": 1, "p50_ms": 37.93, "p95_ms": 46.97, "max_ms": 46.97, "response_bytes": 258, "patients": 0, "appointments": 0, "items": 0, "statuses": {"200": 5}}}

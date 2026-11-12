@@ -1,0 +1,7 @@
+{
+  "actions": [
+    "account.registered",
+    "session.created"
+  ],
+  "failedLoginRequests": 8
+}

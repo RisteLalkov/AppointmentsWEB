@@ -1,0 +1,101 @@
+PASS global An existing patient retains its password and clinic profile after the upgrade
+PASS global The upgrade revokes old clinic-only patient sessions
+PASS global Legacy credentials move centrally rather than creating a second local password
+PASS global Reception retains a clinic-bound staff token
+PASS global Reception cannot use its session in another clinic
+PASS global Reception cannot enter personal patient membership endpoints
+PASS global Whitespace-only patient names remain invalid
+PASS global Self-registration creates a shared patient login without privilege escalation
+PASS global One canonical account is stored for the patient
+PASS global The initial clinic retains a private local patient profile
+PASS global Patient memberships do not reserve duplicate staff login identities
+PASS global A global login alone cannot read an unjoined clinic
+PASS global Patient identity can be checked independently of an active clinic
+PASS global Browsing clinics never creates memberships or clinical records
+PASS global A second clinic cannot register an existing patient/staff email again
+PASS global A second clinic cannot register an existing patient/staff email again
+PASS global A global patient email cannot be used for another clinic staff account
+PASS global Concurrent joins across API instances create one clinic profile
+PASS global Separate clinic profiles use the same single login identity
+PASS global Local memberships contain no independent patient password
+PASS global Patient availability excludes an overlapping visit at another clinic
+PASS global Colored-day summaries retain cross-clinic patient busy intervals
+PASS global First-free summaries cannot suggest an overlapping visit at another clinic
+PASS global Reception cannot bypass a shared patient’s cross-clinic overlap rule
+PASS global Concurrent bookings at two clinics cannot double-book the same global patient
+PASS global Cancellation releases the shared busy interval atomically
+PASS global The personal page aggregates only this patient’s upcoming visits across clinics
+PASS global Reception sees only its own clinic, including for a shared patient
+PASS global Local patient IDs cannot expose records across clinics
+PASS global Reception cannot create/link patient login accounts
+PASS global Reception cannot reset the global password from a local membership
+PASS global Disabling clinic A access does not disable clinic B or the shared account
+PASS global Joining again cannot reactivate a disabled membership
+PASS global Closed registration still prevents new clinic memberships
+PASS global Initial registration still respects clinic policy
+PASS global Rejected joins/registration do not leave extra identities
+PASS global Matching contact email never unlocks or merges somebody’s clinic record
+PASS global A newly registered patient sees only the new owned profile
+PASS global Concurrent cross-clinic signups create one account
+PASS global Patient and company session tokens cannot cross authentication schemes
+PASS global Reception cannot use the company patient-support directory
+PASS global Company support does not list all patient identities without an exact search
+PASS global Support finds one login identity without returning clinical history
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global A central lockout cannot be bypassed through another API or clinic
+PASS global Company support revokes all sessions and restores access with one new password
+PASS global Company recovery records an audit event with the operator identity
+PASS global A damaged default clinic cannot lock the patient out of their personal account or healthy clinic
+PASS global browser Only the personal patient workspace offers My clinics
+PASS global browser Personal page shows this patient’s appointments across two clinics
+PASS global browser Clinic cards show the correct local patient number
+PASS global browser Switching clinics updates the signed-in workspace
+PASS global browser An old tab cannot silently read the newly selected clinic
+Error: Changing the workspace header cannot revive an old clinic’s CSRF token
+    at check (/workspace/AppointmentsWEB/tests/frontend/global-patients-browser.cjs:6:39)
+    at /workspace/AppointmentsWEB/tests/frontend/global-patients-browser.cjs:30:3
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "MigrationId", "ProductVersion"
+      FROM "__EFMigrationsHistory"
+      ORDER BY "MigrationId";
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "MigrationId", "ProductVersion"
+      FROM "__EFMigrationsHistory"
+      ORDER BY "MigrationId";
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {79266976-6dd9-4654-b0d4-216c17f827e2} may be persisted to storage in unencrypted form.
+
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {e9767a0f-a946-4e46-a182-07d180ceef41} may be persisted to storage in unencrypted form.
+
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {a6e1de17-b590-4701-be6f-b19fbf5a2ea0} may be persisted to storage in unencrypted form.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+
+Traceback (most recent call last):
+  File "/workspace/AppointmentsWEB/tests/global_patients_integration.py", line 202, in <module>
+    subprocess.run(['node','tests/frontend/global-patients-browser.cjs'],cwd=root,env=dict(env,TEST_WEB_URL=web,TEST_PASSWORD=password,TEST_GLOBAL_FIXTURE=json.dumps(dict(doctor=doctors['east'],service=services['east'],date=date,mainVisit=aa['id'],eastVisit=bb['id']))),check=True,timeout=120)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['node', 'tests/frontend/global-patients-browser.cjs']' returned non-zero exit status 1.

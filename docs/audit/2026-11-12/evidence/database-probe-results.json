@@ -1,0 +1,316 @@
+[
+  {
+    "id": "X0001",
+    "name": "All clinical constraints are validated",
+    "status": "PASS",
+    "count": 166
+  },
+  {
+    "id": "X0002",
+    "name": "All clinical indexes are valid and ready",
+    "status": "PASS",
+    "count": 131
+  },
+  {
+    "id": "X0003",
+    "name": "Ordinary clinical owner has no cluster administration privileges",
+    "status": "PASS"
+  },
+  {
+    "id": "X0004",
+    "name": "All platform constraints are validated",
+    "status": "PASS",
+    "count": 7
+  },
+  {
+    "id": "X0005",
+    "name": "All platform indexes are valid and ready",
+    "status": "PASS",
+    "count": 6
+  },
+  {
+    "id": "X0006",
+    "name": "Ordinary platform owner has no cluster administration privileges",
+    "status": "PASS"
+  },
+  {
+    "id": "X0007",
+    "name": "SQL rollback clinical.PatientBookings_PatientAccountId_fkey",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=PatientBookings_PatientAccountId_fkey"
+  },
+  {
+    "id": "X0008",
+    "name": "SQL rollback clinical.PatientBookings_check",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=PatientBookings_check"
+  },
+  {
+    "id": "X0009",
+    "name": "SQL rollback clinical.PatientEvents_ActorType_check",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=PatientEvents_ActorType_check"
+  },
+  {
+    "id": "X0010",
+    "name": "SQL rollback clinical.PatientEvents_PatientAccountId_fkey",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=PatientEvents_PatientAccountId_fkey"
+  },
+  {
+    "id": "X0011",
+    "name": "SQL rollback clinical.PatientMemberships_PatientAccountId_fkey",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=PatientMemberships_PatientAccountId_fkey"
+  },
+  {
+    "id": "X0012",
+    "name": "SQL rollback clinical.PatientMemberships_PatientNumber_check",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=PatientMemberships_PatientNumber_check"
+  },
+  {
+    "id": "X0013",
+    "name": "SQL rollback clinical.PatientSessions_PatientAccountId_fkey",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=PatientSessions_PatientAccountId_fkey"
+  },
+  {
+    "id": "X0014",
+    "name": "SQL rollback clinical.CK_Account_GlobalPatient",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Account_GlobalPatient"
+  },
+  {
+    "id": "X0015",
+    "name": "SQL rollback clinical.CK_Account_RoleLink",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Account_RoleLink"
+  },
+  {
+    "id": "X0016",
+    "name": "SQL rollback clinical.FK_Accounts_Doctors_DoctorId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Accounts_Doctors_DoctorId"
+  },
+  {
+    "id": "X0017",
+    "name": "SQL rollback clinical.FK_Accounts_PatientAccounts_GlobalPatientId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Accounts_PatientAccounts_GlobalPatientId"
+  },
+  {
+    "id": "X0018",
+    "name": "SQL rollback clinical.FK_Accounts_Patients_PatientId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Accounts_Patients_PatientId"
+  },
+  {
+    "id": "X0019",
+    "name": "SQL rollback clinical.CK_History_AfterRange",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_History_AfterRange"
+  },
+  {
+    "id": "X0020",
+    "name": "SQL rollback clinical.CK_History_Before",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_History_Before"
+  },
+  {
+    "id": "X0021",
+    "name": "SQL rollback clinical.CK_History_Version",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_History_Version"
+  },
+  {
+    "id": "X0022",
+    "name": "SQL rollback clinical.FK_AppointmentHistory_Appointments_AppointmentId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_AppointmentHistory_Appointments_AppointmentId"
+  },
+  {
+    "id": "X0023",
+    "name": "SQL rollback clinical.CK_Appointment_Range",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Appointment_Range"
+  },
+  {
+    "id": "X0024",
+    "name": "SQL rollback clinical.CK_Appointment_Status",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Appointment_Status"
+  },
+  {
+    "id": "X0025",
+    "name": "SQL rollback clinical.CK_Appointment_Version",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Appointment_Version"
+  },
+  {
+    "id": "X0026",
+    "name": "SQL rollback clinical.FK_Appointments_Doctors_DoctorId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Appointments_Doctors_DoctorId"
+  },
+  {
+    "id": "X0027",
+    "name": "SQL rollback clinical.FK_Appointments_Patients_PatientId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Appointments_Patients_PatientId"
+  },
+  {
+    "id": "X0028",
+    "name": "SQL rollback clinical.FK_Appointments_Services_ServiceId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Appointments_Services_ServiceId"
+  },
+  {
+    "id": "X0029",
+    "name": "SQL rollback clinical.CK_Exception_Range",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Exception_Range"
+  },
+  {
+    "id": "X0030",
+    "name": "SQL rollback clinical.FK_AvailabilityExceptions_Doctors_DoctorId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_AvailabilityExceptions_Doctors_DoctorId"
+  },
+  {
+    "id": "X0031",
+    "name": "SQL rollback clinical.FK_DoctorServices_Doctors_DoctorId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_DoctorServices_Doctors_DoctorId"
+  },
+  {
+    "id": "X0032",
+    "name": "SQL rollback clinical.FK_DoctorServices_Services_ServiceId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_DoctorServices_Services_ServiceId"
+  },
+  {
+    "id": "X0033",
+    "name": "SQL rollback clinical.CK_Doctor_Duration",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Doctor_Duration"
+  },
+  {
+    "id": "X0034",
+    "name": "SQL rollback clinical.FK_Doctors_Specialties_SpecialtyId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Doctors_Specialties_SpecialtyId"
+  },
+  {
+    "id": "X0035",
+    "name": "SQL rollback clinical.FK_IdempotencyRequests_Accounts_AccountId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_IdempotencyRequests_Accounts_AccountId"
+  },
+  {
+    "id": "X0036",
+    "name": "SQL rollback clinical.CK_Patient_Number",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Patient_Number"
+  },
+  {
+    "id": "X0037",
+    "name": "SQL rollback clinical.CK_Patient_Version",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Patient_Version"
+  },
+  {
+    "id": "X0038",
+    "name": "SQL rollback clinical.CK_Service_Duration",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_Service_Duration"
+  },
+  {
+    "id": "X0039",
+    "name": "SQL rollback clinical.FK_Services_Specialties_SpecialtyId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Services_Specialties_SpecialtyId"
+  },
+  {
+    "id": "X0040",
+    "name": "SQL rollback clinical.FK_Sessions_Accounts_AccountId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_Sessions_Accounts_AccountId"
+  },
+  {
+    "id": "X0041",
+    "name": "SQL rollback clinical.FK_SourceSchedules_Doctors_DoctorId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_SourceSchedules_Doctors_DoctorId"
+  },
+  {
+    "id": "X0042",
+    "name": "SQL rollback clinical.CK_WorkingPeriod_Dates",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_WorkingPeriod_Dates"
+  },
+  {
+    "id": "X0043",
+    "name": "SQL rollback clinical.CK_WorkingPeriod_Range",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=CK_WorkingPeriod_Range"
+  },
+  {
+    "id": "X0044",
+    "name": "SQL rollback clinical.FK_WorkingPeriods_Doctors_DoctorId",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=FK_WorkingPeriods_Doctors_DoctorId"
+  },
+  {
+    "id": "X0045",
+    "name": "SQL rollback platform.PlatformClinics_State_check",
+    "status": "PASS",
+    "expected": "23514",
+    "observed": "NOTICE:  REJECTED state=23514 constraint=PlatformClinics_State_check"
+  },
+  {
+    "id": "X0046",
+    "name": "SQL rollback platform.PlatformSessions_OperatorId_fkey",
+    "status": "PASS",
+    "expected": "23503",
+    "observed": "NOTICE:  REJECTED state=23503 constraint=PlatformSessions_OperatorId_fkey"
+  }
+]

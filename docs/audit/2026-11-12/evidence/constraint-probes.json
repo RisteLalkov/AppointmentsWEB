@@ -1,0 +1,362 @@
+[
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientBookings",
+    "constraint": "PatientBookings_PatientAccountId_fkey",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=PatientBookings_PatientAccountId_fkey"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientBookings",
+    "constraint": "PatientBookings_check",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=PatientBookings_check"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientEvents",
+    "constraint": "PatientEvents_ActorType_check",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=PatientEvents_ActorType_check"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientEvents",
+    "constraint": "PatientEvents_PatientAccountId_fkey",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=PatientEvents_PatientAccountId_fkey"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "constraint": "PatientMemberships_PatientAccountId_fkey",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=PatientMemberships_PatientAccountId_fkey"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "constraint": "PatientMemberships_PatientNumber_check",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=PatientMemberships_PatientNumber_check"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientSessions",
+    "constraint": "PatientSessions_PatientAccountId_fkey",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=PatientSessions_PatientAccountId_fkey"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "constraint": "CK_Account_GlobalPatient",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Account_GlobalPatient"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "constraint": "CK_Account_RoleLink",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Account_RoleLink"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "constraint": "FK_Accounts_Doctors_DoctorId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Accounts_Doctors_DoctorId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "constraint": "FK_Accounts_PatientAccounts_GlobalPatientId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Accounts_PatientAccounts_GlobalPatientId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "constraint": "FK_Accounts_Patients_PatientId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Accounts_Patients_PatientId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "constraint": "CK_History_AfterRange",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_History_AfterRange"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "constraint": "CK_History_Before",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_History_Before"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "constraint": "CK_History_Version",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_History_Version"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "constraint": "FK_AppointmentHistory_Appointments_AppointmentId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_AppointmentHistory_Appointments_AppointmentId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "constraint": "CK_Appointment_Range",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Appointment_Range"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "constraint": "CK_Appointment_Status",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Appointment_Status"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "constraint": "CK_Appointment_Version",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Appointment_Version"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "constraint": "FK_Appointments_Doctors_DoctorId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Appointments_Doctors_DoctorId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "constraint": "FK_Appointments_Patients_PatientId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Appointments_Patients_PatientId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "constraint": "FK_Appointments_Services_ServiceId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Appointments_Services_ServiceId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "constraint": "CK_Exception_Range",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Exception_Range"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "constraint": "FK_AvailabilityExceptions_Doctors_DoctorId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_AvailabilityExceptions_Doctors_DoctorId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "DoctorServices",
+    "constraint": "FK_DoctorServices_Doctors_DoctorId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_DoctorServices_Doctors_DoctorId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "DoctorServices",
+    "constraint": "FK_DoctorServices_Services_ServiceId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_DoctorServices_Services_ServiceId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "constraint": "CK_Doctor_Duration",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Doctor_Duration"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "constraint": "FK_Doctors_Specialties_SpecialtyId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Doctors_Specialties_SpecialtyId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "constraint": "FK_IdempotencyRequests_Accounts_AccountId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_IdempotencyRequests_Accounts_AccountId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "constraint": "CK_Patient_Number",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Patient_Number"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "constraint": "CK_Patient_Version",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Patient_Version"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "constraint": "CK_Service_Duration",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_Service_Duration"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "constraint": "FK_Services_Specialties_SpecialtyId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Services_Specialties_SpecialtyId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Sessions",
+    "constraint": "FK_Sessions_Accounts_AccountId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_Sessions_Accounts_AccountId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "constraint": "FK_SourceSchedules_Doctors_DoctorId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_SourceSchedules_Doctors_DoctorId"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "constraint": "CK_WorkingPeriod_Dates",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_WorkingPeriod_Dates"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "constraint": "CK_WorkingPeriod_Range",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=CK_WorkingPeriod_Range"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "constraint": "FK_WorkingPeriods_Doctors_DoctorId",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=FK_WorkingPeriods_Doctors_DoctorId"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "constraint": "PlatformClinics_State_check",
+    "expected": "23514",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23514 constraint=PlatformClinics_State_check"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformSessions",
+    "constraint": "PlatformSessions_OperatorId_fkey",
+    "expected": "23503",
+    "status": "PASS",
+    "evidence": "NOTICE:  REJECTED state=23503 constraint=PlatformSessions_OperatorId_fkey"
+  }
+]

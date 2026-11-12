@@ -1,0 +1,135 @@
+[
+  {
+    "id": "X0001",
+    "name": "Small receptionist bootstrap",
+    "status": "PASS",
+    "measurement": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 54.83,
+      "p95_ms": 90.84,
+      "max_ms": 90.84,
+      "response_bytes": 9414,
+      "patients": 14,
+      "appointments": 4,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    }
+  },
+  {
+    "id": "X0002",
+    "name": "Large Reception bootstrap",
+    "status": "PASS",
+    "measurement": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 379.76,
+      "p95_ms": 522.58,
+      "max_ms": 522.58,
+      "response_bytes": 12107744,
+      "patients": 5014,
+      "appointments": 30005,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    }
+  },
+  {
+    "id": "X0003",
+    "name": "Large Doctor bootstrap",
+    "status": "PASS",
+    "measurement": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 328.37,
+      "p95_ms": 506.84,
+      "max_ms": 506.84,
+      "response_bytes": 12107730,
+      "patients": 5014,
+      "appointments": 30005,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    }
+  },
+  {
+    "id": "X0004",
+    "name": "Large Patient bootstrap",
+    "status": "PASS",
+    "measurement": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 41.91,
+      "p95_ms": 47.48,
+      "max_ms": 47.48,
+      "response_bytes": 6127,
+      "patients": 1,
+      "appointments": 2,
+      "items": 0,
+      "statuses": {
+        "200": 10
+      }
+    }
+  },
+  {
+    "id": "X0005",
+    "name": "Large paged appointments take=12",
+    "status": "PASS",
+    "measurement": {
+      "samples": 10,
+      "concurrency": 1,
+      "p50_ms": 33.35,
+      "p95_ms": 34.59,
+      "max_ms": 34.59,
+      "response_bytes": 4439,
+      "patients": 0,
+      "appointments": 0,
+      "items": 12,
+      "statuses": {
+        "200": 10
+      }
+    }
+  },
+  {
+    "id": "X0006",
+    "name": "Large Reception bootstrap concurrent",
+    "status": "PASS",
+    "measurement": {
+      "samples": 24,
+      "concurrency": 8,
+      "p50_ms": 1418.28,
+      "p95_ms": 2178.3,
+      "max_ms": 2251.72,
+      "response_bytes": 12107742,
+      "patients": 5014,
+      "appointments": 30005,
+      "items": 0,
+      "statuses": {
+        "200": 24
+      }
+    }
+  },
+  {
+    "id": "X0007",
+    "name": "Large next-slot summary",
+    "status": "PASS",
+    "measurement": {
+      "samples": 5,
+      "concurrency": 1,
+      "p50_ms": 37.93,
+      "p95_ms": 46.97,
+      "max_ms": 46.97,
+      "response_bytes": 258,
+      "patients": 0,
+      "appointments": 0,
+      "items": 0,
+      "statuses": {
+        "200": 5
+      }
+    }
+  }
+]

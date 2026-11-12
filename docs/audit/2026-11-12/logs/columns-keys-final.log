@@ -1,0 +1,266 @@
+{"id": "X0001", "name": "NOT NULL clinical.careline_identity.PatientAccounts.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0002", "name": "Length clinical.careline_identity.PatientAccounts.Id", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0003", "name": "NOT NULL clinical.careline_identity.PatientAccounts.Email", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Email"}}
+{"id": "X0004", "name": "Length clinical.careline_identity.PatientAccounts.Email", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0005", "name": "NOT NULL clinical.careline_identity.PatientAccounts.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0006", "name": "Length clinical.careline_identity.PatientAccounts.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0007", "name": "NOT NULL clinical.careline_identity.PatientAccounts.PasswordHash", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PasswordHash"}}
+{"id": "X0008", "name": "NOT NULL clinical.careline_identity.PatientAccounts.Enabled", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Enabled"}}
+{"id": "X0009", "name": "NOT NULL clinical.careline_identity.PatientAccounts.FailedAttempts", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "FailedAttempts"}}
+{"id": "X0010", "name": "NOT NULL clinical.careline_identity.PatientAccounts.HomeClinicId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "HomeClinicId"}}
+{"id": "X0011", "name": "NOT NULL clinical.careline_identity.PatientAccounts.CreatedAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CreatedAt"}}
+{"id": "X0012", "name": "NOT NULL clinical.careline_identity.PatientAccounts.Phone", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Phone"}}
+{"id": "X0013", "name": "Length clinical.careline_identity.PatientAccounts.Phone", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0014", "name": "NOT NULL clinical.careline_identity.PatientBookings.PatientAccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientAccountId"}}
+{"id": "X0015", "name": "Length clinical.careline_identity.PatientBookings.PatientAccountId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0016", "name": "NOT NULL clinical.careline_identity.PatientBookings.ClinicId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ClinicId"}}
+{"id": "X0017", "name": "NOT NULL clinical.careline_identity.PatientBookings.AppointmentId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AppointmentId"}}
+{"id": "X0018", "name": "NOT NULL clinical.careline_identity.PatientBookings.Start", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Start"}}
+{"id": "X0019", "name": "NOT NULL clinical.careline_identity.PatientBookings.End", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "End"}}
+{"id": "X0020", "name": "NOT NULL clinical.careline_identity.PatientEvents.Id", "status": "PASS", "expected": "428C9", "actual": {"state": "428C9", "constraint": "", "column": ""}}
+{"id": "X0021", "name": "NOT NULL clinical.careline_identity.PatientEvents.PatientAccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientAccountId"}}
+{"id": "X0022", "name": "Length clinical.careline_identity.PatientEvents.PatientAccountId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0023", "name": "NOT NULL clinical.careline_identity.PatientEvents.ActorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ActorId"}}
+{"id": "X0024", "name": "NOT NULL clinical.careline_identity.PatientEvents.ActorType", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ActorType"}}
+{"id": "X0025", "name": "NOT NULL clinical.careline_identity.PatientEvents.Action", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Action"}}
+{"id": "X0026", "name": "NOT NULL clinical.careline_identity.PatientEvents.OccurredAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "OccurredAt"}}
+{"id": "X0027", "name": "NOT NULL clinical.careline_identity.PatientMemberships.PatientAccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientAccountId"}}
+{"id": "X0028", "name": "Length clinical.careline_identity.PatientMemberships.PatientAccountId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0029", "name": "NOT NULL clinical.careline_identity.PatientMemberships.ClinicId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ClinicId"}}
+{"id": "X0030", "name": "NOT NULL clinical.careline_identity.PatientMemberships.AccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AccountId"}}
+{"id": "X0031", "name": "NOT NULL clinical.careline_identity.PatientMemberships.PatientId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientId"}}
+{"id": "X0032", "name": "NOT NULL clinical.careline_identity.PatientMemberships.PatientNumber", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientNumber"}}
+{"id": "X0033", "name": "NOT NULL clinical.careline_identity.PatientSessions.TokenHash", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "TokenHash"}}
+{"id": "X0034", "name": "NOT NULL clinical.careline_identity.PatientSessions.PatientAccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientAccountId"}}
+{"id": "X0035", "name": "Length clinical.careline_identity.PatientSessions.PatientAccountId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0036", "name": "NOT NULL clinical.careline_identity.PatientSessions.ExpiresAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ExpiresAt"}}
+{"id": "X0037", "name": "NOT NULL clinical.careline_identity.accounts.email", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "email"}}
+{"id": "X0038", "name": "NOT NULL clinical.careline_identity.accounts.clinic_id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "clinic_id"}}
+{"id": "X0039", "name": "NOT NULL clinical.careline_identity.accounts.account_id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "account_id"}}
+{"id": "X0040", "name": "NOT NULL clinical.careline_identity.accounts.is_demo", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "is_demo"}}
+{"id": "X0041", "name": "NOT NULL clinical.careline_identity.clinics.clinic_id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "clinic_id"}}
+{"id": "X0042", "name": "NOT NULL clinical.careline_identity.clinics.schema_name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "schema_name"}}
+{"id": "X0043", "name": "NOT NULL clinical.public.Accounts.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0044", "name": "NOT NULL clinical.public.Accounts.Email", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Email"}}
+{"id": "X0045", "name": "Length clinical.public.Accounts.Email", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0046", "name": "NOT NULL clinical.public.Accounts.NormalizedEmail", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "NormalizedEmail"}}
+{"id": "X0047", "name": "Length clinical.public.Accounts.NormalizedEmail", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0048", "name": "NOT NULL clinical.public.Accounts.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0049", "name": "Length clinical.public.Accounts.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0050", "name": "NOT NULL clinical.public.Accounts.PasswordHash", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PasswordHash"}}
+{"id": "X0051", "name": "NOT NULL clinical.public.Accounts.Role", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Role"}}
+{"id": "X0052", "name": "Length clinical.public.Accounts.Role", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0053", "name": "Length clinical.public.Accounts.DoctorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0054", "name": "Length clinical.public.Accounts.PatientId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0055", "name": "NOT NULL clinical.public.Accounts.Enabled", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Enabled"}}
+{"id": "X0056", "name": "NOT NULL clinical.public.Accounts.IsDemo", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "IsDemo"}}
+{"id": "X0057", "name": "NOT NULL clinical.public.Accounts.FailedAttempts", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "FailedAttempts"}}
+{"id": "X0058", "name": "NOT NULL clinical.public.Accounts.CreatedAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CreatedAt"}}
+{"id": "X0059", "name": "Length clinical.public.Accounts.GlobalPatientId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0060", "name": "NOT NULL clinical.public.AppointmentHistory.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0061", "name": "Length clinical.public.AppointmentHistory.Id", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0062", "name": "NOT NULL clinical.public.AppointmentHistory.AppointmentId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AppointmentId"}}
+{"id": "X0063", "name": "Length clinical.public.AppointmentHistory.AppointmentId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0064", "name": "NOT NULL clinical.public.AppointmentHistory.AppointmentVersion", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AppointmentVersion"}}
+{"id": "X0065", "name": "NOT NULL clinical.public.AppointmentHistory.Kind", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Kind"}}
+{"id": "X0066", "name": "Length clinical.public.AppointmentHistory.Kind", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0067", "name": "NOT NULL clinical.public.AppointmentHistory.ActorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ActorId"}}
+{"id": "X0068", "name": "Length clinical.public.AppointmentHistory.ActorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0069", "name": "NOT NULL clinical.public.AppointmentHistory.ActorName", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ActorName"}}
+{"id": "X0070", "name": "Length clinical.public.AppointmentHistory.ActorName", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0071", "name": "NOT NULL clinical.public.AppointmentHistory.ActorRole", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ActorRole"}}
+{"id": "X0072", "name": "Length clinical.public.AppointmentHistory.ActorRole", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0073", "name": "NOT NULL clinical.public.AppointmentHistory.OccurredAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "OccurredAt"}}
+{"id": "X0074", "name": "Length clinical.public.AppointmentHistory.BeforeStatus", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0075", "name": "NOT NULL clinical.public.AppointmentHistory.AfterStart", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AfterStart"}}
+{"id": "X0076", "name": "NOT NULL clinical.public.AppointmentHistory.AfterEnd", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AfterEnd"}}
+{"id": "X0077", "name": "NOT NULL clinical.public.AppointmentHistory.AfterStatus", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AfterStatus"}}
+{"id": "X0078", "name": "Length clinical.public.AppointmentHistory.AfterStatus", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0079", "name": "NOT NULL clinical.public.Appointments.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0080", "name": "Length clinical.public.Appointments.Id", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0081", "name": "NOT NULL clinical.public.Appointments.DoctorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DoctorId"}}
+{"id": "X0082", "name": "Length clinical.public.Appointments.DoctorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0083", "name": "NOT NULL clinical.public.Appointments.PatientId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PatientId"}}
+{"id": "X0084", "name": "Length clinical.public.Appointments.PatientId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0085", "name": "NOT NULL clinical.public.Appointments.Start", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Start"}}
+{"id": "X0086", "name": "NOT NULL clinical.public.Appointments.End", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "End"}}
+{"id": "X0087", "name": "NOT NULL clinical.public.Appointments.Status", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Status"}}
+{"id": "X0088", "name": "Length clinical.public.Appointments.Status", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0089", "name": "NOT NULL clinical.public.Appointments.Version", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Version"}}
+{"id": "X0090", "name": "NOT NULL clinical.public.Appointments.CreatedBy", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CreatedBy"}}
+{"id": "X0091", "name": "NOT NULL clinical.public.Appointments.UpdatedAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "UpdatedAt"}}
+{"id": "X0092", "name": "NOT NULL clinical.public.Appointments.RequestId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "RequestId"}}
+{"id": "X0093", "name": "Length clinical.public.Appointments.ServiceName", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0094", "name": "NOT NULL clinical.public.AuditEvents.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0095", "name": "NOT NULL clinical.public.AuditEvents.ActorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ActorId"}}
+{"id": "X0096", "name": "NOT NULL clinical.public.AuditEvents.Action", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Action"}}
+{"id": "X0097", "name": "Length clinical.public.AuditEvents.Action", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0098", "name": "NOT NULL clinical.public.AuditEvents.TargetId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "TargetId"}}
+{"id": "X0099", "name": "NOT NULL clinical.public.AuditEvents.OccurredAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "OccurredAt"}}
+{"id": "X0100", "name": "NOT NULL clinical.public.AvailabilityExceptions.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0101", "name": "NOT NULL clinical.public.AvailabilityExceptions.DoctorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DoctorId"}}
+{"id": "X0102", "name": "Length clinical.public.AvailabilityExceptions.DoctorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0103", "name": "NOT NULL clinical.public.AvailabilityExceptions.Date", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Date"}}
+{"id": "X0104", "name": "NOT NULL clinical.public.AvailabilityExceptions.Start", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Start"}}
+{"id": "X0105", "name": "NOT NULL clinical.public.AvailabilityExceptions.End", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "End"}}
+{"id": "X0106", "name": "NOT NULL clinical.public.AvailabilityExceptions.IsAvailable", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "IsAvailable"}}
+{"id": "X0107", "name": "NOT NULL clinical.public.AvailabilityExceptions.Reason", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Reason"}}
+{"id": "X0108", "name": "Length clinical.public.AvailabilityExceptions.Reason", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0109", "name": "NOT NULL clinical.public.DoctorServices.DoctorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DoctorId"}}
+{"id": "X0110", "name": "Length clinical.public.DoctorServices.DoctorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0111", "name": "NOT NULL clinical.public.DoctorServices.ServiceId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ServiceId"}}
+{"id": "X0112", "name": "NOT NULL clinical.public.Doctors.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0113", "name": "Length clinical.public.Doctors.Id", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0114", "name": "NOT NULL clinical.public.Doctors.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0115", "name": "Length clinical.public.Doctors.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0116", "name": "NOT NULL clinical.public.Doctors.Specialty", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Specialty"}}
+{"id": "X0117", "name": "Length clinical.public.Doctors.Specialty", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0118", "name": "NOT NULL clinical.public.Doctors.BookingMethod", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "BookingMethod"}}
+{"id": "X0119", "name": "NOT NULL clinical.public.Doctors.Funding", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Funding"}}
+{"id": "X0120", "name": "NOT NULL clinical.public.Doctors.IsService", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "IsService"}}
+{"id": "X0121", "name": "NOT NULL clinical.public.Doctors.RequiresConfirmation", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "RequiresConfirmation"}}
+{"id": "X0122", "name": "NOT NULL clinical.public.Doctors.StaffOnly", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "StaffOnly"}}
+{"id": "X0123", "name": "NOT NULL clinical.public.Doctors.TuesdayFirst", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "TuesdayFirst"}}
+{"id": "X0124", "name": "NOT NULL clinical.public.Doctors.DurationMinutes", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DurationMinutes"}}
+{"id": "X0125", "name": "NOT NULL clinical.public.Doctors.DemoScheduleEdited", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DemoScheduleEdited"}}
+{"id": "X0126", "name": "NOT NULL clinical.public.Doctors.ScheduleVersion", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ScheduleVersion"}}
+{"id": "X0127", "name": "NOT NULL clinical.public.Doctors.CatalogVersion", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CatalogVersion"}}
+{"id": "X0128", "name": "NOT NULL clinical.public.Doctors.Enabled", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Enabled"}}
+{"id": "X0129", "name": "NOT NULL clinical.public.Doctors.Subspecialty", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Subspecialty"}}
+{"id": "X0130", "name": "Length clinical.public.Doctors.Subspecialty", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0131", "name": "NOT NULL clinical.public.IdempotencyRequests.AccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AccountId"}}
+{"id": "X0132", "name": "NOT NULL clinical.public.IdempotencyRequests.RequestId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "RequestId"}}
+{"id": "X0133", "name": "NOT NULL clinical.public.IdempotencyRequests.Fingerprint", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Fingerprint"}}
+{"id": "X0134", "name": "Length clinical.public.IdempotencyRequests.Fingerprint", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0135", "name": "NOT NULL clinical.public.IdempotencyRequests.ResponseJson", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ResponseJson"}}
+{"id": "X0136", "name": "NOT NULL clinical.public.IdempotencyRequests.CreatedAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CreatedAt"}}
+{"id": "X0137", "name": "NOT NULL clinical.public.Patients.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0138", "name": "Length clinical.public.Patients.Id", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0139", "name": "NOT NULL clinical.public.Patients.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0140", "name": "Length clinical.public.Patients.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0141", "name": "NOT NULL clinical.public.Patients.Email", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Email"}}
+{"id": "X0142", "name": "Length clinical.public.Patients.Email", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0143", "name": "NOT NULL clinical.public.Patients.Phone", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Phone"}}
+{"id": "X0144", "name": "Length clinical.public.Patients.Phone", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0145", "name": "NOT NULL clinical.public.Patients.IsDemonstration", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "IsDemonstration"}}
+{"id": "X0146", "name": "NOT NULL clinical.public.Patients.Version", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Version"}}
+{"id": "X0147", "name": "NOT NULL clinical.public.Patients.Number", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Number"}}
+{"id": "X0148", "name": "NOT NULL clinical.public.Services.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0149", "name": "NOT NULL clinical.public.Services.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0150", "name": "Length clinical.public.Services.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0151", "name": "NOT NULL clinical.public.Services.SpecialtyId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "SpecialtyId"}}
+{"id": "X0152", "name": "NOT NULL clinical.public.Services.DurationMinutes", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DurationMinutes"}}
+{"id": "X0153", "name": "NOT NULL clinical.public.Services.Enabled", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Enabled"}}
+{"id": "X0154", "name": "NOT NULL clinical.public.Services.Version", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Version"}}
+{"id": "X0155", "name": "NOT NULL clinical.public.Sessions.TokenHash", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "TokenHash"}}
+{"id": "X0156", "name": "Length clinical.public.Sessions.TokenHash", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0157", "name": "NOT NULL clinical.public.Sessions.AccountId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AccountId"}}
+{"id": "X0158", "name": "NOT NULL clinical.public.Sessions.ExpiresAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ExpiresAt"}}
+{"id": "X0159", "name": "NOT NULL clinical.public.Sessions.IsDemo", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "IsDemo"}}
+{"id": "X0160", "name": "NOT NULL clinical.public.Settings.Key", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Key"}}
+{"id": "X0161", "name": "NOT NULL clinical.public.Settings.Value", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Value"}}
+{"id": "X0162", "name": "NOT NULL clinical.public.SourceSchedules.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0163", "name": "NOT NULL clinical.public.SourceSchedules.Row", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Row"}}
+{"id": "X0164", "name": "NOT NULL clinical.public.SourceSchedules.Days", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Days"}}
+{"id": "X0165", "name": "NOT NULL clinical.public.SourceSchedules.Start", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Start"}}
+{"id": "X0166", "name": "NOT NULL clinical.public.SourceSchedules.End", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "End"}}
+{"id": "X0167", "name": "NOT NULL clinical.public.SourceSchedules.Type", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Type"}}
+{"id": "X0168", "name": "NOT NULL clinical.public.SourceSchedules.Note", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Note"}}
+{"id": "X0169", "name": "NOT NULL clinical.public.SourceSchedules.DoctorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DoctorId"}}
+{"id": "X0170", "name": "Length clinical.public.SourceSchedules.DoctorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0171", "name": "NOT NULL clinical.public.Specialties.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0172", "name": "NOT NULL clinical.public.Specialties.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0173", "name": "Length clinical.public.Specialties.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0174", "name": "NOT NULL clinical.public.Specialties.Version", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Version"}}
+{"id": "X0175", "name": "NOT NULL clinical.public.WorkingPeriods.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0176", "name": "NOT NULL clinical.public.WorkingPeriods.Day", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Day"}}
+{"id": "X0177", "name": "NOT NULL clinical.public.WorkingPeriods.Start", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Start"}}
+{"id": "X0178", "name": "NOT NULL clinical.public.WorkingPeriods.End", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "End"}}
+{"id": "X0179", "name": "NOT NULL clinical.public.WorkingPeriods.DoctorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "DoctorId"}}
+{"id": "X0180", "name": "Length clinical.public.WorkingPeriods.DoctorId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0181", "name": "NOT NULL clinical.public.__EFMigrationsHistory.MigrationId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "MigrationId"}}
+{"id": "X0182", "name": "Length clinical.public.__EFMigrationsHistory.MigrationId", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0183", "name": "NOT NULL clinical.public.__EFMigrationsHistory.ProductVersion", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ProductVersion"}}
+{"id": "X0184", "name": "Length clinical.public.__EFMigrationsHistory.ProductVersion", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0185", "name": "Primary key clinical.PatientAccounts_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientAccounts_pkey", "column": ""}}
+{"id": "X0186", "name": "Primary key clinical.PatientBookings_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientBookings_pkey", "column": ""}}
+{"id": "X0187", "name": "Primary key clinical.PatientEvents_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientEvents_pkey", "column": ""}}
+{"id": "X0188", "name": "Primary key clinical.PatientMemberships_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientMemberships_pkey", "column": ""}}
+{"id": "X0189", "name": "Primary key clinical.PatientSessions_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientSessions_pkey", "column": ""}}
+{"id": "X0190", "name": "Primary key clinical.accounts_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "accounts_pkey", "column": ""}}
+{"id": "X0191", "name": "Primary key clinical.clinics_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "clinics_pkey", "column": ""}}
+{"id": "X0192", "name": "Primary key clinical.PK_Accounts", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Accounts", "column": ""}}
+{"id": "X0193", "name": "Primary key clinical.PK_AppointmentHistory", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_AppointmentHistory", "column": ""}}
+{"id": "X0194", "name": "Primary key clinical.PK_Appointments", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Appointments", "column": ""}}
+{"id": "X0195", "name": "Primary key clinical.PK_AuditEvents", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_AuditEvents", "column": ""}}
+{"id": "X0196", "name": "Primary key clinical.PK_AvailabilityExceptions", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_AvailabilityExceptions", "column": ""}}
+{"id": "X0197", "name": "Primary key clinical.PK_DoctorServices", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_DoctorServices", "column": ""}}
+{"id": "X0198", "name": "Primary key clinical.PK_Doctors", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Doctors", "column": ""}}
+{"id": "X0199", "name": "Primary key clinical.PK_IdempotencyRequests", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_IdempotencyRequests", "column": ""}}
+{"id": "X0200", "name": "Primary key clinical.PK_Patients", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Patients", "column": ""}}
+{"id": "X0201", "name": "Primary key clinical.PK_Services", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Services", "column": ""}}
+{"id": "X0202", "name": "Primary key clinical.PK_Sessions", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Sessions", "column": ""}}
+{"id": "X0203", "name": "Primary key clinical.PK_Settings", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Settings", "column": ""}}
+{"id": "X0204", "name": "Primary key clinical.PK_SourceSchedules", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_SourceSchedules", "column": ""}}
+{"id": "X0205", "name": "Primary key clinical.PK_Specialties", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_Specialties", "column": ""}}
+{"id": "X0206", "name": "Primary key clinical.PK_WorkingPeriods", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK_WorkingPeriods", "column": ""}}
+{"id": "X0207", "name": "Primary key clinical.PK___EFMigrationsHistory", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PK___EFMigrationsHistory", "column": ""}}
+{"id": "X0208", "name": "Unique clinical.PatientAccounts_Email_key", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientAccounts_Email_key", "column": ""}}
+{"id": "X0209", "name": "Unique clinical.PatientMemberships_ClinicId_AccountId_key", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientMemberships_ClinicId_AccountId_key", "column": ""}}
+{"id": "X0210", "name": "Unique clinical.PatientMemberships_ClinicId_PatientId_key", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PatientMemberships_ClinicId_PatientId_key", "column": ""}}
+{"id": "X0211", "name": "Unique clinical.clinics_schema_name_key", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "clinics_schema_name_key", "column": ""}}
+{"id": "X0212", "name": "Unique clinical.IX_Accounts_DoctorId", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Accounts_DoctorId", "column": ""}}
+{"id": "X0213", "name": "Unique clinical.IX_Accounts_GlobalPatientId", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Accounts_GlobalPatientId", "column": ""}}
+{"id": "X0214", "name": "Unique clinical.IX_Accounts_NormalizedEmail", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Accounts_NormalizedEmail", "column": ""}}
+{"id": "X0215", "name": "Unique clinical.IX_Accounts_PatientId", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Accounts_PatientId", "column": ""}}
+{"id": "X0216", "name": "Unique clinical.IX_AppointmentHistory_AppointmentId_AppointmentVersion", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_AppointmentHistory_AppointmentId_AppointmentVersion", "column": ""}}
+{"id": "X0217", "name": "Unique clinical.IX_Appointments_CreatedBy_RequestId", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Appointments_CreatedBy_RequestId", "column": ""}}
+{"id": "X0218", "name": "Unique clinical.IX_Patients_Email", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Patients_Email", "column": ""}}
+{"id": "X0219", "name": "Unique clinical.IX_Patients_Number", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Patients_Number", "column": ""}}
+{"id": "X0220", "name": "Unique clinical.IX_Services_SpecialtyId_Name", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Services_SpecialtyId_Name", "column": ""}}
+{"id": "X0221", "name": "Unique clinical.IX_Specialties_Name", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "IX_Specialties_Name", "column": ""}}
+{"id": "X0222", "name": "NOT NULL platform.public.PlatformClinics.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0223", "name": "Length platform.public.PlatformClinics.Id", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0224", "name": "NOT NULL platform.public.PlatformClinics.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0225", "name": "Length platform.public.PlatformClinics.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0226", "name": "NOT NULL platform.public.PlatformClinics.ConnectionName", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ConnectionName"}}
+{"id": "X0227", "name": "NOT NULL platform.public.PlatformClinics.TimeZone", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "TimeZone"}}
+{"id": "X0228", "name": "Length platform.public.PlatformClinics.TimeZone", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0229", "name": "NOT NULL platform.public.PlatformClinics.State", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "State"}}
+{"id": "X0230", "name": "NOT NULL platform.public.PlatformClinics.AdminEmail", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AdminEmail"}}
+{"id": "X0231", "name": "Length platform.public.PlatformClinics.AdminEmail", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0232", "name": "NOT NULL platform.public.PlatformClinics.AdminName", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AdminName"}}
+{"id": "X0233", "name": "Length platform.public.PlatformClinics.AdminName", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0234", "name": "Length platform.public.PlatformClinics.Description", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0235", "name": "Length platform.public.PlatformClinics.Address", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0236", "name": "Length platform.public.PlatformClinics.Phone", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0237", "name": "NOT NULL platform.public.PlatformClinics.Discoverable", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Discoverable"}}
+{"id": "X0238", "name": "NOT NULL platform.public.PlatformClinics.AllowRegistration", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AllowRegistration"}}
+{"id": "X0239", "name": "NOT NULL platform.public.PlatformClinics.CreatedBy", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CreatedBy"}}
+{"id": "X0240", "name": "NOT NULL platform.public.PlatformClinics.CreatedAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "CreatedAt"}}
+{"id": "X0241", "name": "NOT NULL platform.public.PlatformClinics.Adopted", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Adopted"}}
+{"id": "X0242", "name": "NOT NULL platform.public.PlatformClinics.Version", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Version"}}
+{"id": "X0243", "name": "NOT NULL platform.public.PlatformOperators.Id", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Id"}}
+{"id": "X0244", "name": "NOT NULL platform.public.PlatformOperators.Email", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Email"}}
+{"id": "X0245", "name": "Length platform.public.PlatformOperators.Email", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0246", "name": "NOT NULL platform.public.PlatformOperators.Name", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Name"}}
+{"id": "X0247", "name": "Length platform.public.PlatformOperators.Name", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0248", "name": "NOT NULL platform.public.PlatformOperators.PasswordHash", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "PasswordHash"}}
+{"id": "X0249", "name": "NOT NULL platform.public.PlatformOperators.Enabled", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Enabled"}}
+{"id": "X0250", "name": "NOT NULL platform.public.PlatformOperators.FailedAttempts", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "FailedAttempts"}}
+{"id": "X0251", "name": "NOT NULL platform.public.PlatformSchemaVersions.Version", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "Version"}}
+{"id": "X0252", "name": "NOT NULL platform.public.PlatformSchemaVersions.AppliedAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "AppliedAt"}}
+{"id": "X0253", "name": "NOT NULL platform.public.PlatformSessions.TokenHash", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "TokenHash"}}
+{"id": "X0254", "name": "Length platform.public.PlatformSessions.TokenHash", "status": "PASS", "expected": "22001", "actual": {"state": "22001", "constraint": "", "column": ""}}
+{"id": "X0255", "name": "NOT NULL platform.public.PlatformSessions.OperatorId", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "OperatorId"}}
+{"id": "X0256", "name": "NOT NULL platform.public.PlatformSessions.ExpiresAt", "status": "PASS", "expected": "23502", "actual": {"state": "23502", "constraint": "", "column": "ExpiresAt"}}
+{"id": "X0257", "name": "Primary key platform.PlatformClinics_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PlatformClinics_pkey", "column": ""}}
+{"id": "X0258", "name": "Primary key platform.PlatformOperators_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PlatformOperators_pkey", "column": ""}}
+{"id": "X0259", "name": "Primary key platform.PlatformSchemaVersions_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PlatformSchemaVersions_pkey", "column": ""}}
+{"id": "X0260", "name": "Primary key platform.PlatformSessions_pkey", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PlatformSessions_pkey", "column": ""}}
+{"id": "X0261", "name": "Unique platform.PlatformOperators_Email_key", "status": "PASS", "expected": "23505", "actual": {"state": "23505", "constraint": "PlatformOperators_Email_key", "column": ""}}
+{"id": "X0262", "name": "Exclusion PatientBookings_PatientAccountId_tstzrange_excl", "status": "PASS", "expected": "23P01", "actual": {"state": "23P01", "constraint": "PatientBookings_PatientAccountId_tstzrange_excl", "column": ""}}
+{"id": "X0263", "name": "Exclusion EX_Appointments_Doctor", "status": "PASS", "expected": "23P01", "actual": {"state": "23P01", "constraint": "EX_Appointments_Doctor", "column": ""}}
+{"id": "X0264", "name": "Exclusion EX_Appointments_Patient", "status": "PASS", "expected": "23P01", "actual": {"state": "23P01", "constraint": "EX_Appointments_Patient", "column": ""}}
+{"id": "X0265", "name": "Cascade clinical account sessions", "status": "PASS", "rows_after_delete": "0"}
+{"id": "X0266", "name": "Cascade platform account sessions", "status": "PASS", "rows_after_delete": "0"}

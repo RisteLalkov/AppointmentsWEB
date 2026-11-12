@@ -1,0 +1,93 @@
+[
+  {
+    "id": "H01",
+    "severity": "HIGH",
+    "title": "Unbounded staff bootstrap and repeated whole-history date formatting freeze the workspace",
+    "classification": "confirmed defect",
+    "detail_markdown": "**HIGH · reproduced in API, Chromium and database · open**\n\n**Affected:** `src/Appointments.Data/PostgresAppointments.cs:14–19`; `src/Appointments.Web/wwwroot/js/app.js:97–112`, `:304–308`, `:382–390`, `:1947–1970`; `GET /api/bootstrap` and Web `GET /data/bootstrap`. All historical appointments and all scheduling contacts are fetched for staff; UI pagination does not bound that payload. `wall()` constructs a fresh `Intl.DateTimeFormat` per conversion, and overview calculations repeatedly scan the full appointment array.\n\n**Reproduce:** use the disposable fixture; run `performance_20261112.py`, which adds 5,000 contacts/30,000 completed historical visits; run `browser_performance_20261112.cjs`; sign in as reception and open the overview. Do not run this synthetic workload against production.\n\n**Observed:** 12,107,744 bytes for one staff bootstrap; local API median 379.76 ms, p95 522.58 ms; 24 requests at concurrency eight had p95 2,178.3 ms and all returned 200. Browser overview readiness was **21,685 ms**, with a **20,517 ms main-thread task**. Patient readiness was 398 ms. A paged 12-item appointment response was 4,439 bytes/median 33.35 ms. Under an explicit 20-staff/20-second polling assumption, bootstrap alone is about **12.1 MB/s uncompressed aggregate transfer**. This is an arithmetic workload illustration, not a measured production network limit.\n\n**Impact:** receptionist controls can be unusable for tens of seconds; repeated polling transfers and processes the entire history as the clinic grows. API-only latency would have missed the most serious effect.\n\n**Fix:** split bootstrap metadata/current aggregates from history; load appointments and contacts using server-side filters/pagination and bounded calendar windows; use server-side overview totals. Cache/reuse timezone formatters and converted local dates within a render. Avoid rerendering unchanged summaries; pause/back off polling appropriately. Compression alone does not fix CPU or unbounded growth. Add a real-browser growth regression and agree budgets before retesting.\n\n**Evidence:** `evidence/performance.json`, `browser-performance.json`, `performance-row-counts.json`, `query-plans.json`; `screenshots/large-reception-overview.png`."
+  },
+  {
+    "id": "M01",
+    "severity": "MEDIUM",
+    "title": "Older patient tabs cannot log out or change language after a clinic switch",
+    "classification": "confirmed defect",
+    "detail_markdown": "**MEDIUM · reproduced · open**\n\n**Affected:** `src/Appointments.Web/Services/ClinicAntiforgery.cs:8–25`; shared account/settings forms in `_AccountSettings.cshtml` and `_LanguageSelector.cshtml`; `POST /Account/Logout`, `POST /Preferences/Language`.\n\n**Reproduce:** log a shared patient into main in tab A. In tab B select east from My clinics. In A open account settings and click Logout, or repeat with English language selection. **Actual: HTTP 400.** A stale clinical `/data/bootstrap` read returns 409 as intended.\n\n**Cause:** workspace forms carry the issuing clinic's additional CSRF data. Personal endpoint validation accepts the personal identity token or the *current* clinic token, so the old main token is rejected after the cookie changes to east.\n\n**Fix:** issue personal-identity-bound tokens for global account controls regardless of which clinic rendered them, while preserving strict clinic binding on clinical writes. Keep the underlying antiforgery identity check and add two-tab logout/language regressions. Refreshing the old tab is a workaround, not a fix.\n\n**Evidence:** `browser-targeted.json` B002/B003; `screenshots/stale-tab-logout.png`."
+  },
+  {
+    "id": "M02",
+    "severity": "MEDIUM",
+    "title": "Authenticated workspace permits same-site cross-origin framing",
+    "classification": "confirmed defect",
+    "detail_markdown": "**MEDIUM · browser-proven, scope qualified · open**\n\n**Affected:** Web response-header pipeline, `src/Appointments.Web/Program.cs:110`; `/Workspace` and other sensitive MVC pages.\n\n**Reproduce:** authenticate on one loopback port, then open a different-origin page on another loopback port containing an iframe to `/Workspace`. The authenticated overview renders inside the frame. The workspace response had **neither X-Frame-Options nor CSP frame-ancestors**.\n\n**Impact/scope:** enables UI-redress/clickjacking where an attacker controls another same-site origin, such as an untrusted sibling application. The demonstration was same-site/different-port. SameSite=Strict cookies reduce unrelated cross-site authenticated framing; this test does **not** prove that an arbitrary unrelated domain receives the login cookie. No XSS or token extraction was demonstrated.\n\n**Fix:** establish a response-level framing policy, normally `Content-Security-Policy: frame-ancestors 'none'` and an appropriate legacy X-Frame-Options policy. Test intended embedding exceptions explicitly. A parent-framing policy does not itself prohibit the app's child Google Maps iframe; assess any broader CSP separately.\n\n**Evidence:** `browser-targeted.json` B059; `screenshots/authenticated-cross-origin-frame.png`."
+  },
+  {
+    "id": "M03",
+    "severity": "MEDIUM",
+    "title": "Default-theme contrast failures remain in real workspaces and dialogs",
+    "classification": "confirmed defect",
+    "detail_markdown": "**MEDIUM · axe/browser reproduced · open**\n\n**Affected:** `src/Appointments.Web/wwwroot/css/site.css:764–768`, `:1609–1618`, `:1647–1664`, `:2789–2796`; real-clinic breadcrumb, booking review, availability summaries; company recovery warning styling around `:375–386`. Relevant markup includes `Views/Home/Workspace.cshtml`, `Views/PatientSupport/Index.cshtml` and booking DOM in `app.js`.\n\n**Reproduce:** sign in as reception/doctor with actual clinic metadata; inspect the current clinic name in Standard theme. Open a booking review and the company patient-recovery form. Run the supplied axe scenarios.\n\n**Examples:** static clinic breadcrumb **1.81:1** (#bac3b7 on approximately white); booking step **4.48:1**, booking specialty **4.25:1**, recovery warning **4.38:1**, where these normal-size texts require 4.5:1 under the tested WCAG AA rules. Dark/Vibrant doctor-card scans passed their exercised scenarios; no claim is made that all theme/state combinations passed.\n\n**Fix:** correct semantic text tokens and specificity rather than changing every background. In particular `.breadcrumb span` overrides the intended clinic-name color. Retest all roles, three themes, dialogs and disabled/error states. Existing demo-only accessibility passes did not cover the real clinic breadcrumb.\n\n**Evidence:** `browser-targeted.json` contains exact selectors, colors and ratios for every reported node; 22 additional axe scans were executed."
+  },
+  {
+    "id": "M04",
+    "severity": "MEDIUM",
+    "title": "Calendar scroll region is not keyboard-focusable in an exercised state",
+    "classification": "confirmed defect",
+    "detail_markdown": "**MEDIUM · automated browser finding · open; manual assistive-technology assessment outstanding**\n\n**Affected:** FullCalendar `.fc-scroller-liquid-absolute`; calendar initialization in `src/Appointments.Web/wwwroot/js/app.js:1210–1255`, calendar markup around `:1150–1165`, scroll styling `site.css:2289`.\n\n**Reproduce:** open reception Calendar with the QA fixture and run WCAG A/AA axe checks. `scrollable-region-focusable` reports the time-grid scroller. Pointer interaction and an actual drag/reschedule passed separately. The app also offers appointment-list keyboard access, so this is not evidence that every appointment workflow is inaccessible.\n\n**Fix:** provide a keyboard-focusable, labelled scroll region or supported FullCalendar keyboard behavior, preserving a visible focus indicator and meaningful navigation. Verify scrolling timeslots with keyboard and a real screen reader, including empty calendars and mobile layouts.\n\n**Evidence:** `browser-targeted.json` B029, plus the successful physical drag in `browser-extra.json`."
+  },
+  {
+    "id": "M05",
+    "severity": "MEDIUM",
+    "title": "Swagger omits required X-Clinic input from patient CRUD operations",
+    "classification": "confirmed defect",
+    "detail_markdown": "**MEDIUM · schema and live request reproduced · open**\n\n**Affected:** `src/Appointments.Api/Services/ApiDocumentation.cs:35–45`; POST `/api/patients`, GET/POST `/api/patients/{id}`.\n\n**Reproduce:** inspect `/openapi/v1.json` or authorize in Swagger in a multi-clinic deployment and try patient details. Those operations lack an X-Clinic parameter. A valid reception token without clinic selection returned **400**; the same request with `X-Clinic: main` returned **200**.\n\n**Cause:** `StartsWith(\"/api/patient\")` intended for central `/api/patient/...` also matches clinic-local `/api/patients...`.\n\n**Fix:** distinguish the singular patient-account route using a segment boundary, then assert the required header for **every** clinic-scoped OpenAPI operation. Authorization and tenant routing themselves remained enforced; this is not a cross-clinic data leak.\n\n**Evidence:** `evidence/swagger-header-defect.json`, `openapi.json`; the older general Swagger assertion passed because it sampled other scoped operations."
+  },
+  {
+    "id": "M06",
+    "severity": "MEDIUM",
+    "title": "Operational audit does not cover a complete security/access trail",
+    "classification": "database observation and code/policy gap",
+    "detail_markdown": "**MEDIUM · database observation plus code review · policy/engineering gap**\n\n**Affected:** `src/Appointments.Api/Services/GlobalPatients.cs:22–58`, `PlatformService.cs:48–68` and metadata updates; `AccountService.cs:19–58`; read endpoints in `PostgresAppointments.cs`; `AppointmentsDbContext.cs` AuditEvents mapping and `database/009-global-patients.sql` PatientEvents.\n\n**Observed:** eight rejected patient login attempts and lockout were executed. The patient's persistent events showed registration/session creation, without corresponding failure/lockout events. Successful booking/contact/account changes do have transaction-associated operational events/history. Patient-record reads are not a complete access trail; there is no comprehensive company-action audit ledger, externally protected audit sink, retention job or tamper-evident design in this repository.\n\n**Impact:** investigating credential attacks, operator actions and sensitive-record access is limited. This is not a finding that appointment history is absent or that every failed request disappears from infrastructure logs; production log aggregation was unavailable.\n\n**Fix:** agree event scope, retention and access policy; add structured failure/lockout/operator/access events without credentials or unnecessary medical/contact payloads; send protected operational logs to an appropriate sink; validate correlation/alerting and retention. Do not claim compliance merely by adding a table.\n\n**Evidence:** `evidence/patient-audit-actions.json`, `security-results.json`, installed audit tables/functions and the cited source."
+  },
+  {
+    "id": "M07",
+    "severity": "MEDIUM",
+    "title": "Email/phone ownership assurance and MFA are not implemented",
+    "classification": "confirmed product/policy gap",
+    "detail_markdown": "**MEDIUM · confirmed product-scope gap; requires owner decision**\n\n**Affected:** `GlobalPatients.cs:77–94`, `AccountService.cs:19–58`, `PlatformService.cs:48–68`; registration/login contracts and views.\n\n**Reproduce:** register a synthetic `.test` mailbox and phone and sign in immediately. There is no email/SMS ownership challenge. Staff/company sign-in has password/session/rate-limit/lockout protections, but no MFA challenge.\n\n**Scope:** form format validation, password hashing, lockout and tenant ownership passed. An unverified mailbox did **not** gain an existing clinic contact's history; that isolation passed. The app does not claim to send reminders or recovery email. Absence of MFA is a risk decision, not by itself proof of a broken authentication mechanism.\n\n**Fix:** define identity-assurance requirements for patients and privileged staff. Implement verified-address/contact workflows and appropriate privileged-account MFA or approved identity-provider integration if required by that policy. Keep manual recovery identity verification explicit and auditable; test recovery end to end through the actual chosen provider."
+  },
+  {
+    "id": "M08",
+    "severity": "MEDIUM",
+    "title": "Public privacy and terms are intentionally unpublished placeholders",
+    "classification": "confirmed product/policy gap",
+    "detail_markdown": "**MEDIUM · reproduced markup/product gap; previously deferred design scope**\n\n**Affected:** `src/Appointments.Web/Views/Discover/Index.cshtml:172`; footer privacy/terms controls show \"Наскоро\" with `aria-disabled=true`. No corresponding implemented policy pages were discovered.\n\n**Reproduce:** open the landing footer; the displayed policy items cannot be opened. This is not a broken promise that an already-approved policy page existed; placeholders were intentionally accepted during development.\n\n**Fix before real-data launch:** obtain approved content and clear operator/contact responsibilities; publish accessible pages and any required consent/notice flows. A technical audit cannot authoritatively determine the applicable legal obligations or approve this deferral."
+  },
+  {
+    "id": "L01",
+    "severity": "LOW",
+    "title": "JSON demo idempotency ignores a changed AgreedTime flag",
+    "classification": "confirmed defect",
+    "detail_markdown": "**LOW · executable reproduction; Development-only backend**\n\n**Affected:** `src/Appointments.Core/AppointmentService.cs:61–68`. PostgreSQL's separate complete-command fingerprint implementation in `PostgresAppointments.cs:101–115` handles the field correctly.\n\n**Reproduce:** in the JSON backend, book a confirmation-required provider as reception with `AgreedTime=false`; retry the same request key with identical fields and `AgreedTime=true`. The old Scheduled result is replayed rather than a changed-command 409. `tests/audit/CoreProbes` reproduces it and exits nonzero for that observation.\n\n**Fix:** include the complete canonical booking command in demo idempotency comparison, or explicitly include AgreedTime with a regression. Production PostgreSQL behavior was not found to share this defect."
+  },
+  {
+    "id": "L02",
+    "severity": "LOW",
+    "title": "API documentation contains obsolete patient and health guidance",
+    "classification": "documentation/assurance gap",
+    "detail_markdown": "**LOW · code/document discrepancy**\n\n**Affected:** `docs/API.md:31`, clinical patient-creation row, and `:72`, \"Errors and health\" paragraph. It still describes email/phone as optional on patient creation and `/health` as process-only liveness. Current contract requires both on new manual patients; `/health/live` is liveness, while `/health` checks readiness/shared-store access. The executable checks observed the current behavior.\n\n**Fix:** update examples/health semantics and distinguish new-patient creation from legacy contact editing. Add lightweight documentation assertions where stable. Incorrect monitoring guidance can hide or mislabel a deployment failure."
+  },
+  {
+    "id": "L03",
+    "severity": "LOW",
+    "title": "Per-schema connection-pool growth needs a multi-clinic capacity budget",
+    "classification": "code-only capacity concern; outage not reproduced",
+    "detail_markdown": "**LOW · architectural/code-only concern, not a reproduced outage**\n\n**Affected:** `src/Appointments.Api/Services/SharedClinicDatabase.cs:20–39`, `ClinicConnections.cs`, `PublicDiscovery.cs:69–111`, registry/startup paths. SearchPath changes the connection string per clinic, producing distinct Npgsql pools. Public multi-clinic discovery traverses selected clinic connections sequentially.\n\n**Risk:** as tenant count and API-instance count grow, aggregate connections/latency may exceed a shared PostgreSQL budget even with low individual-clinic traffic. The audit exercised multiple clinics/hosts, **not** hundreds of active schemas or a pool-exhaustion campaign.\n\n**Recommendation:** define aggregate pool limits, timeouts, eviction/idle policy and discovery latency budgets; load-test the intended tenant count against the intended PostgreSQL `max_connections` and infrastructure. Consider a supported shared-data-source approach with safe per-transaction schema selection if architectural work is justified; never trade away binding checks casually."
+  },
+  {
+    "id": "L04",
+    "severity": "LOW",
+    "title": "Automated assurance does not yet cover all dependencies and exercised states",
+    "classification": "documentation/assurance gap",
+    "detail_markdown": "**LOW · code/CI observation and demonstrated test blind spots**\n\n**Affected:** `.github/workflows/ci.yml`, `tests/frontend/accessibility-browser.cjs`, `src/Appointments.Web/wwwroot/vendor/fullcalendar.min.js` (Standard Bundle 6.1.20), frontend test manifest.\n\nNuGet/npm advisory checks were run for this audit but are not a comprehensive enforced release gate. Vendored FullCalendar is outside the test package manager's dependency graph. Existing accessibility checks use demo scenarios and missed the real-clinic breadcrumb/dialog failures. Two existing tests also needed the narrow corrections recorded in section 4; they are corrected in this audit, not left as known failures.\n\n**Recommendation:** add representative real-database accessibility/dialog/growth cases to CI, maintain a vendored-asset inventory/advisory review, pin/maintain build actions according to company policy, and publish build/test/advisory artifacts. No known FullCalendar vulnerability is asserted by this finding."
+  }
+]

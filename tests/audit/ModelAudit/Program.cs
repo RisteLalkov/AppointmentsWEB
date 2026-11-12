@@ -1,0 +1,14 @@
+using Appointments.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Text.Json;
+var root=Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,"../../../../../../docs/audit/2026-11-12/evidence"));
+var dsn=JsonSerializer.Deserialize<string[]>(File.ReadAllText("/workspace/.setup/qa20261112/fixtures.json"))!;
+if (dsn.Any(c=>!System.Text.RegularExpressions.Regex.IsMatch(c,@"Database=careline_test_[a-f0-9]{12}_[01](;|$)"))) throw new InvalidOperationException("Disposable QA databases only.");
+using var db=new AppointmentsDbContext(new DbContextOptionsBuilder<AppointmentsDbContext>().UseNpgsql(dsn[0]).Options);
+using var platform=new PlatformDbContext(new DbContextOptionsBuilder<PlatformDbContext>().UseNpgsql(dsn[1]).Options);
+object Describe(DbContext context) => context.GetService<IDesignTimeModel>().Model.GetRelationalModel().Tables.Select(t=>new{t.Name,t.Schema,columns=t.Columns.Select(c=>new{c.Name,c.StoreType,c.IsNullable}),indexes=t.Indexes.Select(i=>new{i.Name,i.IsUnique,columns=i.Columns.Select(c=>c.Name)}),foreignKeys=t.ForeignKeyConstraints.Select(f=>new{f.Name,principal=f.PrincipalTable.Name,columns=f.Columns.Select(c=>c.Name)})});
+var result=new{pendingModelChanges=db.Database.HasPendingModelChanges(),appliedMigrations=await db.Database.GetAppliedMigrationsAsync(),pendingMigrations=await db.Database.GetPendingMigrationsAsync(),clinical=Describe(db),platform=Describe(platform)};
+File.WriteAllText(root+"/ef-model.json",JsonSerializer.Serialize(result,new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine($"Pending model changes: {result.pendingModelChanges}; pending migrations: {result.pendingMigrations.Count()}");

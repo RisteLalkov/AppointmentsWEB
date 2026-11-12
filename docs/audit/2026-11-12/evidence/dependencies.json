@@ -1,0 +1,313 @@
+{
+  "version": 1,
+  "parameters": "--include-transitive",
+  "projects": [
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Web/Appointments.Web.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Core/Appointments.Core.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/tests/Appointments.Tests/Appointments.Tests.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Api/Appointments.Api.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.AspNetCore.OpenApi",
+              "requestedVersion": "10.0.12",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Swashbuckle.AspNetCore.SwaggerUI",
+              "requestedVersion": "10.3.1",
+              "resolvedVersion": "10.3.1"
+            }
+          ],
+          "transitivePackages": [
+            {
+              "id": "Microsoft.EntityFrameworkCore",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Analyzers",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Relational",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.OpenApi",
+              "resolvedVersion": "2.12.0"
+            },
+            {
+              "id": "Npgsql",
+              "resolvedVersion": "10.0.3"
+            },
+            {
+              "id": "Npgsql.EntityFrameworkCore.PostgreSQL",
+              "resolvedVersion": "10.0.3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Data/Appointments.Data.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.EntityFrameworkCore.Design",
+              "requestedVersion": "10.0.12",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Relational",
+              "requestedVersion": "10.0.12",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Npgsql.EntityFrameworkCore.PostgreSQL",
+              "requestedVersion": "10.0.3",
+              "resolvedVersion": "10.0.3"
+            }
+          ],
+          "transitivePackages": [
+            {
+              "id": "Humanizer.Core",
+              "resolvedVersion": "2.14.1"
+            },
+            {
+              "id": "Microsoft.Build.Framework",
+              "resolvedVersion": "18.0.2"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Analyzers",
+              "resolvedVersion": "3.11.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Common",
+              "resolvedVersion": "5.0.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.CSharp",
+              "resolvedVersion": "5.0.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+              "resolvedVersion": "5.0.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Workspaces.Common",
+              "resolvedVersion": "5.0.0"
+            },
+            {
+              "id": "Microsoft.CodeAnalysis.Workspaces.MSBuild",
+              "resolvedVersion": "5.0.0"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Analyzers",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Caching.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Caching.Memory",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Configuration.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyInjection",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyModel",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Logging",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Logging.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Options",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Primitives",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.VisualStudio.SolutionPersistence",
+              "resolvedVersion": "1.0.52"
+            },
+            {
+              "id": "Mono.TextTemplating",
+              "resolvedVersion": "3.0.0"
+            },
+            {
+              "id": "Newtonsoft.Json",
+              "resolvedVersion": "13.0.4"
+            },
+            {
+              "id": "Npgsql",
+              "resolvedVersion": "10.0.3"
+            },
+            {
+              "id": "System.CodeDom",
+              "resolvedVersion": "6.0.0"
+            },
+            {
+              "id": "System.Composition",
+              "resolvedVersion": "9.0.0"
+            },
+            {
+              "id": "System.Composition.AttributedModel",
+              "resolvedVersion": "9.0.0"
+            },
+            {
+              "id": "System.Composition.Convention",
+              "resolvedVersion": "9.0.0"
+            },
+            {
+              "id": "System.Composition.Hosting",
+              "resolvedVersion": "9.0.0"
+            },
+            {
+              "id": "System.Composition.Runtime",
+              "resolvedVersion": "9.0.0"
+            },
+            {
+              "id": "System.Composition.TypedParts",
+              "resolvedVersion": "9.0.0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/src/Appointments.Contracts/Appointments.Contracts.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/AppointmentsWEB/tests/Appointments.DatabaseTests/Appointments.DatabaseTests.csproj",
+      "frameworks": [
+        {
+          "framework": "net10.0",
+          "transitivePackages": [
+            {
+              "id": "Microsoft.EntityFrameworkCore",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Analyzers",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.EntityFrameworkCore.Relational",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Caching.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Caching.Memory",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Configuration.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyInjection",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Logging",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Logging.Abstractions",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Options",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Microsoft.Extensions.Primitives",
+              "resolvedVersion": "10.0.12"
+            },
+            {
+              "id": "Npgsql",
+              "resolvedVersion": "10.0.3"
+            },
+            {
+              "id": "Npgsql.EntityFrameworkCore.PostgreSQL",
+              "resolvedVersion": "10.0.3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

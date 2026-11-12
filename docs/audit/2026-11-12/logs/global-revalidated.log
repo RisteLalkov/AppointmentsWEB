@@ -1,0 +1,96 @@
+PASS global An existing patient retains its password and clinic profile after the upgrade
+PASS global The upgrade revokes old clinic-only patient sessions
+PASS global Legacy credentials move centrally rather than creating a second local password
+PASS global Reception retains a clinic-bound staff token
+PASS global Reception cannot use its session in another clinic
+PASS global Reception cannot enter personal patient membership endpoints
+PASS global Whitespace-only patient names remain invalid
+PASS global Self-registration creates a shared patient login without privilege escalation
+PASS global One canonical account is stored for the patient
+PASS global The initial clinic retains a private local patient profile
+PASS global Patient memberships do not reserve duplicate staff login identities
+PASS global A global login alone cannot read an unjoined clinic
+PASS global Patient identity can be checked independently of an active clinic
+PASS global Browsing clinics never creates memberships or clinical records
+PASS global A second clinic cannot register an existing patient/staff email again
+PASS global A second clinic cannot register an existing patient/staff email again
+PASS global A global patient email cannot be used for another clinic staff account
+PASS global Concurrent joins across API instances create one clinic profile
+PASS global Separate clinic profiles use the same single login identity
+PASS global Local memberships contain no independent patient password
+PASS global Patient availability excludes an overlapping visit at another clinic
+PASS global Colored-day summaries retain cross-clinic patient busy intervals
+PASS global First-free summaries cannot suggest an overlapping visit at another clinic
+PASS global Reception cannot bypass a shared patient’s cross-clinic overlap rule
+PASS global Concurrent bookings at two clinics cannot double-book the same global patient
+PASS global Cancellation releases the shared busy interval atomically
+PASS global The personal page aggregates only this patient’s upcoming visits across clinics
+PASS global Reception sees only its own clinic, including for a shared patient
+PASS global Local patient IDs cannot expose records across clinics
+PASS global Reception cannot create/link patient login accounts
+PASS global Reception cannot reset the global password from a local membership
+PASS global Disabling clinic A access does not disable clinic B or the shared account
+PASS global Joining again cannot reactivate a disabled membership
+PASS global Closed registration still prevents new clinic memberships
+PASS global Initial registration still respects clinic policy
+PASS global Rejected joins/registration do not leave extra identities
+PASS global Matching contact email never unlocks or merges somebody’s clinic record
+PASS global A newly registered patient sees only the new owned profile
+PASS global Concurrent cross-clinic signups create one account
+PASS global Patient and company session tokens cannot cross authentication schemes
+PASS global Reception cannot use the company patient-support directory
+PASS global Company support does not list all patient identities without an exact search
+PASS global Support finds one login identity without returning clinical history
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global Wrong password contributes to one shared patient lockout
+PASS global A central lockout cannot be bypassed through another API or clinic
+PASS global Company support revokes all sessions and restores access with one new password
+PASS global Company recovery records an audit event with the operator identity
+PASS global A damaged default clinic cannot lock the patient out of their personal account or healthy clinic
+PASS global browser Only the personal patient workspace offers My clinics
+PASS global browser Personal page shows this patient’s appointments across two clinics
+PASS global browser Clinic cards show the correct local patient number
+PASS global browser Switching clinics updates the signed-in workspace
+PASS global browser An old tab cannot silently read the newly selected clinic
+PASS global browser Changing the workspace header cannot revive an old clinic’s CSRF token
+PASS global browser Aggregated appointment opens its own clinic and private details
+PASS global browser Closed registration has no misleading join button
+PASS global browser Personal patient pages are translated into English
+PASS global browser Patient home fits a 320px phone
+PASS global browser One self-registration gives a personal account with one initial clinic
+PASS global browser Another clinic asks for explicit profile consent, not another account/password
+PASS global browser Viewing the join confirmation leaves the existing workspace unchanged
+PASS global browser Joining carries the selected clinic/date through to booking
+PASS global browser Publicly selected time and service survive clinic joining
+PASS global browser Patient still books only for their own clinic profile
+PASS global browser Normal booking/details remain available with the shared login
+PASS global browser Aggregated visits never reveal another patient’s appointments
+PASS global browser Personal password changes use the existing form and sign the user out
+PASS global browser Reception has no cross-clinic patient selector
+PASS global browser Reception cannot create or link patient login accounts
+PASS global browser Reception retains doctor and receptionist account management
+PASS global browser Patient row offers clinic-local access control without global credentials
+PASS global browser Reception cannot switch to another clinic through public booking
+PASS global browser Reception cannot open the personal clinic-selection page
+PASS global browser A receptionist cannot open company patient recovery
+PASS global browser Company support can find the login without exposing clinic record identifiers
+PASS global browser Company recovery works through the protected MVC form
+PASS global browser Company patient recovery fits a 320px phone
+PASS global browser No uncaught browser errors: 
+30/30 global patient browser checks passed.
+PASS global A patient password change revokes sessions in every clinic and API instance
+PASS global The old patient password stops working everywhere
+PASS global The same new password opens the all-clinic patient identity without a silent clinic selection
+PASS global Global sign-out revokes the patient token
+PASS global Patient changes cannot broaden receptionist permissions
+PASS global Repeated maintenance preserves the one-account/two-membership model
+PASS global Patient can reach its configured clinic-local allowance
+PASS global Patient can reach its configured clinic-local allowance
+PASS global Patient can reach its configured clinic-local allowance
+PASS global Three bookings at clinic A do not consume the allowance at clinic B
+PASS global Other-clinic bookings cannot prevent a valid reschedule at clinic B
+PASS global The original clinic still enforces its own future-booking cap
+64/64 global patient API/PostgreSQL checks passed.

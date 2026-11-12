@@ -1,0 +1,292 @@
+{
+  "patient_history": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 26.88,
+        "Total Cost": 26.89,
+        "Plan Rows": 6,
+        "Plan Width": 169,
+        "Actual Startup Time": 0.099,
+        "Actual Total Time": 0.101,
+        "Actual Rows": 6,
+        "Actual Loops": 1,
+        "Shared Hit Blocks": 11,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Sort",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 26.88,
+            "Total Cost": 26.89,
+            "Plan Rows": 6,
+            "Plan Width": 169,
+            "Actual Startup Time": 0.098,
+            "Actual Total Time": 0.099,
+            "Actual Rows": 6,
+            "Actual Loops": 1,
+            "Sort Key": [
+              "\"Start\" DESC"
+            ],
+            "Sort Method": "quicksort",
+            "Sort Space Used": 26,
+            "Sort Space Type": "Memory",
+            "Shared Hit Blocks": 11,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Bitmap Heap Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "Appointments",
+                "Alias": "Appointments",
+                "Startup Cost": 4.33,
+                "Total Cost": 26.8,
+                "Plan Rows": 6,
+                "Plan Width": 169,
+                "Actual Startup Time": 0.047,
+                "Actual Total Time": 0.077,
+                "Actual Rows": 6,
+                "Actual Loops": 1,
+                "Recheck Cond": "((\"PatientId\")::text = 'qa-load-p-100'::text)",
+                "Rows Removed by Index Recheck": 0,
+                "Exact Heap Blocks": 6,
+                "Lossy Heap Blocks": 0,
+                "Shared Hit Blocks": 8,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0,
+                "Plans": [
+                  {
+                    "Node Type": "Bitmap Index Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Index Name": "IX_Appointments_PatientId_Start",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 4.33,
+                    "Plan Rows": 6,
+                    "Plan Width": 0,
+                    "Actual Startup Time": 0.023,
+                    "Actual Total Time": 0.023,
+                    "Actual Rows": 6,
+                    "Actual Loops": 1,
+                    "Index Cond": "((\"PatientId\")::text = 'qa-load-p-100'::text)",
+                    "Shared Hit Blocks": 2,
+                    "Shared Read Blocks": 0,
+                    "Shared Dirtied Blocks": 0,
+                    "Shared Written Blocks": 0,
+                    "Local Hit Blocks": 0,
+                    "Local Read Blocks": 0,
+                    "Local Dirtied Blocks": 0,
+                    "Local Written Blocks": 0,
+                    "Temp Read Blocks": 0,
+                    "Temp Written Blocks": 0
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 221,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 1.422,
+      "Triggers": [],
+      "Execution Time": 0.2
+    }
+  ],
+  "doctor_range": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 0.41,
+        "Total Cost": 50.91,
+        "Plan Rows": 25,
+        "Plan Width": 169,
+        "Actual Startup Time": 0.299,
+        "Actual Total Time": 0.303,
+        "Actual Rows": 5,
+        "Actual Loops": 1,
+        "Shared Hit Blocks": 4,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Index Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Scan Direction": "Forward",
+            "Index Name": "IX_Appointments_DoctorId_Start",
+            "Relation Name": "Appointments",
+            "Alias": "Appointments",
+            "Startup Cost": 0.41,
+            "Total Cost": 50.91,
+            "Plan Rows": 25,
+            "Plan Width": 169,
+            "Actual Startup Time": 0.298,
+            "Actual Total Time": 0.301,
+            "Actual Rows": 5,
+            "Actual Loops": 1,
+            "Index Cond": "(((\"DoctorId\")::text = '6b38f567d3404e9880eb6f0b6810adb0'::text) AND (\"Start\" >= '2026-11-12 00:00:00+00'::timestamp with time zone))",
+            "Rows Removed by Index Recheck": 0,
+            "Shared Hit Blocks": 4,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 224,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 4.239,
+      "Triggers": [],
+      "Execution Time": 0.329
+    }
+  ],
+  "tables": [
+    {
+      "table": "Specialties",
+      "live_estimate": 1,
+      "dead_estimate": 6
+    },
+    {
+      "table": "DoctorServices",
+      "live_estimate": 5,
+      "dead_estimate": 5
+    },
+    {
+      "table": "AvailabilityExceptions",
+      "live_estimate": 1,
+      "dead_estimate": 4
+    },
+    {
+      "table": "Settings",
+      "live_estimate": 2,
+      "dead_estimate": 3
+    },
+    {
+      "table": "Doctors",
+      "live_estimate": 4,
+      "dead_estimate": 7
+    },
+    {
+      "table": "AppointmentHistory",
+      "live_estimate": 7,
+      "dead_estimate": 7
+    },
+    {
+      "table": "SourceSchedules",
+      "live_estimate": 0,
+      "dead_estimate": 0
+    },
+    {
+      "table": "Sessions",
+      "live_estimate": 30,
+      "dead_estimate": 8
+    },
+    {
+      "table": "Services",
+      "live_estimate": 2,
+      "dead_estimate": 7
+    },
+    {
+      "table": "Appointments",
+      "live_estimate": 30005,
+      "dead_estimate": 17
+    },
+    {
+      "table": "AuditEvents",
+      "live_estimate": 65,
+      "dead_estimate": 3
+    },
+    {
+      "table": "WorkingPeriods",
+      "live_estimate": 21,
+      "dead_estimate": 4
+    },
+    {
+      "table": "IdempotencyRequests",
+      "live_estimate": 5,
+      "dead_estimate": 4
+    },
+    {
+      "table": "Accounts",
+      "live_estimate": 10,
+      "dead_estimate": 28
+    },
+    {
+      "table": "__EFMigrationsHistory",
+      "live_estimate": 7,
+      "dead_estimate": 3
+    },
+    {
+      "table": "Patients",
+      "live_estimate": 5014,
+      "dead_estimate": 12
+    }
+  ]
+}

@@ -1,0 +1,1323 @@
+[
+  {
+    "path": "/api/clinics",
+    "method": "GET",
+    "protected": false,
+    "parameters": [],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/health/live",
+    "method": "GET",
+    "protected": false,
+    "parameters": [],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "protected": false,
+    "parameters": [],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/health/database",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/accounts",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/accounts",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/accounts/{id}/credentials",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/accounts/{id}/access",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/accounts/audit",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "take",
+        "in": "query",
+        "schema": {
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32",
+          "default": 100
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/reports",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "From",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "To",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "GroupBy",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DoctorId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Specialty",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ServiceId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/catalogue/doctors",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/catalogue/specialties",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/catalogue/services",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/bootstrap",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/appointments",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "from",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      {
+        "name": "to",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      {
+        "name": "skip",
+        "in": "query",
+        "schema": {
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32",
+          "default": 0
+        }
+      },
+      {
+        "name": "take",
+        "in": "query",
+        "schema": {
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32",
+          "default": 100
+        }
+      },
+      {
+        "name": "doctorId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "patientId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "serviceId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "status",
+        "in": "query",
+        "schema": {
+          "$ref": "#/components/schemas/AppointmentStatus"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/appointments",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/appointments/{id}/history",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/slots",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "doctorId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "date",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "excludeId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "serviceId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "patientId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/availability/days",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "doctorId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "to",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "excludeId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "serviceId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "patientId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/availability/next",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "doctorIds",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "serviceId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/exceptions",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "doctorId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/appointments/{id}/move",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/appointments/{id}/status",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/patients/{id}",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/patients",
+    "method": "POST",
+    "protected": true,
+    "parameters": [],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/schedule/{doctorId}",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "doctorId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/exceptions/{doctorId}",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "doctorId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/exceptions/{id}/remove",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/auth/register",
+    "method": "POST",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 400
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/auth/password",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401
+  },
+  {
+    "path": "/api/auth/demo-users",
+    "method": "GET",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 404,
+    "authorizedRead": 404
+  },
+  {
+    "path": "/api/auth/demo-login",
+    "method": "POST",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "X-Clinic",
+        "in": "header",
+        "description": "Clinic identifier, for example main. Must match the clinic session. Registration also uses this header.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 400
+  },
+  {
+    "path": "/api/public/clinics",
+    "method": "GET",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "Search",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Clinic",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "ClinicId",
+        "in": "query",
+        "schema": {
+          "maxLength": 40,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Specialty",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Service",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Page",
+        "in": "query",
+        "schema": {
+          "maximum": 100,
+          "minimum": 1,
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32"
+        }
+      },
+      {
+        "name": "PageSize",
+        "in": "query",
+        "schema": {
+          "maximum": 24,
+          "minimum": 1,
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32"
+        }
+      }
+    ],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/public/clinics/{id}",
+    "method": "GET",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/public/doctors",
+    "method": "GET",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "Search",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Clinic",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "ClinicId",
+        "in": "query",
+        "schema": {
+          "maxLength": 40,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Specialty",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Service",
+        "in": "query",
+        "schema": {
+          "maxLength": 100,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      {
+        "name": "Page",
+        "in": "query",
+        "schema": {
+          "maximum": 100,
+          "minimum": 1,
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32"
+        }
+      },
+      {
+        "name": "PageSize",
+        "in": "query",
+        "schema": {
+          "maximum": 24,
+          "minimum": 1,
+          "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "type": [
+            "integer",
+            "string"
+          ],
+          "format": "int32"
+        }
+      }
+    ],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "method": "GET",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "clinicId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "doctorId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "date",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      {
+        "name": "serviceId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "method": "GET",
+    "protected": false,
+    "parameters": [
+      {
+        "name": "clinicId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "doctorId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 200,
+    "authorizedRead": 200
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "POST",
+    "protected": false,
+    "parameters": [],
+    "anonymous": 400
+  },
+  {
+    "path": "/api/patient/home",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "clinicId",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/patient/clinics",
+    "method": "GET",
+    "protected": true,
+    "parameters": [],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/patient/clinics/{clinicId}",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "clinicId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 403
+  },
+  {
+    "path": "/api/platform/login",
+    "method": "POST",
+    "protected": false,
+    "parameters": [],
+    "anonymous": 400
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "GET",
+    "protected": true,
+    "parameters": [],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/clinics",
+    "method": "POST",
+    "protected": true,
+    "parameters": [],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/adopt",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/clinics/{id}/details",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/patients",
+    "method": "GET",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "email",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "authorizedRead": 200,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/patients/{id}/password",
+    "method": "POST",
+    "protected": true,
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/password",
+    "method": "POST",
+    "protected": true,
+    "parameters": [],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 401
+  },
+  {
+    "path": "/api/platform/logout",
+    "method": "POST",
+    "protected": true,
+    "parameters": [],
+    "anonymous": 401,
+    "invalidToken": 401,
+    "wrongRole": 401
+  }
+]

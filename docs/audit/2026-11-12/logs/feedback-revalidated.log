@@ -1,0 +1,54 @@
+PASS feedback Technical connected badge is absent
+PASS feedback Same-name patients show distinct permanent numbers in card view
+PASS feedback List view has a patient-number column
+PASS feedback Patient-number search distinguishes identical names
+PASS feedback Patient profile displays its assigned number
+PASS feedback Typing a patient-history date preserves its field and focus
+PASS feedback Completed patient-history date is committed exactly once
+PASS feedback Searchable booking choice displays name and number without email, retaining the internal ID
+PASS feedback US browser displays DD.MM.YYYY while booking uses ISO
+PASS feedback Calendar icon opens the availability calendar
+PASS feedback Dismissing the availability calendar keeps booking open
+PASS feedback Invalid typed date clears the previously selected date
+PASS feedback A partial or invalid entry does not prevent opening the calendar
+PASS feedback Review identifies the selected same-name patient unambiguously
+PASS feedback Final booking request sends the unchanged ISO date
+PASS feedback Saved appointment details retain patient identification
+PASS feedback Committed patient-history date filters out earlier appointments
+PASS feedback Clearing the optional date restores the saved appointment
+PASS feedback Public doctor-availability form preserves day-first display and ISO query
+PASS feedback Specialties omit the fictitious status column and badges
+PASS feedback Services retain their real active-state column
+PASS feedback doctors report labels cannot overlap the totals
+PASS feedback specialties report labels cannot overlap the totals
+PASS feedback services report labels cannot overlap the totals
+PASS feedback 390px drawer has an accessible close control and blocks background interaction
+PASS feedback 390px drawer contains keyboard focus
+PASS feedback 390px X dismisses menu and backdrop
+PASS feedback 390px outside tap dismisses and restores the workspace
+PASS feedback 390px Escape restores focus to the menu trigger
+PASS feedback 390px navigation also closes the drawer
+PASS feedback 320px drawer has an accessible close control and blocks background interaction
+PASS feedback 320px drawer contains keyboard focus
+PASS feedback 320px X dismisses menu and backdrop
+PASS feedback 320px outside tap dismisses and restores the workspace
+PASS feedback 320px Escape restores focus to the menu trigger
+PASS feedback 320px navigation also closes the drawer
+PASS feedback Resizing an open drawer to desktop restores normal navigation
+PASS feedback Account list is paginated at 20 rows
+PASS feedback Reception offers staff roles only and excludes already linked doctor profiles across all account pages
+PASS feedback Next page displays the remaining accounts
+PASS feedback Search is case-insensitive and combines role/access filters with an accurate count
+PASS feedback Cyrillic account-name search works
+PASS feedback No-match filters show an explicit empty state
+PASS feedback Account-created success identifies the account and receives focus
+PASS feedback default success message has readable text contrast
+PASS feedback dark success message has readable text contrast
+PASS feedback vibrant success message has readable text contrast
+PASS feedback Changing access preserves the active account filters
+PASS feedback Account filters and pagination fit a 320px phone
+PASS feedback New account controls and result counts are translated
+PASS feedback English report forms use the shared day-first controls
+PASS feedback No uncaught browser errors: 
+52/52 tester-feedback browser checks passed.
+PASS Real PostgreSQL contact updates cannot change assigned patient numbers

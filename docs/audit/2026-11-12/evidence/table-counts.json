@@ -1,0 +1,301 @@
+{
+  "clinical": [
+    {
+      "schema": "careline_identity",
+      "table": "PatientAccounts",
+      "rows": 2
+    },
+    {
+      "schema": "careline_identity",
+      "table": "PatientBookings",
+      "rows": 1
+    },
+    {
+      "schema": "careline_identity",
+      "table": "PatientEvents",
+      "rows": 5
+    },
+    {
+      "schema": "careline_identity",
+      "table": "PatientMemberships",
+      "rows": 3
+    },
+    {
+      "schema": "careline_identity",
+      "table": "PatientSessions",
+      "rows": 3
+    },
+    {
+      "schema": "careline_identity",
+      "table": "accounts",
+      "rows": 5
+    },
+    {
+      "schema": "careline_identity",
+      "table": "clinics",
+      "rows": 3
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Accounts",
+      "rows": 1
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "AppointmentHistory",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Appointments",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "AuditEvents",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "AvailabilityExceptions",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "DoctorServices",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Doctors",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "IdempotencyRequests",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Patients",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Services",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Sessions",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Settings",
+      "rows": 2
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "SourceSchedules",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "Specialties",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "WorkingPeriods",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_closed",
+      "table": "__EFMigrationsHistory",
+      "rows": 7
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Accounts",
+      "rows": 2
+    },
+    {
+      "schema": "clinic_east",
+      "table": "AppointmentHistory",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Appointments",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_east",
+      "table": "AuditEvents",
+      "rows": 20
+    },
+    {
+      "schema": "clinic_east",
+      "table": "AvailabilityExceptions",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_east",
+      "table": "DoctorServices",
+      "rows": 5
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Doctors",
+      "rows": 4
+    },
+    {
+      "schema": "clinic_east",
+      "table": "IdempotencyRequests",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Patients",
+      "rows": 7
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Services",
+      "rows": 2
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Sessions",
+      "rows": 3
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Settings",
+      "rows": 2
+    },
+    {
+      "schema": "clinic_east",
+      "table": "SourceSchedules",
+      "rows": 0
+    },
+    {
+      "schema": "clinic_east",
+      "table": "Specialties",
+      "rows": 1
+    },
+    {
+      "schema": "clinic_east",
+      "table": "WorkingPeriods",
+      "rows": 21
+    },
+    {
+      "schema": "clinic_east",
+      "table": "__EFMigrationsHistory",
+      "rows": 7
+    },
+    {
+      "schema": "public",
+      "table": "Accounts",
+      "rows": 5
+    },
+    {
+      "schema": "public",
+      "table": "AppointmentHistory",
+      "rows": 5
+    },
+    {
+      "schema": "public",
+      "table": "Appointments",
+      "rows": 3
+    },
+    {
+      "schema": "public",
+      "table": "AuditEvents",
+      "rows": 32
+    },
+    {
+      "schema": "public",
+      "table": "AvailabilityExceptions",
+      "rows": 1
+    },
+    {
+      "schema": "public",
+      "table": "DoctorServices",
+      "rows": 5
+    },
+    {
+      "schema": "public",
+      "table": "Doctors",
+      "rows": 4
+    },
+    {
+      "schema": "public",
+      "table": "IdempotencyRequests",
+      "rows": 3
+    },
+    {
+      "schema": "public",
+      "table": "Patients",
+      "rows": 8
+    },
+    {
+      "schema": "public",
+      "table": "Services",
+      "rows": 2
+    },
+    {
+      "schema": "public",
+      "table": "Sessions",
+      "rows": 6
+    },
+    {
+      "schema": "public",
+      "table": "Settings",
+      "rows": 2
+    },
+    {
+      "schema": "public",
+      "table": "SourceSchedules",
+      "rows": 0
+    },
+    {
+      "schema": "public",
+      "table": "Specialties",
+      "rows": 1
+    },
+    {
+      "schema": "public",
+      "table": "WorkingPeriods",
+      "rows": 21
+    },
+    {
+      "schema": "public",
+      "table": "__EFMigrationsHistory",
+      "rows": 7
+    }
+  ],
+  "platform": [
+    {
+      "schema": "public",
+      "table": "PlatformClinics",
+      "rows": 1
+    },
+    {
+      "schema": "public",
+      "table": "PlatformOperators",
+      "rows": 1
+    },
+    {
+      "schema": "public",
+      "table": "PlatformSchemaVersions",
+      "rows": 3
+    },
+    {
+      "schema": "public",
+      "table": "PlatformSessions",
+      "rows": 3
+    }
+  ]
+}

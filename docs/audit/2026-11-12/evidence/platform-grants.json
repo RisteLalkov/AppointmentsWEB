@@ -1,0 +1,170 @@
+[
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformClinics",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformOperators",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSchemaVersions",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_1",
+    "table_name": "PlatformSessions",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  }
+]

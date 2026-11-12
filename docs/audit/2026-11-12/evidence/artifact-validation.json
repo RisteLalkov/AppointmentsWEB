@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "pdf_pages": 17,
+  "pdf_text_characters": 45648,
+  "word_paragraphs": 165,
+  "word_tables": 6,
+  "word_hyperlinks": 9,
+  "all_finding_ids_in_pdf_and_word": true,
+  "missing_local_links": [],
+  "application_source_diff_empty": true
+}

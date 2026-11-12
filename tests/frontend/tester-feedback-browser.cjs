@@ -88,6 +88,7 @@ function check(ok, message) { if (!ok) throw Error(message); checks++; console.l
    check(await page.locator('#navigation-backdrop').isHidden() && !await page.locator('.main-shell').evaluate(e=>e.inert), width+'px navigation also closes the drawer');
   }
   await page.locator('#menu-toggle').click();await page.setViewportSize({width:1360,height:1000});
+  await page.waitForFunction(()=>document.querySelector('#navigation-backdrop').hidden && !document.querySelector('.main-shell').inert);
   check(await page.locator('#navigation-backdrop').isHidden() && !await page.locator('.main-shell').evaluate(e=>e.inert), 'Resizing an open drawer to desktop restores normal navigation');
   await page.goto(base+'/Accounts');await page.locator('#account-results-count').waitFor();
   check(await page.locator('.account-row').count()===20 && await page.locator('.account-pagination').isVisible(), 'Account list is paginated at 20 rows');

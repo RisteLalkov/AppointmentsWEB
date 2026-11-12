@@ -26,7 +26,10 @@ function check(ok,label){if(!ok)throw Error(label);checks++;console.log('PASS gl
   check(await other.locator('meta[name=careline-clinic]').getAttribute('content')==='east','Switching clinics updates the signed-in workspace');
   const stale=await page.request.get(base+'/data/bootstrap',{headers:{'X-Workspace-Clinic':'main'}});
   check(stale.status()===409,'An old tab cannot silently read the newly selected clinic');
-  const forged=await page.request.post(base+'/data/patients',{headers:{'X-Workspace-Clinic':'east','X-CSRF-TOKEN':oldToken},data:{name:'Forbidden stale mutation',email:'',phone:''}});
+  // Patient creation is now forbidden at authorization, before the CSRF filter.
+  // Exercise an allowed patient action with a fully valid body to isolate CSRF.
+  const eastState=await (await other.request.get(base+'/data/bootstrap',{headers:{'X-Workspace-Clinic':'east'}})).json();
+  const forged=await page.request.post(base+'/data/appointments',{headers:{'X-Workspace-Clinic':'east','X-CSRF-TOKEN':oldToken},data:{doctorId:fixture.doctor.id,patientId:eastState.actor.patientId,serviceId:fixture.service.id,date:fixture.date,time:'14:00',durationMinutes:fixture.service.durationMinutes,requestId:crypto.randomUUID()}});
   check(forged.status()===400,'Changing the workspace header cannot revive an old clinic’s CSRF token');
   await other.goto(base+'/PatientClinics');await other.locator('[data-patient-visit="'+fixture.mainVisit+'"]').getByRole('button').click();await other.locator('#main-dialog[open]').waitFor();
   check((await other.locator('#main-dialog').innerText()).includes('Д-р main'),'Aggregated appointment opens its own clinic and private details');

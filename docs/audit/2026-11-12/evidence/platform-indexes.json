@@ -1,0 +1,62 @@
+[
+  {
+    "definition": "CREATE UNIQUE INDEX \"PlatformClinics_pkey\" ON public.\"PlatformClinics\" USING btree (\"Id\")",
+    "index_name": "PlatformClinics_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PlatformClinics",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PlatformOperators_Email_key\" ON public.\"PlatformOperators\" USING btree (\"Email\")",
+    "index_name": "PlatformOperators_Email_key",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PlatformOperators",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PlatformOperators_pkey\" ON public.\"PlatformOperators\" USING btree (\"Id\")",
+    "index_name": "PlatformOperators_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PlatformOperators",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PlatformSchemaVersions_pkey\" ON public.\"PlatformSchemaVersions\" USING btree (\"Version\")",
+    "index_name": "PlatformSchemaVersions_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PlatformSchemaVersions",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_PlatformSessions_ExpiresAt\" ON public.\"PlatformSessions\" USING btree (\"ExpiresAt\")",
+    "index_name": "IX_PlatformSessions_ExpiresAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PlatformSessions",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PlatformSessions_pkey\" ON public.\"PlatformSessions\" USING btree (\"TokenHash\")",
+    "index_name": "PlatformSessions_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PlatformSessions",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  }
+]

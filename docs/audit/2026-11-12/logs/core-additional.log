@@ -1,0 +1,15 @@
+[
+  {
+    "id": "C001",
+    "name": "JSON demo rejects replay when AgreedTime changes",
+    "status": "FAIL",
+    "observed": "Original Scheduled response replayed",
+    "scope": "Development-only JSON backend; PostgreSQL fingerprints whole command"
+  },
+  {
+    "id": "C002",
+    "name": "Legacy TuesdayFirst metadata does not suppress Wednesday availability",
+    "status": "PASS",
+    "slots": 18
+  }
+]

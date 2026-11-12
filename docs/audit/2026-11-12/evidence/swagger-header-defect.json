@@ -1,0 +1,17 @@
+{
+  "path": "/api/patients/ac63890435754f9aa2a051ac1d70d899",
+  "documented_parameters": [
+    {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "without_clinic": 400,
+  "with_clinic": 200,
+  "expected_without_documented_missing_header": 200,
+  "status": "FAIL"
+}

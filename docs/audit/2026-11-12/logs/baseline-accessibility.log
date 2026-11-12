@@ -1,0 +1,18 @@
+PASS accessibility Administrator overview default: no detected WCAG A/AA violations
+PASS accessibility Administrator doctors default: no detected WCAG A/AA violations
+PASS accessibility Administrator patients default: no detected WCAG A/AA violations
+PASS accessibility Administrator calendar default: no detected WCAG A/AA violations
+PASS accessibility Administrator catalogue/specialties default: no detected WCAG A/AA violations
+PASS accessibility Administrator catalogue/services default: no detected WCAG A/AA violations
+PASS accessibility Administrator reports default: no detected WCAG A/AA violations
+PASS accessibility Administrator appointments default: no detected WCAG A/AA violations
+PASS accessibility Administrator doctors dark: no detected WCAG A/AA violations
+PASS accessibility Administrator doctors vibrant: no detected WCAG A/AA violations
+PASS accessibility Doctor overview default: no detected WCAG A/AA violations
+PASS accessibility Doctor appointments default: no detected WCAG A/AA violations
+PASS accessibility Doctor calendar default: no detected WCAG A/AA violations
+PASS accessibility Doctor availability default: no detected WCAG A/AA violations
+PASS accessibility Patient overview default: no detected WCAG A/AA violations
+PASS accessibility Patient doctors default: no detected WCAG A/AA violations
+PASS accessibility Patient appointments default: no detected WCAG A/AA violations
+17/17 accessibility scenarios passed (automated coverage only).

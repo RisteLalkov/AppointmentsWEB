@@ -1,0 +1,68 @@
+PASS feedback Technical connected badge is absent
+PASS feedback Same-name patients show distinct permanent numbers in card view
+PASS feedback List view has a patient-number column
+PASS feedback Patient-number search distinguishes identical names
+PASS feedback Patient profile displays its assigned number
+PASS feedback Typing a patient-history date preserves its field and focus
+PASS feedback Completed patient-history date is committed exactly once
+PASS feedback Searchable booking choice displays name and number without email, retaining the internal ID
+PASS feedback US browser displays DD.MM.YYYY while booking uses ISO
+PASS feedback Calendar icon opens the availability calendar
+PASS feedback Dismissing the availability calendar keeps booking open
+PASS feedback Invalid typed date clears the previously selected date
+PASS feedback A partial or invalid entry does not prevent opening the calendar
+PASS feedback Review identifies the selected same-name patient unambiguously
+PASS feedback Final booking request sends the unchanged ISO date
+PASS feedback Saved appointment details retain patient identification
+PASS feedback Committed patient-history date filters out earlier appointments
+PASS feedback Clearing the optional date restores the saved appointment
+PASS feedback Public doctor-availability form preserves day-first display and ISO query
+PASS feedback Specialties omit the fictitious status column and badges
+PASS feedback Services retain their real active-state column
+PASS feedback doctors report labels cannot overlap the totals
+PASS feedback specialties report labels cannot overlap the totals
+PASS feedback services report labels cannot overlap the totals
+PASS feedback 390px drawer has an accessible close control and blocks background interaction
+PASS feedback 390px drawer contains keyboard focus
+PASS feedback 390px X dismisses menu and backdrop
+PASS feedback 390px outside tap dismisses and restores the workspace
+PASS feedback 390px Escape restores focus to the menu trigger
+PASS feedback 390px navigation also closes the drawer
+PASS feedback 320px drawer has an accessible close control and blocks background interaction
+PASS feedback 320px drawer contains keyboard focus
+PASS feedback 320px X dismisses menu and backdrop
+PASS feedback 320px outside tap dismisses and restores the workspace
+PASS feedback 320px Escape restores focus to the menu trigger
+PASS feedback 320px navigation also closes the drawer
+Error: Resizing an open drawer to desktop restores normal navigation
+    at check (/workspace/AppointmentsWEB/tests/frontend/tester-feedback-browser.cjs:8:46)
+    at /workspace/AppointmentsWEB/tests/frontend/tester-feedback-browser.cjs:91:3
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+      Failed executing DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "MigrationId", "ProductVersion"
+      FROM "__EFMigrationsHistory"
+      ORDER BY "MigrationId";
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {ef376122-2466-4122-bb8a-b07dff7a750d} may be persisted to storage in unencrypted form.
+
+warn: Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository[50]
+      Using an in-memory repository. Keys will not be persisted to storage.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[59]
+      Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {3959f9d2-895f-4722-a008-0b6f8b941a0f} may be persisted to storage in unencrypted form.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+warn: Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery[8]
+      The 'Cache-Control' and 'Pragma' headers have been overridden and set to 'no-cache, no-store' and 'no-cache' respectively to prevent caching of this response. Any response that uses antiforgery should not be cached.
+
+Traceback (most recent call last):
+  File "/workspace/AppointmentsWEB/tests/tester_feedback_integration.py", line 89, in <module>
+    subprocess.run(['node', 'tests/frontend/tester-feedback-browser.cjs'], cwd=root, env=browser_env, check=True, timeout=120)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['node', 'tests/frontend/tester-feedback-browser.cjs']' returned non-zero exit status 1.

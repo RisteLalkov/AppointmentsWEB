@@ -1,0 +1,578 @@
+[
+  {
+    "file": ".config/dotnet-tools.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/audit-summary.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/accessibility.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/account-access-form.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/account-form-error.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/constraint-audit.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/constraint-extra.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/demo-parity.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/dependencies.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/dialog-race.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/endpoint-boundaries.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/followup.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/method-matrix.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/model-comparison.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/network-check.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/npm-audit.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/nuget-vulnerabilities.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/probes.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/repository-inventory.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/role-matrix.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/stale-patient-move.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/evidence/syntax-validation.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-02/findings.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/accessibility.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/clinic-columns.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/clinic-constraints.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/clinic-indexes.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/model-comparison.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/platform-columns.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/platform-constraints.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/platform-indexes.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/restore-comparison.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/syntax-validation.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/test-results.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/audit/2026-11-10/evidence/verification.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/high-severity-verification-2026-11-02.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "docs/user-guide/build_guides.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "global.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "scripts/build-localization.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "src/Appointments.Api/Appointments.Api.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Api/Properties/launchSettings.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Api/appsettings.Development.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Api/appsettings.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Api/dotnet-tools.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Contracts/Appointments.Contracts.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Core/Appointments.Core.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Core/Localization/en.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Data/Appointments.Data.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/Appointments.Web.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/Properties/launchSettings.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/Seed/doctors.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/appsettings.Development.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/appsettings.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/dotnet-tools.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/favicon.svg",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/i18n/en.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/icons/interface.svg",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/images/company-mark.svg",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/account-create.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/account-settings.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/accounts.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/app.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/clinic-switcher.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/dates.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/demo.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/discover.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/icons.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/language.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/localization.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/navigation-drawer.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/navigation.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/password-visibility.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/platform.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/theme.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "src/Appointments.Web/wwwroot/js/validation-mk.js",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/Appointments.DatabaseTests/Appointments.DatabaseTests.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "tests/Appointments.Tests/Appointments.Tests.csproj",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "tests/api_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/booking_review_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/discovery_web_smoke.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/frontend/accessibility-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/account-settings-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/booking-review-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/dates.mjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/discovery-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/global-patients-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/helpers/account-settings.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/high-severity.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/localization-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/localization.mjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/overnight-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/package-lock.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "tests/frontend/package.json",
+    "status": "PASS",
+    "check": "JSON or XML syntax"
+  },
+  {
+    "file": "tests/frontend/password-visibility.mjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/smoke.mjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/tenancy.mjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/tester-feedback-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/tester-round2-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/themes-browser.cjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/frontend/themes.mjs",
+    "status": "PASS",
+    "check": "Node syntax",
+    "error": null
+  },
+  {
+    "file": "tests/global_patients_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/high_severity_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/http_smoke.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/overnight_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/platform_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/tenancy_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/tester_feedback_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  },
+  {
+    "file": "tests/tester_round2_integration.py",
+    "status": "PASS",
+    "check": "Python AST"
+  }
+]

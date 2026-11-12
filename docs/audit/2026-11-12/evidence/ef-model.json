@@ -1,0 +1,1328 @@
+{
+  "pendingModelChanges": false,
+  "appliedMigrations": [
+    "20260922194435_InitialPostgres",
+    "20260930135621_ServiceCatalogue",
+    "20261001070652_AppointmentHistory",
+    "20261005225240_PatientProfiles",
+    "20261110091110_PatientNumbers",
+    "20261110131050_GlobalPatientMemberships",
+    "20261111122943_DatedWorkingHours"
+  ],
+  "pendingMigrations": [],
+  "clinical": [
+    {
+      "Name": "Accounts",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "CreatedAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "DoctorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": true
+        },
+        {
+          "Name": "Email",
+          "StoreType": "character varying(120)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Enabled",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "FailedAttempts",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "GlobalPatientId",
+          "StoreType": "character varying(64)",
+          "IsNullable": true
+        },
+        {
+          "Name": "IsDemo",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "LockedUntil",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": true
+        },
+        {
+          "Name": "Name",
+          "StoreType": "character varying(80)",
+          "IsNullable": false
+        },
+        {
+          "Name": "NormalizedEmail",
+          "StoreType": "character varying(120)",
+          "IsNullable": false
+        },
+        {
+          "Name": "PasswordHash",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "PatientId",
+          "StoreType": "character varying(64)",
+          "IsNullable": true
+        },
+        {
+          "Name": "Role",
+          "StoreType": "character varying(20)",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Accounts_DoctorId",
+          "IsUnique": true,
+          "columns": [
+            "DoctorId"
+          ]
+        },
+        {
+          "Name": "IX_Accounts_GlobalPatientId",
+          "IsUnique": true,
+          "columns": [
+            "GlobalPatientId"
+          ]
+        },
+        {
+          "Name": "IX_Accounts_NormalizedEmail",
+          "IsUnique": true,
+          "columns": [
+            "NormalizedEmail"
+          ]
+        },
+        {
+          "Name": "IX_Accounts_PatientId",
+          "IsUnique": true,
+          "columns": [
+            "PatientId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_Accounts_Doctors_DoctorId",
+          "principal": "Doctors",
+          "columns": [
+            "DoctorId"
+          ]
+        },
+        {
+          "Name": "FK_Accounts_PatientAccounts_GlobalPatientId",
+          "principal": "PatientAccounts",
+          "columns": [
+            "GlobalPatientId"
+          ]
+        },
+        {
+          "Name": "FK_Accounts_Patients_PatientId",
+          "principal": "Patients",
+          "columns": [
+            "PatientId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "AppointmentHistory",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ActorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ActorName",
+          "StoreType": "character varying(200)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ActorRole",
+          "StoreType": "character varying(20)",
+          "IsNullable": false
+        },
+        {
+          "Name": "AfterEnd",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "AfterStart",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "AfterStatus",
+          "StoreType": "character varying(20)",
+          "IsNullable": false
+        },
+        {
+          "Name": "AppointmentId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "AppointmentVersion",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "BeforeEnd",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": true
+        },
+        {
+          "Name": "BeforeStart",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": true
+        },
+        {
+          "Name": "BeforeStatus",
+          "StoreType": "character varying(20)",
+          "IsNullable": true
+        },
+        {
+          "Name": "Kind",
+          "StoreType": "character varying(20)",
+          "IsNullable": false
+        },
+        {
+          "Name": "OccurredAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_AppointmentHistory_AppointmentId_AppointmentVersion",
+          "IsUnique": true,
+          "columns": [
+            "AppointmentId",
+            "AppointmentVersion"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_AppointmentHistory_Appointments_AppointmentId",
+          "principal": "Appointments",
+          "columns": [
+            "AppointmentId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Appointments",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "CreatedBy",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "DoctorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "End",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "PatientId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "RequestId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "ServiceId",
+          "StoreType": "text",
+          "IsNullable": true
+        },
+        {
+          "Name": "ServiceName",
+          "StoreType": "character varying(200)",
+          "IsNullable": true
+        },
+        {
+          "Name": "Start",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "Status",
+          "StoreType": "character varying(20)",
+          "IsNullable": false
+        },
+        {
+          "Name": "UpdatedAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "Version",
+          "StoreType": "integer",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Appointments_CreatedBy_RequestId",
+          "IsUnique": true,
+          "columns": [
+            "CreatedBy",
+            "RequestId"
+          ]
+        },
+        {
+          "Name": "IX_Appointments_DoctorId_Start",
+          "IsUnique": false,
+          "columns": [
+            "DoctorId",
+            "Start"
+          ]
+        },
+        {
+          "Name": "IX_Appointments_PatientId_Start",
+          "IsUnique": false,
+          "columns": [
+            "PatientId",
+            "Start"
+          ]
+        },
+        {
+          "Name": "IX_Appointments_ServiceId",
+          "IsUnique": false,
+          "columns": [
+            "ServiceId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_Appointments_Doctors_DoctorId",
+          "principal": "Doctors",
+          "columns": [
+            "DoctorId"
+          ]
+        },
+        {
+          "Name": "FK_Appointments_Patients_PatientId",
+          "principal": "Patients",
+          "columns": [
+            "PatientId"
+          ]
+        },
+        {
+          "Name": "FK_Appointments_Services_ServiceId",
+          "principal": "Services",
+          "columns": [
+            "ServiceId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "AuditEvents",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "bigint",
+          "IsNullable": false
+        },
+        {
+          "Name": "Action",
+          "StoreType": "character varying(80)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ActorId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "OccurredAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "TargetId",
+          "StoreType": "text",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_AuditEvents_OccurredAt",
+          "IsUnique": false,
+          "columns": [
+            "OccurredAt"
+          ]
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "Name": "AvailabilityExceptions",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Date",
+          "StoreType": "date",
+          "IsNullable": false
+        },
+        {
+          "Name": "DoctorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "End",
+          "StoreType": "time without time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "IsAvailable",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Reason",
+          "StoreType": "character varying(120)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Start",
+          "StoreType": "time without time zone",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_AvailabilityExceptions_DoctorId_Date",
+          "IsUnique": false,
+          "columns": [
+            "DoctorId",
+            "Date"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_AvailabilityExceptions_Doctors_DoctorId",
+          "principal": "Doctors",
+          "columns": [
+            "DoctorId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Doctors",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "BookingMethod",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "CatalogVersion",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "DemoScheduleEdited",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "DurationMinutes",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "Enabled",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Funding",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "IsService",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Name",
+          "StoreType": "character varying(200)",
+          "IsNullable": false
+        },
+        {
+          "Name": "RequiresConfirmation",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "ScheduleVersion",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "Specialty",
+          "StoreType": "character varying(200)",
+          "IsNullable": false
+        },
+        {
+          "Name": "SpecialtyId",
+          "StoreType": "text",
+          "IsNullable": true
+        },
+        {
+          "Name": "StaffOnly",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Subspecialty",
+          "StoreType": "character varying(200)",
+          "IsNullable": false
+        },
+        {
+          "Name": "TuesdayFirst",
+          "StoreType": "boolean",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Doctors_SpecialtyId",
+          "IsUnique": false,
+          "columns": [
+            "SpecialtyId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_Doctors_Specialties_SpecialtyId",
+          "principal": "Specialties",
+          "columns": [
+            "SpecialtyId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "DoctorServices",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "DoctorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ServiceId",
+          "StoreType": "text",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_DoctorServices_ServiceId",
+          "IsUnique": false,
+          "columns": [
+            "ServiceId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_DoctorServices_Doctors_DoctorId",
+          "principal": "Doctors",
+          "columns": [
+            "DoctorId"
+          ]
+        },
+        {
+          "Name": "FK_DoctorServices_Services_ServiceId",
+          "principal": "Services",
+          "columns": [
+            "ServiceId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "IdempotencyRequests",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "AccountId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "RequestId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "CreatedAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "Fingerprint",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ResponseJson",
+          "StoreType": "jsonb",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [],
+      "foreignKeys": [
+        {
+          "Name": "FK_IdempotencyRequests_Accounts_AccountId",
+          "principal": "Accounts",
+          "columns": [
+            "AccountId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "PatientAccounts",
+      "Schema": "careline_identity",
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "CreatedAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "Email",
+          "StoreType": "character varying(120)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Enabled",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "FailedAttempts",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "HomeClinicId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "LockedUntil",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": true
+        },
+        {
+          "Name": "Name",
+          "StoreType": "character varying(80)",
+          "IsNullable": false
+        },
+        {
+          "Name": "PasswordHash",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Phone",
+          "StoreType": "character varying(30)",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_PatientAccounts_Email",
+          "IsUnique": true,
+          "columns": [
+            "Email"
+          ]
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "Name": "PatientMemberships",
+      "Schema": "careline_identity",
+      "columns": [
+        {
+          "Name": "PatientAccountId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "ClinicId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "AccountId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "PatientId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "PatientNumber",
+          "StoreType": "bigint",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_PatientMemberships_ClinicId_AccountId",
+          "IsUnique": true,
+          "columns": [
+            "ClinicId",
+            "AccountId"
+          ]
+        },
+        {
+          "Name": "IX_PatientMemberships_ClinicId_PatientId",
+          "IsUnique": true,
+          "columns": [
+            "ClinicId",
+            "PatientId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_PatientMemberships_PatientAccounts_PatientAccountId",
+          "principal": "PatientAccounts",
+          "columns": [
+            "PatientAccountId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Patients",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Email",
+          "StoreType": "character varying(120)",
+          "IsNullable": false
+        },
+        {
+          "Name": "IsDemonstration",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Name",
+          "StoreType": "character varying(80)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Number",
+          "StoreType": "bigint",
+          "IsNullable": false
+        },
+        {
+          "Name": "Phone",
+          "StoreType": "character varying(30)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Version",
+          "StoreType": "integer",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Patients_Email",
+          "IsUnique": true,
+          "columns": [
+            "Email"
+          ]
+        },
+        {
+          "Name": "IX_Patients_Number",
+          "IsUnique": true,
+          "columns": [
+            "Number"
+          ]
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "Name": "PatientSessions",
+      "Schema": "careline_identity",
+      "columns": [
+        {
+          "Name": "TokenHash",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "ExpiresAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "PatientAccountId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_PatientSessions_PatientAccountId",
+          "IsUnique": false,
+          "columns": [
+            "PatientAccountId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_PatientSessions_PatientAccounts_PatientAccountId",
+          "principal": "PatientAccounts",
+          "columns": [
+            "PatientAccountId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Services",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "DurationMinutes",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "Enabled",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Name",
+          "StoreType": "character varying(200)",
+          "IsNullable": false
+        },
+        {
+          "Name": "SpecialtyId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Version",
+          "StoreType": "integer",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Services_SpecialtyId_Name",
+          "IsUnique": true,
+          "columns": [
+            "SpecialtyId",
+            "Name"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_Services_Specialties_SpecialtyId",
+          "principal": "Specialties",
+          "columns": [
+            "SpecialtyId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Sessions",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "TokenHash",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "AccountId",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "ExpiresAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "IsDemo",
+          "StoreType": "boolean",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Sessions_AccountId",
+          "IsUnique": false,
+          "columns": [
+            "AccountId"
+          ]
+        },
+        {
+          "Name": "IX_Sessions_ExpiresAt",
+          "IsUnique": false,
+          "columns": [
+            "ExpiresAt"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_Sessions_Accounts_AccountId",
+          "principal": "Accounts",
+          "columns": [
+            "AccountId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Settings",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Key",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Value",
+          "StoreType": "text",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [],
+      "foreignKeys": []
+    },
+    {
+      "Name": "SourceSchedules",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "bigint",
+          "IsNullable": false
+        },
+        {
+          "Name": "Days",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "DoctorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "End",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Note",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Row",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "Start",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Type",
+          "StoreType": "text",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_SourceSchedules_DoctorId",
+          "IsUnique": false,
+          "columns": [
+            "DoctorId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_SourceSchedules_Doctors_DoctorId",
+          "principal": "Doctors",
+          "columns": [
+            "DoctorId"
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Specialties",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Name",
+          "StoreType": "character varying(200)",
+          "IsNullable": false
+        },
+        {
+          "Name": "Version",
+          "StoreType": "integer",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_Specialties_Name",
+          "IsUnique": true,
+          "columns": [
+            "Name"
+          ]
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "Name": "WorkingPeriods",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "bigint",
+          "IsNullable": false
+        },
+        {
+          "Name": "Day",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "DoctorId",
+          "StoreType": "character varying(64)",
+          "IsNullable": false
+        },
+        {
+          "Name": "End",
+          "StoreType": "time without time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "Start",
+          "StoreType": "time without time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "ValidFrom",
+          "StoreType": "date",
+          "IsNullable": true
+        },
+        {
+          "Name": "ValidTo",
+          "StoreType": "date",
+          "IsNullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_WorkingPeriods_DoctorId_Day",
+          "IsUnique": false,
+          "columns": [
+            "DoctorId",
+            "Day"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_WorkingPeriods_Doctors_DoctorId",
+          "principal": "Doctors",
+          "columns": [
+            "DoctorId"
+          ]
+        }
+      ]
+    }
+  ],
+  "platform": [
+    {
+      "Name": "PlatformClinics",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Address",
+          "StoreType": "text",
+          "IsNullable": true
+        },
+        {
+          "Name": "AdminEmail",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "AdminName",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Adopted",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "AllowRegistration",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "ConnectionName",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "CreatedAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "CreatedBy",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Description",
+          "StoreType": "text",
+          "IsNullable": true
+        },
+        {
+          "Name": "Discoverable",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "Name",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Phone",
+          "StoreType": "text",
+          "IsNullable": true
+        },
+        {
+          "Name": "State",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "TimeZone",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Version",
+          "StoreType": "integer",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [],
+      "foreignKeys": []
+    },
+    {
+      "Name": "PlatformOperators",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "Id",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Email",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "Enabled",
+          "StoreType": "boolean",
+          "IsNullable": false
+        },
+        {
+          "Name": "FailedAttempts",
+          "StoreType": "integer",
+          "IsNullable": false
+        },
+        {
+          "Name": "LockedUntil",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": true
+        },
+        {
+          "Name": "Name",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "PasswordHash",
+          "StoreType": "text",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_PlatformOperators_Email",
+          "IsUnique": true,
+          "columns": [
+            "Email"
+          ]
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "Name": "PlatformSessions",
+      "Schema": null,
+      "columns": [
+        {
+          "Name": "TokenHash",
+          "StoreType": "text",
+          "IsNullable": false
+        },
+        {
+          "Name": "ExpiresAt",
+          "StoreType": "timestamp with time zone",
+          "IsNullable": false
+        },
+        {
+          "Name": "OperatorId",
+          "StoreType": "text",
+          "IsNullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "Name": "IX_PlatformSessions_OperatorId",
+          "IsUnique": false,
+          "columns": [
+            "OperatorId"
+          ]
+        }
+      ],
+      "foreignKeys": [
+        {
+          "Name": "FK_PlatformSessions_PlatformOperators_OperatorId",
+          "principal": "PlatformOperators",
+          "columns": [
+            "OperatorId"
+          ]
+        }
+      ]
+    }
+  ]
+}

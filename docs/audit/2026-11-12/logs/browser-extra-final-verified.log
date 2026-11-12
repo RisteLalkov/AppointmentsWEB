@@ -1,0 +1,3 @@
+{"id":"E1","name":"Stored patient HTML is escaped in card and profile","status":"PASS"}
+{"id":"E2","name":"Physical calendar drag reschedules through confirmation and API","status":"FAIL","old":"2026-12-23T09:00:00+00:00","new":"2026-12-23T09:00:00+00:00","version":1,"response":409,"result":{"error":"Тој термин е недостапен. Вашиот првичен термин е задржан."},"request":{"date":"2026-12-23","time":"10:40","version":1}}
+{"id":"E3","name":"Drawer closes after twenty phone-to-desktop transitions","status":"PASS","iterations":20}

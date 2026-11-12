@@ -1,0 +1,2312 @@
+[
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientAccounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientBookings",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientEvents",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientMemberships",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "PatientSessions",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "accounts",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "clinics",
+    "table_schema": "careline_identity",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_closed",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "clinic_east",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Accounts",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AppointmentHistory",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Appointments",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AuditEvents",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "AvailabilityExceptions",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "DoctorServices",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Doctors",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "IdempotencyRequests",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Patients",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Services",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Sessions",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Settings",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "SourceSchedules",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "Specialties",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "WorkingPeriods",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "DELETE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "INSERT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "REFERENCES"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "SELECT"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "TRIGGER"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "TRUNCATE"
+  },
+  {
+    "grantee": "careline_test_f2af7265f283_0",
+    "table_name": "__EFMigrationsHistory",
+    "table_schema": "public",
+    "privilege_type": "UPDATE"
+  }
+]

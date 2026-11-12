@@ -1,0 +1,5 @@
+{"id": "X0001", "name": "Backup restores every clinical table with identical row fingerprint", "status": "PASS", "tables": 55, "dump_bytes": 621642, "dump_sha256": "7fadb314cd24616ba25d965a3a40081384fab25ed6b28f0f09d018eebe7830fd"}
+{"id": "X0002", "name": "Backup restores every platform table with identical row fingerprint", "status": "PASS", "tables": 4, "dump_bytes": 8487, "dump_sha256": "c31239e9c4eb0e3ba55e7de440ecf837bf5916cab9675775d796b80040192562"}
+{"id": "X0003", "name": "Both source databases remained unchanged across paired backup window", "status": "PASS"}
+{"id": "X0004", "name": "Backup/restore rehearsal completed", "status": "FAIL", "error": "[Errno 13] Permission denied: '/proc/190306/environ'"}
+{"id": "X0005", "name": "Temporary restore databases and raw dumps removed", "status": "PASS"}

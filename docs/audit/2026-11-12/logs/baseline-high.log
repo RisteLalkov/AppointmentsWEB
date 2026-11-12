@@ -1,0 +1,71 @@
+PASS H04 unrelated misbound clinic cannot block healthy login
+PASS Misbound clinic itself fails closed
+PASS Global identity uniqueness survives indexed login
+PASS Real Razor account access round trip: false
+PASS Real Razor account access round trip: true
+PASS Independent original Web visitors retain separate API rate-limit budgets
+PASS Real doctor reception-only checkbox saved: true
+PASS Real doctor reception-only checkbox saved: false
+PASS H07 Web disable revokes sessions even after access is enabled again
+PASS H03 concurrent administrator disable permits one change and rejects revoked actor
+PASS At least one enabled administrator survives
+PASS English API permission error retains its 403 status
+PASS Concurrent PostgreSQL API requests retain independent language and conflict semantics
+PASS English API keeps stored Cyrillic records and protocol role values unchanged
+PASS H06 concurrent pending day-fill allows one request only
+PASS H06 cross-doctor concurrency cannot exceed three future visits
+PASS Staff can authorize additional visits beyond patient self-service limits
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 independent visitor auth attempt
+PASS H02 exhausted visitor gets structured 429 and retry time
+PASS H02 second signed visitor remains able to log in
+PASS Invalid signed forwarding identity fails closed
+PASS Untrusted forwarded address cannot bypass direct-peer limits
+PASS Non-ready adopted clinic cannot fall back to enabled configured defaults
+PASS Validated registry recovery restores the managed clinic
+PASS H05 registry outage makes readiness unavailable
+PASS H05 short registry outage does not synchronously stop clinical reads
+PASS Healthy clinical login also tolerates a brief registry outage
+PASS H05 stale routing fails closed after the bounded 30-second lease
+PASS Liveness remains separate from unavailable readiness
+PASS Registry recovery restores clinical reads without restart
+PASS Preview maintenance refuses to seed without an explicit opt-in
+PASS Preview seeding preserves all pre-existing appointment rows
+PASS Explicit preview seed adds realistic history and upcoming appointments
+PASS Preview history matches every generated appointment status and version
+PASS Preview command preserves existing bookings and does not duplicate a repeated run
+PASS Incomplete identity backfill cannot silently serve traffic
+PASS Full repeatable maintenance upgrade repairs directory coverage and preserves appointments
+PASS H01 HTTP-only Production listener rejects credentials when HTTPS redirect port is unavailable
+PASS H01 untrusted forwarded HTTPS header cannot bypass transport enforcement
+PASS H01 Production Web also fails closed on an HTTP-only listener
+PASS H01 real TLS listener accepts login with certificate validation enabled
+65/65 high-severity integration checks passed.

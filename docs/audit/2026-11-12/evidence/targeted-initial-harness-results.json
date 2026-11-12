@@ -1,0 +1,2437 @@
+[
+  {
+    "id": "X0001",
+    "name": "Anonymous read /api/clinics",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0002",
+    "name": "Authorized read /api/clinics",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0003",
+    "name": "Unsupported method PUT /api/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0004",
+    "name": "Unsupported method PATCH /api/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0005",
+    "name": "Unsupported method DELETE /api/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0006",
+    "name": "Unsupported method OPTIONS /api/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0007",
+    "name": "Anonymous read /health/live",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0008",
+    "name": "Authorized read /health/live",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0009",
+    "name": "Unsupported method PUT /health/live",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0010",
+    "name": "Unsupported method PATCH /health/live",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0011",
+    "name": "Unsupported method DELETE /health/live",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0012",
+    "name": "Unsupported method OPTIONS /health/live",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0013",
+    "name": "Anonymous read /health",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0014",
+    "name": "Authorized read /health",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0015",
+    "name": "Unsupported method PUT /health",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0016",
+    "name": "Unsupported method PATCH /health",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0017",
+    "name": "Unsupported method DELETE /health",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0018",
+    "name": "Unsupported method OPTIONS /health",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0019",
+    "name": "Anonymous boundary GET /health/database",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0020",
+    "name": "Invalid session GET /health/database",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0021",
+    "name": "Authorized read /health/database",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0022",
+    "name": "Unsupported method PUT /health/database",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0023",
+    "name": "Unsupported method PATCH /health/database",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0024",
+    "name": "Unsupported method DELETE /health/database",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0025",
+    "name": "Unsupported method OPTIONS /health/database",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0026",
+    "name": "Anonymous boundary GET /api/accounts",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0027",
+    "name": "Invalid session GET /api/accounts",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0028",
+    "name": "Authorized read /api/accounts",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0029",
+    "name": "Role boundary GET /api/accounts",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0030",
+    "name": "Anonymous boundary POST /api/accounts",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0031",
+    "name": "Invalid session POST /api/accounts",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0032",
+    "name": "Role boundary POST /api/accounts",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0033",
+    "name": "Unsupported method PUT /api/accounts",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0034",
+    "name": "Unsupported method PATCH /api/accounts",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0035",
+    "name": "Unsupported method DELETE /api/accounts",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0036",
+    "name": "Unsupported method OPTIONS /api/accounts",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0037",
+    "name": "Anonymous boundary POST /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0038",
+    "name": "Invalid session POST /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0039",
+    "name": "Role boundary POST /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0040",
+    "name": "Unsupported method PUT /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0041",
+    "name": "Unsupported method PATCH /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0042",
+    "name": "Unsupported method DELETE /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0043",
+    "name": "Unsupported method OPTIONS /api/accounts/{id}/credentials",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0044",
+    "name": "Anonymous boundary POST /api/accounts/{id}/access",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0045",
+    "name": "Invalid session POST /api/accounts/{id}/access",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0046",
+    "name": "Role boundary POST /api/accounts/{id}/access",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0047",
+    "name": "Unsupported method PUT /api/accounts/{id}/access",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0048",
+    "name": "Unsupported method PATCH /api/accounts/{id}/access",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0049",
+    "name": "Unsupported method DELETE /api/accounts/{id}/access",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0050",
+    "name": "Unsupported method OPTIONS /api/accounts/{id}/access",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0051",
+    "name": "Anonymous boundary GET /api/accounts/audit",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0052",
+    "name": "Invalid session GET /api/accounts/audit",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0053",
+    "name": "Authorized read /api/accounts/audit",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0054",
+    "name": "Role boundary GET /api/accounts/audit",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0055",
+    "name": "Unsupported method PUT /api/accounts/audit",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0056",
+    "name": "Unsupported method PATCH /api/accounts/audit",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0057",
+    "name": "Unsupported method DELETE /api/accounts/audit",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0058",
+    "name": "Unsupported method OPTIONS /api/accounts/audit",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0059",
+    "name": "Anonymous boundary GET /api/reports",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0060",
+    "name": "Invalid session GET /api/reports",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0061",
+    "name": "Authorized read /api/reports",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0062",
+    "name": "Role boundary GET /api/reports",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0063",
+    "name": "Unsupported method PUT /api/reports",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0064",
+    "name": "Unsupported method PATCH /api/reports",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0065",
+    "name": "Unsupported method DELETE /api/reports",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0066",
+    "name": "Unsupported method OPTIONS /api/reports",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0067",
+    "name": "Anonymous boundary POST /api/catalogue/doctors",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0068",
+    "name": "Invalid session POST /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0069",
+    "name": "Role boundary POST /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0070",
+    "name": "Unsupported method PUT /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0071",
+    "name": "Unsupported method PATCH /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0072",
+    "name": "Unsupported method DELETE /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0073",
+    "name": "Unsupported method OPTIONS /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0074",
+    "name": "Anonymous boundary POST /api/catalogue/specialties",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0075",
+    "name": "Invalid session POST /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0076",
+    "name": "Role boundary POST /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0077",
+    "name": "Unsupported method PUT /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0078",
+    "name": "Unsupported method PATCH /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0079",
+    "name": "Unsupported method DELETE /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0080",
+    "name": "Unsupported method OPTIONS /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0081",
+    "name": "Anonymous boundary POST /api/catalogue/services",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0082",
+    "name": "Invalid session POST /api/catalogue/services",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0083",
+    "name": "Role boundary POST /api/catalogue/services",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0084",
+    "name": "Unsupported method PUT /api/catalogue/services",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0085",
+    "name": "Unsupported method PATCH /api/catalogue/services",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0086",
+    "name": "Unsupported method DELETE /api/catalogue/services",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0087",
+    "name": "Unsupported method OPTIONS /api/catalogue/services",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0088",
+    "name": "Anonymous boundary GET /api/bootstrap",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0089",
+    "name": "Invalid session GET /api/bootstrap",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0090",
+    "name": "Authorized read /api/bootstrap",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0091",
+    "name": "Unsupported method PUT /api/bootstrap",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0092",
+    "name": "Unsupported method PATCH /api/bootstrap",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0093",
+    "name": "Unsupported method DELETE /api/bootstrap",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0094",
+    "name": "Unsupported method OPTIONS /api/bootstrap",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0095",
+    "name": "Anonymous boundary GET /api/appointments",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0096",
+    "name": "Invalid session GET /api/appointments",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0097",
+    "name": "Authorized read /api/appointments",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0098",
+    "name": "Anonymous boundary POST /api/appointments",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0099",
+    "name": "Invalid session POST /api/appointments",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0100",
+    "name": "Unsupported method PUT /api/appointments",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0101",
+    "name": "Unsupported method PATCH /api/appointments",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0102",
+    "name": "Unsupported method DELETE /api/appointments",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0103",
+    "name": "Unsupported method OPTIONS /api/appointments",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0104",
+    "name": "Anonymous boundary GET /api/appointments/{id}/history",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0105",
+    "name": "Invalid session GET /api/appointments/{id}/history",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0106",
+    "name": "Authorized read /api/appointments/{id}/history",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0107",
+    "name": "Unsupported method PUT /api/appointments/{id}/history",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0108",
+    "name": "Unsupported method PATCH /api/appointments/{id}/history",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0109",
+    "name": "Unsupported method DELETE /api/appointments/{id}/history",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0110",
+    "name": "Unsupported method OPTIONS /api/appointments/{id}/history",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0111",
+    "name": "Anonymous boundary GET /api/slots",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0112",
+    "name": "Invalid session GET /api/slots",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0113",
+    "name": "Authorized read /api/slots",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0114",
+    "name": "Unsupported method PUT /api/slots",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0115",
+    "name": "Unsupported method PATCH /api/slots",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0116",
+    "name": "Unsupported method DELETE /api/slots",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0117",
+    "name": "Unsupported method OPTIONS /api/slots",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0118",
+    "name": "Anonymous boundary GET /api/availability/days",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0119",
+    "name": "Invalid session GET /api/availability/days",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0120",
+    "name": "Authorized read /api/availability/days",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0121",
+    "name": "Unsupported method PUT /api/availability/days",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0122",
+    "name": "Unsupported method PATCH /api/availability/days",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0123",
+    "name": "Unsupported method DELETE /api/availability/days",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0124",
+    "name": "Unsupported method OPTIONS /api/availability/days",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0125",
+    "name": "Anonymous boundary GET /api/availability/next",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0126",
+    "name": "Invalid session GET /api/availability/next",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0127",
+    "name": "Authorized read /api/availability/next",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0128",
+    "name": "Unsupported method PUT /api/availability/next",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0129",
+    "name": "Unsupported method PATCH /api/availability/next",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0130",
+    "name": "Unsupported method DELETE /api/availability/next",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0131",
+    "name": "Unsupported method OPTIONS /api/availability/next",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0132",
+    "name": "Anonymous boundary GET /api/exceptions",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0133",
+    "name": "Invalid session GET /api/exceptions",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0134",
+    "name": "Authorized read /api/exceptions",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0135",
+    "name": "Unsupported method PUT /api/exceptions",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0136",
+    "name": "Unsupported method PATCH /api/exceptions",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0137",
+    "name": "Unsupported method DELETE /api/exceptions",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0138",
+    "name": "Unsupported method OPTIONS /api/exceptions",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0139",
+    "name": "Anonymous boundary POST /api/appointments/{id}/move",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0140",
+    "name": "Invalid session POST /api/appointments/{id}/move",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0141",
+    "name": "Unsupported method PUT /api/appointments/{id}/move",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0142",
+    "name": "Unsupported method PATCH /api/appointments/{id}/move",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0143",
+    "name": "Unsupported method DELETE /api/appointments/{id}/move",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0144",
+    "name": "Unsupported method OPTIONS /api/appointments/{id}/move",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0145",
+    "name": "Anonymous boundary POST /api/appointments/{id}/status",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0146",
+    "name": "Invalid session POST /api/appointments/{id}/status",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0147",
+    "name": "Unsupported method PUT /api/appointments/{id}/status",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0148",
+    "name": "Unsupported method PATCH /api/appointments/{id}/status",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0149",
+    "name": "Unsupported method DELETE /api/appointments/{id}/status",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0150",
+    "name": "Unsupported method OPTIONS /api/appointments/{id}/status",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0151",
+    "name": "Anonymous boundary GET /api/patients/{id}",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0152",
+    "name": "Invalid session GET /api/patients/{id}",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0153",
+    "name": "Authorized read /api/patients/{id}",
+    "status": "PASS",
+    "actual": 200,
+    "role": "patient"
+  },
+  {
+    "id": "X0154",
+    "name": "Role boundary GET /api/patients/{id}",
+    "status": "FAIL",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0155",
+    "name": "Anonymous boundary POST /api/patients/{id}",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0156",
+    "name": "Invalid session POST /api/patients/{id}",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0157",
+    "name": "Role boundary POST /api/patients/{id}",
+    "status": "FAIL",
+    "actual": 400,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0158",
+    "name": "Unsupported method PUT /api/patients/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0159",
+    "name": "Unsupported method PATCH /api/patients/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0160",
+    "name": "Unsupported method DELETE /api/patients/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0161",
+    "name": "Unsupported method OPTIONS /api/patients/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0162",
+    "name": "Anonymous boundary POST /api/patients",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0163",
+    "name": "Invalid session POST /api/patients",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0164",
+    "name": "Role boundary POST /api/patients",
+    "status": "PASS",
+    "actual": 403,
+    "role": "patient"
+  },
+  {
+    "id": "X0165",
+    "name": "Unsupported method PUT /api/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0166",
+    "name": "Unsupported method PATCH /api/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0167",
+    "name": "Unsupported method DELETE /api/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0168",
+    "name": "Unsupported method OPTIONS /api/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0169",
+    "name": "Anonymous boundary POST /api/schedule/{doctorId}",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0170",
+    "name": "Invalid session POST /api/schedule/{doctorId}",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0171",
+    "name": "Unsupported method PUT /api/schedule/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0172",
+    "name": "Unsupported method PATCH /api/schedule/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0173",
+    "name": "Unsupported method DELETE /api/schedule/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0174",
+    "name": "Unsupported method OPTIONS /api/schedule/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0175",
+    "name": "Anonymous boundary POST /api/exceptions/{doctorId}",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0176",
+    "name": "Invalid session POST /api/exceptions/{doctorId}",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0177",
+    "name": "Unsupported method PUT /api/exceptions/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0178",
+    "name": "Unsupported method PATCH /api/exceptions/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0179",
+    "name": "Unsupported method DELETE /api/exceptions/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0180",
+    "name": "Unsupported method OPTIONS /api/exceptions/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0181",
+    "name": "Anonymous boundary POST /api/exceptions/{id}/remove",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0182",
+    "name": "Invalid session POST /api/exceptions/{id}/remove",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0183",
+    "name": "Unsupported method PUT /api/exceptions/{id}/remove",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0184",
+    "name": "Unsupported method PATCH /api/exceptions/{id}/remove",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0185",
+    "name": "Unsupported method DELETE /api/exceptions/{id}/remove",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0186",
+    "name": "Unsupported method OPTIONS /api/exceptions/{id}/remove",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0187",
+    "name": "Unsupported method PUT /api/auth/register",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0188",
+    "name": "Unsupported method PATCH /api/auth/register",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0189",
+    "name": "Unsupported method DELETE /api/auth/register",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0190",
+    "name": "Unsupported method OPTIONS /api/auth/register",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0191",
+    "name": "Anonymous boundary GET /api/auth/me",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0192",
+    "name": "Invalid session GET /api/auth/me",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0193",
+    "name": "Authorized read /api/auth/me",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0194",
+    "name": "Unsupported method PUT /api/auth/me",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0195",
+    "name": "Unsupported method PATCH /api/auth/me",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0196",
+    "name": "Unsupported method DELETE /api/auth/me",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0197",
+    "name": "Unsupported method OPTIONS /api/auth/me",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0198",
+    "name": "Anonymous boundary POST /api/auth/logout",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0199",
+    "name": "Invalid session POST /api/auth/logout",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0200",
+    "name": "Unsupported method PUT /api/auth/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0201",
+    "name": "Unsupported method PATCH /api/auth/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0202",
+    "name": "Unsupported method DELETE /api/auth/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0203",
+    "name": "Unsupported method OPTIONS /api/auth/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0204",
+    "name": "Anonymous boundary POST /api/auth/password",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0205",
+    "name": "Invalid session POST /api/auth/password",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0206",
+    "name": "Unsupported method PUT /api/auth/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0207",
+    "name": "Unsupported method PATCH /api/auth/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0208",
+    "name": "Unsupported method DELETE /api/auth/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0209",
+    "name": "Unsupported method OPTIONS /api/auth/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0210",
+    "name": "Anonymous read /api/auth/demo-users",
+    "status": "PASS",
+    "actual": 404
+  },
+  {
+    "id": "X0211",
+    "name": "Authorized read /api/auth/demo-users",
+    "status": "PASS",
+    "actual": 404,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0212",
+    "name": "Unsupported method PUT /api/auth/demo-users",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0213",
+    "name": "Unsupported method PATCH /api/auth/demo-users",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0214",
+    "name": "Unsupported method DELETE /api/auth/demo-users",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0215",
+    "name": "Unsupported method OPTIONS /api/auth/demo-users",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0216",
+    "name": "Unsupported method PUT /api/auth/demo-login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0217",
+    "name": "Unsupported method PATCH /api/auth/demo-login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0218",
+    "name": "Unsupported method DELETE /api/auth/demo-login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0219",
+    "name": "Unsupported method OPTIONS /api/auth/demo-login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0220",
+    "name": "Anonymous read /api/public/clinics",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0221",
+    "name": "Authorized read /api/public/clinics",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0222",
+    "name": "Unsupported method PUT /api/public/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0223",
+    "name": "Unsupported method PATCH /api/public/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0224",
+    "name": "Unsupported method DELETE /api/public/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0225",
+    "name": "Unsupported method OPTIONS /api/public/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0226",
+    "name": "Anonymous read /api/public/clinics/{id}",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0227",
+    "name": "Authorized read /api/public/clinics/{id}",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0228",
+    "name": "Unsupported method PUT /api/public/clinics/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0229",
+    "name": "Unsupported method PATCH /api/public/clinics/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0230",
+    "name": "Unsupported method DELETE /api/public/clinics/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0231",
+    "name": "Unsupported method OPTIONS /api/public/clinics/{id}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0232",
+    "name": "Anonymous read /api/public/doctors",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0233",
+    "name": "Authorized read /api/public/doctors",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0234",
+    "name": "Unsupported method PUT /api/public/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0235",
+    "name": "Unsupported method PATCH /api/public/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0236",
+    "name": "Unsupported method DELETE /api/public/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0237",
+    "name": "Unsupported method OPTIONS /api/public/doctors",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0238",
+    "name": "Anonymous read /api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0239",
+    "name": "Authorized read /api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0240",
+    "name": "Unsupported method PUT /api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0241",
+    "name": "Unsupported method PATCH /api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0242",
+    "name": "Unsupported method DELETE /api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0243",
+    "name": "Unsupported method OPTIONS /api/public/clinics/{clinicId}/doctors/{doctorId}/availability",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0244",
+    "name": "Anonymous read /api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0245",
+    "name": "Authorized read /api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "status": "PASS",
+    "actual": 200,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0246",
+    "name": "Unsupported method PUT /api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0247",
+    "name": "Unsupported method PATCH /api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0248",
+    "name": "Unsupported method DELETE /api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0249",
+    "name": "Unsupported method OPTIONS /api/public/clinics/{clinicId}/doctors/{doctorId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0250",
+    "name": "Unsupported method PUT /api/auth/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0251",
+    "name": "Unsupported method PATCH /api/auth/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0252",
+    "name": "Unsupported method DELETE /api/auth/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0253",
+    "name": "Unsupported method OPTIONS /api/auth/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0254",
+    "name": "Anonymous boundary GET /api/patient/home",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0255",
+    "name": "Invalid session GET /api/patient/home",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0256",
+    "name": "Authorized read /api/patient/home",
+    "status": "PASS",
+    "actual": 200,
+    "role": "patient"
+  },
+  {
+    "id": "X0257",
+    "name": "Role boundary GET /api/patient/home",
+    "status": "PASS",
+    "actual": 403,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0258",
+    "name": "Unsupported method PUT /api/patient/home",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0259",
+    "name": "Unsupported method PATCH /api/patient/home",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0260",
+    "name": "Unsupported method DELETE /api/patient/home",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0261",
+    "name": "Unsupported method OPTIONS /api/patient/home",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0262",
+    "name": "Anonymous boundary GET /api/patient/clinics",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0263",
+    "name": "Invalid session GET /api/patient/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0264",
+    "name": "Authorized read /api/patient/clinics",
+    "status": "PASS",
+    "actual": 200,
+    "role": "patient"
+  },
+  {
+    "id": "X0265",
+    "name": "Role boundary GET /api/patient/clinics",
+    "status": "PASS",
+    "actual": 403,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0266",
+    "name": "Unsupported method PUT /api/patient/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0267",
+    "name": "Unsupported method PATCH /api/patient/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0268",
+    "name": "Unsupported method DELETE /api/patient/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0269",
+    "name": "Unsupported method OPTIONS /api/patient/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0270",
+    "name": "Anonymous boundary POST /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0271",
+    "name": "Invalid session POST /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0272",
+    "name": "Role boundary POST /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "actual": 403,
+    "role": "reception-main"
+  },
+  {
+    "id": "X0273",
+    "name": "Unsupported method PUT /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0274",
+    "name": "Unsupported method PATCH /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0275",
+    "name": "Unsupported method DELETE /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0276",
+    "name": "Unsupported method OPTIONS /api/patient/clinics/{clinicId}",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0277",
+    "name": "Role boundary POST /api/platform/login",
+    "status": "FAIL",
+    "actual": 400,
+    "role": "patient"
+  },
+  {
+    "id": "X0278",
+    "name": "Unsupported method PUT /api/platform/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0279",
+    "name": "Unsupported method PATCH /api/platform/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0280",
+    "name": "Unsupported method DELETE /api/platform/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0281",
+    "name": "Unsupported method OPTIONS /api/platform/login",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0282",
+    "name": "Anonymous boundary GET /api/platform/clinics",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0283",
+    "name": "Invalid session GET /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0284",
+    "name": "Authorized read /api/platform/clinics",
+    "status": "PASS",
+    "actual": 200,
+    "role": "platform"
+  },
+  {
+    "id": "X0285",
+    "name": "Role boundary GET /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0286",
+    "name": "Anonymous boundary POST /api/platform/clinics",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0287",
+    "name": "Invalid session POST /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0288",
+    "name": "Role boundary POST /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0289",
+    "name": "Unsupported method PUT /api/platform/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0290",
+    "name": "Unsupported method PATCH /api/platform/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0291",
+    "name": "Unsupported method DELETE /api/platform/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0292",
+    "name": "Unsupported method OPTIONS /api/platform/clinics",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0293",
+    "name": "Anonymous boundary POST /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0294",
+    "name": "Invalid session POST /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0295",
+    "name": "Role boundary POST /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0296",
+    "name": "Unsupported method PUT /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0297",
+    "name": "Unsupported method PATCH /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0298",
+    "name": "Unsupported method DELETE /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0299",
+    "name": "Unsupported method OPTIONS /api/platform/clinics/{id}/adopt",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0300",
+    "name": "Anonymous boundary POST /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0301",
+    "name": "Invalid session POST /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0302",
+    "name": "Role boundary POST /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0303",
+    "name": "Unsupported method PUT /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0304",
+    "name": "Unsupported method PATCH /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0305",
+    "name": "Unsupported method DELETE /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0306",
+    "name": "Unsupported method OPTIONS /api/platform/clinics/{id}/details",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0307",
+    "name": "Anonymous boundary GET /api/platform/patients",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0308",
+    "name": "Invalid session GET /api/platform/patients",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0309",
+    "name": "Authorized read /api/platform/patients",
+    "status": "PASS",
+    "actual": 200,
+    "role": "platform"
+  },
+  {
+    "id": "X0310",
+    "name": "Role boundary GET /api/platform/patients",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0311",
+    "name": "Unsupported method PUT /api/platform/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0312",
+    "name": "Unsupported method PATCH /api/platform/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0313",
+    "name": "Unsupported method DELETE /api/platform/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0314",
+    "name": "Unsupported method OPTIONS /api/platform/patients",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0315",
+    "name": "Anonymous boundary POST /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0316",
+    "name": "Invalid session POST /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0317",
+    "name": "Role boundary POST /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0318",
+    "name": "Unsupported method PUT /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0319",
+    "name": "Unsupported method PATCH /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0320",
+    "name": "Unsupported method DELETE /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0321",
+    "name": "Unsupported method OPTIONS /api/platform/patients/{id}/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0322",
+    "name": "Anonymous boundary POST /api/platform/password",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0323",
+    "name": "Invalid session POST /api/platform/password",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0324",
+    "name": "Role boundary POST /api/platform/password",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0325",
+    "name": "Unsupported method PUT /api/platform/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0326",
+    "name": "Unsupported method PATCH /api/platform/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0327",
+    "name": "Unsupported method DELETE /api/platform/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0328",
+    "name": "Unsupported method OPTIONS /api/platform/password",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0329",
+    "name": "Anonymous boundary POST /api/platform/logout",
+    "status": "PASS",
+    "expected": 401,
+    "actual": 401
+  },
+  {
+    "id": "X0330",
+    "name": "Invalid session POST /api/platform/logout",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0331",
+    "name": "Role boundary POST /api/platform/logout",
+    "status": "PASS",
+    "actual": 401,
+    "role": "patient"
+  },
+  {
+    "id": "X0332",
+    "name": "Unsupported method PUT /api/platform/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0333",
+    "name": "Unsupported method PATCH /api/platform/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0334",
+    "name": "Unsupported method DELETE /api/platform/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0335",
+    "name": "Unsupported method OPTIONS /api/platform/logout",
+    "status": "PASS",
+    "actual": 405
+  },
+  {
+    "id": "X0336",
+    "name": "Validation 1 /api/patients",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0337",
+    "name": "Validation 2 /api/patients",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0338",
+    "name": "Validation 3 /api/patients",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0339",
+    "name": "Validation 4 /api/patients",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0340",
+    "name": "Validation 5 /api/patients",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0341",
+    "name": "Validation 6 /api/catalogue/doctors",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0342",
+    "name": "Validation 7 /api/catalogue/specialties",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0343",
+    "name": "Validation 8 /api/catalogue/services",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0344",
+    "name": "Validation 9 /api/catalogue/services",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0345",
+    "name": "Validation 10 /api/schedule/6b38f567d3404e9880eb6f0b6810adb0",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0346",
+    "name": "Validation 11 /api/schedule/6b38f567d3404e9880eb6f0b6810adb0",
+    "status": "PASS",
+    "actual": 409,
+    "response": null
+  },
+  {
+    "id": "X0347",
+    "name": "Validation 12 /api/schedule/6b38f567d3404e9880eb6f0b6810adb0",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0348",
+    "name": "Validation 13 /api/schedule/6b38f567d3404e9880eb6f0b6810adb0",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0349",
+    "name": "Validation 14 /api/exceptions/6b38f567d3404e9880eb6f0b6810adb0",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0350",
+    "name": "Validation 15 /api/exceptions/6b38f567d3404e9880eb6f0b6810adb0",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0351",
+    "name": "Validation 16 /api/appointments",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0352",
+    "name": "Validation 17 /api/appointments",
+    "status": "PASS",
+    "actual": 409,
+    "response": null
+  },
+  {
+    "id": "X0353",
+    "name": "Validation 18 /api/appointments/ba7a0c25bc6a47fc85f606299269dca4/status",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0354",
+    "name": "Validation 19 /api/appointments/ba7a0c25bc6a47fc85f606299269dca4/move",
+    "status": "PASS",
+    "actual": 409,
+    "response": null
+  },
+  {
+    "id": "X0355",
+    "name": "Validation 20 /api/accounts",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0356",
+    "name": "Validation 21 /api/auth/register",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0357",
+    "name": "Boundary /api/slots?doctorId=6b38f567d3404e9880eb6f0b6810adb0&date=9999-12-31",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0358",
+    "name": "Boundary /api/slots?doctorId=6b38f567d3404e9880eb6f0b6810adb0&date=0001-01-01",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0359",
+    "name": "Boundary /api/slots?doctorId=6b38f567d3404e9880eb6f0b6810adb0&date=garbage",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0360",
+    "name": "Boundary /api/appointments?skip=-1",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0361",
+    "name": "Boundary /api/appointments?take=501",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0362",
+    "name": "Boundary /api/appointments?status=999",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0363",
+    "name": "Boundary /api/reports?from=9999-12-31&to=9999-12-31",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0364",
+    "name": "Boundary /api/reports?from=2026-11-12&to=2025-01-01",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0365",
+    "name": "Boundary /api/availability/next?doctorIds=&from=2026-11-22",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0366",
+    "name": "Boundary /api/availability/days?doctorId=6b38f567d3404e9880eb6f0b6810adb0&from=2026-11-22&to=9999-12-31",
+    "status": "PASS",
+    "actual": 400,
+    "response": null
+  },
+  {
+    "id": "X0367",
+    "name": "Boundary /api/patients/missing",
+    "status": "PASS",
+    "actual": 404,
+    "response": null
+  },
+  {
+    "id": "X0368",
+    "name": "Boundary /api/appointments/missing/history",
+    "status": "PASS",
+    "actual": 404,
+    "response": null
+  },
+  {
+    "id": "X0369",
+    "name": "Boundary /api/slots?doctorId=missing&date=2026-11-22",
+    "status": "PASS",
+    "actual": 404,
+    "response": null
+  },
+  {
+    "id": "X0370",
+    "name": "Malformed body POST b'null'",
+    "status": "PASS",
+    "actual": 400
+  },
+  {
+    "id": "X0371",
+    "name": "Malformed body POST b'[]'",
+    "status": "PASS",
+    "actual": 400
+  },
+  {
+    "id": "X0372",
+    "name": "Malformed body POST b'{'",
+    "status": "PASS",
+    "actual": 400
+  },
+  {
+    "id": "X0373",
+    "name": "Malformed body POST b'\"text\"'",
+    "status": "PASS",
+    "actual": 400
+  },
+  {
+    "id": "X0374",
+    "name": "Malformed body GET None",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0375",
+    "name": "Public search ' OR 1=1 --",
+    "status": "PASS",
+    "actual": 200,
+    "total": 0
+  },
+  {
+    "id": "X0376",
+    "name": "Public search <script>globalThis.qaXss=1</script>",
+    "status": "PASS",
+    "actual": 200,
+    "total": 0
+  },
+  {
+    "id": "X0377",
+    "name": "Public search ЈОВАН",
+    "status": "PASS",
+    "actual": 200,
+    "total": 1
+  },
+  {
+    "id": "X0378",
+    "name": "Public search Нешковски",
+    "status": "PASS",
+    "actual": 200,
+    "total": 1
+  },
+  {
+    "id": "X0379",
+    "name": "Public search Јован Нешковски",
+    "status": "PASS",
+    "actual": 200,
+    "total": 1
+  },
+  {
+    "id": "X0380",
+    "name": "Eight simultaneous bookings across two API hosts",
+    "status": "PASS",
+    "statuses": [
+      409,
+      409,
+      409,
+      409,
+      200,
+      409,
+      409,
+      409
+    ]
+  },
+  {
+    "id": "X0381",
+    "name": "Concurrent rescheduling preserves one version winner",
+    "status": "PASS",
+    "statuses": [
+      409,
+      409,
+      200,
+      409
+    ]
+  },
+  {
+    "id": "X0382",
+    "name": "Platform adopts the existing public-schema clinic",
+    "status": "PASS",
+    "actual": 200
+  }
+]

@@ -1,0 +1,30 @@
+{"id": "X0001", "name": "Small receptionist bootstrap", "status": "PASS", "measurement": {"samples": 10, "concurrency": 1, "p50_ms": 54.83, "p95_ms": 90.84, "max_ms": 90.84, "response_bytes": 9414, "patients": 14, "appointments": 4, "items": 0, "statuses": {"200": 10}}}
+{"id": "X0002", "name": "Large Reception bootstrap", "status": "PASS", "measurement": {"samples": 10, "concurrency": 1, "p50_ms": 379.76, "p95_ms": 522.58, "max_ms": 522.58, "response_bytes": 12107744, "patients": 5014, "appointments": 30005, "items": 0, "statuses": {"200": 10}}}
+{"id": "X0003", "name": "Large Doctor bootstrap", "status": "PASS", "measurement": {"samples": 10, "concurrency": 1, "p50_ms": 328.37, "p95_ms": 506.84, "max_ms": 506.84, "response_bytes": 12107730, "patients": 5014, "appointments": 30005, "items": 0, "statuses": {"200": 10}}}
+{"id": "X0004", "name": "Large Patient bootstrap", "status": "PASS", "measurement": {"samples": 10, "concurrency": 1, "p50_ms": 41.91, "p95_ms": 47.48, "max_ms": 47.48, "response_bytes": 6127, "patients": 1, "appointments": 2, "items": 0, "statuses": {"200": 10}}}
+{"id": "X0005", "name": "Large paged appointments take=12", "status": "PASS", "measurement": {"samples": 10, "concurrency": 1, "p50_ms": 33.35, "p95_ms": 34.59, "max_ms": 34.59, "response_bytes": 4439, "patients": 0, "appointments": 0, "items": 12, "statuses": {"200": 10}}}
+{"id": "X0006", "name": "Large Reception bootstrap concurrent", "status": "PASS", "measurement": {"samples": 24, "concurrency": 8, "p50_ms": 1418.28, "p95_ms": 2178.3, "max_ms": 2251.72, "response_bytes": 12107742, "patients": 5014, "appointments": 30005, "items": 0, "statuses": {"200": 24}}}
+Traceback (most recent call last):
+  File "/workspace/AppointmentsWEB/tests/audit/performance_20261112.py", line 21, in <module>
+    series('Large next-slot summary',A,'/api/availability/next?doctorIds='+doc+'&from='+S['today'],5)
+  File "/workspace/AppointmentsWEB/tests/audit/performance_20261112.py", line 9, in series
+    with concurrent.futures.ThreadPoolExecutor(max_workers=parallel) as pool:rows=list(pool.map(one,range(n)))
+                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/AppointmentsWEB/tests/audit/performance_20261112.py", line 8, in one
+    code,value,headers,ms,size=client.req(path);return dict(status=code,ms=ms,bytes=size,patients=len(value.get('patients',[])),appointments=len(value.get('appointments',[])),items=len(value.get('items',[])))
+                                                                                                      ^^^^^^^^^
+AttributeError: 'list' object has no attribute 'get'

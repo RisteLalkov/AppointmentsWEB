@@ -1,0 +1,51 @@
+[
+  {
+    "tgname": "global_patient_email",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER global_patient_email BEFORE INSERT OR UPDATE OF \"Email\" ON careline_identity.\"PatientAccounts\" FOR EACH ROW EXECUTE FUNCTION careline_identity.check_patient_email()",
+    "table_name": "PatientAccounts",
+    "schema_name": "careline_identity"
+  },
+  {
+    "tgname": "careline_identity_sync",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER careline_identity_sync AFTER INSERT OR DELETE OR UPDATE ON clinic_closed.\"Accounts\" FOR EACH ROW EXECUTE FUNCTION careline_identity.sync_account('closed')",
+    "table_name": "Accounts",
+    "schema_name": "clinic_closed"
+  },
+  {
+    "tgname": "careline_patient_booking_sync",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER careline_patient_booking_sync AFTER INSERT OR DELETE OR UPDATE ON clinic_closed.\"Appointments\" FOR EACH ROW EXECUTE FUNCTION careline_identity.sync_patient_booking('closed')",
+    "table_name": "Appointments",
+    "schema_name": "clinic_closed"
+  },
+  {
+    "tgname": "careline_identity_sync",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER careline_identity_sync AFTER INSERT OR DELETE OR UPDATE ON clinic_east.\"Accounts\" FOR EACH ROW EXECUTE FUNCTION careline_identity.sync_account('east')",
+    "table_name": "Accounts",
+    "schema_name": "clinic_east"
+  },
+  {
+    "tgname": "careline_patient_booking_sync",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER careline_patient_booking_sync AFTER INSERT OR DELETE OR UPDATE ON clinic_east.\"Appointments\" FOR EACH ROW EXECUTE FUNCTION careline_identity.sync_patient_booking('east')",
+    "table_name": "Appointments",
+    "schema_name": "clinic_east"
+  },
+  {
+    "tgname": "careline_identity_sync",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER careline_identity_sync AFTER INSERT OR DELETE OR UPDATE ON public.\"Accounts\" FOR EACH ROW EXECUTE FUNCTION careline_identity.sync_account('main')",
+    "table_name": "Accounts",
+    "schema_name": "public"
+  },
+  {
+    "tgname": "careline_patient_booking_sync",
+    "tgenabled": "O",
+    "definition": "CREATE TRIGGER careline_patient_booking_sync AFTER INSERT OR DELETE OR UPDATE ON public.\"Appointments\" FOR EACH ROW EXECUTE FUNCTION careline_identity.sync_patient_booking('main')",
+    "table_name": "Appointments",
+    "schema_name": "public"
+  }
+]

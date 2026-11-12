@@ -1,0 +1,587 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Appointments — Production Readiness & QA</title><base href="https://github.com/RisteLalkov/AppointmentsWEB/blob/main/docs/audit/2026-11-12/"><style>@page{size:A4;margin:19mm 16mm 20mm}*{box-sizing:border-box}body{font-family:Arial,"Noto Sans",sans-serif;color:#183d36;font-size:10.2pt;line-height:1.5;margin:0}h1{font-size:27pt;line-height:1.16;letter-spacing:-.7px;margin:0 0 22px;color:#087a6d}h2{font-size:18pt;line-height:1.22;margin:30px 0 15px;border-top:2px solid #c6e0da;padding-top:14px;break-after:avoid}h3{font-size:13.3pt;color:#076b60;margin:24px 0 10px;break-after:avoid}p{margin:9px 0}a{color:#087b71;text-decoration:none}table{border-collapse:collapse;width:100%;font-size:8.8pt;margin:15px 0 20px;table-layout:fixed}thead{display:table-header-group}th{background:#145248;color:#fff;text-align:left;font-weight:700}th,td{border:1px solid #d7e2df;padding:7px 8px;vertical-align:top;overflow-wrap:anywhere}tr{break-inside:avoid}tbody tr:nth-child(even){background:#f3f8f6}strong{color:#133c33}li{margin:5px 0}code{font:8.9pt "DejaVu Sans Mono",monospace;overflow-wrap:anywhere}pre{background:#f0f6f4;padding:15px;border:1px solid #d7e2df;border-radius:7px;line-height:1.65;white-space:pre-wrap;break-inside:avoid}pre code{font-size:8pt}.stamp{font-size:9pt;letter-spacing:1.7px;color:#56716b;font-weight:700;margin-bottom:18px}.summary{background:#fff3ed;border-left:5px solid #b35828;padding:12px 16px;margin:18px 0;font-size:11pt}.summary strong{color:#933e1b}@media screen{body{max-width:1000px;padding:50px;margin:auto;background:white}html{background:#edf4f1}}</style></head><body><div class="stamp">MEDTERMIN · ENGINEERING QUALITY ASSURANCE · 12 NOV 2026</div><h1>APPOINTMENTS — PRODUCTION READINESS &amp; QA REPORT</h1>
+<p><strong>МедТермин · 12 November 2026 · Pre-release assessment</strong></p>
+<table>
+<thead>
+<tr>
+<th>Audit reference</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application revision</td>
+<td><code>08bd3d62c246eb8b8b6586d46357f2db50ba9fb0</code> on <code>main</code></td>
+</tr>
+<tr>
+<td>Overall verdict</td>
+<td><strong>NOT READY for unrestricted production release</strong></td>
+</tr>
+<tr>
+<td>Confirmed high-priority issue</td>
+<td>Staff workspace becomes unresponsive with a plausible accumulated clinic dataset</td>
+</tr>
+<tr>
+<td>Findings</td>
+<td>0 Critical; 1 High; 8 Medium; 4 Low. Some are explicitly identified policy, documentation or code-only risks rather than reproduced application defects.</td>
+</tr>
+<tr>
+<td>Product changes during audit</td>
+<td><strong>None.</strong> Only audit material, audit harnesses and two corrections to existing browser tests.</td>
+</tr>
+<tr>
+<td>Data safety</td>
+<td>Disposable local databases and synthetic identities only; no production database accessed or changed.</td>
+</tr>
+</tbody>
+</table>
+<div class="summary"><strong>RELEASE VERDICT: NOT READY</strong><br>Core workflows passed; a reproduced staff-workspace performance issue and remaining acceptance work block unrestricted release.</div><h2>1. Decision and practical interpretation</h2>
+<p>The principal booking, identity, tenant-isolation and transaction mechanisms performed well in the executed tests. Concurrent bookings produced one winner, stale edits were rejected, shared patients could not double-book across clinics, and the complete browser booking/confirmation/cancellation flow produced the expected database history and busy-time changes. Restoring the clinical and platform databases also worked.</p>
+<p>There is nevertheless a <strong>reproduced release-blocking scalability problem</strong>. After adding 5,000 patients and 30,000 historical appointments to one clinic, a receptionist workspace downloaded approximately <strong>12.1 MB</strong> of bootstrap JSON. Its overview took <strong>21.7 seconds</strong> to become usable, including a <strong>20.5-second JavaScript long task</strong>. The workspace repeats the bootstrap every 20 seconds. The same machine loaded the patient overview in approximately 0.4 seconds. This was an actual Chromium execution, not an estimate from reading code.</p>
+<p>Other verified problems include stale-tab logout/language failures, authenticated same-site cross-origin framing, contrast and calendar keyboard-accessibility failures, and missing clinic headers in Swagger's patient operations. Identity assurance, operational audit coverage and public privacy/terms content also need explicit launch decisions.</p>
+<p><strong>This verdict does not mean that the fundamental appointment engine failed.</strong> It means the measured staff usability failure and remaining release/security acceptance work prevent a responsible unconditional production sign-off. A controlled synthetic-data staging demonstration is substantially better supported by this evidence than a broad real-patient launch.</p>
+<p>Recommended release gates:</p>
+<ol>
+<li>Resolve H01 and repeat the growth experiment through both API and browser; agree response-size and interaction-time budgets for the expected clinic workload.</li>
+<li>Address M01–M05, including browser regressions that exercise real clinic workspaces and open dialogs.</li>
+<li>Decide and document M06–M08 with the company, clinic owners and appropriate privacy/security reviewers. These are not automatically solved by passing functional tests.</li>
+<li>Complete the production-only checks in section 11 against the actual IIS/domain/database deployment. The environment used for this audit cannot certify them.</li>
+<li>Re-run the complete regression suite on the final release revision and perform a final staging smoke test. This report assesses the named revision, not future fixes.</li>
+</ol>
+<h2>2. Scope, environment and evidence rules</h2>
+<p>The repository inventory contains <strong>319 tracked baseline files</strong>, including <strong>157 application files</strong> across API, Web, Core, Contracts and Data. The inventory records paths, sizes and SHA-256 fingerprints. Controllers, domain rules, persistence operations, EF mappings/migrations, shared SQL installation, authentication, tenant routing, browser scripts, styles, Razor pages, configuration, publishing content and CI were examined by component. Compiling or listing a file is not represented as proof of complete line or branch coverage.</p>
+<p>Execution used:</p>
+<ul>
+<li>.NET SDK 10.0.100/runtime 10.0.0 on Linux; Release solution build and complete API/Web publish outputs.</li>
+<li>PostgreSQL 17.11 in a container bound only to loopback. A test coordinator created generated clinical/platform databases and ordinary database-owner roles without cluster-administrator privileges.</li>
+<li>Two independently running published API processes and a published Web process in <strong>Production mode</strong>. Local HTTP testing was explicitly enabled, with a generated shared proxy key. Demo data/imports were disabled for the principal fixture.</li>
+<li>Main, east and registration-closed clinic schemas; separate company registry database; shared patient identities; reception, doctor, patient, another patient, and company accounts.</li>
+<li>Chromium 154, Playwright 1.64.1, Node 24.19.0 and axe-core 4.14.0. Existing suites also exercised stubbed MVC integrations and the explicitly enabled Development JSON backend; those are labelled separately.</li>
+<li>Dedicated synthetic history, contacts and accounts. The large-data benchmark records were removed after measurement. Restore databases/dumps and the final fixture were cleaned up as recorded in the evidence.</li>
+</ul>
+<p><strong>Status definitions:</strong> PASS means the stated assertion was executed successfully, within its stated scope. FAIL means an assertion did not hold; the report distinguishes product failures from test-harness errors. BLOCKED means a concrete environment/dependency prevented verification. NOT TESTED means the scenario was not executed. A passing process exit is not silently substituted for passing assertions.</p>
+<p>No claim is made of 100% code coverage, every possible input combination, formal security certification, medical/legal compliance, or production capacity. Every discovered feature family is accounted for in <a href="FEATURE_COVERAGE.md">FEATURE_COVERAGE.md</a>; specific remaining combinations are identified there and in section 11.</p>
+<h2>3. Architecture and verified boundaries</h2>
+<pre><code class="language-text">Browser
+  └─ Razor/MVC Web + JavaScript workspace
+       ├─ protected clinical or company cookie; CSRF validation
+       └─ server-side ApiClient; opaque API token + signed client attribution
+            └─ API: authentication, role/ownership, clinic resolution, validation
+                 ├─ Core: availability, status and booking rules
+                 ├─ Data: EF Core, transactions, version checks, advisory locks
+                 ├─ appointments: public / clinic_* / careline_identity
+                 └─ appointments_platform: company registry and operator sessions
+</code></pre>
+<p>The browser does not connect to PostgreSQL or obtain the API bearer token as a JavaScript credential. Web and API independently enforce boundaries; hiding a navigation item is not the authorization mechanism. Shared patient identity and sessions remain central, while each clinic has its own contact/profile, appointments and staff accounts. Joining another clinic requires an explicit authenticated action. Registering an existing contact email does not transfer that contact's history to the new identity.</p>
+<p>Staff sessions remain clinic-bound. A doctor sees their own appointments; a patient sees their own appointments. Doctors are intentionally allowed to create/edit clinic scheduling contacts; this is existing tested policy, not an identified authorization bypass. Clinic owners should explicitly accept that contact-access policy before real deployment. Another clinic's appointment details are not disclosed through the shared busy-time representation.</p>
+<p>Concurrency is layered: request-key idempotency, transaction-scoped advisory locks, catalogue/doctor/patient coordination, optimistic record versions, SQL uniqueness and range exclusions, and atomic history writes. Shared patient range exclusions span clinics. The executed cross-instance races and the 225-case status matrix support these boundaries for the tested cases.</p>
+<p>Schemas are <strong>namespaces, not separate database-security sandboxes</strong>. The clinical runtime owner can reach multiple schemas. The API is the tenant authorization boundary; a compromised shared database credential would have broad impact. Production role/network/secret controls remain an operational acceptance requirement.</p>
+<h2>4. Build, dependency and automated execution results</h2>
+<p>The Release solution build and both complete publish outputs succeeded with <strong>zero build warnings and zero errors</strong>. JSON/XML/JavaScript/Python syntax checks passed, and the generated English catalogue check verified 1,156 messages. NuGet's vulnerability check and npm audit reported no known vulnerable packages in their covered dependency sets at audit time. That is not proof that every bundled asset, runtime, OS component or future advisory is safe; see L04.</p>
+<table>
+<thead>
+<tr>
+<th>Executed suite</th>
+<th>Final result and scope</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core executable</td>
+<td>107/107 PASS: scheduling, ownership, status rules, persistence, limits, dates, import metadata</td>
+<td><code>logs/baseline-core.log</code></td>
+</tr>
+<tr>
+<td>Frontend DOM/language/password/theme/dates</td>
+<td>All PASS: 85 DOM, 23 language, 16 password, 14 theme, 42 date assertions</td>
+<td><code>logs/baseline-dom.log</code></td>
+</tr>
+<tr>
+<td>PostgreSQL/API/MVC</td>
+<td>126/126 PASS, plus direct SQL/upgrade/patient-number probes and a repeated DOM invocation</td>
+<td><code>logs/baseline-api.log</code></td>
+</tr>
+<tr>
+<td>Multi-tenancy</td>
+<td>75/75 API/MVC plus 12/12 DOM PASS</td>
+<td><code>logs/baseline-tenancy.log</code></td>
+</tr>
+<tr>
+<td>Platform/public discovery</td>
+<td>103/103 PASS, including provisioning/adoption/restart cases</td>
+<td><code>logs/baseline-platform.log</code></td>
+</tr>
+<tr>
+<td>Shared patients</td>
+<td>Original run FAIL due to stale test expectation; corrected full run 64 API + 30 browser PASS</td>
+<td><code>logs/baseline-global.log</code>, <code>logs/global-revalidated.log</code></td>
+</tr>
+<tr>
+<td>Booking review</td>
+<td>21 API + 22 real-browser PASS</td>
+<td><code>logs/baseline-booking.log</code></td>
+</tr>
+<tr>
+<td>Historical high-severity regressions</td>
+<td>65/65 PASS, including real TLS, registry outages, concurrency, preview safety and maintenance</td>
+<td><code>logs/baseline-high.log</code></td>
+</tr>
+<tr>
+<td>Tester feedback</td>
+<td>Original run FAIL due to resize timing; corrected full run 52 browser checks and database check PASS</td>
+<td><code>logs/baseline-feedback.log</code>, <code>logs/feedback-revalidated.log</code></td>
+</tr>
+<tr>
+<td>Tester round two</td>
+<td>40 API/database + 59 browser PASS</td>
+<td><code>logs/baseline-round2.log</code></td>
+</tr>
+<tr>
+<td>Overnight regressions</td>
+<td>8 API + 11 browser PASS</td>
+<td><code>logs/baseline-overnight.log</code></td>
+</tr>
+<tr>
+<td>Discovery/settings/language/themes</td>
+<td>89 MVC contract, 138 browser, 87 settings, 72 language, 46 theme PASS; public API stub/JSON scopes identified in log</td>
+<td><code>logs/baseline-discovery.log</code></td>
+</tr>
+<tr>
+<td>Existing accessibility suite</td>
+<td>17/17 PASS on its demo/default-theme scenarios; <strong>does not supersede new real-data failures</strong></td>
+<td><code>logs/baseline-accessibility.log</code></td>
+</tr>
+<tr>
+<td>MVC HTTP smoke</td>
+<td>38/38 PASS</td>
+<td><code>logs/baseline-http.log</code></td>
+</tr>
+<tr>
+<td>New OpenAPI-driven matrix</td>
+<td><strong>379/379 PASS</strong>, 53 method/path operations plus method/auth/validation/search/race assertions</td>
+<td><code>evidence/api-matrix-results.json</code></td>
+</tr>
+<tr>
+<td>New actual-schema check/FK probes</td>
+<td><strong>46/46 PASS</strong></td>
+<td><code>evidence/database-probe-results.json</code></td>
+</tr>
+<tr>
+<td>New column/key/exclusion/cascade probes</td>
+<td><strong>266/266 PASS</strong></td>
+<td><code>evidence/database-column-key-results.json</code></td>
+</tr>
+<tr>
+<td>New role/session/cross-clinic security checks</td>
+<td><strong>76/76 PASS</strong>; includes observation of unverified registration, not an assurance endorsement</td>
+<td><code>evidence/security-results.json</code></td>
+</tr>
+<tr>
+<td>New exhaustive status matrix</td>
+<td><strong>225/225 PASS</strong>, role × current status × requested status × time phase, with DB assertions</td>
+<td><code>evidence/status-matrix.json</code></td>
+</tr>
+<tr>
+<td>New real-database browser scenarios</td>
+<td><strong>49 PASS / 11 FAIL</strong> out of 60 assertions; failures map to M01–M04</td>
+<td><code>evidence/browser-targeted.json</code></td>
+</tr>
+<tr>
+<td>Physical drag, stored HTML, repeated drawer resize</td>
+<td><strong>3/3 PASS</strong> on final synchronized run; invalid off-grid drop also rejected safely</td>
+<td><code>evidence/browser-extra.json</code>, <code>evidence/calendar-off-grid-rejection.json</code></td>
+</tr>
+<tr>
+<td>Growth API measurements</td>
+<td>7 measurement groups PASS for HTTP completion; <strong>performance acceptance FAIL, H01</strong></td>
+<td><code>evidence/performance.json</code></td>
+</tr>
+<tr>
+<td>Growth browser measurements</td>
+<td>Both overview renders completed; staff timing/long task <strong>FAIL release acceptance, H01</strong></td>
+<td><code>evidence/browser-performance.json</code></td>
+</tr>
+<tr>
+<td>Paired backup/restore</td>
+<td><strong>11/11 PASS</strong>, including restored authentication, migration and new booking</td>
+<td><code>evidence/restore-results.json</code></td>
+</tr>
+<tr>
+<td>Additional Core probes</td>
+<td>1 PASS / 1 FAIL: source preference ignored; JSON idempotency discrepancy L01</td>
+<td><code>logs/core-additional-final.log</code></td>
+</tr>
+<tr>
+<td>Syntax/configuration</td>
+<td>108 tracked-file checks PASS, plus build/localization validation</td>
+<td><code>evidence/syntax-all.json</code></td>
+</tr>
+</tbody>
+</table>
+<p>Counts above are assertion or scenario counts, <strong>not unique code branches</strong>. Some suites deliberately repeat common setup/DOM assertions. <a href="TEST_LEDGER.csv">TEST_LEDGER.csv</a> preserves each recorded execution with its evidence location rather than inflating a single &quot;coverage percentage&quot;.</p>
+<h3>Test-harness corrections and unsuccessful attempts</h3>
+<p>Two existing tests were corrected without touching product code:</p>
+<ol>
+<li>The old global-patient CSRF assertion posted patient creation as a patient. Authorization now correctly returns 403 before CSRF validation. The replacement submits a valid patient-allowed booking with the stale clinic CSRF token and verifies <strong>400</strong>, so it actually isolates CSRF.</li>
+<li>The drawer test asserted state immediately after resizing. It now waits for the browser's media-query handler. A further 20 physical phone/desktop transitions passed.</li>
+</ol>
+<p>Two inapplicable guarded patient probes issued no request; they are excluded from the 76 meaningful security assertions and marked NOT TESTED in the ledger. Audit harness attempts also required corrections for role-route prefix classification, PostgreSQL identity-always versus identity-by-default errors, JSON booleans, selector synchronization, a recovery-query column name, rate-budget/timing interactions, and local SDK activation. Early restore attempts successfully restored fingerprints but did not finish application startup because of harness environment access/PATH errors. The final 11-case restore run passed. Early drag attempts landed on 10:40, outside the 30-minute provider grid; the API correctly returned 409 and preserved the appointment. The corrected physical drag to 10:30 passed. Logs of unsuccessful attempts are retained. These are not silently reported as application defects or unqualified passes.</p>
+<h2>5. Database audit and restore verification</h2>
+<p>This section describes <strong>actual test-database catalogues after application migration</strong>, not an assumption that migration source equals the live production schema.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Actual observed structure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clinical database</td>
+<td>55 tables: 16 each in <code>public</code>, <code>clinic_east</code>, <code>clinic_closed</code>; 7 in <code>careline_identity</code></td>
+</tr>
+<tr>
+<td>Clinical constraints/indexes</td>
+<td>166 validated constraints; 131 indexes valid and ready</td>
+</tr>
+<tr>
+<td>Canonical clinic tables</td>
+<td>Accounts, AppointmentHistory, Appointments, AuditEvents, AvailabilityExceptions, DoctorServices, Doctors, IdempotencyRequests, Patients, Services, Sessions, Settings, SourceSchedules, Specialties, WorkingPeriods, <code>__EFMigrationsHistory</code></td>
+</tr>
+<tr>
+<td>Shared identity tables</td>
+<td><code>clinics</code>, <code>accounts</code>, PatientAccounts, PatientSessions, PatientMemberships, PatientBookings, PatientEvents</td>
+</tr>
+<tr>
+<td>Platform database</td>
+<td>PlatformClinics, PlatformOperators, PlatformSessions, PlatformSchemaVersions</td>
+</tr>
+<tr>
+<td>EF clinical migrations</td>
+<td>Seven applied; zero pending migrations; <code>HasPendingModelChanges=false</code></td>
+</tr>
+<tr>
+<td>Model/catalogue comparison</td>
+<td>All 156 mapped columns exist with matching nullability; exact actual/model types retained for inspection</td>
+</tr>
+<tr>
+<td>Shared installation</td>
+<td>SQL scripts 008/009 and attached identity/busy-time triggers inspected in the installed database; these are not ordinary per-clinic EF migrations</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="DATABASE_CATALOGUE.md">DATABASE_CATALOGUE.md</a> appendix lists every observed table, column/type/default/nullability, constraint and index, with complete JSON for trigger/function/grant definitions. It includes generated tenant copies and distinguishes EF-managed and shared/manual installation.</p>
+<p>Rollback probes exercised canonical non-null and bounded-string columns, primary keys, unique indexes, foreign keys, checks, doctor/patient/shared range exclusions, role/profile links and session cascades. Tenant copies were catalogued and exercised through tenant-specific API/browser flows; mutation-testing every identical constraint in every schema was not claimed. Each failure probe verified an actual affected row and the relevant PostgreSQL error/constraint instead of passing on an empty update.</p>
+<p>Range conflicts, cancelled-slot reuse, current-version history, duplicate registration, contact/email normalization, clinic patient-number assignment, service relations, schedule/date validity and active-administrator safeguards also ran through the application. Cross-schema identity/membership relations that cannot be expressed as one fixed tenant FK are protected by explicit binding/identity checks and triggers; this remains an important architectural boundary.</p>
+<p>The restore rehearsal made full custom-format backups of both generated databases during a checked, stable-data window. <strong>Every one of the 55 clinical and four platform tables matched its restored row-count and content fingerprint.</strong> The source pair remained unchanged during the backup window. The restored pair then passed complete maintenance validation; main/east/shared-patient/company logins and a new appointment/history write worked. That restored write was absent from the source. Temporary restore databases and raw dumps were deleted.</p>
+<p>This demonstrates a local logical restore, <strong>not</strong> a hot cross-database atomic-backup guarantee, production point-in-time recovery, Windows disaster recovery, role/secret restoration on a new server, or the actual organization's recovery-time objective. See section 11.</p>
+<h2>6. API, business rules and role coverage</h2>
+<p><a href="API_COVERAGE.md">API_COVERAGE.md</a> enumerates the <strong>49 OpenAPI paths / 53 method-path operations</strong>, including health/minimal endpoints, with anonymous, invalid-session, authorized-read and selected wrong-role results. The audit additionally exercised Swagger UI/assets, schema retrieval and unsupported methods. Positive write paths are supported by the named integration/browser suites; the endpoint matrix itself is not misrepresented as executing every write with valid data.</p>
+<p>Executed negative cases included missing/invalid bodies, null/list/string JSON, overlong fields, absent phone/email, invalid emails/phones, unknown profiles, unsupported roles/statuses, invalid versions, malformed/maximum dates, backwards ranges, excessive page sizes, non-existent records, clinic-header injection strings, Cyrillic names, SQL-style search text and HTML search text. No uncontrolled 500 response was observed in that targeted matrix. This does not imply every possible malformed HTTP message was tested.</p>
+<p>Real two-host races covered identical booking retries, different requests for one doctor/time, one patient across doctors, shared patients across clinics, stale reschedules, stale schedule/contact/catalogue edits, account changes, administrator disabling and registration/provisioning. Appointment history and shared busy-time assertions verified the durable result, not just HTTP status.</p>
+<h3>Appointment status coverage</h3>
+<p>All five statuses are present: <strong>Scheduled / Чека потврда</strong>, <strong>Confirmed / Потврден</strong>, <strong>Completed / Завршен</strong>, <strong>Cancelled / Откажан</strong>, <strong>NoShow / Не се појавил</strong>.</p>
+<p>The 225-case matrix independently exercised three roles, every source/target status and future/in-progress/past phases. Accepted transitions incremented version and appended one history row; rejected transitions left status/version/history unchanged. Shared busy records followed Scheduled/Confirmed and were absent after terminal outcomes.</p>
+<ul>
+<li>Confirmation-required doctors create Scheduled requests; ordinary and explicitly agreed receptionist bookings create Confirmed visits.</li>
+<li>Staff can confirm future Scheduled requests; patients cannot elevate status.</li>
+<li>Own future Scheduled/Confirmed appointments can be cancelled according to role/ownership.</li>
+<li>Staff can resolve overdue Scheduled requests by cancellation, and by completion/no-show after their end.</li>
+<li>Completion/no-show is permitted for appropriate staff after the appointment ends; terminal states cannot be reopened.</li>
+<li>Rescheduling preserves ownership, checks versions/conflicts/current booking restrictions and reevaluates confirmation policy. Patient self-service is blocked for reception-only/by-agreement doctors; authorized reception can record an agreed time without fabricating a weekly schedule.</li>
+</ul>
+<p>Other verified boundaries include 180-day booking horizon, 31-day availability/calendar queries, service-based duration, variable/dated weekly schedules, exceptions/absence conflicts, duplicate exception protection, patient booking quotas, DST invalid/ambiguous periods, last-safe-administrator protection and import-text independence. Imported <code>TuesdayFirst</code>/notes do not control business policy; the dedicated additional probe returned Wednesday slots despite that legacy flag.</p>
+<h2>7. Findings, reproductions and recommended fixes</h2>
+<p>Severity reflects demonstrated impact and scope. &quot;Observed gap&quot; is not synonymous with an exploitable authentication bypass. Exact response details, selectors and measurements remain in the linked evidence.</p>
+<h3>H01 — Unbounded staff bootstrap and repeated whole-history date formatting freeze the workspace</h3>
+<p><strong>HIGH · reproduced in API, Chromium and database · open</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Data/PostgresAppointments.cs:14–19</code>; <code>src/Appointments.Web/wwwroot/js/app.js:97–112</code>, <code>:304–308</code>, <code>:382–390</code>, <code>:1947–1970</code>; <code>GET /api/bootstrap</code> and Web <code>GET /data/bootstrap</code>. All historical appointments and all scheduling contacts are fetched for staff; UI pagination does not bound that payload. <code>wall()</code> constructs a fresh <code>Intl.DateTimeFormat</code> per conversion, and overview calculations repeatedly scan the full appointment array.</p>
+<p><strong>Reproduce:</strong> use the disposable fixture; run <code>performance_20261112.py</code>, which adds 5,000 contacts/30,000 completed historical visits; run <code>browser_performance_20261112.cjs</code>; sign in as reception and open the overview. Do not run this synthetic workload against production.</p>
+<p><strong>Observed:</strong> 12,107,744 bytes for one staff bootstrap; local API median 379.76 ms, p95 522.58 ms; 24 requests at concurrency eight had p95 2,178.3 ms and all returned 200. Browser overview readiness was <strong>21,685 ms</strong>, with a <strong>20,517 ms main-thread task</strong>. Patient readiness was 398 ms. A paged 12-item appointment response was 4,439 bytes/median 33.35 ms. Under an explicit 20-staff/20-second polling assumption, bootstrap alone is about <strong>12.1 MB/s uncompressed aggregate transfer</strong>. This is an arithmetic workload illustration, not a measured production network limit.</p>
+<p><strong>Impact:</strong> receptionist controls can be unusable for tens of seconds; repeated polling transfers and processes the entire history as the clinic grows. API-only latency would have missed the most serious effect.</p>
+<p><strong>Fix:</strong> split bootstrap metadata/current aggregates from history; load appointments and contacts using server-side filters/pagination and bounded calendar windows; use server-side overview totals. Cache/reuse timezone formatters and converted local dates within a render. Avoid rerendering unchanged summaries; pause/back off polling appropriately. Compression alone does not fix CPU or unbounded growth. Add a real-browser growth regression and agree budgets before retesting.</p>
+<p><strong>Evidence:</strong> <code>evidence/performance.json</code>, <code>browser-performance.json</code>, <code>performance-row-counts.json</code>, <code>query-plans.json</code>; <code>screenshots/large-reception-overview.png</code>.</p>
+<h3>M01 — Older patient tabs cannot log out or change language after a clinic switch</h3>
+<p><strong>MEDIUM · reproduced · open</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Web/Services/ClinicAntiforgery.cs:8–25</code>; shared account/settings forms in <code>_AccountSettings.cshtml</code> and <code>_LanguageSelector.cshtml</code>; <code>POST /Account/Logout</code>, <code>POST /Preferences/Language</code>.</p>
+<p><strong>Reproduce:</strong> log a shared patient into main in tab A. In tab B select east from My clinics. In A open account settings and click Logout, or repeat with English language selection. <strong>Actual: HTTP 400.</strong> A stale clinical <code>/data/bootstrap</code> read returns 409 as intended.</p>
+<p><strong>Cause:</strong> workspace forms carry the issuing clinic's additional CSRF data. Personal endpoint validation accepts the personal identity token or the <em>current</em> clinic token, so the old main token is rejected after the cookie changes to east.</p>
+<p><strong>Fix:</strong> issue personal-identity-bound tokens for global account controls regardless of which clinic rendered them, while preserving strict clinic binding on clinical writes. Keep the underlying antiforgery identity check and add two-tab logout/language regressions. Refreshing the old tab is a workaround, not a fix.</p>
+<p><strong>Evidence:</strong> <code>browser-targeted.json</code> B002/B003; <code>screenshots/stale-tab-logout.png</code>.</p>
+<h3>M02 — Authenticated workspace permits same-site cross-origin framing</h3>
+<p><strong>MEDIUM · browser-proven, scope qualified · open</strong></p>
+<p><strong>Affected:</strong> Web response-header pipeline, <code>src/Appointments.Web/Program.cs:110</code>; <code>/Workspace</code> and other sensitive MVC pages.</p>
+<p><strong>Reproduce:</strong> authenticate on one loopback port, then open a different-origin page on another loopback port containing an iframe to <code>/Workspace</code>. The authenticated overview renders inside the frame. The workspace response had <strong>neither X-Frame-Options nor CSP frame-ancestors</strong>.</p>
+<p><strong>Impact/scope:</strong> enables UI-redress/clickjacking where an attacker controls another same-site origin, such as an untrusted sibling application. The demonstration was same-site/different-port. SameSite=Strict cookies reduce unrelated cross-site authenticated framing; this test does <strong>not</strong> prove that an arbitrary unrelated domain receives the login cookie. No XSS or token extraction was demonstrated.</p>
+<p><strong>Fix:</strong> establish a response-level framing policy, normally <code>Content-Security-Policy: frame-ancestors 'none'</code> and an appropriate legacy X-Frame-Options policy. Test intended embedding exceptions explicitly. A parent-framing policy does not itself prohibit the app's child Google Maps iframe; assess any broader CSP separately.</p>
+<p><strong>Evidence:</strong> <code>browser-targeted.json</code> B059; <code>screenshots/authenticated-cross-origin-frame.png</code>.</p>
+<h3>M03 — Default-theme contrast failures remain in real workspaces and dialogs</h3>
+<p><strong>MEDIUM · axe/browser reproduced · open</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Web/wwwroot/css/site.css:764–768</code>, <code>:1609–1618</code>, <code>:1647–1664</code>, <code>:2789–2796</code>; real-clinic breadcrumb, booking review, availability summaries; company recovery warning styling around <code>:375–386</code>. Relevant markup includes <code>Views/Home/Workspace.cshtml</code>, <code>Views/PatientSupport/Index.cshtml</code> and booking DOM in <code>app.js</code>.</p>
+<p><strong>Reproduce:</strong> sign in as reception/doctor with actual clinic metadata; inspect the current clinic name in Standard theme. Open a booking review and the company patient-recovery form. Run the supplied axe scenarios.</p>
+<p><strong>Examples:</strong> static clinic breadcrumb <strong>1.81:1</strong> (#bac3b7 on approximately white); booking step <strong>4.48:1</strong>, booking specialty <strong>4.25:1</strong>, recovery warning <strong>4.38:1</strong>, where these normal-size texts require 4.5:1 under the tested WCAG AA rules. Dark/Vibrant doctor-card scans passed their exercised scenarios; no claim is made that all theme/state combinations passed.</p>
+<p><strong>Fix:</strong> correct semantic text tokens and specificity rather than changing every background. In particular <code>.breadcrumb span</code> overrides the intended clinic-name color. Retest all roles, three themes, dialogs and disabled/error states. Existing demo-only accessibility passes did not cover the real clinic breadcrumb.</p>
+<p><strong>Evidence:</strong> <code>browser-targeted.json</code> contains exact selectors, colors and ratios for every reported node; 22 additional axe scans were executed.</p>
+<h3>M04 — Calendar scroll region is not keyboard-focusable in an exercised state</h3>
+<p><strong>MEDIUM · automated browser finding · open; manual assistive-technology assessment outstanding</strong></p>
+<p><strong>Affected:</strong> FullCalendar <code>.fc-scroller-liquid-absolute</code>; calendar initialization in <code>src/Appointments.Web/wwwroot/js/app.js:1210–1255</code>, calendar markup around <code>:1150–1165</code>, scroll styling <code>site.css:2289</code>.</p>
+<p><strong>Reproduce:</strong> open reception Calendar with the QA fixture and run WCAG A/AA axe checks. <code>scrollable-region-focusable</code> reports the time-grid scroller. Pointer interaction and an actual drag/reschedule passed separately. The app also offers appointment-list keyboard access, so this is not evidence that every appointment workflow is inaccessible.</p>
+<p><strong>Fix:</strong> provide a keyboard-focusable, labelled scroll region or supported FullCalendar keyboard behavior, preserving a visible focus indicator and meaningful navigation. Verify scrolling timeslots with keyboard and a real screen reader, including empty calendars and mobile layouts.</p>
+<p><strong>Evidence:</strong> <code>browser-targeted.json</code> B029, plus the successful physical drag in <code>browser-extra.json</code>.</p>
+<h3>M05 — Swagger omits required X-Clinic input from patient CRUD operations</h3>
+<p><strong>MEDIUM · schema and live request reproduced · open</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Api/Services/ApiDocumentation.cs:35–45</code>; POST <code>/api/patients</code>, GET/POST <code>/api/patients/{id}</code>.</p>
+<p><strong>Reproduce:</strong> inspect <code>/openapi/v1.json</code> or authorize in Swagger in a multi-clinic deployment and try patient details. Those operations lack an X-Clinic parameter. A valid reception token without clinic selection returned <strong>400</strong>; the same request with <code>X-Clinic: main</code> returned <strong>200</strong>.</p>
+<p><strong>Cause:</strong> <code>StartsWith(&quot;/api/patient&quot;)</code> intended for central <code>/api/patient/...</code> also matches clinic-local <code>/api/patients...</code>.</p>
+<p><strong>Fix:</strong> distinguish the singular patient-account route using a segment boundary, then assert the required header for <strong>every</strong> clinic-scoped OpenAPI operation. Authorization and tenant routing themselves remained enforced; this is not a cross-clinic data leak.</p>
+<p><strong>Evidence:</strong> <code>evidence/swagger-header-defect.json</code>, <code>openapi.json</code>; the older general Swagger assertion passed because it sampled other scoped operations.</p>
+<h3>M06 — Operational audit does not cover a complete security/access trail</h3>
+<p><strong>MEDIUM · database observation plus code review · policy/engineering gap</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Api/Services/GlobalPatients.cs:22–58</code>, <code>PlatformService.cs:48–68</code> and metadata updates; <code>AccountService.cs:19–58</code>; read endpoints in <code>PostgresAppointments.cs</code>; <code>AppointmentsDbContext.cs</code> AuditEvents mapping and <code>database/009-global-patients.sql</code> PatientEvents.</p>
+<p><strong>Observed:</strong> eight rejected patient login attempts and lockout were executed. The patient's persistent events showed registration/session creation, without corresponding failure/lockout events. Successful booking/contact/account changes do have transaction-associated operational events/history. Patient-record reads are not a complete access trail; there is no comprehensive company-action audit ledger, externally protected audit sink, retention job or tamper-evident design in this repository.</p>
+<p><strong>Impact:</strong> investigating credential attacks, operator actions and sensitive-record access is limited. This is not a finding that appointment history is absent or that every failed request disappears from infrastructure logs; production log aggregation was unavailable.</p>
+<p><strong>Fix:</strong> agree event scope, retention and access policy; add structured failure/lockout/operator/access events without credentials or unnecessary medical/contact payloads; send protected operational logs to an appropriate sink; validate correlation/alerting and retention. Do not claim compliance merely by adding a table.</p>
+<p><strong>Evidence:</strong> <code>evidence/patient-audit-actions.json</code>, <code>security-results.json</code>, installed audit tables/functions and the cited source.</p>
+<h3>M07 — Email/phone ownership assurance and MFA are not implemented</h3>
+<p><strong>MEDIUM · confirmed product-scope gap; requires owner decision</strong></p>
+<p><strong>Affected:</strong> <code>GlobalPatients.cs:77–94</code>, <code>AccountService.cs:19–58</code>, <code>PlatformService.cs:48–68</code>; registration/login contracts and views.</p>
+<p><strong>Reproduce:</strong> register a synthetic <code>.test</code> mailbox and phone and sign in immediately. There is no email/SMS ownership challenge. Staff/company sign-in has password/session/rate-limit/lockout protections, but no MFA challenge.</p>
+<p><strong>Scope:</strong> form format validation, password hashing, lockout and tenant ownership passed. An unverified mailbox did <strong>not</strong> gain an existing clinic contact's history; that isolation passed. The app does not claim to send reminders or recovery email. Absence of MFA is a risk decision, not by itself proof of a broken authentication mechanism.</p>
+<p><strong>Fix:</strong> define identity-assurance requirements for patients and privileged staff. Implement verified-address/contact workflows and appropriate privileged-account MFA or approved identity-provider integration if required by that policy. Keep manual recovery identity verification explicit and auditable; test recovery end to end through the actual chosen provider.</p>
+<h3>M08 — Public privacy and terms are intentionally unpublished placeholders</h3>
+<p><strong>MEDIUM · reproduced markup/product gap; previously deferred design scope</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Web/Views/Discover/Index.cshtml:172</code>; footer privacy/terms controls show &quot;Наскоро&quot; with <code>aria-disabled=true</code>. No corresponding implemented policy pages were discovered.</p>
+<p><strong>Reproduce:</strong> open the landing footer; the displayed policy items cannot be opened. This is not a broken promise that an already-approved policy page existed; placeholders were intentionally accepted during development.</p>
+<p><strong>Fix before real-data launch:</strong> obtain approved content and clear operator/contact responsibilities; publish accessible pages and any required consent/notice flows. A technical audit cannot authoritatively determine the applicable legal obligations or approve this deferral.</p>
+<h3>L01 — JSON demo idempotency ignores a changed AgreedTime flag</h3>
+<p><strong>LOW · executable reproduction; Development-only backend</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Core/AppointmentService.cs:61–68</code>. PostgreSQL's separate complete-command fingerprint implementation in <code>PostgresAppointments.cs:101–115</code> handles the field correctly.</p>
+<p><strong>Reproduce:</strong> in the JSON backend, book a confirmation-required provider as reception with <code>AgreedTime=false</code>; retry the same request key with identical fields and <code>AgreedTime=true</code>. The old Scheduled result is replayed rather than a changed-command 409. <code>tests/audit/CoreProbes</code> reproduces it and exits nonzero for that observation.</p>
+<p><strong>Fix:</strong> include the complete canonical booking command in demo idempotency comparison, or explicitly include AgreedTime with a regression. Production PostgreSQL behavior was not found to share this defect.</p>
+<h3>L02 — API documentation contains obsolete patient and health guidance</h3>
+<p><strong>LOW · code/document discrepancy</strong></p>
+<p><strong>Affected:</strong> <code>docs/API.md:31</code>, clinical patient-creation row, and <code>:72</code>, &quot;Errors and health&quot; paragraph. It still describes email/phone as optional on patient creation and <code>/health</code> as process-only liveness. Current contract requires both on new manual patients; <code>/health/live</code> is liveness, while <code>/health</code> checks readiness/shared-store access. The executable checks observed the current behavior.</p>
+<p><strong>Fix:</strong> update examples/health semantics and distinguish new-patient creation from legacy contact editing. Add lightweight documentation assertions where stable. Incorrect monitoring guidance can hide or mislabel a deployment failure.</p>
+<h3>L03 — Per-schema connection-pool growth needs a multi-clinic capacity budget</h3>
+<p><strong>LOW · architectural/code-only concern, not a reproduced outage</strong></p>
+<p><strong>Affected:</strong> <code>src/Appointments.Api/Services/SharedClinicDatabase.cs:20–39</code>, <code>ClinicConnections.cs</code>, <code>PublicDiscovery.cs:69–111</code>, registry/startup paths. SearchPath changes the connection string per clinic, producing distinct Npgsql pools. Public multi-clinic discovery traverses selected clinic connections sequentially.</p>
+<p><strong>Risk:</strong> as tenant count and API-instance count grow, aggregate connections/latency may exceed a shared PostgreSQL budget even with low individual-clinic traffic. The audit exercised multiple clinics/hosts, <strong>not</strong> hundreds of active schemas or a pool-exhaustion campaign.</p>
+<p><strong>Recommendation:</strong> define aggregate pool limits, timeouts, eviction/idle policy and discovery latency budgets; load-test the intended tenant count against the intended PostgreSQL <code>max_connections</code> and infrastructure. Consider a supported shared-data-source approach with safe per-transaction schema selection if architectural work is justified; never trade away binding checks casually.</p>
+<h3>L04 — Automated assurance does not yet cover all dependencies and exercised states</h3>
+<p><strong>LOW · code/CI observation and demonstrated test blind spots</strong></p>
+<p><strong>Affected:</strong> <code>.github/workflows/ci.yml</code>, <code>tests/frontend/accessibility-browser.cjs</code>, <code>src/Appointments.Web/wwwroot/vendor/fullcalendar.min.js</code> (Standard Bundle 6.1.20), frontend test manifest.</p>
+<p>NuGet/npm advisory checks were run for this audit but are not a comprehensive enforced release gate. Vendored FullCalendar is outside the test package manager's dependency graph. Existing accessibility checks use demo scenarios and missed the real-clinic breadcrumb/dialog failures. Two existing tests also needed the narrow corrections recorded in section 4; they are corrected in this audit, not left as known failures.</p>
+<p><strong>Recommendation:</strong> add representative real-database accessibility/dialog/growth cases to CI, maintain a vendored-asset inventory/advisory review, pin/maintain build actions according to company policy, and publish build/test/advisory artifacts. No known FullCalendar vulnerability is asserted by this finding.</p>
+<h2>8. Security and reliability conclusions within tested scope</h2>
+<p>Passed evidence includes role and object-level denial, clinic-bound staff sessions, explicit patient joining, no automatic history transfer by matching email, persistent distributed lockouts for all three identity classes, expired/revoked-session rejection, password-change/session revocation, same-origin CSRF and stale-clinic write protection, safe return URLs, body/date bounds, parameterized query use and HTML escaping in the exercised stored-name flow.</p>
+<p>Transport regressions executed a real local TLS listener with certificate validation and verified fail-closed HTTP behavior when secure configuration is required. Trusted-proxy attribution was exercised with valid and invalid signatures, independent visitor budgets and structured 429 responses. These results <strong>do not</strong> establish that IIS forwarding, external TLS termination, cookies, firewalls or key storage are correctly configured on the real server.</p>
+<p>Registry-outage tests checked a brief cached-routing lease, eventual fail-closed behavior and recovery without restart. Booking and maintenance tests verified idempotent outcomes, consistent histories and no automatic JSON fallback on backend failure. Natural multi-hour session expiry, long soak tests, power loss and production failover were not executed.</p>
+<h2>9. Performance evidence and limits</h2>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th style="text-align:right">Median</th>
+<th style="text-align:right">p95</th>
+<th style="text-align:right">Decoded response bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small reception bootstrap, 10 sequential samples</td>
+<td style="text-align:right">54.83 ms</td>
+<td style="text-align:right">90.84 ms</td>
+<td style="text-align:right">9,414</td>
+</tr>
+<tr>
+<td>Large reception bootstrap, 10 samples</td>
+<td style="text-align:right">379.76 ms</td>
+<td style="text-align:right">522.58 ms</td>
+<td style="text-align:right">12,107,744</td>
+</tr>
+<tr>
+<td>Large doctor bootstrap, 10 samples</td>
+<td style="text-align:right">328.37 ms</td>
+<td style="text-align:right">506.84 ms</td>
+<td style="text-align:right">12,107,730</td>
+</tr>
+<tr>
+<td>Large patient bootstrap, 10 samples</td>
+<td style="text-align:right">41.91 ms</td>
+<td style="text-align:right">47.48 ms</td>
+<td style="text-align:right">6,127</td>
+</tr>
+<tr>
+<td>Large paged appointments, take 12</td>
+<td style="text-align:right">33.35 ms</td>
+<td style="text-align:right">34.59 ms</td>
+<td style="text-align:right">4,439</td>
+</tr>
+<tr>
+<td>Large reception bootstrap, 24 samples / concurrency 8</td>
+<td style="text-align:right">1,418.28 ms</td>
+<td style="text-align:right">2,178.3 ms</td>
+<td style="text-align:right">approximately 12.1 MB each</td>
+</tr>
+<tr>
+<td>Large next-slot summary, 5 samples</td>
+<td style="text-align:right">37.93 ms</td>
+<td style="text-align:right">46.97 ms</td>
+<td style="text-align:right">258</td>
+</tr>
+</tbody>
+</table>
+<p>These are local, bounded experiments on shared test hardware, not clean-room benchmarks or production SLAs. Some browser exploration overlapped the API measurements. The historical workload was synthetic completed visits, without generating 30,000 history/audit records or real medical data; row shape and dataset counts are explicit in the seeder/evidence. Slow WAN links, mobile CPU, realistic multi-clinic distribution, backups under load and sustained occupancy may behave differently. The browser measurements are single observations, not p95 browser statistics.</p>
+<p>Observed query plans, index metadata and row counts are retained. Index validity and selected indexed queries do not establish that every production query is optimal.</p>
+<h2>10. Prioritized remediation and acceptance plan</h2>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Work</th>
+<th>Acceptance evidence required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>H01 bounded staff loading and rendering</td>
+<td>Repeat the same growth dataset; bounded transfer, no multi-second blocking task; all counts/history/filters remain correct</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>M02 frame policy</td>
+<td>Same-site cross-origin frame refused, normal pages/Maps still work</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>M01 personal-token behavior</td>
+<td>Two-tab logout/language succeed; stale clinical read/write remain blocked</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>M03/M04 accessibility</td>
+<td>Axe passes representative real-data states; manual keyboard and screen-reader verification</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>M05 OpenAPI</td>
+<td>Every scoped operation exposes clinic selection and works in Swagger with valid authorized input</td>
+</tr>
+<tr>
+<td>Before real-data launch</td>
+<td>M06–M08 decisions and implementation</td>
+<td>Documented audit/assurance/content acceptance; tests of chosen providers and operational controls</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>L01/L02</td>
+<td>Demo retry conflicts on changed flag; API/monitoring documentation matches contracts</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>L03/L04</td>
+<td>Tenant capacity budget and load evidence; dependency/state coverage included in release checks</td>
+</tr>
+</tbody>
+</table>
+<p>No application fixes or architectural refactors were made during this audit. Recommended implementation should be reviewed as a subsequent change set and assessed at its own revision.</p>
+<h2>11. Explicit coverage gaps and deployment blockers</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Status</th>
+<th>Why / evidence needed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Actual <code>medtermin.mk</code>, app/admin/api DNS, public certificates and redirects</td>
+<td><strong>BLOCKED</strong></td>
+<td>A direct HTTPS HEAD attempt was rejected by this environment's outbound CONNECT proxy with 403. That is an environment restriction, not evidence that the public app is broken.</td>
+</tr>
+<tr>
+<td>Actual production PostgreSQL schema/data/roles at the company's server</td>
+<td><strong>BLOCKED</strong></td>
+<td>No verified current production audit connection was available through this environment’s configured network access. Generated local schema cannot certify production drift.</td>
+</tr>
+<tr>
+<td>Windows/IIS Hosting Bundle, bindings, app-pool identity, filesystem ACLs and recycle behavior</td>
+<td><strong>BLOCKED</strong></td>
+<td>Execution host is Linux; no Windows/IIS control session. Published outputs built successfully, but this is not an IIS deployment test.</td>
+</tr>
+<tr>
+<td>Production reverse proxy, real-client rate-limit attribution, cookie Secure flags and HTTPS backend</td>
+<td><strong>BLOCKED</strong></td>
+<td>Local positive/negative TLS/proxy tests passed; actual topology unavailable.</td>
+</tr>
+<tr>
+<td>Production secret storage, rotation, backups of config/Data Protection keys</td>
+<td><strong>BLOCKED</strong></td>
+<td>Server configuration/secret store unavailable. Confirm persistent protected keys, least-privilege storage and restore process without revealing secrets in reports.</td>
+</tr>
+<tr>
+<td>Live Maps/third-party pages and social navigation</td>
+<td><strong>BLOCKED</strong> for external execution</td>
+<td>Local rendering/encoded URLs/fallbacks exercised; external tiles/geocoding and external destination accuracy cannot be certified here.</td>
+</tr>
+<tr>
+<td>Email/SMS delivery, verification, reminders, calendar-provider sync</td>
+<td><strong>NOT TESTED / not implemented integration</strong></td>
+<td>No configured delivery/sync provider discovered. UI explicitly warns that notifications are not sent. Do not advertise these as passing features.</td>
+</tr>
+<tr>
+<td>Natural two-hour expiry/long lockout waits</td>
+<td><strong>NOT TESTED</strong> as wall-clock waits</td>
+<td>Expired timestamps/lockouts and revocation were tested using controlled test-state changes; no claim of waiting full durations.</td>
+</tr>
+<tr>
+<td>Real Safari/iOS, Firefox, Edge/Android devices, touch drag and OS-native controls</td>
+<td><strong>NOT TESTED</strong></td>
+<td>Chromium desktop/responsive widths were used. A narrow viewport is not a physical-device/browser certification.</td>
+</tr>
+<tr>
+<td>Real screen readers, human comprehension, complete tab order/zoom/motion assessment</td>
+<td><strong>NOT TESTED</strong> comprehensively</td>
+<td>Automated axe, keyboard and viewport tests cover selected states; manual accessibility acceptance remains.</td>
+</tr>
+<tr>
+<td>Hundreds of clinics, long-running soak, sustained heavy bookings and connection exhaustion</td>
+<td><strong>NOT TESTED</strong></td>
+<td>Two API processes, bounded races, several clinics and one growth fixture were tested. No speculative capacity number is approved.</td>
+</tr>
+<tr>
+<td>Disk-full, process/power loss during commit, storage corruption, backup failure, failover/PITR and network partition</td>
+<td><strong>NOT TESTED</strong></td>
+<td>Local logical restore and selected controlled service failures passed; infrastructure fault certification not available.</td>
+</tr>
+<tr>
+<td>Hot cross-database consistent backup, new-server role/password restoration and RTO/RPO</td>
+<td><strong>NOT TESTED</strong></td>
+<td>Restore used an explicitly stable-data window and existing generated roles. Production recovery requires a separate runbook drill.</td>
+</tr>
+<tr>
+<td>Formal code/branch coverage, full protocol fuzzing and exhaustive penetration testing</td>
+<td><strong>NOT TESTED</strong></td>
+<td>Assertions and route coverage are listed; no instrumented coverage percentage or accredited penetration-test claim.</td>
+</tr>
+<tr>
+<td>Every arbitrary data value/theme/dialog/device combination</td>
+<td><strong>NOT TESTED</strong></td>
+<td>Feature-level coverage and recorded interactions are explicit; combinatorial completeness is not claimed.</td>
+</tr>
+</tbody>
+</table>
+<p>Patient deletion remains intentionally unavailable to preserve history, as requested earlier. Reception cannot create/link global patient credentials, and by-agreement doctors cannot be self-booked by patients; these are current product policies, not missing-functionality bugs. Production test-data cleanup and clinic migration strategy require their own approved operational plan; this audit did not modify existing environments.</p>
+<h2>12. Evidence package and reproduction</h2>
+<ul>
+<li><a href="FEATURE_COVERAGE.md">Feature inventory and testing checklist</a></li>
+<li><a href="API_COVERAGE.md">Every documented API operation and its recorded boundary results</a></li>
+<li><a href="DATABASE_CATALOGUE.md">Actual database structure and integrity coverage</a></li>
+<li><a href="TEST_LEDGER.csv">Individual assertion ledger</a>, <a href="TEST_RUNS.md">test runs and attempt adjudication</a></li>
+<li><a href="evidence/">Machine-readable results</a>, <a href="logs/">raw logs</a>, <a href="screenshots/">screenshots</a></li>
+<li><a href="../../../tests/audit/README.md">Audit harness instructions</a></li>
+</ul>
+<p>The evidence manifest records file hashes. Private credentials, session tokens, raw database dumps and runtime configuration files are excluded. Screenshots and persisted data are synthetic. Production issues found after this revision or outside the tested environment remain possible; a final deployment smoke test and operational acceptance are still required.</p>
+</body></html>

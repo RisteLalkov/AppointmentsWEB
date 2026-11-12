@@ -1,0 +1,1312 @@
+[
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientAccounts_Email_key\" ON careline_identity.\"PatientAccounts\" USING btree (\"Email\")",
+    "index_name": "PatientAccounts_Email_key",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientAccounts",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientAccounts_pkey\" ON careline_identity.\"PatientAccounts\" USING btree (\"Id\")",
+    "index_name": "PatientAccounts_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientAccounts",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"PatientBookings_PatientAccountId_tstzrange_excl\" ON careline_identity.\"PatientBookings\" USING gist (\"PatientAccountId\", tstzrange(\"Start\", \"End\", '[)'::text))",
+    "index_name": "PatientBookings_PatientAccountId_tstzrange_excl",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientBookings",
+    "indisunique": false,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientBookings_pkey\" ON careline_identity.\"PatientBookings\" USING btree (\"ClinicId\", \"AppointmentId\")",
+    "index_name": "PatientBookings_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientBookings",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientEvents_pkey\" ON careline_identity.\"PatientEvents\" USING btree (\"Id\")",
+    "index_name": "PatientEvents_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientEvents",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientMemberships_ClinicId_AccountId_key\" ON careline_identity.\"PatientMemberships\" USING btree (\"ClinicId\", \"AccountId\")",
+    "index_name": "PatientMemberships_ClinicId_AccountId_key",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientMemberships",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientMemberships_ClinicId_PatientId_key\" ON careline_identity.\"PatientMemberships\" USING btree (\"ClinicId\", \"PatientId\")",
+    "index_name": "PatientMemberships_ClinicId_PatientId_key",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientMemberships",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientMemberships_pkey\" ON careline_identity.\"PatientMemberships\" USING btree (\"PatientAccountId\", \"ClinicId\")",
+    "index_name": "PatientMemberships_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientMemberships",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PatientSessions_pkey\" ON careline_identity.\"PatientSessions\" USING btree (\"TokenHash\")",
+    "index_name": "PatientSessions_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientSessions",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX ix_patient_sessions_account ON careline_identity.\"PatientSessions\" USING btree (\"PatientAccountId\")",
+    "index_name": "ix_patient_sessions_account",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "PatientSessions",
+    "indisunique": false,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX accounts_pkey ON careline_identity.accounts USING btree (clinic_id, account_id)",
+    "index_name": "accounts_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "accounts",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX ix_identity_email ON careline_identity.accounts USING btree (email)",
+    "index_name": "ix_identity_email",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "accounts",
+    "indisunique": false,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX clinics_pkey ON careline_identity.clinics USING btree (clinic_id)",
+    "index_name": "clinics_pkey",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "clinics",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX clinics_schema_name_key ON careline_identity.clinics USING btree (schema_name)",
+    "index_name": "clinics_schema_name_key",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "clinics",
+    "indisunique": true,
+    "schema_name": "careline_identity",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_DoctorId\" ON clinic_closed.\"Accounts\" USING btree (\"DoctorId\")",
+    "index_name": "IX_Accounts_DoctorId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_GlobalPatientId\" ON clinic_closed.\"Accounts\" USING btree (\"GlobalPatientId\")",
+    "index_name": "IX_Accounts_GlobalPatientId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_NormalizedEmail\" ON clinic_closed.\"Accounts\" USING btree (\"NormalizedEmail\")",
+    "index_name": "IX_Accounts_NormalizedEmail",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_PatientId\" ON clinic_closed.\"Accounts\" USING btree (\"PatientId\")",
+    "index_name": "IX_Accounts_PatientId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Accounts\" ON clinic_closed.\"Accounts\" USING btree (\"Id\")",
+    "index_name": "PK_Accounts",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_AppointmentHistory_AppointmentId_AppointmentVersion\" ON clinic_closed.\"AppointmentHistory\" USING btree (\"AppointmentId\", \"AppointmentVersion\")",
+    "index_name": "IX_AppointmentHistory_AppointmentId_AppointmentVersion",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AppointmentHistory",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AppointmentHistory\" ON clinic_closed.\"AppointmentHistory\" USING btree (\"Id\")",
+    "index_name": "PK_AppointmentHistory",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AppointmentHistory",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"EX_Appointments_Doctor\" ON clinic_closed.\"Appointments\" USING gist (\"DoctorId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)",
+    "index_name": "EX_Appointments_Doctor",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"EX_Appointments_Patient\" ON clinic_closed.\"Appointments\" USING gist (\"PatientId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)",
+    "index_name": "EX_Appointments_Patient",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Appointments_CreatedBy_RequestId\" ON clinic_closed.\"Appointments\" USING btree (\"CreatedBy\", \"RequestId\")",
+    "index_name": "IX_Appointments_CreatedBy_RequestId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_DoctorId_Start\" ON clinic_closed.\"Appointments\" USING btree (\"DoctorId\", \"Start\")",
+    "index_name": "IX_Appointments_DoctorId_Start",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_PatientId_Start\" ON clinic_closed.\"Appointments\" USING btree (\"PatientId\", \"Start\")",
+    "index_name": "IX_Appointments_PatientId_Start",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_ServiceId\" ON clinic_closed.\"Appointments\" USING btree (\"ServiceId\")",
+    "index_name": "IX_Appointments_ServiceId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Appointments\" ON clinic_closed.\"Appointments\" USING btree (\"Id\")",
+    "index_name": "PK_Appointments",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_AuditEvents_OccurredAt\" ON clinic_closed.\"AuditEvents\" USING btree (\"OccurredAt\")",
+    "index_name": "IX_AuditEvents_OccurredAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AuditEvents",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AuditEvents\" ON clinic_closed.\"AuditEvents\" USING btree (\"Id\")",
+    "index_name": "PK_AuditEvents",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AuditEvents",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_AvailabilityExceptions_DoctorId_Date\" ON clinic_closed.\"AvailabilityExceptions\" USING btree (\"DoctorId\", \"Date\")",
+    "index_name": "IX_AvailabilityExceptions_DoctorId_Date",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AvailabilityExceptions",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AvailabilityExceptions\" ON clinic_closed.\"AvailabilityExceptions\" USING btree (\"Id\")",
+    "index_name": "PK_AvailabilityExceptions",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AvailabilityExceptions",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_DoctorServices_ServiceId\" ON clinic_closed.\"DoctorServices\" USING btree (\"ServiceId\")",
+    "index_name": "IX_DoctorServices_ServiceId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "DoctorServices",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_DoctorServices\" ON clinic_closed.\"DoctorServices\" USING btree (\"DoctorId\", \"ServiceId\")",
+    "index_name": "PK_DoctorServices",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "DoctorServices",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Doctors_SpecialtyId\" ON clinic_closed.\"Doctors\" USING btree (\"SpecialtyId\")",
+    "index_name": "IX_Doctors_SpecialtyId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Doctors",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Doctors\" ON clinic_closed.\"Doctors\" USING btree (\"Id\")",
+    "index_name": "PK_Doctors",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Doctors",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_IdempotencyRequests\" ON clinic_closed.\"IdempotencyRequests\" USING btree (\"AccountId\", \"RequestId\")",
+    "index_name": "PK_IdempotencyRequests",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "IdempotencyRequests",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Patients_Email\" ON clinic_closed.\"Patients\" USING btree (\"Email\") WHERE ((\"Email\")::text <> ''::text)",
+    "index_name": "IX_Patients_Email",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Patients_Number\" ON clinic_closed.\"Patients\" USING btree (\"Number\")",
+    "index_name": "IX_Patients_Number",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Patients\" ON clinic_closed.\"Patients\" USING btree (\"Id\")",
+    "index_name": "PK_Patients",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Services_SpecialtyId_Name\" ON clinic_closed.\"Services\" USING btree (\"SpecialtyId\", \"Name\")",
+    "index_name": "IX_Services_SpecialtyId_Name",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Services",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Services\" ON clinic_closed.\"Services\" USING btree (\"Id\")",
+    "index_name": "PK_Services",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Services",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Sessions_AccountId\" ON clinic_closed.\"Sessions\" USING btree (\"AccountId\")",
+    "index_name": "IX_Sessions_AccountId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Sessions_ExpiresAt\" ON clinic_closed.\"Sessions\" USING btree (\"ExpiresAt\")",
+    "index_name": "IX_Sessions_ExpiresAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Sessions\" ON clinic_closed.\"Sessions\" USING btree (\"TokenHash\")",
+    "index_name": "PK_Sessions",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Settings\" ON clinic_closed.\"Settings\" USING btree (\"Key\")",
+    "index_name": "PK_Settings",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Settings",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_SourceSchedules_DoctorId\" ON clinic_closed.\"SourceSchedules\" USING btree (\"DoctorId\")",
+    "index_name": "IX_SourceSchedules_DoctorId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "SourceSchedules",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_SourceSchedules\" ON clinic_closed.\"SourceSchedules\" USING btree (\"Id\")",
+    "index_name": "PK_SourceSchedules",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "SourceSchedules",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Specialties_Name\" ON clinic_closed.\"Specialties\" USING btree (\"Name\")",
+    "index_name": "IX_Specialties_Name",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Specialties",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Specialties\" ON clinic_closed.\"Specialties\" USING btree (\"Id\")",
+    "index_name": "PK_Specialties",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Specialties",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_WorkingPeriods_DoctorId_Day\" ON clinic_closed.\"WorkingPeriods\" USING btree (\"DoctorId\", \"Day\")",
+    "index_name": "IX_WorkingPeriods_DoctorId_Day",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "WorkingPeriods",
+    "indisunique": false,
+    "schema_name": "clinic_closed",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_WorkingPeriods\" ON clinic_closed.\"WorkingPeriods\" USING btree (\"Id\")",
+    "index_name": "PK_WorkingPeriods",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "WorkingPeriods",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK___EFMigrationsHistory\" ON clinic_closed.\"__EFMigrationsHistory\" USING btree (\"MigrationId\")",
+    "index_name": "PK___EFMigrationsHistory",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "__EFMigrationsHistory",
+    "indisunique": true,
+    "schema_name": "clinic_closed",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_DoctorId\" ON clinic_east.\"Accounts\" USING btree (\"DoctorId\")",
+    "index_name": "IX_Accounts_DoctorId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_GlobalPatientId\" ON clinic_east.\"Accounts\" USING btree (\"GlobalPatientId\")",
+    "index_name": "IX_Accounts_GlobalPatientId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_NormalizedEmail\" ON clinic_east.\"Accounts\" USING btree (\"NormalizedEmail\")",
+    "index_name": "IX_Accounts_NormalizedEmail",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_PatientId\" ON clinic_east.\"Accounts\" USING btree (\"PatientId\")",
+    "index_name": "IX_Accounts_PatientId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Accounts\" ON clinic_east.\"Accounts\" USING btree (\"Id\")",
+    "index_name": "PK_Accounts",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_AppointmentHistory_AppointmentId_AppointmentVersion\" ON clinic_east.\"AppointmentHistory\" USING btree (\"AppointmentId\", \"AppointmentVersion\")",
+    "index_name": "IX_AppointmentHistory_AppointmentId_AppointmentVersion",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AppointmentHistory",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AppointmentHistory\" ON clinic_east.\"AppointmentHistory\" USING btree (\"Id\")",
+    "index_name": "PK_AppointmentHistory",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AppointmentHistory",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"EX_Appointments_Doctor\" ON clinic_east.\"Appointments\" USING gist (\"DoctorId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)",
+    "index_name": "EX_Appointments_Doctor",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"EX_Appointments_Patient\" ON clinic_east.\"Appointments\" USING gist (\"PatientId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)",
+    "index_name": "EX_Appointments_Patient",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Appointments_CreatedBy_RequestId\" ON clinic_east.\"Appointments\" USING btree (\"CreatedBy\", \"RequestId\")",
+    "index_name": "IX_Appointments_CreatedBy_RequestId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_DoctorId_Start\" ON clinic_east.\"Appointments\" USING btree (\"DoctorId\", \"Start\")",
+    "index_name": "IX_Appointments_DoctorId_Start",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_PatientId_Start\" ON clinic_east.\"Appointments\" USING btree (\"PatientId\", \"Start\")",
+    "index_name": "IX_Appointments_PatientId_Start",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_ServiceId\" ON clinic_east.\"Appointments\" USING btree (\"ServiceId\")",
+    "index_name": "IX_Appointments_ServiceId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Appointments\" ON clinic_east.\"Appointments\" USING btree (\"Id\")",
+    "index_name": "PK_Appointments",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_AuditEvents_OccurredAt\" ON clinic_east.\"AuditEvents\" USING btree (\"OccurredAt\")",
+    "index_name": "IX_AuditEvents_OccurredAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AuditEvents",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AuditEvents\" ON clinic_east.\"AuditEvents\" USING btree (\"Id\")",
+    "index_name": "PK_AuditEvents",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AuditEvents",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_AvailabilityExceptions_DoctorId_Date\" ON clinic_east.\"AvailabilityExceptions\" USING btree (\"DoctorId\", \"Date\")",
+    "index_name": "IX_AvailabilityExceptions_DoctorId_Date",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AvailabilityExceptions",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AvailabilityExceptions\" ON clinic_east.\"AvailabilityExceptions\" USING btree (\"Id\")",
+    "index_name": "PK_AvailabilityExceptions",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AvailabilityExceptions",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_DoctorServices_ServiceId\" ON clinic_east.\"DoctorServices\" USING btree (\"ServiceId\")",
+    "index_name": "IX_DoctorServices_ServiceId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "DoctorServices",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_DoctorServices\" ON clinic_east.\"DoctorServices\" USING btree (\"DoctorId\", \"ServiceId\")",
+    "index_name": "PK_DoctorServices",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "DoctorServices",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Doctors_SpecialtyId\" ON clinic_east.\"Doctors\" USING btree (\"SpecialtyId\")",
+    "index_name": "IX_Doctors_SpecialtyId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Doctors",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Doctors\" ON clinic_east.\"Doctors\" USING btree (\"Id\")",
+    "index_name": "PK_Doctors",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Doctors",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_IdempotencyRequests\" ON clinic_east.\"IdempotencyRequests\" USING btree (\"AccountId\", \"RequestId\")",
+    "index_name": "PK_IdempotencyRequests",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "IdempotencyRequests",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Patients_Email\" ON clinic_east.\"Patients\" USING btree (\"Email\") WHERE ((\"Email\")::text <> ''::text)",
+    "index_name": "IX_Patients_Email",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Patients_Number\" ON clinic_east.\"Patients\" USING btree (\"Number\")",
+    "index_name": "IX_Patients_Number",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Patients\" ON clinic_east.\"Patients\" USING btree (\"Id\")",
+    "index_name": "PK_Patients",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Services_SpecialtyId_Name\" ON clinic_east.\"Services\" USING btree (\"SpecialtyId\", \"Name\")",
+    "index_name": "IX_Services_SpecialtyId_Name",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Services",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Services\" ON clinic_east.\"Services\" USING btree (\"Id\")",
+    "index_name": "PK_Services",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Services",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Sessions_AccountId\" ON clinic_east.\"Sessions\" USING btree (\"AccountId\")",
+    "index_name": "IX_Sessions_AccountId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Sessions_ExpiresAt\" ON clinic_east.\"Sessions\" USING btree (\"ExpiresAt\")",
+    "index_name": "IX_Sessions_ExpiresAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Sessions\" ON clinic_east.\"Sessions\" USING btree (\"TokenHash\")",
+    "index_name": "PK_Sessions",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Settings\" ON clinic_east.\"Settings\" USING btree (\"Key\")",
+    "index_name": "PK_Settings",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Settings",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_SourceSchedules_DoctorId\" ON clinic_east.\"SourceSchedules\" USING btree (\"DoctorId\")",
+    "index_name": "IX_SourceSchedules_DoctorId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "SourceSchedules",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_SourceSchedules\" ON clinic_east.\"SourceSchedules\" USING btree (\"Id\")",
+    "index_name": "PK_SourceSchedules",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "SourceSchedules",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Specialties_Name\" ON clinic_east.\"Specialties\" USING btree (\"Name\")",
+    "index_name": "IX_Specialties_Name",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Specialties",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Specialties\" ON clinic_east.\"Specialties\" USING btree (\"Id\")",
+    "index_name": "PK_Specialties",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Specialties",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_WorkingPeriods_DoctorId_Day\" ON clinic_east.\"WorkingPeriods\" USING btree (\"DoctorId\", \"Day\")",
+    "index_name": "IX_WorkingPeriods_DoctorId_Day",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "WorkingPeriods",
+    "indisunique": false,
+    "schema_name": "clinic_east",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_WorkingPeriods\" ON clinic_east.\"WorkingPeriods\" USING btree (\"Id\")",
+    "index_name": "PK_WorkingPeriods",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "WorkingPeriods",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK___EFMigrationsHistory\" ON clinic_east.\"__EFMigrationsHistory\" USING btree (\"MigrationId\")",
+    "index_name": "PK___EFMigrationsHistory",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "__EFMigrationsHistory",
+    "indisunique": true,
+    "schema_name": "clinic_east",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_DoctorId\" ON public.\"Accounts\" USING btree (\"DoctorId\")",
+    "index_name": "IX_Accounts_DoctorId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_GlobalPatientId\" ON public.\"Accounts\" USING btree (\"GlobalPatientId\")",
+    "index_name": "IX_Accounts_GlobalPatientId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_NormalizedEmail\" ON public.\"Accounts\" USING btree (\"NormalizedEmail\")",
+    "index_name": "IX_Accounts_NormalizedEmail",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Accounts_PatientId\" ON public.\"Accounts\" USING btree (\"PatientId\")",
+    "index_name": "IX_Accounts_PatientId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Accounts\" ON public.\"Accounts\" USING btree (\"Id\")",
+    "index_name": "PK_Accounts",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Accounts",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_AppointmentHistory_AppointmentId_AppointmentVersion\" ON public.\"AppointmentHistory\" USING btree (\"AppointmentId\", \"AppointmentVersion\")",
+    "index_name": "IX_AppointmentHistory_AppointmentId_AppointmentVersion",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AppointmentHistory",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AppointmentHistory\" ON public.\"AppointmentHistory\" USING btree (\"Id\")",
+    "index_name": "PK_AppointmentHistory",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AppointmentHistory",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"EX_Appointments_Doctor\" ON public.\"Appointments\" USING gist (\"DoctorId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)",
+    "index_name": "EX_Appointments_Doctor",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"EX_Appointments_Patient\" ON public.\"Appointments\" USING gist (\"PatientId\", tstzrange(\"Start\", \"End\", '[)'::text)) WHERE ((\"Status\")::text <> 'Cancelled'::text)",
+    "index_name": "EX_Appointments_Patient",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Appointments_CreatedBy_RequestId\" ON public.\"Appointments\" USING btree (\"CreatedBy\", \"RequestId\")",
+    "index_name": "IX_Appointments_CreatedBy_RequestId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_DoctorId_Start\" ON public.\"Appointments\" USING btree (\"DoctorId\", \"Start\")",
+    "index_name": "IX_Appointments_DoctorId_Start",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_PatientId_Start\" ON public.\"Appointments\" USING btree (\"PatientId\", \"Start\")",
+    "index_name": "IX_Appointments_PatientId_Start",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Appointments_ServiceId\" ON public.\"Appointments\" USING btree (\"ServiceId\")",
+    "index_name": "IX_Appointments_ServiceId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Appointments\" ON public.\"Appointments\" USING btree (\"Id\")",
+    "index_name": "PK_Appointments",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Appointments",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_AuditEvents_OccurredAt\" ON public.\"AuditEvents\" USING btree (\"OccurredAt\")",
+    "index_name": "IX_AuditEvents_OccurredAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AuditEvents",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AuditEvents\" ON public.\"AuditEvents\" USING btree (\"Id\")",
+    "index_name": "PK_AuditEvents",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AuditEvents",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_AvailabilityExceptions_DoctorId_Date\" ON public.\"AvailabilityExceptions\" USING btree (\"DoctorId\", \"Date\")",
+    "index_name": "IX_AvailabilityExceptions_DoctorId_Date",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AvailabilityExceptions",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_AvailabilityExceptions\" ON public.\"AvailabilityExceptions\" USING btree (\"Id\")",
+    "index_name": "PK_AvailabilityExceptions",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "AvailabilityExceptions",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_DoctorServices_ServiceId\" ON public.\"DoctorServices\" USING btree (\"ServiceId\")",
+    "index_name": "IX_DoctorServices_ServiceId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "DoctorServices",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_DoctorServices\" ON public.\"DoctorServices\" USING btree (\"DoctorId\", \"ServiceId\")",
+    "index_name": "PK_DoctorServices",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "DoctorServices",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Doctors_SpecialtyId\" ON public.\"Doctors\" USING btree (\"SpecialtyId\")",
+    "index_name": "IX_Doctors_SpecialtyId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Doctors",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Doctors\" ON public.\"Doctors\" USING btree (\"Id\")",
+    "index_name": "PK_Doctors",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Doctors",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_IdempotencyRequests\" ON public.\"IdempotencyRequests\" USING btree (\"AccountId\", \"RequestId\")",
+    "index_name": "PK_IdempotencyRequests",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "IdempotencyRequests",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Patients_Email\" ON public.\"Patients\" USING btree (\"Email\") WHERE ((\"Email\")::text <> ''::text)",
+    "index_name": "IX_Patients_Email",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Patients_Number\" ON public.\"Patients\" USING btree (\"Number\")",
+    "index_name": "IX_Patients_Number",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Patients\" ON public.\"Patients\" USING btree (\"Id\")",
+    "index_name": "PK_Patients",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Patients",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Services_SpecialtyId_Name\" ON public.\"Services\" USING btree (\"SpecialtyId\", \"Name\")",
+    "index_name": "IX_Services_SpecialtyId_Name",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Services",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Services\" ON public.\"Services\" USING btree (\"Id\")",
+    "index_name": "PK_Services",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Services",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Sessions_AccountId\" ON public.\"Sessions\" USING btree (\"AccountId\")",
+    "index_name": "IX_Sessions_AccountId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE INDEX \"IX_Sessions_ExpiresAt\" ON public.\"Sessions\" USING btree (\"ExpiresAt\")",
+    "index_name": "IX_Sessions_ExpiresAt",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Sessions\" ON public.\"Sessions\" USING btree (\"TokenHash\")",
+    "index_name": "PK_Sessions",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Sessions",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Settings\" ON public.\"Settings\" USING btree (\"Key\")",
+    "index_name": "PK_Settings",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Settings",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_SourceSchedules_DoctorId\" ON public.\"SourceSchedules\" USING btree (\"DoctorId\")",
+    "index_name": "IX_SourceSchedules_DoctorId",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "SourceSchedules",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_SourceSchedules\" ON public.\"SourceSchedules\" USING btree (\"Id\")",
+    "index_name": "PK_SourceSchedules",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "SourceSchedules",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"IX_Specialties_Name\" ON public.\"Specialties\" USING btree (\"Name\")",
+    "index_name": "IX_Specialties_Name",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Specialties",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_Specialties\" ON public.\"Specialties\" USING btree (\"Id\")",
+    "index_name": "PK_Specialties",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "Specialties",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE INDEX \"IX_WorkingPeriods_DoctorId_Day\" ON public.\"WorkingPeriods\" USING btree (\"DoctorId\", \"Day\")",
+    "index_name": "IX_WorkingPeriods_DoctorId_Day",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "WorkingPeriods",
+    "indisunique": false,
+    "schema_name": "public",
+    "indisprimary": false
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK_WorkingPeriods\" ON public.\"WorkingPeriods\" USING btree (\"Id\")",
+    "index_name": "PK_WorkingPeriods",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "WorkingPeriods",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  },
+  {
+    "definition": "CREATE UNIQUE INDEX \"PK___EFMigrationsHistory\" ON public.\"__EFMigrationsHistory\" USING btree (\"MigrationId\")",
+    "index_name": "PK___EFMigrationsHistory",
+    "indisready": true,
+    "indisvalid": true,
+    "table_name": "__EFMigrationsHistory",
+    "indisunique": true,
+    "schema_name": "public",
+    "indisprimary": true
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "sync_patient_booking",
+    "schema": "careline_identity",
+    "definition": "CREATE OR REPLACE FUNCTION careline_identity.sync_patient_booking()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog'\nAS $function$\nDECLARE identity_id varchar(64);\nBEGIN\n    IF TG_OP = 'DELETE' THEN\n        DELETE FROM careline_identity.\"PatientBookings\" WHERE \"ClinicId\"=TG_ARGV[0] AND \"AppointmentId\"=OLD.\"Id\";\n        RETURN OLD;\n    END IF;\n    SELECT \"PatientAccountId\" INTO identity_id FROM careline_identity.\"PatientMemberships\"\n        WHERE \"ClinicId\"=TG_ARGV[0] AND \"PatientId\"=NEW.\"PatientId\";\n    IF identity_id IS NOT NULL AND NEW.\"Status\" IN ('Scheduled','Confirmed') THEN\n        INSERT INTO careline_identity.\"PatientBookings\" (\"PatientAccountId\",\"ClinicId\",\"AppointmentId\",\"Start\",\"End\")\n          VALUES (identity_id,TG_ARGV[0],NEW.\"Id\",NEW.\"Start\",NEW.\"End\")\n          ON CONFLICT (\"ClinicId\",\"AppointmentId\") DO UPDATE SET\n            \"PatientAccountId\"=EXCLUDED.\"PatientAccountId\", \"Start\"=EXCLUDED.\"Start\", \"End\"=EXCLUDED.\"End\";\n    ELSE\n        DELETE FROM careline_identity.\"PatientBookings\" WHERE \"ClinicId\"=TG_ARGV[0] AND \"AppointmentId\"=NEW.\"Id\";\n    END IF;\n    RETURN NEW;\nEND $function$\n"
+  },
+  {
+    "name": "check_patient_email",
+    "schema": "careline_identity",
+    "definition": "CREATE OR REPLACE FUNCTION careline_identity.check_patient_email()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog'\nAS $function$\nBEGIN\n    PERFORM pg_advisory_xact_lock(734251899);\n    IF EXISTS (SELECT 1 FROM careline_identity.accounts WHERE email=NEW.\"Email\") THEN\n        RAISE EXCEPTION 'Account identity already reserved' USING ERRCODE='23505';\n    END IF;\n    RETURN NEW;\nEND $function$\n"
+  },
+  {
+    "name": "sync_account",
+    "schema": "careline_identity",
+    "definition": "CREATE OR REPLACE FUNCTION careline_identity.sync_account()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO 'pg_catalog'\nAS $function$\nBEGIN\n    PERFORM pg_advisory_xact_lock(734251899);\n    IF TG_OP <> 'DELETE' AND (to_jsonb(NEW)->>'GlobalPatientId') IS NULL THEN\n        IF EXISTS (SELECT 1 FROM careline_identity.accounts\n            WHERE email=NEW.\"NormalizedEmail\" AND (clinic_id,account_id)<>(TG_ARGV[0],NEW.\"Id\")\n              AND (NOT NEW.\"IsDemo\" OR NOT is_demo))\n          OR EXISTS (SELECT 1 FROM careline_identity.\"PatientAccounts\" WHERE \"Email\"=NEW.\"NormalizedEmail\") THEN\n            RAISE EXCEPTION 'Account identity already reserved' USING ERRCODE='23505';\n        END IF;\n    END IF;\n    IF TG_OP <> 'INSERT' THEN\n        DELETE FROM careline_identity.accounts WHERE clinic_id=TG_ARGV[0] AND account_id=OLD.\"Id\";\n    END IF;\n    IF TG_OP <> 'DELETE' THEN\n        IF (to_jsonb(NEW)->>'GlobalPatientId') IS NULL THEN\n            INSERT INTO careline_identity.accounts(email,clinic_id,account_id,is_demo)\n            VALUES(NEW.\"NormalizedEmail\",TG_ARGV[0],NEW.\"Id\",NEW.\"IsDemo\");\n        END IF;\n        RETURN NEW;\n    END IF;\n    RETURN OLD;\nEND $function$\n"
+  }
+]

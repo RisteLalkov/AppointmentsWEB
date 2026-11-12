@@ -1,0 +1,30 @@
+[
+  {
+    "MigrationId": "20260922194435_InitialPostgres",
+    "ProductVersion": "10.0.12"
+  },
+  {
+    "MigrationId": "20260930135621_ServiceCatalogue",
+    "ProductVersion": "10.0.12"
+  },
+  {
+    "MigrationId": "20261001070652_AppointmentHistory",
+    "ProductVersion": "10.0.12"
+  },
+  {
+    "MigrationId": "20261005225240_PatientProfiles",
+    "ProductVersion": "10.0.12"
+  },
+  {
+    "MigrationId": "20261110091110_PatientNumbers",
+    "ProductVersion": "10.0.12"
+  },
+  {
+    "MigrationId": "20261110131050_GlobalPatientMemberships",
+    "ProductVersion": "10.0.12"
+  },
+  {
+    "MigrationId": "20261111122943_DatedWorkingHours",
+    "ProductVersion": "10.0.12"
+  }
+]

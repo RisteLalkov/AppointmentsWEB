@@ -1,0 +1,17 @@
+[
+  {
+    "clinic": "main",
+    "invalid_memberships": 0,
+    "status": "PASS"
+  },
+  {
+    "clinic": "east",
+    "invalid_memberships": 0,
+    "status": "PASS"
+  },
+  {
+    "clinic": "closed",
+    "invalid_memberships": 0,
+    "status": "PASS"
+  }
+]

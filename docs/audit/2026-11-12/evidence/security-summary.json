@@ -1,0 +1,6 @@
+{
+  "cases": 76,
+  "failed": [],
+  "excluded_inapplicable_guarded_probes": 2,
+  "note": "Original log includes two guarded patient probes that issued no request; they are not counted as executed assertions."
+}

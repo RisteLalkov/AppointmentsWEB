@@ -1,0 +1,493 @@
+[
+  {
+    "id": "X0001",
+    "name": "Role matrix anonymous /api/bootstrap",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0002",
+    "name": "Role matrix anonymous /api/accounts",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0003",
+    "name": "Role matrix anonymous /api/accounts/audit",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0004",
+    "name": "Role matrix anonymous /api/reports?from=2026-11-12&to=2026-11-22",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0005",
+    "name": "Role matrix anonymous /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0006",
+    "name": "Role matrix anonymous /api/platform/patients?email=patient%40audit.test",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0007",
+    "name": "Role matrix anonymous /api/patient/home",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0008",
+    "name": "Role matrix anonymous /api/patient/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0009",
+    "name": "Role matrix reception /api/bootstrap",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0010",
+    "name": "Role matrix reception /api/accounts",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0011",
+    "name": "Role matrix reception /api/accounts/audit",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0012",
+    "name": "Role matrix reception /api/reports?from=2026-11-12&to=2026-11-22",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0013",
+    "name": "Role matrix reception /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0014",
+    "name": "Role matrix reception /api/platform/patients?email=patient%40audit.test",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0015",
+    "name": "Role matrix reception /api/patient/home",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0016",
+    "name": "Role matrix reception /api/patient/clinics",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0017",
+    "name": "Role matrix doctor /api/bootstrap",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0018",
+    "name": "Role matrix doctor /api/accounts",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0019",
+    "name": "Role matrix doctor /api/accounts/audit",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0020",
+    "name": "Role matrix doctor /api/reports?from=2026-11-12&to=2026-11-22",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0021",
+    "name": "Role matrix doctor /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0022",
+    "name": "Role matrix doctor /api/platform/patients?email=patient%40audit.test",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0023",
+    "name": "Role matrix doctor /api/patient/home",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0024",
+    "name": "Role matrix doctor /api/patient/clinics",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0025",
+    "name": "Role matrix patient /api/bootstrap",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0026",
+    "name": "Role matrix patient /api/accounts",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0027",
+    "name": "Role matrix patient /api/accounts/audit",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0028",
+    "name": "Role matrix patient /api/reports?from=2026-11-12&to=2026-11-22",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0029",
+    "name": "Role matrix patient /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0030",
+    "name": "Role matrix patient /api/platform/patients?email=patient%40audit.test",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0031",
+    "name": "Role matrix patient /api/patient/home",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0032",
+    "name": "Role matrix patient /api/patient/clinics",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0033",
+    "name": "Role matrix other patient /api/bootstrap",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0034",
+    "name": "Role matrix other patient /api/accounts",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0035",
+    "name": "Role matrix other patient /api/accounts/audit",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0036",
+    "name": "Role matrix other patient /api/reports?from=2026-11-12&to=2026-11-22",
+    "status": "PASS",
+    "actual": 403
+  },
+  {
+    "id": "X0037",
+    "name": "Role matrix other patient /api/platform/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0038",
+    "name": "Role matrix other patient /api/platform/patients?email=patient%40audit.test",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0039",
+    "name": "Role matrix other patient /api/patient/home",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0040",
+    "name": "Role matrix other patient /api/patient/clinics",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0041",
+    "name": "Role matrix platform /api/bootstrap",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0042",
+    "name": "Role matrix platform /api/accounts",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0043",
+    "name": "Role matrix platform /api/accounts/audit",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0044",
+    "name": "Role matrix platform /api/reports?from=2026-11-12&to=2026-11-22",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0045",
+    "name": "Role matrix platform /api/platform/clinics",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0046",
+    "name": "Role matrix platform /api/platform/patients?email=patient%40audit.test",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0047",
+    "name": "Role matrix platform /api/patient/home",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0048",
+    "name": "Role matrix platform /api/patient/clinics",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0049",
+    "name": "Appointment history object ownership patient",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0050",
+    "name": "Patient details object ownership patient",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0052",
+    "name": "Appointment history object ownership other-patient",
+    "status": "PASS",
+    "actual": 404
+  },
+  {
+    "id": "X0053",
+    "name": "Patient details object ownership other-patient",
+    "status": "PASS",
+    "actual": 404
+  },
+  {
+    "id": "X0055",
+    "name": "Appointment history object ownership doctor",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0056",
+    "name": "Patient details object ownership doctor",
+    "status": "PASS",
+    "actual": 200
+  },
+  {
+    "id": "X0057",
+    "name": "Main staff token cannot select east doctor",
+    "status": "PASS"
+  },
+  {
+    "id": "X0058",
+    "name": "Staff token remains clinic bound reception",
+    "status": "PASS"
+  },
+  {
+    "id": "X0059",
+    "name": "Staff token remains clinic bound doctor",
+    "status": "PASS"
+  },
+  {
+    "id": "X0060",
+    "name": "Global patient cannot double-book across clinics and hosts",
+    "status": "PASS",
+    "statuses": [
+      200,
+      409
+    ]
+  },
+  {
+    "id": "X0061",
+    "name": "Cross-clinic winner has exactly one central busy record",
+    "status": "PASS"
+  },
+  {
+    "id": "X0062",
+    "name": "Distributed persistent lockout patient",
+    "status": "PASS",
+    "statuses": [
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401
+    ],
+    "state": {
+      "attempts": 0,
+      "locked": true
+    }
+  },
+  {
+    "id": "X0063",
+    "name": "Correct password cannot bypass lockout patient",
+    "status": "PASS"
+  },
+  {
+    "id": "X0064",
+    "name": "Expired lock permits valid login patient",
+    "status": "PASS",
+    "clock": "test SQL expired timestamp"
+  },
+  {
+    "id": "X0065",
+    "name": "Expired session is rejected patient",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0066",
+    "name": "Distributed persistent lockout staff",
+    "status": "PASS",
+    "statuses": [
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401
+    ],
+    "state": {
+      "attempts": 0,
+      "locked": true
+    }
+  },
+  {
+    "id": "X0067",
+    "name": "Correct password cannot bypass lockout staff",
+    "status": "PASS"
+  },
+  {
+    "id": "X0068",
+    "name": "Expired lock permits valid login staff",
+    "status": "PASS",
+    "clock": "test SQL expired timestamp"
+  },
+  {
+    "id": "X0069",
+    "name": "Expired session is rejected staff",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0070",
+    "name": "Distributed persistent lockout company",
+    "status": "PASS",
+    "statuses": [
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401,
+      401
+    ],
+    "state": {
+      "attempts": 0,
+      "locked": true
+    }
+  },
+  {
+    "id": "X0071",
+    "name": "Correct password cannot bypass lockout company",
+    "status": "PASS"
+  },
+  {
+    "id": "X0072",
+    "name": "Expired lock permits valid login company",
+    "status": "PASS",
+    "clock": "test SQL expired timestamp"
+  },
+  {
+    "id": "X0073",
+    "name": "Expired session is rejected company",
+    "status": "PASS",
+    "actual": 401
+  },
+  {
+    "id": "X0074",
+    "name": "Registration accepts an unverified inbox identity",
+    "status": "PASS",
+    "observation": "A synthetic .test mailbox registered and signed in without an email/SMS challenge; assurance policy review required, not a claimed validation failure."
+  },
+  {
+    "id": "X0075",
+    "name": "Invalid clinic header main,east",
+    "status": "PASS",
+    "actual": 404
+  },
+  {
+    "id": "X0076",
+    "name": "Invalid clinic header public",
+    "status": "PASS",
+    "actual": 404
+  },
+  {
+    "id": "X0077",
+    "name": "Invalid clinic header ../main",
+    "status": "PASS",
+    "actual": 404
+  },
+  {
+    "id": "X0078",
+    "name": "Invalid clinic header main';DROP SCHEMA public;--",
+    "status": "PASS",
+    "actual": 404
+  }
+]

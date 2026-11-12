@@ -1,0 +1,965 @@
+{
+  "results": [
+    {
+      "id": "B001",
+      "name": "Stale clinic tab reads fail closed",
+      "status": "PASS",
+      "actual": 409
+    },
+    {
+      "id": "B002",
+      "name": "Logout works from a tab opened before switching clinic",
+      "status": "FAIL",
+      "actual": 400,
+      "reproduction": "Patient main workspace in tab A; select east in tab B; logout in A"
+    },
+    {
+      "id": "B003",
+      "name": "Language works from a tab opened before switching clinic",
+      "status": "FAIL",
+      "actual": 400
+    },
+    {
+      "id": "B004",
+      "name": "Automated WCAG registration",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B005",
+      "name": "Browser registration creates one global identity and first clinic membership",
+      "status": "PASS"
+    },
+    {
+      "id": "B006",
+      "name": "Automated WCAG patient personal home",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B007",
+      "name": "Automated WCAG public doctor availability",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B008",
+      "name": "Automated WCAG explicit second clinic consent",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B009",
+      "name": "Joining another clinic never asks for a new password",
+      "status": "PASS"
+    },
+    {
+      "id": "B010",
+      "name": "Chosen public slot reaches booking",
+      "status": "FAIL"
+    },
+    {
+      "id": "B011",
+      "name": "Automated WCAG booking review",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".step.active"
+            ],
+            [
+              ".booking-context > div > small"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B012",
+      "name": "Pending booking persists in east with two memberships and shared busy time",
+      "status": "PASS",
+      "database": {
+        "status": "Scheduled",
+        "id": "a46c220ebab64245ac68205f65f86c2d",
+        "memberships": 2,
+        "busy": 1
+      }
+    },
+    {
+      "id": "B013",
+      "name": "Cross-clinic personal home shows only own new appointment",
+      "status": "PASS"
+    },
+    {
+      "id": "B014",
+      "name": "Reception confirmation writes status/version/history",
+      "status": "PASS"
+    },
+    {
+      "id": "B015",
+      "name": "Patient cancellation releases global busy row and appends history",
+      "status": "PASS"
+    },
+    {
+      "id": "B016",
+      "name": "Automated WCAG platform overview",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B017",
+      "name": "Automated WCAG platform clinic metadata",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B018",
+      "name": "Automated WCAG company patient recovery",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".inline-note"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B019",
+      "name": "Company support and separate clinical session",
+      "status": "FAIL",
+      "error": "locator.click: Error: strict mode violation: locator('form[action=\"/PatientSupport/Password\"] button') resolved to 2 elements:\n    1) <button type=\"button\" aria-pressed=\"false\" title=\"Прикажи лозинка\" aria-controls=\"support-password\" class=\"password-visibility-toggle\" aria-label=\"Прикажи лозинка: Нова лозинка\">…</button> aka getByRole('button', { name: 'Прикажи лозинка: Нова лозинка' })\n    2) <button type=\"submit\" class=\"btn primary\">Обнови лична лозинка</button> aka getByRole('button', { name: 'Обнови лична лозинка' })\n\nCall log:\n\u001b[2m  - waiting for locator('form[action=\"/PatientSupport/Password\"] button')\u001b[22m\n"
+    },
+    {
+      "id": "B020",
+      "name": "Automated WCAG reception doctors",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B021",
+      "name": "No viewport overflow reception doctors 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B022",
+      "name": "No viewport overflow reception doctors 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B023",
+      "name": "No viewport overflow reception doctors 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B024",
+      "name": "Automated WCAG reception patients",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B025",
+      "name": "No viewport overflow reception patients 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B026",
+      "name": "No viewport overflow reception patients 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B027",
+      "name": "No viewport overflow reception patients 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B028",
+      "name": "Automated WCAG reception calendar",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impact": "serious",
+          "targets": [
+            [
+              ".fc-scroller-liquid-absolute"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B029",
+      "name": "No viewport overflow reception calendar 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B030",
+      "name": "No viewport overflow reception calendar 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B031",
+      "name": "No viewport overflow reception calendar 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B032",
+      "name": "Automated WCAG reception reports",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B033",
+      "name": "No viewport overflow reception reports 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B034",
+      "name": "No viewport overflow reception reports 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B035",
+      "name": "No viewport overflow reception reports 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B036",
+      "name": "Automated WCAG reception account dialog",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B037",
+      "name": "Automated WCAG clinic accounts",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B038",
+      "name": "Automated WCAG real database doctors dark",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B039",
+      "name": "Automated WCAG real database doctors vibrant",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B040",
+      "name": "Automated WCAG doctor appointments",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B041",
+      "name": "No viewport overflow doctor appointments 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B042",
+      "name": "No viewport overflow doctor appointments 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B043",
+      "name": "No viewport overflow doctor appointments 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B044",
+      "name": "Automated WCAG doctor availability",
+      "status": "FAIL",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ],
+            [
+              "div > small"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B045",
+      "name": "No viewport overflow doctor availability 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B046",
+      "name": "No viewport overflow doctor availability 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B047",
+      "name": "No viewport overflow doctor availability 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B048",
+      "name": "Automated WCAG doctor account dialog",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B049",
+      "name": "Automated WCAG patient doctors",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B050",
+      "name": "No viewport overflow patient doctors 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B051",
+      "name": "No viewport overflow patient doctors 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B052",
+      "name": "No viewport overflow patient doctors 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B053",
+      "name": "Automated WCAG patient appointments",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B054",
+      "name": "No viewport overflow patient appointments 320",
+      "status": "PASS"
+    },
+    {
+      "id": "B055",
+      "name": "No viewport overflow patient appointments 768",
+      "status": "PASS"
+    },
+    {
+      "id": "B056",
+      "name": "No viewport overflow patient appointments 1360",
+      "status": "PASS"
+    },
+    {
+      "id": "B057",
+      "name": "Automated WCAG patient account dialog",
+      "status": "PASS",
+      "violations": []
+    },
+    {
+      "id": "B058",
+      "name": "Authenticated workspace rejects unrelated-origin framing",
+      "status": "FAIL",
+      "framed": true,
+      "xFrameOptions": null,
+      "csp": null
+    },
+    {
+      "id": "B059",
+      "name": "No uncaught JavaScript exceptions in targeted flows",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "actions": [
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/PatientClinics",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Отвори клиника",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "Q\nQA Ана Пациент\nПациент",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Одјави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/PatientClinics",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Отвори клиника",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "Q\nQA Ана Пациент\nПациент",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "EN",
+      "type": "submit"
+    },
+    {
+      "path": "/Account/Register",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Создај пациентска сметка",
+      "type": "submit"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Discover/Doctor/0db9a33a2c5b474d823672f904b2e5e1",
+      "tag": "A",
+      "id": "",
+      "text": "08:00",
+      "type": ""
+    },
+    {
+      "path": "/PatientClinics/Join",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Продолжи во клиниката",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "review-booking",
+      "text": "Провери го терминот",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "submit-booking",
+      "text": "Потврди термин",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "close-dialog",
+      "text": "Затвори прозорец",
+      "type": "submit"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Сите",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Детали ",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Потврди преглед",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "confirm-yes",
+      "text": "Ажурирај статус",
+      "type": "submit"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/PatientClinics",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Види термин",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Откажи преглед",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "confirm-yes",
+      "text": "Откажи термин",
+      "type": "submit"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Platform/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/PatientSupport",
+      "tag": "INPUT",
+      "id": "",
+      "text": "",
+      "type": "checkbox"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#reports",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "А\nАдминистратор на МедТермин\nРецепционер",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#reports",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Затвори поставки",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "А\nАдминистратор на МедТермин\nРецепционер",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Затвори поставки",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "А\nАдминистратор на МедТермин\nРецепционер",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#doctors",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Затвори поставки",
+      "type": "button"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#availability",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "Q\nQA Лекар\nЛекар",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#availability",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Затвори поставки",
+      "type": "button"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "account-menu-button",
+      "text": "Q\nQA Ана Пациент\nПациент",
+      "type": "button"
+    },
+    {
+      "path": "/Workspace#appointments",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Затвори поставки",
+      "type": "button"
+    },
+    {
+      "path": "/Account/Login",
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Најави се",
+      "type": "submit"
+    }
+  ],
+  "axeResults": [
+    {
+      "label": "registration",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "patient personal home",
+      "violations": [],
+      "incomplete": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "public doctor availability",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "explicit second clinic consent",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "booking review",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".step.active"
+            ],
+            [
+              ".booking-context > div > small"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "platform overview",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "platform clinic metadata",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "company patient recovery",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".inline-note"
+            ]
+          ]
+        }
+      ],
+      "incomplete": []
+    },
+    {
+      "label": "reception doctors",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "reception patients",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "reception calendar",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impact": "serious",
+          "targets": [
+            [
+              ".fc-scroller-liquid-absolute"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "aria-prohibited-attr",
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "reception reports",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "aria-valid-attr-value",
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "reception account dialog",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "clinic accounts",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "real database doctors dark",
+      "violations": [],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "real database doctors vibrant",
+      "violations": [],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "doctor appointments",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "doctor availability",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".clinic-context-name > span"
+            ],
+            [
+              "div > small"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "doctor account dialog",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "patient doctors",
+      "violations": [],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "patient appointments",
+      "violations": [],
+      "incomplete": [
+        "aria-valid-attr-value"
+      ]
+    },
+    {
+      "label": "patient account dialog",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ]
+}

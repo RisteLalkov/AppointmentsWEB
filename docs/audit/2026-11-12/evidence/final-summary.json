@@ -1,0 +1,33 @@
+{
+  "verdict": "NOT READY",
+  "tested_revision": "08bd3d62c246eb8b8b6586d46357f2db50ba9fb0",
+  "application_changes": false,
+  "production_data_accessed": false,
+  "findings": {
+    "CRITICAL": 0,
+    "HIGH": 1,
+    "MEDIUM": 8,
+    "LOW": 4
+  },
+  "feature_families": 80,
+  "openapi_paths": 49,
+  "openapi_operations": 53,
+  "api_matrix_assertions": 379,
+  "status_matrix_assertions": 225,
+  "additional_integrity_assertions": 312,
+  "meaningful_security_assertions": 76,
+  "targeted_browser_assertions": {
+    "PASS": 49,
+    "FAIL": 11
+  },
+  "restore_assertions": 11,
+  "large_workspace": {
+    "response_bytes": 12107744,
+    "interactive_ms": 21685,
+    "blocking_task_ms": 20517
+  },
+  "notes": [
+    "Assertion counts are scoped and can overlap. The complete ledger retains repeated and superseded executions.",
+    "Production IIS/TLS/database verification blocked; real devices, soak/failover and full penetration testing not certified."
+  ]
+}

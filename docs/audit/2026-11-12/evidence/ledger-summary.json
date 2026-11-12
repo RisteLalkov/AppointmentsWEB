@@ -1,0 +1,10 @@
+{
+  "recorded_assertion_executions": 4008,
+  "statuses": {
+    "PASS": 3948,
+    "FAIL": 56,
+    "BLOCKED": 2,
+    "NOT TESTED": 2
+  },
+  "warning": "Repeated suites and superseded harness attempts included; not a unique test or code coverage count."
+}

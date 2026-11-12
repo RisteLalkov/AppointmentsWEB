@@ -1,0 +1,1562 @@
+[
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "CreatedAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "DoctorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "Email",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(120)",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "Enabled",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "FailedAttempts",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "GlobalPatientId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "IsDemo",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "LockedUntil",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(80)",
+    "actual_type": "character varying(80)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "NormalizedEmail",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(120)",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "PasswordHash",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "PatientId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Accounts",
+    "column": "Role",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(20)",
+    "actual_type": "character varying(20)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "ActorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "ActorName",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "ActorRole",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(20)",
+    "actual_type": "character varying(20)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "AfterEnd",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "AfterStart",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "AfterStatus",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(20)",
+    "actual_type": "character varying(20)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "AppointmentId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "AppointmentVersion",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "BeforeEnd",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "BeforeStart",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "BeforeStatus",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(20)",
+    "actual_type": "character varying(20)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "Kind",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(20)",
+    "actual_type": "character varying(20)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AppointmentHistory",
+    "column": "OccurredAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "CreatedBy",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "DoctorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "End",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "PatientId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "RequestId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "ServiceId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "ServiceName",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "Start",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "Status",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(20)",
+    "actual_type": "character varying(20)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "UpdatedAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Appointments",
+    "column": "Version",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AuditEvents",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "bigint",
+    "actual_type": "bigint"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AuditEvents",
+    "column": "Action",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(80)",
+    "actual_type": "character varying(80)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AuditEvents",
+    "column": "ActorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AuditEvents",
+    "column": "OccurredAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AuditEvents",
+    "column": "TargetId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "Date",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "date",
+    "actual_type": "date"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "DoctorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "End",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "time without time zone",
+    "actual_type": "time without time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "IsAvailable",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "Reason",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(120)",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "AvailabilityExceptions",
+    "column": "Start",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "time without time zone",
+    "actual_type": "time without time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "BookingMethod",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "CatalogVersion",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "DemoScheduleEdited",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "DurationMinutes",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "Enabled",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "Funding",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "IsService",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "RequiresConfirmation",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "ScheduleVersion",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "Specialty",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "SpecialtyId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "StaffOnly",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "Subspecialty",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Doctors",
+    "column": "TuesdayFirst",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "DoctorServices",
+    "column": "DoctorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "DoctorServices",
+    "column": "ServiceId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "column": "AccountId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "column": "RequestId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "column": "CreatedAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "column": "Fingerprint",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "IdempotencyRequests",
+    "column": "ResponseJson",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "jsonb",
+    "actual_type": "jsonb"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "CreatedAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "Email",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(120)",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "Enabled",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "FailedAttempts",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "HomeClinicId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "LockedUntil",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(80)",
+    "actual_type": "character varying(80)"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "PasswordHash",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientAccounts",
+    "column": "Phone",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(30)",
+    "actual_type": "character varying(30)"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "column": "PatientAccountId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "column": "ClinicId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "column": "AccountId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "column": "PatientId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientMemberships",
+    "column": "PatientNumber",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "bigint",
+    "actual_type": "bigint"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "Email",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(120)",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "IsDemonstration",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(80)",
+    "actual_type": "character varying(80)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "Number",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "bigint",
+    "actual_type": "bigint"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "Phone",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(30)",
+    "actual_type": "character varying(30)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Patients",
+    "column": "Version",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientSessions",
+    "column": "TokenHash",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientSessions",
+    "column": "ExpiresAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "careline_identity",
+    "table": "PatientSessions",
+    "column": "PatientAccountId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "column": "DurationMinutes",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "column": "Enabled",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "column": "SpecialtyId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Services",
+    "column": "Version",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Sessions",
+    "column": "TokenHash",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Sessions",
+    "column": "AccountId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Sessions",
+    "column": "ExpiresAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Sessions",
+    "column": "IsDemo",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Settings",
+    "column": "Key",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Settings",
+    "column": "Value",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "bigint",
+    "actual_type": "bigint"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "Days",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "DoctorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "End",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "Note",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "Row",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "Start",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "SourceSchedules",
+    "column": "Type",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Specialties",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Specialties",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(200)",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "Specialties",
+    "column": "Version",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "bigint",
+    "actual_type": "bigint"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "Day",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "DoctorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "character varying(64)",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "End",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "time without time zone",
+    "actual_type": "time without time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "Start",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "time without time zone",
+    "actual_type": "time without time zone"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "ValidFrom",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "date",
+    "actual_type": "date"
+  },
+  {
+    "database": "clinical",
+    "schema": "public",
+    "table": "WorkingPeriods",
+    "column": "ValidTo",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "date",
+    "actual_type": "date"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(40)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Address",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(200)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "AdminEmail",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "AdminName",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(80)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Adopted",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "AllowRegistration",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "ConnectionName",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "CreatedAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "CreatedBy",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Description",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(1000)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Discoverable",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(100)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Phone",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(30)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "State",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "TimeZone",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(100)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformClinics",
+    "column": "Version",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "Id",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "Email",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(120)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "Enabled",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "boolean",
+    "actual_type": "boolean"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "FailedAttempts",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "integer",
+    "actual_type": "integer"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "LockedUntil",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "Name",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(80)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformOperators",
+    "column": "PasswordHash",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformSessions",
+    "column": "TokenHash",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "character varying(64)"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformSessions",
+    "column": "ExpiresAt",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "timestamp with time zone",
+    "actual_type": "timestamp with time zone"
+  },
+  {
+    "database": "platform",
+    "schema": "public",
+    "table": "PlatformSessions",
+    "column": "OperatorId",
+    "exists": true,
+    "nullable_matches": true,
+    "expected_type": "text",
+    "actual_type": "text"
+  }
+]

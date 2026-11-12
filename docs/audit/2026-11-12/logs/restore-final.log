@@ -1,0 +1,5 @@
+{"id": "X0001", "name": "Backup restores every clinical table with identical row fingerprint", "status": "PASS", "tables": 55, "dump_bytes": 621642, "dump_sha256": "879f8c8456fb66d6a54010cb6a6ba41b9405bab375e57d8fa4909a3f1740cc32"}
+{"id": "X0002", "name": "Backup restores every platform table with identical row fingerprint", "status": "PASS", "tables": 4, "dump_bytes": 8487, "dump_sha256": "40b062dc440ee14b14c19e31cb31eaa1a2e8a26f1a8fbe862696cabf47ab57a5"}
+{"id": "X0003", "name": "Both source databases remained unchanged across paired backup window", "status": "PASS"}
+{"id": "X0004", "name": "Backup/restore rehearsal completed", "status": "FAIL", "error": "[Errno 2] No such file or directory: 'dotnet'"}
+{"id": "X0005", "name": "Temporary restore databases and raw dumps removed", "status": "PASS"}

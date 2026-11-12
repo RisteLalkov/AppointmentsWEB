@@ -1,0 +1,512 @@
+[
+  {
+    "file": "src/Appointments.Api/Controllers/AccountsController.cs",
+    "line": 13,
+    "declaration": "[HttpGet] public async Task<IReadOnlyList<AccountSummary>> List(CancellationToken ct) => (await db.Accounts.AsNoTracking().OrderBy(a => a.Name).ThenBy(a => a.Id).ToListAsync(ct)).Select(AccountService.Summary).ToList();"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AccountsController.cs",
+    "line": 14,
+    "declaration": "[HttpPost] public Task<AccountSummary> Create(AccountInput input, CancellationToken ct) => service.CreateAsync(Actor, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AccountsController.cs",
+    "line": 15,
+    "declaration": "[HttpPost(\"{id}/credentials\")] public async Task<object> Credentials(string id, LoginInput input, CancellationToken ct) { await service.CredentialsAsync(Actor, id, input, ct); return new { saved = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AccountsController.cs",
+    "line": 16,
+    "declaration": "[HttpPost(\"{id}/access\")] public async Task<object> Access(string id, AccountAccessInput input, CancellationToken ct) { await service.AccessAsync(Actor, id, input.Enabled, ct); return new { saved = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AccountsController.cs",
+    "line": 17,
+    "declaration": "[HttpGet(\"audit\")] public Task<List<AuditEvent>> Audit(int take = 100, CancellationToken ct = default) => db.AuditEvents.AsNoTracking().OrderByDescending(a => a.Id).Take(Math.Clamp(take, 1, 500)).ToListAsync(ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 13,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpGet(\"reports\")] public Task<ReportResult> Reports([FromQuery] ReportQuery query, CancellationToken ct) => service.ReportAsync(Actor, query, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 14,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpPost(\"catalogue/doctors\")] public Task<object> Doctor(DoctorInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, \"doctors\", input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 15,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpPost(\"catalogue/specialties\")] public Task<object> Specialty(SpecialtyInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, \"specialties\", input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 16,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpPost(\"catalogue/services\")] public Task<object> MedicalService(ServiceInput input, CancellationToken ct) => service.SaveCatalogueAsync(Actor, \"services\", input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 17,
+    "declaration": "[HttpGet(\"bootstrap\")] public Task<BootstrapResponse> Bootstrap(CancellationToken ct) => service.BootstrapAsync(Actor, IsDemo, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 18,
+    "declaration": "[HttpGet(\"appointments\")] public async Task<IActionResult> List([FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, int skip = 0, int take = 100, CancellationToken ct = default, string? doctorId = null, string? patientId = null, string? serviceId = null, AppointmentStatus? status = null)"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 32,
+    "declaration": "[HttpGet(\"appointments/{id}/history\")] public Task<AppointmentHistoryResult> History(string id, CancellationToken ct) => service.HistoryAsync(Actor, id, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 33,
+    "declaration": "[HttpGet(\"slots\")] public Task<IReadOnlyList<Slot>> Slots(string doctorId, DateOnly date, string? excludeId, CancellationToken ct, string? serviceId = null, string? patientId = null) => service.SlotsAsync(Actor, doctorId, date, excludeId, ct, serviceId, patientId);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 34,
+    "declaration": "[HttpGet(\"availability/days\")] public Task<IReadOnlyList<AvailabilityDay>> Days(string doctorId, DateOnly from, DateOnly to, CancellationToken ct, string? excludeId = null, string? serviceId = null, string? patientId = null) => service.AvailabilityDaysAsync(Actor, doctorId, from, to, excludeId, serviceId, patientId, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 35,
+    "declaration": "[HttpGet(\"availability/next\")] public Task<IReadOnlyList<DoctorNextSlot>> Next(string doctorIds, DateOnly from, CancellationToken ct, string? serviceId = null) => service.NextSlotsAsync(Actor, doctorIds, from, serviceId, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 36,
+    "declaration": "[HttpGet(\"exceptions\")] public Task<IReadOnlyList<AvailabilityException>> Exceptions(string doctorId, CancellationToken ct) => service.ExceptionsAsync(Actor, doctorId, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 37,
+    "declaration": "[HttpPost(\"appointments\")] public Task<Appointment> Book(BookingCommand input, CancellationToken ct) => service.BookAsync(Actor, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 38,
+    "declaration": "[HttpPost(\"appointments/{id}/move\")] public Task<Appointment> Move(string id, MoveCommand input, CancellationToken ct) => service.MoveAsync(Actor, id, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 39,
+    "declaration": "[HttpPost(\"appointments/{id}/status\")] public Task<Appointment> Status(string id, StatusInput input, CancellationToken ct) => service.StatusAsync(Actor, id, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 40,
+    "declaration": "[HttpGet(\"patients/{id}\")] public Task<PatientDetailsResult> PatientDetails(string id, CancellationToken ct) => service.PatientDetailsAsync(Actor, id, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 41,
+    "declaration": "[HttpPost(\"patients/{id}\")] public Task<Patient> UpdatePatient(string id, PatientUpdateCommand input, CancellationToken ct) => service.UpdatePatientAsync(Actor, id, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 42,
+    "declaration": "[HttpPost(\"patients\"), Authorize(Roles = \"Administrator,Doctor\")] public Task<Patient> Patient(PatientInput input, CancellationToken ct) => service.PatientAsync(Actor, input, IsDemo, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 43,
+    "declaration": "[HttpPost(\"schedule/{doctorId}\")] public async Task<object> Schedule(string doctorId, ScheduleInput input, CancellationToken ct) { await service.ScheduleAsync(Actor, doctorId, input, ct); return new { saved = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 44,
+    "declaration": "[HttpPost(\"exceptions/{doctorId}\")] public Task<AvailabilityException> Exception(string doctorId, ExceptionInput input, CancellationToken ct) => service.AddExceptionAsync(Actor, doctorId, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AppointmentsController.cs",
+    "line": 45,
+    "declaration": "[HttpPost(\"exceptions/{id}/remove\")] public async Task<object> Remove(string id, CancellationToken ct) { await service.RemoveExceptionAsync(Actor, id, ct); return new { saved = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AuthController.cs",
+    "line": 19,
+    "declaration": "[HttpPost(\"register\"), EnableRateLimiting(\"auth\")] public Task<AccountSummary> Register(RegisterInput input, CancellationToken ct) => Service.RegisterAsync(input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AuthController.cs",
+    "line": 20,
+    "declaration": "[Authorize, HttpGet(\"me\")] public object Me() => new { actor = Actor, demoMode = IsDemo, clinic = clinicContext.IsSelected ? clinicContext.Current.Summary() : null, globalPatient = Global };"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AuthController.cs",
+    "line": 21,
+    "declaration": "[Authorize, HttpPost(\"logout\")] public async Task<object> Logout(CancellationToken ct) { var hash = HttpContext.Items[\"SessionHash\"] as string; if (Global) await patients.LogoutAsync(PatientToken, ct); else await Db.Sessions.Where(s => s.TokenHash == hash).ExecuteDeleteAsync(ct); return new { signedOut = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AuthController.cs",
+    "line": 22,
+    "declaration": "[Authorize, HttpPost(\"password\"), EnableRateLimiting(\"auth\")] public async Task<object> Password(ChangePasswordInput input, CancellationToken ct) { if (Global) await patients.PasswordAsync(PatientToken, input, ct); else await Service.ChangePasswordAsync(Actor, input, ct); return new { signInAgain = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AuthController.cs",
+    "line": 23,
+    "declaration": "[HttpGet(\"demo-users\")] public async Task<IReadOnlyList<DemoActor>> DemoUsers(CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/AuthController.cs",
+    "line": 27,
+    "declaration": "[HttpPost(\"demo-login\"), EnableRateLimiting(\"auth\")] public Task<SessionResponse> DemoLogin(DemoLoginInput input, CancellationToken ct) { DemoAllowed(); return Service.DemoAsync(input.UserId, ct); }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/DiscoveryController.cs",
+    "line": 13,
+    "declaration": "[HttpGet(\"clinics\")] public PublicPage<PublicClinic> Clinics([FromQuery] DiscoveryQuery query) => discovery.Clinics(query);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/DiscoveryController.cs",
+    "line": 14,
+    "declaration": "[HttpGet(\"clinics/{id}\")] public PublicClinic Clinic(string id) => PublicDiscovery.Describe(discovery.Clinic(id));"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/DiscoveryController.cs",
+    "line": 15,
+    "declaration": "[HttpGet(\"doctors\")] public Task<PublicPage<PublicDoctor>> Doctors([FromQuery] DiscoveryQuery query, CancellationToken ct) => discovery.DoctorsAsync(query, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/DiscoveryController.cs",
+    "line": 16,
+    "declaration": "[HttpGet(\"clinics/{clinicId}/doctors/{doctorId}/availability\"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/DiscoveryController.cs",
+    "line": 19,
+    "declaration": "[HttpGet(\"clinics/{clinicId}/doctors/{doctorId}\")] public async Task<PublicDoctor> Doctor(string clinicId, string doctorId, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/LoginController.cs",
+    "line": 13,
+    "declaration": "[HttpPost, EnableRateLimiting(\"auth\")]"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PatientAccountController.cs",
+    "line": 14,
+    "declaration": "[HttpGet(\"home\")] public Task<PatientHome> Home(CancellationToken ct, string? clinicId = null) => patients.HomeAsync(Token, ct, clinicId);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PatientAccountController.cs",
+    "line": 15,
+    "declaration": "[HttpGet(\"clinics\")] public async Task<IReadOnlyList<PatientClinicOption>> Clinics(CancellationToken ct) => (await patients.HomeAsync(Token, ct, includeVisits: false)).Clinics;"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PatientAccountController.cs",
+    "line": 16,
+    "declaration": "[HttpPost(\"clinics/{clinicId}\")] public Task<SessionResponse> Join(string clinicId, PatientJoinInput input, CancellationToken ct) => patients.JoinAsync(Token, clinicId, ct, input.Phone);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 15,
+    "declaration": "[HttpGet(\"clinics\")] public Task<IReadOnlyList<PlatformClinicSummary>> List(CancellationToken ct) => service.ListAsync(ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 16,
+    "declaration": "[HttpPost(\"clinics\")] public Task<PlatformClinicSummary> Create(ProvisionClinicInput input, CancellationToken ct) => service.ProvisionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 17,
+    "declaration": "[HttpPost(\"clinics/{id}/adopt\")] public Task<PlatformClinicSummary> Adopt(string id, CancellationToken ct) => service.AdoptAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!, id, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 18,
+    "declaration": "[HttpPost(\"clinics/{id}/details\")] public Task<PlatformClinicSummary> Update(string id, UpdateClinicInput input, CancellationToken ct) => service.UpdateAsync(id, input, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 19,
+    "declaration": "[HttpGet(\"patients\")] public Task<IReadOnlyList<PatientIdentitySummary>> Patients(string? email, CancellationToken ct) => patients.FindForSupportAsync(email, ct);"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 20,
+    "declaration": "[HttpPost(\"patients/{id}/password\"), EnableRateLimiting(\"auth\")] public async Task<object> PatientPassword(string id, PatientPasswordReset input, CancellationToken ct) { await patients.SupportPasswordAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!, id, input, ct); return new { saved = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 21,
+    "declaration": "[HttpPost(\"password\"), EnableRateLimiting(\"auth\")] public async Task<object> Password(ChangePasswordInput input, CancellationToken ct) { await service.PasswordAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!, input, ct); return new { saved = true }; }"
+  },
+  {
+    "file": "src/Appointments.Api/Controllers/PlatformController.cs",
+    "line": 22,
+    "declaration": "[HttpPost(\"logout\")] public async Task<object> Logout(CancellationToken ct) { await using var db = registry.PlatformDb(); var hash = HttpContext.Items[\"PlatformSessionHash\"] as string; await db.Sessions.Where(s => s.TokenHash == hash).ExecuteDeleteAsync(ct); return new { signedOut = true }; }"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 39,
+    "declaration": "[HttpGet] public async Task<IActionResult> Login(string? clinicId, string? returnUrl, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 45,
+    "declaration": "[HttpPost] public async Task<IActionResult> Login(LoginInput input, string? clinicId, string? returnUrl, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 53,
+    "declaration": "[HttpGet] public async Task<IActionResult> Register(string? clinicId, string? returnUrl, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 59,
+    "declaration": "[HttpPost] public async Task<IActionResult> Register(RegisterInput input, string? clinicId, string? returnUrl, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 79,
+    "declaration": "[Authorize, HttpPost] public async Task<IActionResult> Logout(CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 85,
+    "declaration": "[HttpGet] public IActionResult AccessDenied()"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 90,
+    "declaration": "[Authorize, HttpGet] public IActionResult Password() => View();"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountController.cs",
+    "line": 91,
+    "declaration": "[Authorize, HttpPost] public async Task<IActionResult> Password(ChangePasswordInput input, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+    "line": 10,
+    "declaration": "[Authorize(Roles = \"Administrator\"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+    "line": 13,
+    "declaration": "[HttpGet] public async Task<IActionResult> Index(string? search, string? role, string? status, int page = 1, CancellationToken ct = default)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+    "line": 33,
+    "declaration": "[HttpPost] public Task<IActionResult> Create(AccountInput input, CancellationToken ct) => Save(\"api/accounts\", input, UiText.T(\"Сметката за {0} ({1}) е успешно создадена.\", input.Name, input.Email), ct);"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+    "line": 34,
+    "declaration": "[HttpPost] public Task<IActionResult> Access(string id, bool enabled, CancellationToken ct) => Save($\"api/accounts/{Uri.EscapeDataString(id ?? \"\")}/access\", new AccountAccessInput(enabled), enabled ? UiText.T(\"Пристапот до оваа клиника е овозможен.\") : UiText.T(\"Пристапот до оваа клиника е оневозможен.\"), ct);"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/AccountsController.cs",
+    "line": 35,
+    "declaration": "[HttpPost] public Task<IActionResult> Credentials(string id, LoginInput input, CancellationToken ct) => Save($\"api/accounts/{Uri.EscapeDataString(id ?? \"\")}/credentials\", input, UiText.T(\"Податоците за најава се ажурирани. Постоечките сесии се одјавени.\"), ct);"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 10,
+    "declaration": "[Authorize, Route(\"data\"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 23,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpGet(\"reports\")]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 27,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpPost(\"catalogue/doctors\")] public Task<IActionResult> Doctor([FromBody] DoctorInput input) => Execute(\"catalogue/doctors\", input, () => Catalogue.SaveDoctor(identity.Actor, input));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 28,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpPost(\"catalogue/specialties\")] public Task<IActionResult> Specialty([FromBody] SpecialtyInput input) => Execute(\"catalogue/specialties\", input, () => Catalogue.SaveSpecialty(identity.Actor, input));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 29,
+    "declaration": "[Authorize(Roles = \"Administrator\"), HttpPost(\"catalogue/services\")] public Task<IActionResult> Service([FromBody] ServiceInput input) => Execute(\"catalogue/services\", input, () => Catalogue.SaveService(identity.Actor, input));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 30,
+    "declaration": "[HttpGet(\"bootstrap\")] public Task<IActionResult> Bootstrap() => Execute(\"bootstrap\", null, () => new BootstrapResponse(identity.Actor, Demo.Doctors(), Demo.Patients(identity.Actor), Demo.Appointments(identity.Actor), clock.Today.ToString(\"yyyy-MM-dd\"), clock.LocalNow.ToString(\"yyyy-MM-ddTHH:mm:ss\"), clock.Zone.Id, clock.UtcNow, true, true, \"Demo\", Store.Read(s => s.Specialties), Store.Read(s => s.Services), Store.Read(s => s.DoctorServices)));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 31,
+    "declaration": "[HttpGet(\"slots\")] public Task<IActionResult> Slots(string doctorId, DateOnly date, string? excludeId, string? serviceId, string? patientId) => Execute($\"slots?doctorId={Escape(doctorId)}&date={date:yyyy-MM-dd}&serviceId={Escape(serviceId)}&patientId={Escape(patientId)}&excludeId={Escape(excludeId)}\", null,"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 33,
+    "declaration": "[HttpGet(\"availability/days\")] public Task<IActionResult> Days(string doctorId, DateOnly from, DateOnly to, string? excludeId, string? serviceId, string? patientId) => Execute($\"availability/days?doctorId={Escape(doctorId)}&from={from:yyyy-MM-dd}&to={to:yyyy-MM-dd}&serviceId={Escape(serviceId)}&patientId={Escape(patientId)}&excludeId={Escape(excludeId)}\", null,"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 35,
+    "declaration": "[HttpGet(\"availability/next\")] public Task<IActionResult> Next(string doctorIds, DateOnly from, string? serviceId) => Execute($\"availability/next?doctorIds={Escape(doctorIds)}&from={from:yyyy-MM-dd}&serviceId={Escape(serviceId)}\", null,"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 37,
+    "declaration": "[HttpGet(\"exceptions\")] public Task<IActionResult> Exceptions(string doctorId) => Execute(\"exceptions?doctorId=\" + Escape(doctorId), null, () => Demo.Exceptions(identity.Actor, doctorId));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 38,
+    "declaration": "[HttpGet(\"appointments/{id}/history\")] public Task<IActionResult> History(string id) => Execute($\"appointments/{Escape(id)}/history\", null, () => Demo.History(identity.Actor, id));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 39,
+    "declaration": "[HttpPost(\"appointments\")] public Task<IActionResult> Book([FromBody] BookingCommand command) => Execute(\"appointments\", command, () => Demo.Book(identity.Actor, command));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 40,
+    "declaration": "[HttpPost(\"appointments/{id}/move\")] public Task<IActionResult> Move(string id, [FromBody] MoveCommand command) => Execute($\"appointments/{Uri.EscapeDataString(id)}/move\", command, () => Demo.Move(identity.Actor, id, command));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 41,
+    "declaration": "[HttpPost(\"appointments/{id}/status\")] public Task<IActionResult> Status(string id, [FromBody] StatusInput input) => Execute($\"appointments/{Uri.EscapeDataString(id)}/status\", input, () => Demo.ChangeStatus(identity.Actor, id, input.Status, input.Version));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 42,
+    "declaration": "[HttpGet(\"patients/{id}\")] public Task<IActionResult> PatientDetails(string id) => Execute($\"patients/{Escape(id)}\", null, () => Demo.PatientDetails(identity.Actor, id));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 43,
+    "declaration": "[HttpPost(\"patients/{id}\")] public Task<IActionResult> UpdatePatient(string id, [FromBody] PatientUpdateCommand input) => Execute($\"patients/{Escape(id)}\", input, () => Demo.UpdatePatient(identity.Actor, id, input));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 44,
+    "declaration": "[HttpPost(\"patients\"), Authorize(Roles = \"Administrator,Doctor\")] public Task<IActionResult> AddPatient([FromBody] PatientInput input) => Execute(\"patients\", input, () => Demo.AddPatient(identity.Actor, input.Name, input.Email ?? \"\", input.Phone ?? \"\"));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 45,
+    "declaration": "[HttpPost(\"schedule/{doctorId}\")] public Task<IActionResult> Schedule(string doctorId, [FromBody] ScheduleInput input) => Execute(\"schedule/\" + Escape(doctorId), input, () => { Demo.ReplaceSchedule(identity.Actor, doctorId, input.Periods, input.DurationMinutes, input.Version ?? 0); return new { saved = true }; });"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 46,
+    "declaration": "[HttpPost(\"exceptions/{doctorId}\")] public Task<IActionResult> Exception(string doctorId, [FromBody] ExceptionInput input) => Execute(\"exceptions/\" + Escape(doctorId), input, () => Demo.AddException(identity.Actor, doctorId, input.Date, input.Start, input.End, input.IsAvailable, input.Reason));"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 47,
+    "declaration": "[HttpPost(\"exceptions/{id}/remove\")] public Task<IActionResult> RemoveException(string id) => Execute($\"exceptions/{Uri.EscapeDataString(id)}/remove\", new { }, () => { Demo.RemoveException(identity.Actor, id); return new { saved = true }; });"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DataController.cs",
+    "line": 48,
+    "declaration": "[HttpPost(\"reset\")] public IActionResult Reset()"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DemoController.cs",
+    "line": 10,
+    "declaration": "[HttpGet] public async Task<IActionResult> Index(string? clinicId, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/DemoController.cs",
+    "line": 24,
+    "declaration": "[HttpPost] public async Task<IActionResult> Enter(string userId, string? clinicId, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/HomeController.cs",
+    "line": 8,
+    "declaration": "[Authorize]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/HomeController.cs",
+    "line": 21,
+    "declaration": "[HttpGet(\"/Workspace\")] public IActionResult Workspace() => User.HasClaim(\"globalPatient\", \"true\") && !User.HasClaim(c => c.Type == \"clinicId\")"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientClinicsController.cs",
+    "line": 9,
+    "declaration": "[Authorize(Roles = \"Patient\"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientClinicsController.cs",
+    "line": 13,
+    "declaration": "[HttpGet] public async Task<IActionResult> Switcher(CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientClinicsController.cs",
+    "line": 29,
+    "declaration": "[HttpGet] public async Task<IActionResult> Index(CancellationToken ct, string? clinicId = null, string period = \"upcoming\")"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientClinicsController.cs",
+    "line": 43,
+    "declaration": "[HttpGet] public async Task<IActionResult> Join(string clinicId, string? returnUrl, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientClinicsController.cs",
+    "line": 58,
+    "declaration": "[HttpPost] public async Task<IActionResult> Select(string clinicId, string? returnUrl, string? phone, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientSupportController.cs",
+    "line": 9,
+    "declaration": "[Authorize(Policy = \"Platform\"), ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientSupportController.cs",
+    "line": 12,
+    "declaration": "[HttpGet] public async Task<IActionResult> Index(string? email, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PatientSupportController.cs",
+    "line": 19,
+    "declaration": "[HttpPost] public async Task<IActionResult> Password(string id, string? email, PatientPasswordReset input, bool confirmed, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 11,
+    "declaration": "[Authorize(Policy = \"Platform\")]"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 48,
+    "declaration": "[HttpPost] public async Task<IActionResult> Adopt(string id, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 58,
+    "declaration": "[HttpGet] public async Task<IActionResult> Edit(string id, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 70,
+    "declaration": "[HttpPost] public async Task<IActionResult> Edit(string id, UpdateClinicInput input, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 82,
+    "declaration": "[HttpPost] public async Task<IActionResult> Create(ProvisionClinicInput input, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 116,
+    "declaration": "[HttpPost] public async Task<IActionResult> Password(ChangePasswordInput input, CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PlatformController.cs",
+    "line": 122,
+    "declaration": "[HttpPost] public async Task<IActionResult> Logout(CancellationToken ct)"
+  },
+  {
+    "file": "src/Appointments.Web/Controllers/PreferencesController.cs",
+    "line": 8,
+    "declaration": "[HttpPost]"
+  }
+]

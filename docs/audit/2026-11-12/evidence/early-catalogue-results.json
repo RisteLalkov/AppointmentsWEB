@@ -1,0 +1,14 @@
+[
+  {
+    "id": "X0001",
+    "name": "All clinical constraints are validated",
+    "status": "PASS",
+    "count": 166
+  },
+  {
+    "id": "X0002",
+    "name": "All clinical indexes are valid and ready",
+    "status": "PASS",
+    "count": 131
+  }
+]

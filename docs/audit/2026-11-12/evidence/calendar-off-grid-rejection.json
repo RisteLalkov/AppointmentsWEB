@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Off-grid physical drag preserves original appointment",
+    "status": "PASS",
+    "expected_http": 409,
+    "actual_http": 409,
+    "request": {
+      "date": "2026-12-22",
+      "time": "10:40",
+      "version": 1
+    },
+    "original": "2026-12-22T09:00:00+00:00",
+    "after": "2026-12-22T09:00:00+00:00",
+    "version": 1,
+    "adjudication": "The pointer landed at 10:40 outside the 30-minute provider grid. The original expectation of a successful drag was a harness coordinate error. Aligned 10:30 drag later passed."
+  }
+]

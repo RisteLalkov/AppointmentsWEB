@@ -1,0 +1,109 @@
+PASS Seed preserves 40 profiles, 46 rows, 87 periods
+PASS Shared booking visible to patient, doctor and reception
+PASS Patient cannot see another patient's appointment
+PASS Doctor cannot see another doctor's private appointments
+PASS Patient cannot book for somebody else
+PASS Doctor cannot book another doctor's schedule
+PASS Doctor cannot query another doctor's availability
+PASS Reject occupied doctor slot
+PASS Reject patient overlap across doctors
+PASS Patient availability excludes their visits with other doctors
+PASS Adjacent appointments are allowed
+PASS Reject past date
+PASS Reject past time today
+PASS Reject weekend outside working days
+PASS Reject before opening and at closing
+PASS Reject partial slot crossing closing boundary
+PASS Reject time not on configured slot grid
+PASS Reject wrong duration
+PASS Duration is configurable per doctor
+PASS Recurring break using split shifts
+PASS Blocked exception removes overlapping slots
+PASS Full-day holiday blocks all appointments
+PASS One-off additional session enables Saturday
+PASS Blocked exception wins over added availability
+PASS Availability edits cannot invalidate appointments
+PASS Removing one-off availability protects existing booking
+PASS Reject overlapping working periods and invalid duration
+PASS Patient cannot change availability or see staff exceptions
+PASS Doctor cannot edit another doctor's availability
+PASS Cancellation releases slot and reaches all roles
+PASS Reschedule releases old slot and reserves new slot
+PASS Conflicting reschedule preserves original booking
+PASS Cannot reschedule or cancel someone else's appointment
+PASS Stale appointment versions are rejected
+PASS Confirmation-required booking starts scheduled
+PASS Rescheduling confirmation booking requires renewed confirmation
+PASS Reception-only provider rejects patient self-booking
+PASS Patient cannot confirm or complete a visit
+PASS Cannot complete or mark no-show before visit ends
+PASS Can complete a confirmed past visit; terminal status stays closed
+PASS Can mark a confirmed past visit no-show
+PASS Staff resolve overdue pending requests with audited terminal outcomes
+PASS Overdue pending resolution retains role, version and time boundaries
+PASS Schedule snapshot rejects stale staff edits without overwriting hours
+PASS Cannot resurrect a cancelled appointment
+PASS Idempotency prevents duplicate submissions
+PASS Reusing request identifier with different data rejected
+PASS Concurrent booking: exactly one succeeds
+PASS JSON restart retains appointments
+PASS Second process cannot open the same demo file
+PASS Reset is administrator-only and restores seed
+PASS Patient validation and duplicate email
+PASS Imported Tuesday preference never blocks independent Wednesday availability
+PASS Spring DST nonexistent times are excluded
+PASS Autumn DST ambiguous times are excluded
+PASS Skopje UTC offsets differ between winter and summer
+PASS Unknown or on-call doctor gets no invented hours
+PASS Booking horizon enforced
+PASS Returned data cannot mutate persisted state
+PASS Reports aggregate every status, distinct patients and cancellation/no-show denominators
+PASS Reports are administrator-only and validate range/group/filter
+PASS Reports distinguish actual service profiles, specialties and unknown services
+PASS Reports merge overlapping availability and honour blocks without double-counting capacity
+PASS Reports use clinic dates, Monday weeks, month groups and include zero days
+PASS Reports flag bookings outside current schedule and never divide by zero
+PASS Report capacity excludes DST invalid and ambiguous slots
+PASS Catalogue is administrator-only and rejects stale edits
+PASS Service duration, assignment and active flags control booking
+PASS Reports group actual services without assigning legacy appointments
+PASS History creation is immutable and idempotent
+PASS Reschedule and cancellation history captures before after and responsible role
+PASS History confirms completion and no-show transitions
+PASS History follows appointment access and does not reveal other patients
+PASS Failed conflicts add no history and saved history survives restart
+PASS Legacy history is not fabricated when an old appointment is changed
+PASS Patient profiles scope history by role and protect other patients
+PASS Staff edit normalized patient contacts without changing identity or appointments
+PASS Patient contact updates validate fields and prevent duplicates
+PASS Concurrent patient edits save exactly once and survive JSON restart
+PASS Confirmation checkbox saves and preserves older clients
+PASS Reception books confirmed agreed time without weekly hours
+PASS Patients and doctors cannot forge agreed-time bookings
+PASS Agreed bookings still reject doctor and patient overlaps
+PASS Agreed bookings cannot override absences or invalid time ranges
+PASS Moving an agreed booking removes only its one-off period
+PASS Agreed booking replay creates no duplicate one-off periods
+PASS Duplicate availability periods are rejected regardless of reason
+PASS Patient future booking cap is enforced; staff and identical replay remain available
+PASS Pending request cap prevents filling a doctor day and cancellation restores quota
+PASS Signed Web identity rejects spoofing, tampering and expired timestamps
+PASS Preview seed has ordinary names, varied history and room for patient bookings
+PASS Reception controls booking restrictions independently of imported source prose
+PASS Interface translations preserve data, whitespace, parameters and error codes
+PASS Concurrent requests keep their own interface language
+PASS Patient numbers backfill legacy demo records and remain unique across concurrent additions and edits
+PASS Availability month summaries reuse booking rules and staff patient conflicts
+PASS First availability honors service duration, date order and doctor permissions
+PASS Working hours and exceptions reject seconds and fractional minutes
+PASS Legacy sub-minute hours cannot generate slots before their actual start
+PASS Date-query boundaries include midnight DST gaps and both repeated midnights
+PASS Cross-clinic busy intervals prevent overlaps without consuming a local quota
+PASS Empty optional services are saved and replayed as null
+PASS Phone and contact email are required for new contacts
+PASS Dated working weeks replace regular hours only within their inclusive date range
+PASS Overlapping dated schedule ranges are rejected and existing bookings remain protected
+PASS Working-hour validation does not confuse fallback duration with service duration
+PASS Patients cannot self-book or reschedule agreement-only doctors even with one-off availability
+
+107/107 tests passed; 0 failed.

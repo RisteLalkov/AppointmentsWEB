@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "attempt": "HTTPS HEAD https://medtermin.mk via configured outbound proxy, timeout 15 seconds",
+  "exit_code": 56,
+  "observation": "CONNECT tunnel failed, response 403",
+  "interpretation": "Environment proxy restriction, not an application HTTP response."
+}
